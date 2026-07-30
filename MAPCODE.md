@@ -1,7 +1,9 @@
 # BẢN ĐỒ MÃ NGUỒN CHI TIẾT (MAPCODE) — DỰ ÁN NINH PHƯỚC 360°
 
-> **Cập nhật:** 07/2026  
+> **Cập nhật:** 07/2026 (Phiên bản 2.1.0)  
 > **Dành cho:** AI Agents, Lập trình viên, Team Lead.  
+> **Repository:** [https://github.com/hackervn89/ninhphuoc360](https://github.com/hackervn89/ninhphuoc360)  
+> **Website Live:** [https://hackervn89.github.io/ninhphuoc360/](https://hackervn89.github.io/ninhphuoc360/)  
 > **Mục đích:** Tra cứu chính xác vị trí dòng code, cấu trúc file, sơ đồ API và luồng dữ liệu mà KHÔNG CẦN đọc lại toàn bộ mã nguồn.
 
 ---
@@ -12,6 +14,7 @@
 e:\Viet Design\Ninhphuoc360\
 ├── index.html                           # [PUBLIC UI] Giao diện tour chính cho người dùng
 ├── tour.xml                             # [MASTER XML] Cấu hình master KrPano, styles hotspot, includes
+├── .gitignore                           # [GIT] Cấu hình bỏ qua node_modules, temp, binaries nặng
 ├── README.md                            # [DOCS] Hướng dẫn tổng quan dự án & cách vận hành
 ├── MAPCODE.md                           # [DOCS] Bản đồ mã nguồn chi tiết (Tệp tin này)
 ├── robots.txt                           # [SEO] Cấu hình Robot Search Engine
@@ -21,8 +24,8 @@ e:\Viet Design\Ninhphuoc360\
 │   ├── css/
 │   │   └── style.css                    # CSS toàn bộ giao diện public tour (Glassmorphic, Responsive)
 │   ├── js/
-│   │   └── app.js                       # Logic JS public tour (Dynamic tourData, Leaflet map, UI event)
-│   ├── assets/                          # Favicon, og-preview.png, logo icon
+│   │   └── app.js                       # Logic JS public tour (Static locations.json parser, Leaflet map, UI event)
+│   ├── assets/                          # Favicon, og-preview.png, logo icon, SVG markers
 │   └── data/                            # GeoJSON ranh giới bản đồ
 │
 ├── engine/                              # [KRPANO BINARY ENGINE]
@@ -31,7 +34,7 @@ e:\Viet Design\Ninhphuoc360\
 │   └── plugins/                         # WebVR, gyro2, scroll, sound-interface plugins
 │
 ├── tours/                               # [DỮ LIỆU CÁC ĐỊA ĐIỂM / SCENES]
-│   ├── locations.json                   # Ánh xạ ID thư mục → Tên hiển thị tiếng Việt có dấu
+│   ├── locations.json                   # [STATIC DATA] Ánh xạ ID thư mục → Tên hiển thị tiếng Việt (Dùng cho GitHub Pages & Local)
 │   ├── lang_gom/                        # Địa điểm: Làng Gốm Bàu Trúc
 │   │   ├── scenes.xml                   # Thẻ <scene> của các cảnh thuộc Làng Gốm
 │   │   └── panos/                       # Ảnh multi-resolution tiles (.tiles/ preview, thumb)
@@ -41,9 +44,9 @@ e:\Viet Design\Ninhphuoc360\
 │   └── <ten_dia_diem>/                  # Các địa điểm di tích/du lịch khác...
 │
 └── _dev/                                # [LOCAL VISUAL EDITOR TOOLING - BÀN GIAO CÓ THỂ XÓA]
-    ├── server.js                        # Express Server (REST API, KrPano CLI Makepano, XML Saver)
+    ├── server.js                        # Express Server (REST API, KrPano CLI Makepano, XML Saver, Port 3600)
     ├── editor.html                      # WYSIWYG Editor GUI (Hotspot Drag, Tree View, Drag Drop)
-    └── krpano-tools/                    # KrPano CLI Executable & Templates
+    └── krpano-tools/                    # KrPano CLI Executable & Templates (Loại trừ khỏi Git)
         ├── krpanotools64.exe            # Executable cắt tiles tự động
         └── templates/
             ├── krpano-editor.config     # Config CLI template với %BASENAME% chống đè file
@@ -99,15 +102,15 @@ e:\Viet Design\Ninhphuoc360\
 
 ---
 
-### 🌐 C. `core/js/app.js` (Public Tour Logic — ~730 dòng)
+### 🌐 C. `core/js/app.js` (Public Tour Logic — ~740 dòng)
 
 | Khoảng dòng | Tên Hàm | Chức năng |
 |-------------|---------|-----------|
 | `L12 - L22`  | `tourData` | Khởi tạo Object chứa dữ liệu Tour (tự động nạp động bởi `buildDynamicTourData()`). |
 | `L51 - L105` | `krpanoReady()` | Khởi tạo KrPano, ẩn skin mặc định, lắng nghe sự kiện `onnewscene` và `onloadcomplete`, đồng bộ góc nhìn nón Radar. |
-| `L107 - L145` | `buildDynamicTourData()` | **Quét dữ liệu Động**: Tự động gọi API `/api/scenes` & `/api/locations` (hoặc quét trực tiếp KrPano XML nếu offline) để xây dựng menu địa điểm động. |
-| `L147 - L183` | `onSceneChange()` | Đồng bộ UI khi đổi cảnh: Cập nhật tiêu đề địa điểm `[Tên Địa Điểm] - [Tên Cảnh]`, cuộn thumbnail hoạt động, lưu lịch sử nút Quay lại (Back). |
-| `L212 - L285` | `initUI()` | Đăng ký sự kiện click Nút Bắt đầu, Nút Tự động xoay (Autorotate), Chế độ VR, Toàn màn hình, Chia sẻ, Nút Quay lại. |
+| `L107 - L189` | `buildDynamicTourData()` | **Nạp Dữ liệu Địa điểm Tĩnh (Static Parser)**: Đọc file `tours/locations.json` (tương thích GitHub Pages / CDN / Offline) & bóc tách `locId` từ đường dẫn `thumburl` để gom nhóm các cảnh chính xác 100%. Fallback API `/api/locations` nếu chạy dev server. |
+| `L191 - L225` | `onSceneChange()` | Đồng bộ UI khi đổi cảnh: Cập nhật tiêu đề địa điểm `[Tên Địa Điểm] - [Tên Cảnh]`, cuộn thumbnail hoạt động, lưu lịch sử nút Quay lại (Back). |
+| `L227 - L295` | `initUI()` | Đăng ký sự kiện click Nút Bắt đầu, Nút Tự động xoay (Autorotate), Chế độ VR, Toàn màn hình, Chia sẻ, Nút Quay lại. |
 | `L297 - L324` | `Sidebar Click-Outside` | **Tự động thu gọn Menu**: Đăng ký `mousedown` và `touchstart` trên `document`, tự động ẩn Sidebar khi click/chạm ra ngoài ảnh 360°. |
 | `L326 - L416` | `Minimap Controls` | Thu nhỏ / Phóng to bản đồ Leaflet Minimap. |
 | `L419 - L530` | `ensureMapInitialized()` | Khởi tạo bản đồ Leaflet, tải GeoJSON ranh giới Ninh Phước và vẽ các marker vị trí di tích. |
@@ -130,7 +133,7 @@ e:\Viet Design\Ninhphuoc360\
 
 ---
 
-### 📜 E. `tour.xml` (Master KrPano XML — ~400 dòng)
+### 📜 E. `tour.xml` (Master KrPano XML — ~430 dòng)
 
 | Thẻ XML / ID | Vai trò & Quy định |
 |--------------|----------------────|
@@ -163,7 +166,7 @@ e:\Viet Design\Ninhphuoc360\
 
 ## 🗃️ 4. QUY ĐỊNH DỮ LIỆU & SCHEMAS
 
-### 📄 1. File `tours/locations.json`
+### 📄 1. File `tours/locations.json` (Nguồn dữ liệu tên hiển thị chuẩn)
 ```json
 {
   "lang_gom": "Làng Gốm Bàu Trúc",

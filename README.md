@@ -1,7 +1,9 @@
 # NINH PHƯỚC 360° — HỆ THỐNG TOUR THỰC TẾ ẢO VÀ BỘ BIÊN TẬP 360 INTERACTIVE
 
-> **Phiên bản:** 2.0.0 (Cập nhật: 07/2026)  
+> **Phiên bản:** 2.1.0 (Cập nhật: 07/2026)  
 > **Tác giả:** Viet Design  
+> **Repository:** [https://github.com/hackervn89/ninhphuoc360](https://github.com/hackervn89/ninhphuoc360)  
+> **Website Live (GitHub Pages):** [https://hackervn89.github.io/ninhphuoc360/](https://hackervn89.github.io/ninhphuoc360/)  
 > **Mục đích:** Tài liệu tổng quan toàn bộ dự án dành cho Đội ngũ phát triển (Developers), Người quản trị (Admins) và AI Agents.
 
 ---
@@ -12,26 +14,26 @@
 
 Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc lập**:
 
-1. **Trải nghiệm Người xem (Public Web Tour - `index.html`)**: Web tĩnh thuần HTML5/CSS3/JS + KrPano 360 Engine. Chạy siêu nhanh, tối ưu SEO, giao diện Glassmorphic hiện đại, tương thích 100% Mobile & VR Devices.
+1. **Trải nghiệm Người xem (Public Web Tour - `index.html`)**: Web tĩnh thuần HTML5/CSS3/JS + KrPano 360 Engine. Chạy siêu nhanh, tối ưu SEO, giao diện Glassmorphic hiện đại, tương thích 100% Mobile & VR Devices. **Hỗ trợ chạy tĩnh 100% trên GitHub Pages** nhờ cơ chế nạp dữ liệu địa điểm tĩnh (`tours/locations.json`).
 2. **Bộ biên tập Đồ họa Trực quan (Visual Editor - `_dev/editor.html` & `_dev/server.js`)**: Trình biên tập WYSIWYG chạy local/nội bộ qua NodeJS Express Server. Cho phép kéo thả hotspot, tạo multires tiles tự động, thêm/sửa/xóa cảnh, kéo thả di chuyển địa điểm và xuất mã KrPano XML tự động 100%.
 
 ---
 
-## 🏗️ 2. KIẾN TRÚC HỆ THỐNG (3 LỚP ĐỘC LẬP)
+## 🏗️ 2. KIẾN TRÚC HỆ THỐNG (MÔ HÌNH DỮ LIỆU TĨNH SẠCH - JAMSTACK)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 🌐 LỚP 1: WEB FRONTEND (Public Tour - index.html)                          │
+│ 🌐 LỚP 1: WEB FRONTEND (Public Tour - index.html / GitHub Pages)            │
 │    ├── UI Glassmorphic Overlay (Logo, Menu Địa điểm, Thanh điều khiển)      │
 │    ├── core/css/style.css (Design System, Responsive, Auto-wrap title)      │
-│    └── core/js/app.js (Đồng bộ KrPano + Leaflet Minimap + Auto-close Sidebar)│
+│    └── core/js/app.js (Tự động nạp tours/locations.json + Leaflet Minimap) │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 📜 LỚP 2: KRPANO 360 ENGINE & XML SCHEMAS                                  │
+│ 📜 LỚP 2: KRPANO 360 ENGINE & STATIC DATA SCHEMAS                           │
 │    ├── tour.xml (Master XML: Định nghĩa Hotspots style: muiten, vitri...)   │
 │    ├── tours/locations.json (Ánh xạ ID thư mục → Tên hiển thị Tiếng Việt)  │
 │    └── tours/<dia_diem>/scenes.xml (Scene XML, view, image, hotspots)       │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 🛠️ LỚP 3: VISUAL EDITOR & NODEJS BACKEND SERVER (_dev/)                      │
+│ 🛠️ LỚP 3: VISUAL EDITOR & NODEJS BACKEND SERVER (_dev/ - LOCAL ONLY)         │
 │    ├── _dev/editor.html (WYSIWYG Editor: Drag Hotspot, Tree View, Drag Drop)│
 │    └── _dev/server.js (NodeJS Express API + KrPano CLI Makepano Tiling)     │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -42,7 +44,8 @@ Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc
 ## 🌟 3. CÁC TÍNH NĂNG NỔI BẬT
 
 ### 📱 Giao diện Trải nghiệm (`index.html`)
-- **Menu Địa điểm Phân cấp & Tự động xuống dòng**: Hiển thị tên địa điểm tiếng Việt đầy đủ 100% không bị cắt chữ. Tự động thu gọn khi click ra ngoài màn hình 360°.
+- **Menu Địa điểm Phân cấp Tự động (Static Data Driven)**: Nạp phân nhóm từ `tours/locations.json` và đường dẫn ảnh `thumburl`, hiển thị chính xác 100% trên cả Localhost lẫn **GitHub Pages** mà không cần server backend.
+- **Tự động xuống dòng mềm mại**: Hiển thị tên địa điểm tiếng Việt đầy đủ 100% không bị cắt chữ. Tự động thu gọn khi click ra ngoài màn hình 360°.
 - **Bản đồ Thu nhỏ Minimap (Leaflet)**: Hiển thị vị trí thực tế và hướng nhìn nón Radar xoay theo camera 360° theo thời gian thực.
 - **Tương thích Đa thiết bị**: Hỗ trợ PC, Mobile, Máy tính bảng và Chế độ kính VR Headset.
 
@@ -67,15 +70,22 @@ node _dev/server.js
 - **Địa chỉ Tour chính:** `http://localhost:3600/index.html`
 
 ### 🔵 2. Xem Tour công khai (Trang người dùng)
-Mở trực tiếp liên kết `http://localhost:3600/index.html` hoặc chạy bất kỳ web server tĩnh nào:
-```powershell
-npx serve .
-```
+- **Truy cập Online (GitHub Pages):** [https://hackervn89.github.io/ninhphuoc360/](https://hackervn89.github.io/ninhphuoc360/)
+- **Chạy Local:** Mở trực tiếp liên kết `http://localhost:3600/index.html` hoặc chạy web server tĩnh: `npx serve .`
 
-### 📦 3. Bàn giao Dự án (Production Deployment)
+### 🔄 3. Đồng bộ & Cập nhật GitHub
+Khi thực hiện chỉnh sửa code hoặc thêm cảnh mới, sử dụng các câu lệnh Git sau:
+```powershell
+git add .
+git commit -m "Mô tả thay đổi của bạn"
+git push
+```
+GitHub Pages sẽ tự động xây dựng và xuất bản phiên bản mới nhất sau ~1 phút.
+
+### 📦 4. Bàn giao Dự án (Production Deployment)
 Dự án được thiết kế hoàn hảo để bàn giao sản phẩm:
 - **Tất cả dữ liệu Tour** được lưu tại root (`index.html`, `tour.xml`, `core/`, `engine/`, `tours/`).
-- **Khi bàn giao cho khách hàng:** Bạn chỉ cần **XÓA THƯ MỤC `_dev/`** là xong! Toàn bộ website vẫn chạy 100% độc lập trên bất kỳ Hosting/Web Server nào (Nginx, Apache, Netlify, Vercel...).
+- **Khi bàn giao cho khách hàng:** Bạn chỉ cần **XÓA THƯ MỤC `_dev/`** là xong! Toàn bộ website vẫn chạy 100% độc lập trên bất kỳ Hosting/Web Server nào (Nginx, Apache, GitHub Pages, Netlify, Vercel...).
 
 ---
 
@@ -98,8 +108,8 @@ Dự án được thiết kế hoàn hảo để bàn giao sản phẩm:
 
 ## ⚠️ 6. CÁC LƯU Ý KỸ THUẬT QUAN TRỌNG
 
-1. **Case-Sensitivity (Phân biệt chữ hoa/thường)**: Mã ID của Scene (`scene_xxx`) và Hotspot (`hs_xxx`) phải viết nhất quán, không dùng khoảng trắng.
-2. **Không đặt Hotspot trong thẻ `<image>`**: Mã XML chuẩn của KrPano yêu cầu thẻ `<hotspot>` phải nằm ngoài thẻ `<image>` và nằm trực tiếp trong `<scene>`.
-3. **Smart Preload bị tắt vĩnh viễn**: Không gọi `loadscene(..., PRELOAD)` vì bản KrPano 1.19 có lỗi tự động nhảy scene ngầm.
-4. **Không cứng hóa Pixel Offsets**: Luôn tính toán bounds tự động thay vì hardcode pixel cố định khi viết giao diện UI.
+1. **Cơ chế Dữ liệu Tĩnh cho Menu Địa điểm**: `core/js/app.js` tự động đọc `tours/locations.json` tĩnh và bóc tách ID địa điểm từ `thumburl`. Không bắt buộc phải có Node.js backend để hiển thị phân nhóm menu.
+2. **Case-Sensitivity (Phân biệt chữ hoa/thường)**: Mã ID của Scene (`scene_xxx`) và Hotspot (`hs_xxx`) cũng như tên ảnh tile trên Linux (GitHub Pages) phải viết nhất quán, chính xác 100%.
+3. **Không đặt Hotspot trong thẻ `<image>`**: Mã XML chuẩn của KrPano yêu cầu thẻ `<hotspot>` phải nằm ngoài thẻ `<image>` và nằm trực tiếp trong `<scene>`.
+4. **Smart Preload bị tắt vĩnh viễn**: Không gọi `loadscene(..., PRELOAD)` vì bản KrPano 1.19 có lỗi tự động nhảy scene ngầm.
 5. **Dọn dẹp Tour XML**: Khi một địa điểm không còn cảnh nào, hệ thống sẽ tự động gỡ thẻ `<include url="tours/x/scenes.xml" />` khỏi `tour.xml` để tránh lỗi `404 Fatal Error: loading failed!`.
