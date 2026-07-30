@@ -1,0 +1,216 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2880 250" width="2880" height="250">
+  <defs>
+    <filter id="ds">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset in="blur" dx="0" dy="2" result="offsetBlur"/>
+      <feMerge><feMergeNode in="offsetBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+        <g filter="url(#ds)" transform="translate(60, 130) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(180, 121.15384615384616) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(300, 112.3076923076923) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(420, 103.46153846153845) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(540, 94.61538461538461) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(540, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.12">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(660, 85.76923076923077) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(660, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.27">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(780, 76.92307692307692) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(780, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.42">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(900, 68.07692307692308) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(900, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1020, 59.230769230769226) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1020, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1020, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.16">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1140, 50.38461538461539) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1140, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1140, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.36">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1260, 41.53846153846153) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1260, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1260, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1380, 32.69230769230769) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1380, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1380, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1500, 23.84615384615384) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1500, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1500, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1620, 15) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1620, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1620, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1740, 15) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1740, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.5">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1740, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.5">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1860, 15) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1860, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.5">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1860, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.5">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g filter="url(#ds)" transform="translate(1980, 15) scale(0.035, 0.3) translate(-341.66, 0)">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1980, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.5">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(1980, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.5">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2100, 15) scale(0.035, 0.3) translate(-341.66, 0)" opacity="1.00">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2100, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2100, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2220, 15) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.75">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2220, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.38">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2220, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.38">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2340, 15) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.50">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2340, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.25">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2340, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.25">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2460, 15) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.25">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2460, 70) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.13">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+        <g transform="translate(2460, 130) scale(0.035, 0.3) translate(-341.66, 0)" opacity="0.13">
+            <polyline fill="rgba(255, 0, 0, 0.95)" points="341.66,0 683.32,222.63 683.32,378.85 341.66,160.56 -0,383.98 -0,223.42 341.66,0 "/>
+        </g>
+  
+  
+  
+</svg>

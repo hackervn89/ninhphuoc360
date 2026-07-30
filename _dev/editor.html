@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Hotspot Creator - Ninh Phước 360</title>
+    
+    <!-- CSS & Fonts -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #FFD700; /* Vàng Gold chủ đạo */
+            --primary-hover: #FFC800;
+            --bg-dark: #0a0f1e;
+            --panel-bg: rgba(13, 27, 46, 0.75);
+            --panel-border: rgba(255, 255, 255, 0.1);
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        /* App Layout */
+        #app-container {
+            display: grid;
+            grid-template-columns: 320px 1fr 360px;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Custom Gold Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Panels Shared Styles */
+        .sidebar {
+            background: var(--panel-bg);
+            border-right: 1px solid var(--panel-border);
+            backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .sidebar-right {
+            border-right: none;
+            border-left: 1px solid var(--panel-border);
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .panel-header h2 {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+        }
+
+        /* Left Panel - Scenes */
+        .search-box {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--panel-border);
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--panel-border);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 13px;
+        }
+
+        .search-box input:focus {
+            outline: 1px solid var(--primary);
+        }
+
+        .scene-list {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            padding: 10px;
+        }
+
+        .scene-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .scene-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scene-item.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .scene-thumb {
+            width: 60px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 10px;
+            background: #1e293b;
+            flex-shrink: 0;
+        }
+
+        .scene-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .scene-name {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .scene-id {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .btn-rename-scene {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 6px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+            opacity: 0.6;
+        }
+
+        .btn-rename-scene:hover {
+            color: var(--primary);
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Location Folder Tree Structure */
+        .location-folder.drag-over {
+            border: 2px dashed var(--primary) !important;
+            background: rgba(255, 215, 0, 0.15) !important;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .scene-item.dragging {
+            opacity: 0.35;
+            border: 1px dashed var(--primary) !important;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .scene-drag-handle {
+            cursor: grab;
+            padding: 4px 6px;
+            color: var(--text-muted);
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+
+        .scene-item:hover .scene-drag-handle {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .location-folder {
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .location-folder-header {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+            gap: 8px;
+        }
+
+        .location-folder-header:hover {
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        .location-folder-title {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .location-badge {
+            font-size: 10px;
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--primary);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: normal;
+        }
+
+        .location-scenes-list {
+            padding: 4px;
+            border-left: 2px solid rgba(255, 215, 0, 0.3);
+            margin-left: 8px;
+        }
+
+        /* Central Viewport */
+        #viewport-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #pano {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Central Editor Controls */
+        .editor-top-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(12px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .mode-badge {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Right Panel - Properties & Action */
+        .properties-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-action:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-action:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid var(--panel-border);
+            margin-bottom: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.35);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Hotspot Item list in active scene */
+        .hotspot-list-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--panel-border);
+            padding-top: 20px;
+        }
+
+        .hotspot-list-header {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .hotspots-wrapper {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Default View Card Styling */
+        .view-config-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .view-card-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-coords-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .view-coord-box span {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .view-coord-box strong {
+            font-size: 13px;
+            font-family: monospace;
+            color: white;
+        }
+
+        .btn-view-save {
+            background: #2563eb !important;
+            color: white !important;
+            margin-bottom: 6px !important;
+            font-size: 13px !important;
+        }
+
+        .btn-view-save:hover {
+            background: #1d4ed8 !important;
+        }
+
+        .hotspot-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .hotspot-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hotspot-item.active {
+            border-color: var(--primary);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .hotspot-item-title {
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 150px;
+        }
+
+        .hotspot-item-style {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            font-family: monospace;
+        }
+
+        /* Modal Overlay Shared Style */
+        .modal-overlay, .upload-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 999999 !important;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Hide KrPano fatal error bar in editor mode */
+        #pano div[style*="background-color"],
+        #pano div[style*="border"],
+        #pano table {
+            opacity: 0.2 !important;
+            pointer-events: none !important;
+        }
+
+        .modal-card {
+            background: #111827;
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius);
+            width: 700px;
+            max-width: 90%;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .modal-body {
+            flex: 1;
+            padding: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: white;
+        }
+
+        .xml-output {
+            flex: 1;
+            width: 100%;
+            background: #030712;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 15px;
+            color: #10b981;
+            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 12px;
+            resize: none;
+            overflow-y: auto;
+            white-space: pre;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--panel-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Notification Toast */
+        #toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #10b981;
+            color: #000;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 2000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Hide krpano error text overlay */
+        #pano div, #pano span {
+            font-family: inherit;
+        }
+        
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        /* Upload Drop Zone */
+        .upload-zone {
+            margin: 10px;
+            padding: 20px 10px;
+            border: 2px dashed rgba(255, 215, 0, 0.3);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--primary);
+            background: rgba(255, 215, 0, 0.05);
+            color: var(--primary);
+        }
+
+        .upload-zone i {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+
+        .upload-zone:hover i {
+            opacity: 1;
+        }
+
+        /* Save Button Accent */
+        .btn-save {
+            background: #10b981 !important;
+            color: white !important;
+        }
+
+        .btn-save:hover {
+            background: #059669 !important;
+        }
+
+        /* Upload Modal */
+        .upload-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-modal {
+            background: #111827;
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius);
+            width: 480px;
+            max-width: 90%;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .upload-modal h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .upload-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #10b981);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .upload-status {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .upload-icon-spinner {
+            animation: spin 1.5s linear infinite;
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scene name input in upload modal */
+        .upload-modal .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .upload-modal .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .upload-modal .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .upload-modal .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-container">
+        
+        <!-- Left Panel: Scene Manager -->
+        <div class="sidebar">
+            <div class="panel-header">
+                <h2>Cảnh Panorama</h2>
+                <i class="fa-solid fa-images"></i>
+            </div>
+            <!-- Upload Drop Zone -->
+            <div class="upload-zone" id="upload-zone">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <div>Kéo thả ảnh 360° vào đây (Chọn được nhiều file)</div>
+                <div style="font-size: 10px; margin-top: 4px; opacity: 0.6;">hoặc bấm để chọn 1 hoặc nhiều file</div>
+                <input type="file" id="upload-input" accept=".jpg,.jpeg,.png,.tif,.tiff" multiple style="display:none;">
+            </div>
+            <div class="search-box">
+                <input type="text" id="scene-search" placeholder="Tìm kiếm cảnh...">
+            </div>
+            <div class="scene-list" id="scene-list-container">
+                <!-- Loaded dynamically by JS -->
+            </div>
+        </div>
+
+        <!-- Central Viewport: KrPano Frame -->
+        <div id="viewport-container">
+            <div class="editor-top-bar">
+                <span class="mode-badge">EDITOR MODE</span>
+                <span style="font-size: 13px; color: var(--text-muted);">
+                    <i class="fa-solid fa-arrows-up-down-left-right"></i> Kéo thả trực tiếp hotspot trên màn hình
+                </span>
+                <span style="font-size: 11px; color: var(--text-muted); border-left: 1px solid var(--panel-border); padding-left: 12px;">
+                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px;">N</kbd> Thêm
+                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">Del</kbd> Xóa
+                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">Esc</kbd> Bỏ chọn
+                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">E</kbd> Xuất XML
+                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">V</kbd> Lưu View
+                </span>
+            </div>
+            <div id="pano"></div>
+        </div>
+
+        <!-- Right Panel: Hotspot Inspector -->
+        <div class="sidebar sidebar-right">
+            <div class="panel-header">
+                <h2>Cấu Hình Hotspot</h2>
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+            
+            <div class="properties-container">
+                <!-- Default View Settings Section -->
+                <div class="view-config-card">
+                    <div class="view-card-title">
+                        <i class="fa-solid fa-camera"></i> KHUNG NHÌN MẶC ĐỊNH (VIEW)
+                    </div>
+                    <div class="view-coords-grid">
+                        <div class="view-coord-box">
+                            <span>hlookat</span>
+                            <strong id="val-hlookat">0.0°</strong>
+                        </div>
+                        <div class="view-coord-box">
+                            <span>vlookat</span>
+                            <strong id="val-vlookat">0.0°</strong>
+                        </div>
+                        <div class="view-coord-box">
+                            <span>fov</span>
+                            <strong id="val-fov">100.0°</strong>
+                        </div>
+                    </div>
+                    <button id="btn-save-view" class="btn-action btn-view-save">
+                        <i class="fa-solid fa-camera"></i> LƯU GÓC NHÌN MẶC ĐỊNH
+                    </button>
+                    <button id="btn-reset-view" class="btn-action btn-secondary" style="font-size: 11px; margin-bottom: 0; padding: 6px 10px;">
+                        <i class="fa-solid fa-rotate-left"></i> VỀ GÓC NHÌN BAN ĐẦU
+                    </button>
+                </div>
+
+                <!-- Quick action: Add Hotspot -->
+                <button id="btn-add-hotspot" class="btn-action">
+                    <i class="fa-solid fa-circle-plus"></i> THÊM HOTSPOT MỚI
+                </button>
+
+                <!-- Hotspot Editor Panel (Hidden when no hotspot selected) -->
+                <div id="property-editor" style="display: none;">
+                    <div style="font-size: 11px; color: var(--primary); font-weight: bold; margin-bottom: 12px; font-family: monospace;" id="lbl-hs-id">hs_xxxx</div>
+                    
+                    <div class="form-group">
+                        <label for="hs-style">Loại Hotspot (Style)</label>
+                        <select id="hs-style">
+                            <option value="muiten">Mũi tên (Di chuyển mặt đất)</option>
+                            <option value="vitri">Ghim vị trí (Hạ cánh từ trên cao)</option>
+                            <option value="tructhang">Trực thăng (Bay lên cao)</option>
+                            <option value="thongtin">Thông tin (Mở thuyết minh)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hs-title">Tiêu đề Tooltip (custom_title)</label>
+                        <input type="text" id="hs-title" placeholder="Ví dụ: Đi vào tháp">
+                    </div>
+
+                    <!-- Destination Scene (Only for link scenes: muiten, vitri, tructhang) -->
+                    <div class="form-group" id="group-linkedscene">
+                        <label for="hs-linkedscene">Đến Cảnh (linkedscene)</label>
+                        <select id="hs-linkedscene">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Info ID (Only for thongtin style) -->
+                    <div class="form-group" id="group-infoid" style="display: none;">
+                        <label for="hs-infoid">Mã thuyết minh (infoid)</label>
+                        <input type="text" id="hs-infoid" placeholder="Ví dụ: info_po_rome_lichsu">
+                    </div>
+
+                    <!-- Readonly coordinates -->
+                    <div class="form-group">
+                        <label>Tọa độ Spherical</label>
+                        <div class="form-row">
+                            <div>
+                                <span style="font-size: 10px; color: var(--text-muted);">ath</span>
+                                <input type="text" id="hs-ath" readonly style="font-family: monospace;">
+                            </div>
+                            <div>
+                                <span style="font-size: 10px; color: var(--text-muted);">atv</span>
+                                <input type="text" id="hs-atv" readonly style="font-family: monospace;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-delete-hotspot" class="btn-action btn-danger" style="margin-top: 10px;">
+                        <i class="fa-solid fa-trash-can"></i> XÓA HOTSPOT
+                    </button>
+                </div>
+
+                <div id="no-selected-msg" style="text-align: center; padding: 40px 10px; color: var(--text-muted); font-size: 13px;">
+                    <i class="fa-solid fa-arrow-pointer" style="font-size: 24px; margin-bottom: 12px; display: block;"></i>
+                    Chọn một hotspot trong danh sách bên dưới hoặc trên màn hình 360 để chỉnh sửa.
+                </div>
+
+                <!-- Hotspots List in this Scene -->
+                <div class="hotspot-list-section">
+                    <div class="hotspot-list-header">Hotspots trong cảnh này</div>
+                    <div class="hotspots-wrapper" id="scene-hotspots-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <button id="btn-save-hotspots" class="btn-action btn-save" style="margin-top: 20px;">
+                    <i class="fa-solid fa-floppy-disk"></i> LƯU HOTSPOTS VÀO FILE
+                </button>
+
+                <button id="btn-export-xml" class="btn-action btn-secondary" style="margin-top: 8px;">
+                    <i class="fa-solid fa-code"></i> XUẤT MÃ XML (XEM CODE)
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Mã XML Hotspots được tạo</h3>
+                <button class="modal-close" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+                    Sao chép mã dưới đây và dán trực tiếp vào bên trong nút <code>&lt;scene&gt;</code> tương ứng trong tệp tin XML của cảnh (ví dụ: <code>tours/diaDiem/scenes.xml</code>).
+                </p>
+                <textarea class="xml-output" id="xml-textarea" readonly></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action btn-secondary" style="margin-bottom: 0;" id="btn-copy-code">
+                    <i class="fa-solid fa-copy"></i> SAO CHÉP MÃ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Progress Modal -->
+    <div class="upload-modal-overlay" id="upload-modal">
+        <div class="upload-modal" style="max-width: 580px; max-height: 85vh; display: flex; flex-direction: column;">
+            <div id="upload-step-form" style="display: flex; flex-direction: column; overflow: hidden;">
+                <h3><i class="fa-solid fa-cloud-arrow-up"></i> Upload Panorama 360° (Phân loại Địa điểm)</h3>
+                
+                <!-- Location Group Selection -->
+                <div class="form-group" style="margin-bottom: 12px; background: rgba(255,215,0,0.08); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <label for="upload-location-select" style="font-weight: bold; color: var(--primary);"><i class="fa-solid fa-folder-tree"></i> Chọn Thư mục Địa điểm / Di tích</label>
+                        <button type="button" id="btn-create-location" style="background: var(--primary); color: #000; border: none; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer;">
+                            <i class="fa-solid fa-plus"></i> Tạo Địa Điểm Mới
+                        </button>
+                    </div>
+                    <select id="upload-location-select" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--panel-border); background: #000; color: #fff; font-size: 13px;">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <div id="upload-file-preview" style="font-size: 12px; color: var(--primary); margin-bottom: 10px; font-weight: bold;"></div>
+                
+                <div id="upload-files-container" style="max-height: 280px; overflow-y: auto; margin-bottom: 15px; border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px; background: rgba(0,0,0,0.2);">
+                    <!-- Multi files inputs dynamically rendered -->
+                </div>
+
+                <button class="btn-action" id="btn-confirm-upload">
+                    <i class="fa-solid fa-rocket"></i> BẮT ĐẦU TẠO TILES VÀO ĐỊA ĐIỂM
+                </button>
+                <button class="btn-action btn-secondary" id="btn-cancel-upload" style="margin-bottom: 0;">
+                    HỦY
+                </button>
+            </div>
+            <div id="upload-step-progress" style="display: none;">
+                <i class="fa-solid fa-gear upload-icon-spinner"></i>
+                <h3>Đang tạo Multi-Resolution Tiles...</h3>
+                <div class="upload-progress">
+                    <div class="upload-progress-fill" id="upload-progress-bar"></div>
+                </div>
+                <div class="upload-status" id="upload-status-text">Đang xử lý ảnh...</div>
+            </div>
+            <div id="upload-step-done" style="display: none;">
+                <i class="fa-solid fa-circle-check" style="font-size: 48px; color: #10b981; margin-bottom: 15px;"></i>
+                <h3 style="color: #10b981;">Hoàn tất!</h3>
+                <div class="upload-status" id="upload-done-text">Tất cả các scene mới đã sẵn sàng.</div>
+                <button class="btn-action" id="btn-upload-done" style="margin-top: 20px; margin-bottom: 0;">
+                    <i class="fa-solid fa-check"></i> TẢI LẠI EDITOR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast">
+        <i class="fa-solid fa-check-double"></i> <span id="toast-msg">Đã copy!</span>
+    </div>
+
+    <!-- Embedding KrPano Core -->
+    <script src="engine/tour.js"></script>
+
+    <script>
+        let krpanoObj = null;
+        let allScenes = [];
+        let currentSceneId = '';
+        let sceneHotspots = []; // Local changes tracker
+        let selectedHotspotName = '';
+        let isDirty = false; // Track unsaved changes
+
+        // Warn before leaving with unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (isDirty) {
+                e.preventDefault();
+                e.returnValue = 'Bạn có thay đổi chưa xuất XML. Rời trang sẽ mất dữ liệu!';
+            }
+        });
+
+        function markDirty() {
+            isDirty = true;
+        }
+
+        // Dom elements
+        const sceneListContainer = document.getElementById('scene-list-container');
+        const searchInput = document.getElementById('scene-search');
+        const hotspotsContainer = document.getElementById('scene-hotspots-container');
+        const propertyEditor = document.getElementById('property-editor');
+        const noSelectedMsg = document.getElementById('no-selected-msg');
+        
+        // Form controls
+        const inputHsId = document.getElementById('lbl-hs-id');
+        const selectHsStyle = document.getElementById('hs-style');
+        const inputHsTitle = document.getElementById('hs-title');
+        const selectHsLinked = document.getElementById('hs-linkedscene');
+        const inputHsInfo = document.getElementById('hs-infoid');
+        const inputHsAth = document.getElementById('hs-ath');
+        const inputHsAtv = document.getElementById('hs-atv');
+        const groupLinkedScene = document.getElementById('group-linkedscene');
+        const groupInfoId = document.getElementById('group-infoid');
+
+        // Startup
+        document.addEventListener("DOMContentLoaded", () => {
+            embedpano({
+                swf: "engine/tour.swf",
+                xml: "tour.xml?v=" + Date.now(),
+                target: "pano",
+                html5: "auto",
+                mobilescale: 1.0,
+                showerrors: false,
+                consolelog: true,
+                passQueryParameters: true,
+                onready: (krpano) => {
+                    krpanoObj = krpano;
+                    injectEditorXML();
+                }
+            });
+
+            initEventListeners();
+            initKeyboardShortcuts();
+        });
+
+        // 1. Inject drag actions and click handlers dynamically into KrPano XML
+        function injectEditorXML() {
+            const dragActionXml = '<krpano><action name="draghotspot">' +
+                'spheretoscreen(ath, atv, hotspotxy[get(name)].x, hotspotxy[get(name)].y);' +
+                'sub(drag_adjustx, mouse.stagex, hotspotxy[get(name)].x);' +
+                'sub(drag_adjusty, mouse.stagey, hotspotxy[get(name)].y);' +
+                'asyncloop(pressed,' +
+                '  sub(dx, mouse.stagex, drag_adjustx);' +
+                '  sub(dy, mouse.stagey, drag_adjusty);' +
+                '  screentosphere(dx, dy, ath, atv);' +
+                '  js(onHotspotDrag(get(name), get(ath), get(atv)));' +
+                ');' +
+                '</action></krpano>';
+            krpanoObj.call("loadxml('" + dragActionXml + "', null, MERGE);");
+
+            // Overrides hotspot clicks inside editor mode
+            const hotspotHookXml = '<krpano>' +
+                '<action name="arrow_hotspot_click">js(onHotspotSelected(get(name)));</action>' +
+                '<action name="fly_transition_click">js(onHotspotSelected(get(name)));</action>' +
+                '<action name="skin_hotspotstyle_click">js(onHotspotSelected(get(name)));</action>' +
+                '</krpano>';
+            krpanoObj.call("loadxml('" + hotspotHookXml + "', null, MERGE);");
+
+            // Listen for scene load completes
+            krpanoObj.set("events.onnewscene", "js(onSceneChange());");
+
+            // Delay scene detection briefly for KrPano parsing
+            setTimeout(detectScenesAndData, 500);
+        }
+
+        const collapsedLocations = {};
+
+        function toggleLocationFolder(locId) {
+            collapsedLocations[locId] = !collapsedLocations[locId];
+            renderSceneList(searchInput.value);
+        }
+
+        // 2. Query KrPano's built-in array of scenes with polling & API fallback
+        async function detectScenesAndData() {
+            if (!krpanoObj) return;
+
+            let sceneCount = krpanoObj.get("scene.count");
+            
+            // Retry polling if KrPano XML parsing is still in progress
+            let retries = 0;
+            while ((!sceneCount || sceneCount === 0) && retries < 15) {
+                await new Promise(r => setTimeout(r, 200));
+                sceneCount = krpanoObj.get("scene.count");
+                retries++;
+            }
+
+            allScenes = [];
+
+            // Query server API for scenes & locations metadata
+            let apiScenesMap = {};
+            let locationsMap = {};
+            try {
+                const [scRes, locRes] = await Promise.all([
+                    fetch('/api/scenes'),
+                    fetch('/api/locations')
+                ]);
+                const scData = await scRes.json();
+                const locData = await locRes.json();
+
+                if (scData.success && scData.scenes) {
+                    scData.scenes.forEach(sc => {
+                        apiScenesMap[sc.name] = sc;
+                    });
+                }
+                if (locData.success && locData.locations) {
+                    locData.locations.forEach(loc => {
+                        locationsMap[loc.id] = loc.name;
+                    });
+                }
+            } catch (e) {
+                console.warn('API scenes/locations fetch info:', e);
+            }
+            
+            for (let i = 0; i < sceneCount; i++) {
+                const name = krpanoObj.get(`scene[${i}].name`);
+                const title = krpanoObj.get(`scene[${i}].title`) || name;
+                let thumb = krpanoObj.get(`scene[${i}].thumburl`) || '';
+                
+                let locationId = 'default';
+                let locationName = 'Cảnh Mặc Định';
+
+                const apiSc = apiScenesMap[name];
+                if (apiSc && apiSc.sourceFile) {
+                    const folderMatch = apiSc.sourceFile.match(/^tours\/([^\/]+)\/scenes\.xml$/);
+                    if (folderMatch) {
+                        locationId = folderMatch[1];
+                        locationName = locationsMap[locationId] || locationId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    }
+                    if (thumb && !thumb.startsWith('http') && !thumb.startsWith('/')) {
+                        if (!thumb.startsWith('tours/')) {
+                            thumb = `tours/${locationId}/${thumb}`;
+                        }
+                    }
+                } else {
+                    if (thumb && !thumb.startsWith('tours/') && !thumb.startsWith('/') && !thumb.startsWith('http')) {
+                        const sceneFolder = name.replace(/^scene_/, '');
+                        thumb = `tours/${sceneFolder}/${thumb}`;
+                    }
+                }
+
+                allScenes.push({ id: name, title, thumb, locationId, locationName });
+            }
+
+            // Populate linked scene dropdown
+            selectHsLinked.innerHTML = '<option value="">-- Chọn scene liên kết --</option>';
+            allScenes.forEach(sc => {
+                const opt = document.createElement('option');
+                opt.value = sc.id;
+                opt.textContent = `${sc.title} (${sc.id})`;
+                selectHsLinked.appendChild(opt);
+            });
+
+            renderSceneList();
+            if (!krpanoObj.get("xml.scene") && allScenes.length > 0) {
+                krpanoObj.call(`loadscene('${allScenes[0].id}', null, MERGE)`);
+            } else {
+                onSceneChange();
+            }
+        }
+
+        let draggedSceneId = null;
+
+        function handleSceneDragStart(e, sceneId) {
+            draggedSceneId = sceneId;
+            e.dataTransfer.setData('text/plain', sceneId);
+            e.dataTransfer.effectAllowed = 'move';
+            e.currentTarget.classList.add('dragging');
+        }
+
+        function handleSceneDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            document.querySelectorAll('.location-folder').forEach(f => f.classList.remove('drag-over'));
+        }
+
+        function handleLocationDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const folder = e.currentTarget.closest('.location-folder');
+            if (folder) folder.classList.add('drag-over');
+        }
+
+        function handleLocationDragLeave(e) {
+            const folder = e.currentTarget.closest('.location-folder');
+            if (folder) folder.classList.remove('drag-over');
+        }
+
+        async function handleLocationDrop(e, targetLocationId) {
+            e.preventDefault();
+            const folder = e.currentTarget.closest('.location-folder');
+            if (folder) folder.classList.remove('drag-over');
+
+            const sceneId = draggedSceneId || e.dataTransfer.getData('text/plain');
+            if (!sceneId || !targetLocationId) return;
+
+            const sc = allScenes.find(s => s.id === sceneId);
+            if (!sc) return;
+
+            if (sc.locationId === targetLocationId) {
+                showToast('ℹ️ Cảnh đã ở sẵn trong Địa điểm này');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/scenes/move-location', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sceneId, targetLocationId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ Đã di chuyển cảnh "${sc.title || sceneId}" sang Địa điểm mới!`);
+                    await detectScenesAndData();
+                } else {
+                    showToast(`❌ Lỗi di chuyển: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // 3. Render scene list in left sidebar as a hierarchical location tree
+        function renderSceneList(filter = '') {
+            sceneListContainer.innerHTML = '';
+            const filtered = allScenes.filter(sc => 
+                sc.title.toLowerCase().includes(filter.toLowerCase()) || 
+                sc.id.toLowerCase().includes(filter.toLowerCase()) ||
+                (sc.locationName && sc.locationName.toLowerCase().includes(filter.toLowerCase()))
+            );
+
+            if (filtered.length === 0) {
+                sceneListContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">Chưa có cảnh nào</div>';
+                return;
+            }
+
+            // Group scenes by locationId
+            const locationGroups = {};
+            filtered.forEach(sc => {
+                const locId = sc.locationId || 'default';
+                if (!locationGroups[locId]) {
+                    locationGroups[locId] = {
+                        id: locId,
+                        name: sc.locationName || locId,
+                        scenes: []
+                    };
+                }
+                locationGroups[locId].scenes.push(sc);
+            });
+
+            Object.values(locationGroups).forEach(group => {
+                const folderEl = document.createElement('div');
+                folderEl.className = 'location-folder';
+                
+                // Attach drop target handlers to Location folder
+                folderEl.addEventListener('dragover', handleLocationDragOver);
+                folderEl.addEventListener('dragleave', handleLocationDragLeave);
+                folderEl.addEventListener('drop', (e) => handleLocationDrop(e, group.id));
+
+                const isCurrentGroup = group.scenes.some(s => s.id === currentSceneId);
+                const isCollapsed = collapsedLocations[group.id] === true && !isCurrentGroup;
+
+                folderEl.innerHTML = `
+                    <div class="location-folder-header" onclick="toggleLocationFolder('${group.id}')">
+                        <i class="fa-solid ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'}" style="font-size: 10px; color: var(--text-muted);"></i>
+                        <i class="fa-solid ${isCollapsed ? 'fa-folder' : 'fa-folder-open'}" style="color: var(--primary); font-size: 14px;"></i>
+                        <div class="location-folder-title">
+                            <span>${group.name}</span>
+                            <span class="location-badge">${group.scenes.length} cảnh</span>
+                        </div>
+                        <button class="btn-rename-scene" title="Đổi tên Địa Điểm" onclick="event.stopPropagation(); promptRenameLocation('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    </div>
+                    <div class="location-scenes-list" style="display: ${isCollapsed ? 'none' : 'block'};"></div>
+                `;
+
+                const scenesContainer = folderEl.querySelector('.location-scenes-list');
+
+                group.scenes.forEach(sc => {
+                    const el = document.createElement('div');
+                    el.className = `scene-item ${sc.id === currentSceneId ? 'active' : ''}`;
+                    el.setAttribute('draggable', 'true');
+                    el.addEventListener('dragstart', (e) => handleSceneDragStart(e, sc.id));
+                    el.addEventListener('dragend', handleSceneDragEnd);
+
+                    const safeTitle = sc.title ? sc.title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+                    const safeId = sc.id ? sc.id.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+                    el.innerHTML = `
+                        <i class="fa-solid fa-grip-vertical scene-drag-handle" title="Kéo thả để di chuyển sang Địa điểm khác"></i>
+                        <img class="scene-thumb" src="${sc.thumb}" onerror="this.src='core/assets/og-preview.png'">
+                        <div class="scene-info">
+                            <div class="scene-name" title="${safeTitle}">${safeTitle}</div>
+                            <div class="scene-id">${safeId}</div>
+                        </div>
+                        <div style="display:flex; gap:2px;">
+                            <button class="btn-rename-scene" title="Chuyển sang Địa điểm khác" style="color: #3b82f6;" onclick="event.stopPropagation(); promptMoveSceneLocation('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-right-left"></i>
+                            </button>
+                            <button class="btn-rename-scene" title="Đổi tên cảnh" onclick="event.stopPropagation(); promptRenameScene('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button class="btn-rename-scene" title="Xóa cảnh này" style="color: #ef4444;" onclick="event.stopPropagation(); confirmDeleteScene('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                    el.addEventListener('click', () => {
+                        if (currentSceneId === sc.id) return;
+                        krpanoObj.call(`loadscene('${sc.id}', null, MERGE, BLEND(0.4))`);
+                    });
+                    scenesContainer.appendChild(el);
+                });
+
+                sceneListContainer.appendChild(folderEl);
+            });
+        }
+
+        // Move scene to another location
+        async function promptMoveSceneLocation(sceneId, title) {
+            let locations = [];
+            try {
+                const res = await fetch('/api/locations');
+                const data = await res.json();
+                if (data.success && data.locations) {
+                    locations = data.locations;
+                }
+            } catch (e) {}
+
+            if (locations.length === 0) {
+                showToast('❌ Không tìm thấy danh sách địa điểm!');
+                return;
+            }
+
+            const currentSc = allScenes.find(s => s.id === sceneId);
+            const currentLocId = currentSc ? currentSc.locationId : '';
+
+            let choicesText = locations.map((loc, idx) => `${idx + 1}. ${loc.name} (${loc.id}) ${loc.id === currentLocId ? '[Hiện tại]' : ''}`).join('\n');
+            choicesText += `\n${locations.length + 1}. + Tạo Địa Điểm Mới...`;
+
+            const choiceInput = prompt(`CHUYỂN CẢNH "${title}" SANG ĐỊA ĐIỂM KHÁC:\n\nChọn số thứ tự địa điểm đích:\n${choicesText}`, '1');
+            if (!choiceInput) return;
+
+            const choiceNum = parseInt(choiceInput.trim(), 10);
+            let targetLocationId = '';
+
+            if (choiceNum > 0 && choiceNum <= locations.length) {
+                targetLocationId = locations[choiceNum - 1].id;
+            } else if (choiceNum === locations.length + 1) {
+                const newLocName = prompt('Nhập tên Địa Điểm Mới:', 'Địa Điểm Mới');
+                if (!newLocName || !newLocName.trim()) return;
+                targetLocationId = newLocName.trim().toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_\-]/g, '');
+            } else {
+                showToast('❌ Lựa chọn không hợp lệ!');
+                return;
+            }
+
+            if (targetLocationId === currentLocId) {
+                showToast('ℹ️ Cảnh đã ở sẵn trong Địa điểm này');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/scenes/move-location', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sceneId, targetLocationId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ ${data.message}`);
+                    await detectScenesAndData();
+                } else {
+                    showToast(`❌ Lỗi: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // Rename location title
+        async function promptRenameLocation(locationId, oldName) {
+            const newName = prompt(`Nhập tên hiển thị mới cho Địa Điểm "${oldName}":`, oldName);
+            if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
+
+            const trimmedName = newName.trim();
+            try {
+                const res = await fetch('/api/locations/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ locationId, newName: trimmedName })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ ${data.message}`);
+                    await detectScenesAndData();
+                } else {
+                    showToast(`❌ Lỗi: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // Rename scene title
+        async function promptRenameScene(sceneId, oldTitle) {
+            const newTitle = prompt(`Nhập tên tiêu đề mới cho cảnh "${oldTitle}":`, oldTitle);
+            if (!newTitle || newTitle.trim() === '' || newTitle.trim() === oldTitle) return;
+
+            const trimmedTitle = newTitle.trim();
+            try {
+                const res = await fetch('/api/scenes/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sceneId, newTitle: trimmedTitle })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ ${data.message}`);
+                    const sc = allScenes.find(s => s.id === sceneId);
+                    if (sc) sc.title = trimmedTitle;
+                    if (krpanoObj) {
+                        krpanoObj.set(`scene[${sceneId}].title`, trimmedTitle);
+                    }
+                    renderSceneList(searchInput.value);
+                } else {
+                    showToast(`❌ Lỗi: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // Delete scene
+        async function confirmDeleteScene(sceneId, title) {
+            if (!confirm(`Bạn có chắc chắn muốn XÓA cảnh "${title}" (${sceneId}) khỏi file XML và đĩa cứng?`)) return;
+
+            try {
+                const res = await fetch('/api/scenes/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sceneId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`🗑️ ${data.message}`);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 800);
+                } else {
+                    showToast(`❌ Lỗi xóa cảnh: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // 4. Triggered when scene changes in KrPano
+        window.onSceneChange = function() {
+            currentSceneId = krpanoObj.get("xml.scene");
+            
+            // Sync Left Sidebar active scene highlight
+            document.querySelectorAll('.scene-item').forEach(item => {
+                const id = item.querySelector('.scene-id').textContent;
+                item.classList.toggle('active', id === currentSceneId);
+            });
+
+            // Extract scene hotspots currently present in KrPano
+            loadSceneHotspots();
+            deselectHotspot();
+            renderHotspotList();
+        };
+
+        // Parse custom hotspots already loaded in the active XML scene
+        function loadSceneHotspots() {
+            sceneHotspots = [];
+            const count = krpanoObj.get("hotspot.count");
+            
+            for (let i = 0; i < count; i++) {
+                const name = krpanoObj.get(`hotspot[${i}].name`);
+                const style = krpanoObj.get(`hotspot[${i}].style`);
+                
+                // Track only our target custom style hotspots
+                if (['muiten', 'vitri', 'tructhang', 'thongtin'].includes(style)) {
+                    const ath = Number(krpanoObj.get(`hotspot[${i}].ath`)).toFixed(4);
+                    const atv = Number(krpanoObj.get(`hotspot[${i}].atv`)).toFixed(4);
+                    
+                    sceneHotspots.push({
+                        name: name,
+                        style: style,
+                        ath: ath,
+                        atv: atv,
+                        linkedscene: krpanoObj.get(`hotspot[${i}].linkedscene`) || '',
+                        custom_title: krpanoObj.get(`hotspot[${i}].custom_title`) || krpanoObj.get(`hotspot[${i}].tooltip`) || '',
+                        infoid: krpanoObj.get(`hotspot[${i}].infoid`) || ''
+                    });
+
+                    // Enable dragging in KrPano dynamically
+                    krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
+                    krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                }
+            }
+        }
+
+        // 5. Render list of hotspots in right sidebar
+        function renderHotspotList() {
+            hotspotsContainer.innerHTML = '';
+            if (sceneHotspots.length === 0) {
+                hotspotsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:10px;">Không có hotspot nào trong cảnh.</div>';
+                return;
+            }
+
+            sceneHotspots.forEach(hs => {
+                const el = document.createElement('div');
+                el.className = `hotspot-item ${selectedHotspotName === hs.name ? 'active' : ''}`;
+                el.dataset.hsName = hs.name;
+                const safeHsTitle = (hs.custom_title || hs.name).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const safeHsStyle = hs.style.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                el.innerHTML = `
+                    <div class="hotspot-item-title">${safeHsTitle}</div>
+                    <div class="hotspot-item-style">${safeHsStyle}</div>
+                `;
+                el.addEventListener('click', () => {
+                    onHotspotSelected(hs.name);
+                    
+                    // Rotate camera to look at the selected hotspot
+                    if (krpanoObj) {
+                        krpanoObj.call(`lookto(${hs.ath}, ${hs.atv}, 90, smooth(100,50,20))`);
+                    }
+                });
+                hotspotsContainer.appendChild(el);
+            });
+        }
+
+        // 6. Selected hotspot callback (from screen clicks or sidebar list)
+        window.onHotspotSelected = function(name) {
+            selectedHotspotName = name;
+            const hs = sceneHotspots.find(h => h.name === name);
+            if (!hs) return;
+
+            // Highlight selected hotspot in sidebar list (toggle class instead of full re-render)
+            document.querySelectorAll('.hotspot-item').forEach(item => {
+                const itemName = item.dataset.hsName;
+                item.classList.toggle('active', itemName === name);
+            });
+
+
+            // Populate property values
+            inputHsId.textContent = hs.name;
+            selectHsStyle.value = hs.style;
+            inputHsTitle.value = hs.custom_title;
+            selectHsLinked.value = hs.linkedscene;
+            inputHsInfo.value = hs.infoid;
+            inputHsAth.value = hs.ath;
+            inputHsAtv.value = hs.atv;
+
+            // Toggle conditional fields
+            toggleConditionalFields(hs.style);
+
+            // Display form
+            noSelectedMsg.style.display = 'none';
+            propertyEditor.style.display = 'block';
+
+            // Show a visual feedback border on the selected hotspot inside KrPano (glow scale)
+            sceneHotspots.forEach(h => {
+                krpanoObj.set(`hotspot[${h.name}].alpha`, h.name === name ? 1.0 : 0.6);
+            });
+        };
+
+        function deselectHotspot() {
+            selectedHotspotName = '';
+            propertyEditor.style.display = 'none';
+            noSelectedMsg.style.display = 'block';
+
+            if (krpanoObj) {
+                sceneHotspots.forEach(h => {
+                    krpanoObj.set(`hotspot[${h.name}].alpha`, 0.9);
+                });
+            }
+        }
+
+        // 7. Realtime coordinates dragging callback from KrPano
+        window.onHotspotDrag = function(name, ath, atv) {
+            const hs = sceneHotspots.find(h => h.name === name);
+            if (hs) {
+                hs.ath = Number(ath).toFixed(4);
+                hs.atv = Number(atv).toFixed(4);
+                
+                // If it is the currently selected hotspot in the form, update inputs
+                if (selectedHotspotName === name) {
+                    inputHsAth.value = hs.ath;
+                    inputHsAtv.value = hs.atv;
+                }
+                markDirty();
+            }
+        };
+
+        // Toggle UI fields depending on selected hotspot type
+        function toggleConditionalFields(style) {
+            if (style === 'thongtin') {
+                groupLinkedScene.style.display = 'none';
+                groupInfoId.style.display = 'block';
+            } else {
+                groupLinkedScene.style.display = 'block';
+                groupInfoId.style.display = 'none';
+            }
+        }
+
+        // Initialize event listeners for controls
+        function initEventListeners() {
+            // Search scene
+            searchInput.addEventListener('input', (e) => {
+                renderSceneList(e.target.value);
+            });
+
+            // Action: Add Hotspot in Center View
+            document.getElementById('btn-add-hotspot').addEventListener('click', () => {
+                if (!krpanoObj) return;
+
+                // Center view coordinates
+                const ath = Number(krpanoObj.get("view.hlookat")).toFixed(4);
+                const atv = Number(krpanoObj.get("view.vlookat")).toFixed(4);
+                const name = `hs_new_${Date.now().toString().slice(-6)}`;
+                
+                const newHs = {
+                    name: name,
+                    style: 'muiten',
+                    ath: ath,
+                    atv: atv,
+                    linkedscene: '',
+                    custom_title: 'Mũi tên di chuyển mới',
+                    infoid: ''
+                };
+
+                // Add to array
+                sceneHotspots.push(newHs);
+                markDirty();
+
+                // Add inside KrPano sphere
+                krpanoObj.call(`addhotspot(${name})`);
+                krpanoObj.call(`hotspot[${name}].loadstyle(${newHs.style})`);
+                krpanoObj.set(`hotspot[${name}].renderer`, 'webgl');
+                krpanoObj.set(`hotspot[${name}].ath`, ath);
+                krpanoObj.set(`hotspot[${name}].atv`, atv);
+                krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
+                krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                krpanoObj.set(`hotspot[${name}].custom_title`, newHs.custom_title);
+
+                renderHotspotList();
+                onHotspotSelected(name);
+                showToast('Đã thêm Hotspot! Hãy kéo thả nó.');
+            });
+
+            // Real-time properties sync (Inputs change -> KrPano update)
+            selectHsStyle.addEventListener('change', (e) => {
+                const style = e.target.value;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.style = style;
+                    krpanoObj.call(`hotspot[${hs.name}].loadstyle(${style})`);
+                    krpanoObj.set(`hotspot[${hs.name}].renderer`, 'webgl');
+                    krpanoObj.set(`hotspot[${hs.name}].distorted`, true);
+                    if (style === 'muiten') {
+                        krpanoObj.set(`hotspot[${hs.name}].rx`, 80);
+                    } else {
+                        krpanoObj.set(`hotspot[${hs.name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${hs.name}].scale`, 0.5);
+                    }
+                    krpanoObj.set(`hotspot[${hs.name}].ondown`, 'draghotspot();');
+                    krpanoObj.set(`hotspot[${hs.name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                    toggleConditionalFields(style);
+                    renderHotspotList();
+                    markDirty();
+                }
+            });
+
+            inputHsTitle.addEventListener('input', (e) => {
+                const title = e.target.value;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.custom_title = title;
+                    krpanoObj.set(`hotspot[${hs.name}].custom_title`, title);
+                    renderHotspotList();
+                    markDirty();
+                }
+            });
+
+            selectHsLinked.addEventListener('change', (e) => {
+                const val = e.target.value;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.linkedscene = val;
+                    krpanoObj.set(`hotspot[${hs.name}].linkedscene`, val);
+                    markDirty();
+                }
+            });
+
+            inputHsInfo.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.infoid = val;
+                    krpanoObj.set(`hotspot[${hs.name}].infoid`, val);
+                    markDirty();
+                }
+            });
+
+            // Delete Hotspot
+            document.getElementById('btn-delete-hotspot').addEventListener('click', () => {
+                if (!selectedHotspotName) return;
+
+                // Delete inside KrPano
+                krpanoObj.call(`removehotspot(${selectedHotspotName})`);
+
+                // Remove from local tracker
+                sceneHotspots = sceneHotspots.filter(h => h.name !== selectedHotspotName);
+                
+                deselectHotspot();
+                renderHotspotList();
+                markDirty();
+                showToast('Đã xóa Hotspot!');
+            });
+
+            // Export XML Modal
+            const modal = document.getElementById('export-modal');
+            document.getElementById('btn-export-xml').addEventListener('click', () => {
+                const xmlTextarea = document.getElementById('xml-textarea');
+                
+                if (sceneHotspots.length === 0) {
+                    xmlTextarea.value = `<!-- Không có hotspot nào để xuất cho cảnh này -->`;
+                } else {
+                    let xmlCode = '';
+                    sceneHotspots.forEach(h => {
+                        if (h.style === 'thongtin') {
+                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid}" custom_title="${h.custom_title}" />\n`;
+                        } else {
+                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene}" custom_title="${h.custom_title}" />\n`;
+                        }
+                    });
+                    xmlTextarea.value = xmlCode.trimEnd();
+                }
+
+                modal.style.display = 'flex';
+            });
+
+            // Close Modal
+            document.getElementById('btn-close-modal').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.style.display = 'none';
+            });
+
+            // Copy Code to Clipboard
+            document.getElementById('btn-copy-code').addEventListener('click', () => {
+                const txt = document.getElementById('xml-textarea');
+                txt.select();
+                navigator.clipboard.writeText(txt.value).then(() => {
+                    showToast('Đã sao chép mã XML!');
+                });
+            });
+
+            // Save Hotspots to File button
+            document.getElementById('btn-save-hotspots').addEventListener('click', () => {
+                saveHotspotsToServer();
+            });
+
+            // Save Default View button
+            document.getElementById('btn-save-view').addEventListener('click', () => {
+                saveCurrentViewAsDefault();
+            });
+
+            // Reset to Default View button
+            document.getElementById('btn-reset-view').addEventListener('click', () => {
+                if (krpanoObj) {
+                    krpanoObj.call('lookat(get(view.hlookat), get(view.vlookat), get(view.fov));');
+                    showToast('🔄 Đã làm mới góc nhìn!');
+                }
+            });
+
+            // Start live view coordinate tracker
+            setInterval(() => {
+                if (krpanoObj) {
+                    const h = Number(krpanoObj.get("view.hlookat") || 0).toFixed(1);
+                    const v = Number(krpanoObj.get("view.vlookat") || 0).toFixed(1);
+                    const f = Number(krpanoObj.get("view.fov") || 100).toFixed(1);
+
+                    const elH = document.getElementById('val-hlookat');
+                    const elV = document.getElementById('val-vlookat');
+                    const elF = document.getElementById('val-fov');
+
+                    if (elH) elH.textContent = `${h}°`;
+                    if (elV) elV.textContent = `${v}°`;
+                    if (elF) elF.textContent = `${f}°`;
+                }
+            }, 200);
+        }
+
+        // Save Current View as Default to Server
+        async function saveCurrentViewAsDefault() {
+            if (!krpanoObj || !currentSceneId) {
+                showToast('⚠️ Không có cảnh nào đang mở!');
+                return;
+            }
+
+            const hlookat = Number(krpanoObj.get("view.hlookat") || 0).toFixed(1);
+            const vlookat = Number(krpanoObj.get("view.vlookat") || 0).toFixed(1);
+            const fov = Number(krpanoObj.get("view.fov") || 100).toFixed(1);
+
+            try {
+                const res = await fetch('/api/scenes/view', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sceneId: currentSceneId,
+                        hlookat: hlookat,
+                        vlookat: vlookat,
+                        fov: fov
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ Đã lưu khung nhìn mặc định (${hlookat}°, ${vlookat}°, fov: ${fov}°)`);
+                } else {
+                    showToast(`❌ Lỗi lưu view: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // Synchronize saved hotspots into KrPano's internal in-memory scene content
+        function updateKrpanoInMemoryScene(sceneId, hotspots) {
+            if (!krpanoObj || !sceneId) return;
+
+            let hotspotsXml = '';
+            if (hotspots && hotspots.length > 0) {
+                hotspots.forEach(h => {
+                    if (h.style === 'thongtin') {
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}" />\n`;
+                    } else {
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}" />\n`;
+                    }
+                });
+            }
+
+            let content = krpanoObj.get(`scene[${sceneId}].content`) || '';
+            content = content.replace(/<hotspot\s[^\/]*\/>/g, '');
+            content = content.replace(/<hotspot\s[^>]*>[\s\S]*?<\/hotspot>/g, '');
+            content = content.trimEnd() + '\n' + hotspotsXml;
+            krpanoObj.set(`scene[${sceneId}].content`, content);
+        }
+
+        // Save Hotspots list to Server XML
+        async function saveHotspotsToServer() {
+            if (!currentSceneId) {
+                showToast('⚠️ Chưa chọn cảnh nào!');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/scenes/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sceneId: currentSceneId,
+                        hotspots: sceneHotspots
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    isDirty = false;
+                    updateKrpanoInMemoryScene(currentSceneId, sceneHotspots);
+                    showToast(`💾 ${data.message}`);
+                } else {
+                    showToast(`❌ Lỗi lưu hotspots: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // Keyboard shortcuts for productivity
+        function initKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Don't fire shortcuts when typing in form fields
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+
+                // Ctrl+S: Save hotspots (works even in form fields)
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    document.getElementById('btn-save-hotspots').click();
+                    return;
+                }
+
+                switch (e.key) {
+                    case 'Delete':
+                    case 'Backspace':
+                        // Delete selected hotspot
+                        if (selectedHotspotName) {
+                            e.preventDefault();
+                            document.getElementById('btn-delete-hotspot').click();
+                        }
+                        break;
+                    case 'Escape':
+                        // Close modals or deselect
+                        e.preventDefault();
+                        const exportModal = document.getElementById('export-modal');
+                        const uploadModal = document.getElementById('upload-modal');
+                        if (uploadModal.style.display === 'flex') {
+                            closeUploadModal();
+                        } else if (exportModal.style.display === 'flex') {
+                            exportModal.style.display = 'none';
+                        } else {
+                            deselectHotspot();
+                        }
+                        break;
+                    case 'n':
+                    case 'N':
+                        // Add new hotspot (shortcut: N)
+                        if (!e.ctrlKey && !e.metaKey) {
+                            e.preventDefault();
+                            document.getElementById('btn-add-hotspot').click();
+                        }
+                        break;
+                    case 'e':
+                    case 'E':
+                        // Export XML (shortcut: E)
+                        if (!e.ctrlKey && !e.metaKey) {
+                            e.preventDefault();
+                            document.getElementById('btn-export-xml').click();
+                        }
+                        break;
+                    case 'v':
+                    case 'V':
+                        // Save view (shortcut: V)
+                        if (!e.ctrlKey && !e.metaKey) {
+                            e.preventDefault();
+                            saveCurrentViewAsDefault();
+                        }
+                        break;
+                }
+            });
+
+            // Ctrl+S from input fields
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    document.getElementById('btn-save-hotspots').click();
+                }
+            });
+        }
+
+        // Show toast
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 3000);
+        }
+
+        // =============================================================
+        // UPLOAD PANORAMA SYSTEM (Multi-File & Location Support)
+        // =============================================================
+
+        let pendingUploadFiles = [];
+
+        function initUploadSystem() {
+            const uploadZone = document.getElementById('upload-zone');
+            const uploadInput = document.getElementById('upload-input');
+            const uploadModal = document.getElementById('upload-modal');
+
+            // Click to open file picker
+            uploadZone.addEventListener('click', () => {
+                uploadInput.click();
+            });
+
+            // File selected via picker
+            uploadInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                    pendingUploadFiles = Array.from(e.target.files);
+                    openUploadModal(pendingUploadFiles);
+                }
+            });
+
+            // Drag & drop events
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('drag-over');
+            });
+
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('drag-over');
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('drag-over');
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    pendingUploadFiles = Array.from(e.dataTransfer.files);
+                    openUploadModal(pendingUploadFiles);
+                }
+            });
+
+            // Create new location button inside modal
+            document.getElementById('btn-create-location').addEventListener('click', async () => {
+                const locName = prompt('Nhập tên địa điểm / di tích mới (Ví dụ: Tháp Po Klong Garai, Làng gốm Bàu Trúc):');
+                if (!locName || locName.trim() === '') return;
+
+                try {
+                    const res = await fetch('/api/locations/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ locationName: locName.trim() })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast(`✅ ${data.message}`);
+                        await loadLocations(data.locationId);
+                    } else {
+                        showToast(`❌ Lỗi: ${data.error}`);
+                    }
+                } catch (err) {
+                    showToast(`❌ Lỗi kết nối server: ${err.message}`);
+                }
+            });
+
+            // Confirm upload button
+            document.getElementById('btn-confirm-upload').addEventListener('click', () => {
+                if (pendingUploadFiles && pendingUploadFiles.length > 0) {
+                    startBatchUpload(pendingUploadFiles);
+                }
+            });
+
+            // Cancel upload
+            document.getElementById('btn-cancel-upload').addEventListener('click', () => {
+                closeUploadModal();
+            });
+
+            // Done - reload page
+            document.getElementById('btn-upload-done').addEventListener('click', () => {
+                window.location.reload();
+            });
+
+            // Click overlay to close
+            uploadModal.addEventListener('click', (e) => {
+                if (e.target === uploadModal) {
+                    const formStep = document.getElementById('upload-step-form');
+                    if (formStep.style.display !== 'none') {
+                        closeUploadModal();
+                    }
+                }
+            });
+        }
+
+        async function loadLocations(selectId = '') {
+            const locSelect = document.getElementById('upload-location-select');
+            try {
+                const res = await fetch('/api/locations');
+                const data = await res.json();
+                locSelect.innerHTML = '<option value="">-- Chọn hoặc Tạo Thư Mục Địa Điểm Mới --</option>';
+                if (data.success && data.locations) {
+                    data.locations.forEach(loc => {
+                        const opt = document.createElement('option');
+                        opt.value = loc.id;
+                        opt.textContent = `${loc.name} (tours/${loc.id}/)`;
+                        if (loc.id === selectId) opt.selected = true;
+                        locSelect.appendChild(opt);
+                    });
+                }
+            } catch (err) {
+                console.error('Lỗi nạp danh sách địa điểm:', err);
+            }
+        }
+
+        async function openUploadModal(files) {
+            const modal = document.getElementById('upload-modal');
+            const filePreview = document.getElementById('upload-file-preview');
+            const container = document.getElementById('upload-files-container');
+
+            // Reset modal steps & load location options
+            document.getElementById('upload-step-form').style.display = 'flex';
+            document.getElementById('upload-step-progress').style.display = 'none';
+            document.getElementById('upload-step-done').style.display = 'none';
+            await loadLocations();
+
+            // Show total file info
+            let totalMB = 0;
+            files.forEach(f => totalMB += f.size / (1024 * 1024));
+            filePreview.innerHTML = `<i class="fa-solid fa-images"></i> Đã chọn ${files.length} ảnh 360° (Tổng cộng: ${totalMB.toFixed(1)} MB)`;
+
+            // Render form inputs for each file
+            container.innerHTML = '';
+            files.forEach((file, idx) => {
+                const baseName = file.name.replace(/\.[^.]+$/, '')
+                    .toLowerCase()
+                    .replace(/\s+/g, '_')
+                    .replace(/[^a-z0-9_\-]/g, '');
+
+                const defaultTitle = file.name.replace(/\.[^.]+$/, '')
+                    .replace(/_/g, ' ')
+                    .replace(/-/g, ' ')
+                    .replace(/\b\w/g, c => c.toUpperCase());
+
+                const item = document.createElement('div');
+                item.style.cssText = 'background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; margin-bottom: 10px; border: 1px solid var(--panel-border);';
+                item.innerHTML = `
+                    <div style="font-size: 12px; font-weight: bold; color: var(--primary); margin-bottom: 6px; display: flex; justify-content: space-between;">
+                        <span>${idx + 1}. ${file.name}</span>
+                        <span style="color: var(--text-muted); font-weight: normal;">${(file.size / (1024*1024)).toFixed(1)} MB</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div>
+                            <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 2px;">Tên ID Scene (không dấu)</label>
+                            <input type="text" class="input-multi-scene-name" data-index="${idx}" value="${baseName}" style="width:100%; padding:6px; border-radius:4px; border:1px solid var(--panel-border); background:#000; color:#fff; font-size:12px; font-family:monospace;">
+                        </div>
+                        <div>
+                            <label style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 2px;">Tiêu đề hiển thị (Title)</label>
+                            <input type="text" class="input-multi-scene-title" data-index="${idx}" value="${defaultTitle}" style="width:100%; padding:6px; border-radius:4px; border:1px solid var(--panel-border); background:#000; color:#fff; font-size:12px;">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            modal.style.display = 'flex';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('upload-modal').style.display = 'none';
+            pendingUploadFiles = [];
+            document.getElementById('upload-input').value = '';
+        }
+
+        async function startBatchUpload(files) {
+            let locationId = document.getElementById('upload-location-select').value.trim();
+            if (!locationId) {
+                const locName = prompt('Nhập tên Thư mục Địa điểm / Di tích để GOM TẤT CẢ ÁNH NÀY VÀO (Ví dụ: Khu Làm Gốm Bàu Trúc):', 'Địa Điểm Mới');
+                if (!locName || !locName.trim()) return;
+                
+                try {
+                    const res = await fetch('/api/locations/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ locationName: locName.trim() })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        locationId = data.locationId;
+                    } else {
+                        showToast(`❌ Lỗi tạo địa điểm: ${data.error}`);
+                        return;
+                    }
+                } catch (err) {
+                    showToast(`❌ Lỗi kết nối server: ${err.message}`);
+                    return;
+                }
+            }
+
+            const nameInputs = document.querySelectorAll('.input-multi-scene-name');
+            const titleInputs = document.querySelectorAll('.input-multi-scene-title');
+
+            const sceneNames = Array.from(nameInputs).map(inp => inp.value.trim());
+            const sceneTitles = Array.from(titleInputs).map(inp => inp.value.trim());
+
+            // Switch to progress step
+            document.getElementById('upload-step-form').style.display = 'none';
+            document.getElementById('upload-step-progress').style.display = 'block';
+            document.getElementById('upload-progress-bar').style.width = '0%';
+            document.getElementById('upload-status-text').textContent = 'Đang tải danh sách ảnh lên server...';
+
+            try {
+                const formData = new FormData();
+                files.forEach(file => {
+                    formData.append('panoramas', file);
+                });
+                formData.append('locationId', locationId);
+                formData.append('sceneNames', JSON.stringify(sceneNames));
+                formData.append('sceneTitles', JSON.stringify(sceneTitles));
+
+                const response = await fetch('/api/upload-pano-multi', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.error || 'Upload thất bại');
+                }
+
+                document.getElementById('upload-status-text').textContent = `Đang tạo tiles cho ${files.length} ảnh...`;
+                document.getElementById('upload-progress-bar').style.width = '10%';
+
+                await trackBatchTilingProgress(result.batchJobId, files.length);
+
+            } catch (err) {
+                document.getElementById('upload-status-text').textContent = `❌ Lỗi: ${err.message}`;
+                document.getElementById('upload-progress-bar').style.width = '0%';
+                document.getElementById('upload-progress-bar').style.background = '#ef4444';
+
+                setTimeout(() => {
+                    document.getElementById('upload-step-progress').style.display = 'none';
+                    document.getElementById('upload-step-form').style.display = 'flex';
+                }, 3000);
+            }
+        }
+
+        function trackBatchTilingProgress(batchJobId, totalFiles) {
+            return new Promise((resolve, reject) => {
+                const evtSource = new EventSource(`/api/tiling-status/${batchJobId}`);
+                const progressBar = document.getElementById('upload-progress-bar');
+                const statusText = document.getElementById('upload-status-text');
+
+                evtSource.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+
+                    if (data.status === 'processing') {
+                        const cur = data.currentIndex || 1;
+                        const pct = Math.max(10, Math.floor((cur / totalFiles) * 100));
+                        progressBar.style.width = `${pct}%`;
+                        statusText.textContent = `Đang xử lý ảnh ${cur}/${totalFiles}: "${data.currentSceneName}" (${pct}%)...`;
+                    } else if (data.status === 'done') {
+                        evtSource.close();
+                        progressBar.style.width = '100%';
+                        statusText.textContent = 'Hoàn tất tất cả!';
+
+                        setTimeout(() => {
+                            document.getElementById('upload-step-progress').style.display = 'none';
+                            document.getElementById('upload-step-done').style.display = 'block';
+                            document.getElementById('upload-done-text').textContent = 
+                                `Đã tạo xong ${totalFiles} scene 360° mới! Bấm nút bên dưới để tải lại editor.`;
+                        }, 500);
+
+                        resolve();
+                    } else if (data.status === 'error') {
+                        evtSource.close();
+                        statusText.textContent = `❌ Lỗi: ${data.error}`;
+                        progressBar.style.background = '#ef4444';
+                        reject(new Error(data.error));
+                    }
+                };
+
+                evtSource.onerror = () => {
+                    evtSource.close();
+                    statusText.textContent = 'Mất kết nối với server. Hãy kiểm tra terminal.';
+                    reject(new Error('SSE connection lost'));
+                };
+            });
+        }
+
+        // =============================================================
+        // SAVE HOTSPOTS TO FILE SYSTEM
+        // =============================================================
+
+        function initSaveSystem() {
+            document.getElementById('btn-save-hotspots').addEventListener('click', async () => {
+                if (!currentSceneId) {
+                    showToast('Chưa chọn scene nào!');
+                    return;
+                }
+
+                const btn = document.getElementById('btn-save-hotspots');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ĐANG LƯU...';
+                btn.disabled = true;
+
+                try {
+                    const response = await fetch('/api/scenes/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            sceneId: currentSceneId,
+                            hotspots: sceneHotspots
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        isDirty = false;
+                        updateKrpanoInMemoryScene(currentSceneId, sceneHotspots);
+                        showToast(`✅ ${result.message}`);
+                    } else {
+                        showToast(`❌ Lỗi: ${result.error}`);
+                    }
+                } catch (err) {
+                    showToast(`❌ Không kết nối được server. Chạy: npm run editor`);
+                    console.error('Save error:', err);
+                } finally {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // Initialize upload & save systems after DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initUploadSystem();
+            initSaveSystem();
+        });
+    </script>
+</body>
+
+</html>
+

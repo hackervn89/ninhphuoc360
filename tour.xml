@@ -1,0 +1,430 @@
+<krpano version="1.19" title="Ninh Phước 360 - Trải nghiệm Du lịch Thực tế ảo">
+
+	<!-- Engine: Skin & Plugins -->
+	<include url="engine/skin/vtourskin.xml" />
+
+	<!-- Memory Management: cap tile cache to prevent GPU memory buildup -->
+	<memory maxmem="350" />
+
+	<!-- Skin Settings -->
+	<skin_settings maps="false"
+	               gyro="true"
+	               webvr="true"
+	               webvr_gyro_keeplookingdirection="false"
+	               webvr_prev_next_hotspots="true"
+	               littleplanetintro="false"
+	               title="false"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="true"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="BLEND(0.5)"
+	               loadscene_blend_prev="BLEND(0.5)"
+	               loadscene_blend_next="BLEND(0.5)"
+	               loadingtext=""
+	               layout_width="100%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin.png"
+	               design_bgcolor="0x2D3E50"
+	               design_bgalpha="0.8"
+	               design_bgborder="0"
+	               design_bgroundedge="1"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="0"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+	               />
+
+	<!--
+	    Hotspot Animation Strategy: TWEEN CHAIN (Zero Memory Leak)
+	    Instead of delayedcall loops (which leak when hotspot is removed),
+	    we use tween() with callbacks. Tween auto-cancels when its target
+	    object is destroyed during scene transition. Zero zombie loops.
+	-->
+	
+	<!-- Hotspot breathing animation using tween chain (leak-free) -->
+	<action name="hotspot_breathe">
+		tween(scale, 0.8, 0.8, easeInOutSine,
+			tween(scale, 0.8, 0.8, easeInOutSine, hotspot_breathe() )
+		);
+	</action>
+
+	<!-- 
+		Mũi tên: Hiệu ứng lướt 3 tầng (sprite sheet) theo phong cách Panoee 
+		- scale: Tỉ lệ kích thước (0.5 = 50%)
+		- edge: Điểm neo ở giữa để xoay và scale đều
+		- distorted: Cho phép biến dạng 3D để dính vào mặt đất
+		- zoom: Giữ kích thước ổn định khi zoom camera (FOV)
+		- rx: Độ nghiêng so với mặt đất (80-85 độ là đẹp nhất)
+	-->
+	<style name="muiten"
+	       url="engine/skin/hotspot_pro.svg"
+	       crop="0|0|120|250"
+	       scale="0.5"
+	       edge="center"
+	       distorted="true"
+	       zoom="true"
+	       renderer="webgl"
+	       rx="80"
+	       tooltip=""
+	       linkedscene=""
+	       linkedscene_lookat=""
+	       onclick="arrow_hotspot_click();"
+	       onover="tween(scale,0.65,0.15); show_custom_tooltip();"
+	       onout="hotspot_breathe(); hide_custom_tooltip();"
+	       myframe="0"
+	       onloaded="hotspot_breathe(); set(myframe,0); delayedcall(calc(Math.random()*2), hotspot_sprite_anim(get(name)) );"
+	       />
+
+	<!-- Hiệu ứng khi click: Mũi tên lướt về phía trước trên mặt đất thay vì đứng dậy -->
+	<action name="arrow_hotspot_click" scope="local">
+		if(caller.linkedscene,
+			copy(hs_linkedscene, caller.linkedscene);
+			if(caller.linkedscene_lookat, txtsplit(caller.linkedscene_lookat, ',', hs_lookat_h, hs_lookat_v, hs_lookat_fov); );
+			set(caller.enabled, false);
+			skin_hidetooltips();
+			hide_custom_tooltip();
+			<!-- 
+				Hiệu ứng lướt:
+				oy -50: Trượt tới trước 50px
+				alpha 0.0: Mờ dần đến biến mất
+				rx 90: Nằm phẳng hoàn toàn xuống đất khi trượt
+				0.5: Diễn ra trong 0.5 giây
+			-->
+			tween(caller.oy|caller.alpha|caller.rx, -50|0.0|90, 0.5, easeOutQuad,
+				skin_loadscene(get(hs_linkedscene), get(skin_settings.loadscene_blend));
+				if(hs_lookat_h !== null, skin_lookat(get(hs_lookat_h), get(hs_lookat_v), get(hs_lookat_fov)); );
+				skin_updatescroll();
+			);
+		);
+	</action>
+
+	<!-- Animation Sprite Sheet (24 khung hình) - Đã tối ưu bằng Tween Chain để chống Lag -->
+	<action name="hotspot_sprite_anim">
+		if(hotspot[%1].loaded,
+			inc(hotspot[%1].myframe);
+			if(hotspot[%1].myframe GT 23, set(hotspot[%1].myframe, 0));
+			mul(hs_cx, hotspot[%1].myframe, 120);
+			txtadd(hotspot[%1].crop, get(hs_cx), '|0|120|250');
+			<!-- 
+				Sử dụng một tween nhỏ làm đồng hồ đếm nhịp. 
+				Chuỗi tween này sẽ tự hủy khi hotspot bị xóa khỏi cảnh (Zero Zombie Loops).
+			-->
+			tween(hotspot[%1].myframe_timer, 1.0, 0.03, linear, hotspot_sprite_anim(%1) );
+		);
+	</action>
+
+	<!-- Hiệu ứng mũi tên Pro: Bắt đầu nhỏ & mờ, lao vọt tới trước đồng thời to dần, sau đó mờ dần -->
+	<action name="hotspot_pro_anim">
+		if(loaded,
+			set(oy, 30);
+			set(alpha, 0.0);
+			set(scale, 0.15);
+			
+			tween(oy|alpha|scale, 0|1.0|0.25, 0.6, easeOutQuad,
+				tween(oy|alpha|scale, -40|0.0|0.2, 0.6, easeInQuad,
+					hotspot_pro_anim();
+				);
+			);
+		);
+	</action>
+
+	<!--
+	    Panorama Location Pin Hotspot Style
+	    For overview/aerial scenes linking to ground-level locations.
+	    Uses the red pin icon with bounce + pulse animation (tween chain, leak-free).
+	-->
+	<style name="vitri"
+	       url="core/assets/iconlocation.png"
+	       scale="0.5"
+	       edge="bottom"
+	       distorted="true"
+	       rx="0"
+	       zoom="true"
+	       renderer="webgl"
+	       alpha="0.9"
+	       oy="0"
+	       tooltip=""
+	       linkedscene=""
+	       linkedscene_lookat=""
+	       onclick="fly_transition_click();"
+	       onover="tween(scale,0.58,0.15); tween(alpha,1.0,0.15); show_custom_tooltip();"
+	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
+	       />
+
+	<!--
+	    Fly-up Location Hotspot Style
+	    For ground-level scenes linking UP to aerial/drone scenes.
+	    Uses the helicopter icon with a vertical hovering animation using 'oy'.
+	-->
+	<style name="tructhang"
+	       url="core/assets/icontructhang.png"
+	       scale="0.5"
+	       edge="bottom"
+	       distorted="true"
+	       rx="0"
+	       zoom="true"
+	       renderer="webgl"
+	       alpha="0.9"
+	       oy="-10"
+	       tooltip=""
+	       linkedscene=""
+	       linkedscene_lookat=""
+	       onclick="fly_transition_click();"
+	       onover="tween(scale,0.58,0.15); tween(alpha,1.0,0.15); show_custom_tooltip();"
+	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
+	       />
+
+	<!-- Little Planet Transition for Vertical Movement -->
+	<action name="fly_transition_click" scope="local">
+		if(caller.linkedscene,
+			copy(hs_linkedscene, caller.linkedscene);
+			if(caller.linkedscene_lookat, txtsplit(caller.linkedscene_lookat, ',', hs_lookat_h, hs_lookat_v, hs_lookat_fov); );
+			set(caller.enabled, false);
+			skin_hidetooltips();
+			hide_custom_tooltip();
+			tween(caller.depth|caller.alpha|caller.oy, 4000|0.0|-50, 0.5, default,
+				skin_loadscene(get(hs_linkedscene), ZOOMBLEND(2.0, 2.0, easeInOutSine));
+				if(hs_lookat_h !== null, skin_lookat(get(hs_lookat_h), get(hs_lookat_v), get(hs_lookat_fov)); );
+				skin_updatescroll();
+			);
+		);
+	</action>
+
+	<!--
+	    Info Hotspot Style
+	    For opening information modals.
+	-->
+	<style name="thongtin"
+	       url="core/assets/iconinfo.svg"
+	       scale="0.5"
+	       edge="center"
+	       distorted="true"
+	       rx="0"
+	       zoom="true"
+	       renderer="webgl"
+	       alpha="0.9"
+	       tooltip=""
+	       infoid=""
+	       onclick="skin_hotspotstyle_click(); js(openInfoModal(get(infoid)));"
+	       onover="tween(scale,0.58,0.15); tween(alpha,1.0,0.15); show_custom_tooltip();"
+	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
+	       />
+
+	<!-- ========================================== -->
+	<!-- CUSTOM TOOLTIP (Text + Thumbnail) -->
+	<!-- ========================================== -->
+	<style name="tooltip_text_style" type="text" background="false" css="color:#ffffff; font-family:'Segoe UI', Arial, sans-serif; font-size:13px; font-weight:bold; text-align:center; text-shadow:0px 1px 2px #000;" enabled="false" />
+
+	<!-- Floating Container -->
+	<layer name="custom_tooltip" keep="true" type="container" align="lefttop" edge="bottom" width="160" height="35" bgcolor="0x1a202c" bgalpha="0.85" bgroundedge="6" bgshadow="0 4 10 0x000000 0.5" zorder="99" alpha="0" enabled="false" capture="false" visible="false">
+		<layer name="custom_tooltip_thumb" type="image" align="top" y="5" width="150" height="85" url="" visible="false" enabled="false" capture="false" />
+		<layer name="custom_tooltip_text" style="tooltip_text_style" align="center" edge="center" x="0" y="0" html="" enabled="false" capture="false" />
+	</layer>
+
+	<action name="show_custom_tooltip">
+		if(custom_title,
+			set(layer[custom_tooltip].visible, true);
+			set(layer[custom_tooltip_text].html, get(custom_title));
+			
+			if(custom_thumb,
+				set(layer[custom_tooltip_thumb].url, get(custom_thumb));
+				set(layer[custom_tooltip_thumb].visible, true);
+				set(layer[custom_tooltip].height, 125);
+				set(layer[custom_tooltip_text].y, 45);
+			,
+				set(layer[custom_tooltip_thumb].visible, false);
+				set(layer[custom_tooltip].height, 35);
+				set(layer[custom_tooltip_text].y, 0);
+			);
+
+			<!-- Follow Mouse Position smoothly, offset above cursor to prevent mouse event conflict -->
+			asyncloop(layer[custom_tooltip].visible,
+				set(layer[custom_tooltip].x, get(mouse.x));
+				calc(layer[custom_tooltip].y, mouse.y - 45);
+			);
+			
+			tween(layer[custom_tooltip].alpha, 1.0, 0.15);
+		);
+	</action>
+
+	<action name="hide_custom_tooltip">
+		tween(layer[custom_tooltip].alpha, 0.0, 0.1, default, set(layer[custom_tooltip].visible, false));
+	</action>
+
+	<!--
+		=====================================================================
+		VR MENU 3D SYSTEM (For WebVR mode)
+		Nhìn vào ảnh 1.8 giây → tự động chuyển cảnh (Gaze Navigation).
+		TODO: Cập nhật thumbnail + scene name khi có panorama Ninh Phước.
+		=====================================================================
+	-->
+
+	<!-- Thumbnail card style -->
+	<style name="vr_menu_item"
+	       type="image"
+	       distorted="true"
+	       depth="1500"
+	       width="220" height="124"
+	       scale="0.38"
+	       alpha="0.0"
+	       bgroundedge="10"
+	       bgborder="3 0x78b4f5 0.6"
+	       enabled="false"
+	       visible="false"
+	       keep="true"
+	       linkedscene=""
+	       onover="vr_gaze_start();"
+	       onout="vr_gaze_cancel();"
+	       onclick="skin_loadscene(get(linkedscene), ZOOMBLEND(2.0, 2.0, easeInOutSine));"
+	       />
+
+	<!-- Label text below each thumbnail -->
+	<style name="vr_label_item"
+	       type="text"
+	       distorted="true"
+	       depth="1500"
+	       scale="0.32"
+	       alpha="0.0"
+	       css="color:#ffffff; font-family:'Segoe UI',Arial,sans-serif; font-size:16px; font-weight:bold; text-align:center; text-shadow:0 1px 4px rgba(0,0,0,1.0);"
+	       bgcolor="0x0d1b2e" bgalpha="0.7" bgroundedge="6"
+	       padding="6 12"
+	       enabled="false"
+	       visible="false"
+	       keep="true"
+	       />
+
+	<!-- Gaze progress: background track -->
+	<layer name="vr_gaze_track"
+	       type="container" align="center" y="95"
+	       width="160" height="5"
+	       bgcolor="0xffffff" bgalpha="0.20" bgroundedge="3"
+	       alpha="0" visible="false" keep="true" zorder="200" />
+
+	<!-- Gaze progress: fill bar (tweens width 0 → 160) -->
+	<layer name="vr_gaze_bar"
+	       type="container" align="center" y="95"
+	       width="0" height="5"
+	       bgcolor="0x4fc3f7" bgalpha="1.0" bgroundedge="3"
+	       alpha="0" visible="false" keep="true" zorder="201" />
+
+	<!-- Gaze state -->
+	<data name="vr_gaze" gazing="false" target_scene="" />
+
+	<!-- Called when user gazes at a VR menu item -->
+	<action name="vr_gaze_start" scope="local">
+		if(webvr.isenabled,
+			set(vr_gaze.gazing, true);
+			copy(vr_gaze.target_scene, caller.linkedscene);
+			tween(caller.scale, 0.50, 0.25, easeOutQuad);
+			tween(caller.alpha, 1.0, 0.2);
+			set(layer[vr_gaze_bar].visible, true);
+			set(layer[vr_gaze_track].visible, true);
+			set(layer[vr_gaze_bar].width, 0);
+			tween(layer[vr_gaze_track].alpha, 1.0, 0.2);
+			tween(layer[vr_gaze_bar].alpha, 1.0, 0.2);
+			tween(layer[vr_gaze_bar].width, 160, 1.8, linear, vr_gaze_confirm());
+		);
+	</action>
+
+	<!-- Called when gaze leaves the item -->
+	<action name="vr_gaze_cancel" scope="local">
+		set(vr_gaze.gazing, false);
+		tween(caller.scale, 0.38, 0.2);
+		tween(caller.alpha, 0.85, 0.2);
+		set(layer[vr_gaze_bar].width, 0);
+		tween(layer[vr_gaze_track].alpha, 0.0, 0.25, default, set(layer[vr_gaze_track].visible, false));
+		tween(layer[vr_gaze_bar].alpha, 0.0, 0.25, default, set(layer[vr_gaze_bar].visible, false));
+	</action>
+
+	<!-- Fires when gaze bar completes — load scene if still gazing -->
+	<action name="vr_gaze_confirm">
+		if(vr_gaze.gazing,
+			set(vr_gaze.gazing, false);
+			tween(layer[vr_gaze_track].alpha, 0.0, 0.2, default, set(layer[vr_gaze_track].visible, false));
+			tween(layer[vr_gaze_bar].alpha, 0.0, 0.2, default, set(layer[vr_gaze_bar].visible, false));
+			skin_loadscene(get(vr_gaze.target_scene), ZOOMBLEND(2.0, 2.0, easeInOutSine));
+		);
+	</action>
+
+	<!-- Spread items in arc below horizon, following gaze direction -->
+	<action name="update_vr_menu_pos">
+		if(webvr.isenabled,
+			set(h, get(view.hlookat));
+			set(v, 28);
+			set(lv, 41);
+			<!-- TODO: Thêm/bớt vr_item khi có đủ địa điểm -->
+		);
+	</action>
+
+	<action name="vr_menu_show">
+		update_vr_menu_pos();
+		<!-- TODO: Bật hiển thị các vr_item khi có panorama -->
+	</action>
+
+	<action name="vr_menu_hide">
+		set(vr_gaze.gazing, false);
+		<!-- TODO: Ẩn các vr_item khi có panorama -->
+	</action>
+
+	<events name="vr_menu_events" keep="true"
+	        onviewchange="if(webvr.isenabled, update_vr_menu_pos())"
+	        onentervr="vr_menu_show();"
+	        onexitvr="vr_menu_hide();"
+	        />
+
+	<!-- TODO: Thêm VR thumbnail hotspots khi có panorama Ninh Phước -->
+	<!-- Ví dụ:
+	<hotspot name="vr_item_1" style="vr_menu_item" url="tours/diaDiem1/panos/xxx.tiles/thumb.jpg" linkedscene="scene_xxx" />
+	<hotspot name="vr_label_1" style="vr_label_item" html="Tên Địa điểm 1" />
+	-->
+
+
+	<!-- Autorotate -->
+	<!-- tofov removed: keeping it would zoom FOV to 120° on autorotate start, causing unwanted pull-back effect -->
+	<autorotate enabled="false" waittime="5.0" speed="2.0" horizon="0" />
+
+	<!-- Include ALL scenes from ALL locations -->
+
+		<include url="tours/lang_gom/scenes.xml" />
+
+		<include url="tours/nha_sinh_hoat/scenes.xml" />
+
+	<!-- Startup: Load the first scene -->
+	<action name="startup" autorun="onstart">
+		if(startscene === null OR !scene[get(startscene)], copy(startscene, scene[0].name); );
+		if(scene[get(startscene)],
+			loadscene(get(startscene), null, MERGE);
+		);
+		if(startactions !== null, startactions() );
+	</action>
+
+	<!--
+	    Smart Preload Strategy — DISABLED.
+	    In this KrPano 1.19 project, loadscene(..., PRELOAD) can still trigger
+	    an unwanted scene switch after the intro. Keep navigation fully user-controlled.
+	-->
+	<action name="enable_smart_preload">
+		trace('Smart preload disabled to prevent automatic scene switching.');
+	</action>
+
+</krpano>

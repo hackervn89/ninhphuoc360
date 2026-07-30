@@ -1,0 +1,15 @@
+{
+  "name": "ninhphuoc360-editor",
+  "version": "1.0.0",
+  "description": "Local development server for Ninh Phước 360 Visual Tour Editor",
+  "main": "server.js",
+  "scripts": {
+    "editor": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "xml2js": "^0.6.2"
+  }
+}

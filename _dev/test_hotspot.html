@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotspot Test - So sánh 5 loại</title>
+    <style>
+        body { margin: 0; background: #000; }
+        #pano { width: 100%; height: 100vh; }
+        #info {
+            position: fixed; top: 10px; left: 10px; z-index: 999;
+            background: rgba(0,0,0,0.9); color: #0f0; padding: 15px;
+            font-family: monospace; font-size: 12px; border-radius: 8px;
+            max-height: 90vh; overflow-y: auto; width: 420px;
+        }
+        #info h3 { color:#fff; margin:0 0 10px 0; }
+        .ok { color: #0f0; }
+        .err { color: #f00; }
+        .warn { color: #ff0; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>🧪 Hotspot Render Test — 5 loại</h3>
+        <div id="log">⏳ Đang khởi tạo KrPano...</div>
+    </div>
+    <div id="pano"></div>
+
+    <script src="/engine/tour.js"></script>
+    <script>
+        const logEl = document.getElementById('log');
+        const log = (msg, cls) => {
+            const d = document.createElement('div');
+            d.className = cls || '';
+            d.innerHTML = msg;
+            logEl.appendChild(d);
+        };
+
+        embedpano({
+            swf: "/engine/tour.swf",
+            xml: "/tour.xml?nocache=" + Date.now(),
+            target: "pano",
+            html5: "auto",
+            mobilescale: 1.0,
+            showerrors: true,
+            consolelog: true,
+            onready: (krpano) => {
+                window.krpano = krpano;
+                log('✅ KrPano sẵn sàng', 'ok');
+
+                setTimeout(() => {
+                    krpano.call("loadscene(scene_1, null, MERGE)");
+                    log('📷 Đang tải cảnh scene_1...', 'warn');
+
+                    setTimeout(() => {
+                        log('✅ Cảnh đã tải xong!', 'ok');
+                        log('<br><b>═══ THÊM 5 HOTSPOTS THỬ NGHIỆM ═══</b>');
+
+                        // Get current view center
+                        const baseAth = Number(krpano.get("view.hlookat"));
+                        const baseAtv = Number(krpano.get("view.vlookat"));
+
+                        // 1. muiten (control - known working)
+                        krpano.call('addhotspot(t_muiten)');
+                        krpano.call('hotspot[t_muiten].loadstyle(muiten)');
+                        krpano.set('hotspot[t_muiten].ath', baseAth - 30);
+                        krpano.set('hotspot[t_muiten].atv', baseAtv + 15);
+                        log('➡️ 1. <b>muiten</b> (mũi tên) — ath=' + (baseAth-30).toFixed(0));
+
+                        // 2. vitri
+                        krpano.call('addhotspot(t_vitri)');
+                        krpano.call('hotspot[t_vitri].loadstyle(vitri)');
+                        krpano.set('hotspot[t_vitri].ath', baseAth - 10);
+                        krpano.set('hotspot[t_vitri].atv', baseAtv);
+                        log('📍 2. <b>vitri</b> (ghim vị trí) — ath=' + (baseAth-10).toFixed(0));
+
+                        // 3. tructhang
+                        krpano.call('addhotspot(t_tructhang)');
+                        krpano.call('hotspot[t_tructhang].loadstyle(tructhang)');
+                        krpano.set('hotspot[t_tructhang].ath', baseAth + 10);
+                        krpano.set('hotspot[t_tructhang].atv', baseAtv);
+                        log('🚁 3. <b>tructhang</b> (trực thăng) — ath=' + (baseAth+10).toFixed(0));
+
+                        // 4. thongtin
+                        krpano.call('addhotspot(t_thongtin)');
+                        krpano.call('hotspot[t_thongtin].loadstyle(thongtin)');
+                        krpano.set('hotspot[t_thongtin].ath', baseAth + 30);
+                        krpano.set('hotspot[t_thongtin].atv', baseAtv);
+                        log('ℹ️ 4. <b>thongtin</b> (thông tin) — ath=' + (baseAth+30).toFixed(0));
+
+                        // 5. vitri_raw (MANUAL — NO loadstyle, raw properties only)
+                        krpano.call('addhotspot(t_vitri_raw)');
+                        krpano.set('hotspot[t_vitri_raw].url', 'core/assets/iconlocation.png');
+                        krpano.set('hotspot[t_vitri_raw].scale', '0.5');
+                        krpano.set('hotspot[t_vitri_raw].edge', 'center');
+                        krpano.set('hotspot[t_vitri_raw].distorted', 'true');
+                        krpano.set('hotspot[t_vitri_raw].renderer', 'webgl');
+                        krpano.set('hotspot[t_vitri_raw].rx', '0');
+                        krpano.set('hotspot[t_vitri_raw].zoom', 'true');
+                        krpano.set('hotspot[t_vitri_raw].ath', baseAth + 50);
+                        krpano.set('hotspot[t_vitri_raw].atv', baseAtv);
+                        log('🔧 5. <b>vitri_raw</b> (thủ công, không loadstyle) — ath=' + (baseAth+50).toFixed(0));
+
+                        // Dump all properties after 3 seconds
+                        setTimeout(() => {
+                            log('<br><b>═══ KIỂM TRA THUỘC TÍNH THỰC TẾ ═══</b>');
+                            ['t_muiten', 't_vitri', 't_tructhang', 't_thongtin', 't_vitri_raw'].forEach(name => {
+                                const dist = krpano.get('hotspot[' + name + '].distorted');
+                                const rx = krpano.get('hotspot[' + name + '].rx');
+                                const url = krpano.get('hotspot[' + name + '].url');
+                                const loaded = krpano.get('hotspot[' + name + '].loaded');
+                                const visible = krpano.get('hotspot[' + name + '].visible');
+                                const alpha = krpano.get('hotspot[' + name + '].alpha');
+                                const scale = krpano.get('hotspot[' + name + '].scale');
+                                const rend = krpano.get('hotspot[' + name + '].renderer');
+                                const w = krpano.get('hotspot[' + name + '].imagewidth');
+                                const h = krpano.get('hotspot[' + name + '].imageheight');
+
+                                const isOk = loaded && visible && alpha > 0;
+                                const cls = isOk ? 'ok' : 'err';
+                                log('<br><b class="' + cls + '">' + name + (isOk ? ' ✅' : ' ❌') + '</b>');
+                                log('  distorted=<b>' + dist + '</b> | renderer=<b>' + rend + '</b> | rx=' + rx);
+                                log('  loaded=' + loaded + ' | visible=' + visible + ' | alpha=' + alpha + ' | scale=' + scale);
+                                log('  size=' + w + 'x' + h);
+                                log('  url=' + (url || '(trống)').substring(0, 50));
+                            });
+
+                            log('<br><b class="warn">═══ XIN HÃY QUAY CAMERA 360 VÀ QUAN SÁT ═══</b>');
+                            log('Nếu hotspot nào bị nhấp nháy khi quay camera,');
+                            log('hãy ghi nhận lại hotspot nào OK, hotspot nào lỗi.');
+                        }, 3000);
+
+                    }, 2500);
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

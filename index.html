@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ninh Phước 360 - Trải nghiệm Du lịch Thực tế ảo Ninh Thuận</title>
+    <meta name="description"
+        content="Khám phá vẻ đẹp Ninh Phước, Ninh Thuận qua tour thực tế ảo 360 độ. Tham quan các địa danh nổi bật và trải nghiệm văn hóa địa phương.">
+    <meta name="keywords"
+        content="Ninh Phước 360, du lịch Ninh Thuận, tour thực tế ảo, tham quan ảo, VR 360 Ninh Thuận">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Viet Design">
+
+    <!-- Link Canonical -->
+    <link rel="canonical" href="https://360.ninhphuoc.vn/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ninh Phước 360 - Trải nghiệm Du lịch Thực tế ảo">
+    <meta property="og:description" content="Khám phá Ninh Phước, Ninh Thuận qua góc nhìn 360 độ sống động.">
+    <meta property="og:image" content="https://360.ninhphuoc.vn/core/assets/og-preview.png">
+    <meta property="og:url" content="https://360.ninhphuoc.vn/">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ninh Phước 360 - VR Tour Ninh Thuận">
+    <meta name="twitter:description" content="Trải nghiệm du lịch thực tế ảo tại Ninh Phước.">
+    <meta name="twitter:image" content="https://360.ninhphuoc.vn/core/assets/og-preview.png">
+
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristAttraction",
+      "name": "Ninh Phước 360",
+      "description": "Trải nghiệm du lịch thực tế ảo 360 độ tại huyện Ninh Phước, tỉnh Ninh Thuận.",
+      "location": {
+        "@type": "Place",
+        "name": "Ninh Phước, Ninh Thuận",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Ninh Phước",
+          "addressRegion": "Ninh Thuận",
+          "addressCountry": "VN"
+        }
+      },
+      "url": "https://360.ninhphuoc.vn",
+      "image": "https://360.ninhphuoc.vn/core/assets/og-preview.png"
+    }
+    </script>
+
+    <!-- Favicon & Icons (TODO: Thay bằng icon Ninh Phước) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="core/assets/favicon-32.png">
+    <link rel="apple-touch-icon" href="core/assets/icon_ninhphuoc.png">
+
+    <!-- Preload Strategy: prioritize first-screen UI before non-critical map assets -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preload" href="core/css/style.css" as="style">
+    <link rel="preload" href="engine/tour.js" as="script">
+    <link rel="preload" href="core/js/app.js" as="script">
+
+    <!-- Preload: FontAwesome solid icons used in the intro card -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2"
+        as="font" type="font/woff2" crossorigin="anonymous">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="core/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Leaflet is non-critical for intro; load CSS/script without blocking first paint. -->
+    <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    </noscript>
+    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Google Analytics 4 (TODO: Thay bằng GA4 ID mới cho Ninh Phước) -->
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX', {
+            page_title: 'Ninh Phước 360 - VR Tour',
+            page_location: window.location.href
+        });
+    </script>
+    -->
+</head>
+
+<body>
+    <!-- Loading & Intro Screen -->
+    <div id="loading-screen">
+        <!-- Phase 1: Loading Progress Bar -->
+        <div class="loader-content" id="loader-phase">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="loading-progress"></div>
+            </div>
+            <h2>Ninh Phước 360°</h2>
+            <p>Đang tải trải nghiệm thực tế ảo... <span id="loading-text-percent">0%</span></p>
+        </div>
+
+        <!-- Phase 2: Intro / Welcome Card -->
+        <div class="intro-card hidden" id="intro-phase">
+            <!-- Header -->
+            <div class="intro-header">
+                <div class="intro-badge">THỰC TẾ ẢO 360°</div>
+                <h2 class="intro-title">Ninh Phước <span>360°</span></h2>
+                <p class="intro-subtitle">Huyện Ninh Phước · Tỉnh Ninh Thuận</p>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="intro-body">
+                <div class="intro-divider"></div>
+
+                <p class="intro-desc">
+                    Chào mừng bạn đến với hành trình khám phá <strong>huyện Ninh Phước</strong> qua góc nhìn thực tế ảo 360°
+                    — vùng đất giàu bản sắc văn hóa Chăm, nơi lưu giữ những di sản kiến trúc độc đáo
+                    và cảnh quan thiên nhiên tuyệt đẹp của tỉnh Ninh Thuận.
+                </p>
+
+                <p class="intro-desc">
+                    <!-- TODO: Bổ sung nội dung giới thiệu chi tiết về Ninh Phước -->
+                    Huyện Ninh Phước sở hữu nhiều địa danh nổi bật, từ các tháp Chăm cổ kính,
+                    làng nghề truyền thống đến những cánh đồng nho xanh mướt trải dài —
+                    tất cả đang chờ bạn khám phá qua góc nhìn 360 độ sống động.
+                </p>
+
+                <p class="intro-desc intro-eco">
+                    <i class="fa-solid fa-landmark"></i>
+                    Ninh Phước là trung tâm văn hóa Chăm quan trọng bậc nhất Việt Nam,
+                    với định hướng phát triển <strong>du lịch văn hóa — di sản</strong>,
+                    kết hợp bảo tồn giá trị truyền thống với trải nghiệm công nghệ hiện đại.
+                </p>
+            </div>
+
+            <!-- Footer: Guide + Button -->
+            <div class="intro-footer">
+                <div class="intro-guide">
+                    <div class="intro-guide-item">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                        <span>Kéo để xoay</span>
+                    </div>
+                    <div class="intro-guide-item">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        <span>Cuộn để phóng to</span>
+                    </div>
+                    <div class="intro-guide-item">
+                        <i class="fa-solid fa-circle-dot"></i>
+                        <span>Chạm các vị trí để di chuyển</span>
+                    </div>
+                </div>
+
+                <button id="btn-start-tour" class="btn-start-tour">
+                    <i class="fa-solid fa-play"></i>
+                    BẮT ĐẦU KHÁM PHÁ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KrPano Container -->
+    <div id="pano"></div>
+
+    <!-- UI Overlay Layer -->
+    <div id="ui-layer">
+
+        <!-- Logo / Brand -->
+        <div class="logo-compact glass-panel" id="logo-area">
+            <h1>Ninh Phước 360°</h1>
+            <span class="subtitle" id="current-scene-title">Đang tải...</span>
+        </div>
+
+        <!-- Desktop QR Code -->
+        <div id="desktop-qr" class="glass-panel"
+            style="position: absolute; bottom: 20px; left: 20px; padding: 10px; border-radius: 12px; display: none; text-align: center;">
+            <img id="qr-img" src="" alt="QR Code" style="width: 100px; height: 100px; border-radius: 8px;">
+            <p
+                style="margin: 5px 0 0; font-size: 11px; color: var(--primary); font-weight: bold; font-family: Verdana, sans-serif;">
+                Quét xem trên<br>Điện thoại</p>
+        </div>
+
+        <!-- Map Overlay (for clicking outside to close) -->
+        <div id="map-maximized-overlay"
+            style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:1999;">
+        </div>
+
+        <!-- Map Panel (Bottom Right) -->
+        <div id="map-panel" class="glass-panel">
+            <div id="map-header">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
+                </svg>
+                <span>Bản đồ vị trí</span>
+                <button id="btn-maximize-map" title="Phóng to bản đồ">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                    </svg>
+                </button>
+                <button id="btn-toggle-map">▼</button>
+            </div>
+            <div id="map-container"></div>
+        </div>
+
+        <!-- Unified Sidebar Navigation (Top Left) -->
+        <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <button id="btn-toggle-sidebar" class="icon-btn-text glass-panel" title="Danh sách Địa điểm">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                </svg>
+                <span>Địa điểm</span>
+            </button>
+            <div class="sidebar glass-panel hidden" id="sidebar">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <!-- Navigation Control Bar (Bottom Center) -->
+        <div class="nav-bar glass-panel" id="nav-bar">
+            <button id="btn-toggle-nav" class="icon-btn" title="Ẩn/Hiện thanh công cụ">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+            </button>
+
+            <div class="nav-controls hidden" id="nav-controls">
+
+                <div class="separator"></div>
+
+                <!-- Back Button -->
+                <button id="btn-back" class="icon-btn" style="display: none;" title="Quay lại scene trước">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                    </svg>
+                </button>
+
+                <button id="btn-share" class="icon-btn" title="Chia sẻ">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
+                    </svg>
+                </button>
+
+
+                <button id="btn-autorotate" class="icon-btn" title="Tự động xoay">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+                    </svg>
+                </button>
+                <button id="btn-vr" class="icon-btn" title="Chế độ VR">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20 5H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h4.5c.29 0 .58-.13.78-.36l1.22-1.39c.28-.32.68-.5 1.1-.5h1.8c.42 0 .82.18 1.1.5l1.22 1.39c.2.23.49.36.78.36H20c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2zm-9 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zm6 0c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                </button>
+                <button id="btn-fullscreen" class="icon-btn" title="Toàn màn hình">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Info Modal -->
+        <div id="info-modal-overlay" class="hidden">
+            <div id="info-modal" class="glass-panel">
+                <button id="btn-close-modal" class="icon-btn" title="Đóng">&times;</button>
+                <div class="modal-content-scroll">
+                    <h2 id="modal-title"></h2>
+                    <div id="modal-body"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="engine/tour.js"></script>
+    <script src="core/js/app.js"></script>
+</body>
+
+</html>

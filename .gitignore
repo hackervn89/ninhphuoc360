@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+_dev/node_modules/
+
+# Temp & Uploads
+_uploads_temp/
+_dev/_uploads_temp/
+*.log
+*.tmp
+*.bak
+
+# Developer tools & binaries
+_dev/krpano-tools/
+*.exe
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
