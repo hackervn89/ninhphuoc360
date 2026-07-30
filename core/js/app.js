@@ -108,28 +108,29 @@ function krpanoReady(krpano) {
 async function buildDynamicTourData() {
     if (!krpanoObj) return;
 
-    let apiScenesMap = {};
     let locationsMap = {};
-    try {
-        const [scRes, locRes] = await Promise.all([
-            fetch('/api/scenes'),
-            fetch('/api/locations')
-        ]);
-        const scData = await scRes.json();
-        const locData = await locRes.json();
 
-        if (scData.success && scData.scenes) {
-            scData.scenes.forEach(sc => {
-                apiScenesMap[sc.name] = sc;
-            });
-        }
-        if (locData.success && locData.locations) {
-            locData.locations.forEach(loc => {
-                locationsMap[loc.id] = loc.name;
-            });
+    // 1. Fetch static locations.json (works on GitHub Pages, CDNs, and offline)
+    try {
+        const locRes = await fetch('tours/locations.json');
+        if (locRes.ok) {
+            locationsMap = await locRes.json();
         }
     } catch (e) {
-        // Fallback when server API is offline
+        // Fallback for static fetch error
+    }
+
+    // 2. Fallback to API if static fetch returned empty (e.g. local dev server)
+    if (Object.keys(locationsMap).length === 0) {
+        try {
+            const locRes = await fetch('/api/locations');
+            const locData = await locRes.json();
+            if (locData && locData.success && locData.locations) {
+                locData.locations.forEach(loc => {
+                    locationsMap[loc.id] = loc.name;
+                });
+            }
+        } catch (e) {}
     }
 
     const sceneCount = Number(krpanoObj.get("scene.count")) || 0;
@@ -145,24 +146,19 @@ async function buildDynamicTourData() {
         let locId = 'default';
         let locLabel = 'Địa điểm Ninh Phước';
 
-        const apiSc = apiScenesMap[name];
-        if (apiSc && apiSc.sourceFile) {
-            const folderMatch = apiSc.sourceFile.match(/^tours\/([^\/]+)\/scenes\.xml$/);
-            if (folderMatch) {
-                locId = folderMatch[1];
-                locLabel = locationsMap[locId] || locId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            }
-            if (thumb && !thumb.startsWith('http') && !thumb.startsWith('/')) {
-                if (!thumb.startsWith('tours/')) {
-                    thumb = `tours/${locId}/${thumb}`;
-                }
-            }
-        } else {
-            if (thumb && !thumb.startsWith('http') && !thumb.startsWith('/')) {
-                if (!thumb.startsWith('tours/')) {
-                    const sceneFolder = name.replace(/^scene_/, '');
-                    thumb = `tours/${sceneFolder}/${thumb}`;
-                }
+        // Extract location folder from thumburl (e.g. "tours/lang_gom/panos/...")
+        const folderMatch = thumb.match(/^tours\/([^\/]+)\//);
+        if (folderMatch) {
+            locId = folderMatch[1];
+        }
+
+        if (locId !== 'default') {
+            locLabel = locationsMap[locId] || locId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        if (thumb && !thumb.startsWith('http') && !thumb.startsWith('/')) {
+            if (!thumb.startsWith('tours/')) {
+                thumb = `tours/${locId}/${thumb}`;
             }
         }
 
