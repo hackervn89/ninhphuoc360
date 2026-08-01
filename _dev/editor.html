@@ -1726,6 +1726,17 @@
                 if (hs) {
                     hs.linkedscene = val;
                     krpanoObj.set(`hotspot[${hs.name}].linkedscene`, val);
+
+                    // Auto-fill hotspot title from target scene title if current title is default/empty
+                    if (val && krpanoObj) {
+                        const targetTitle = krpanoObj.get(`scene[${val}].title`);
+                        if (targetTitle && (!hs.custom_title || hs.custom_title === 'Mũi tên di chuyển mới' || hs.custom_title === 'Ghim vị trí mới')) {
+                            hs.custom_title = targetTitle;
+                            inputHsTitle.value = targetTitle;
+                            krpanoObj.set(`hotspot[${hs.name}].custom_title`, targetTitle);
+                            renderHotspotList();
+                        }
+                    }
                     markDirty();
                 }
             });

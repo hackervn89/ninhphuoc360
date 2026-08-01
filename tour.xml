@@ -242,12 +242,32 @@
 	</layer>
 
 	<action name="show_custom_tooltip">
-		if(custom_title,
+		<!-- Auto-fetch target scene title & thumb if custom_title is empty or default generic text -->
+		set(tooltip_txt, '');
+		set(tooltip_thumb, '');
+
+		if(linkedscene,
+			if(custom_title === null OR custom_title === '' OR custom_title === 'Mũi tên di chuyển mới' OR custom_title === 'Ghim vị trí mới',
+				copy(tooltip_txt, scene[get(linkedscene)].title);
+			,
+				copy(tooltip_txt, custom_title);
+			);
+			if(custom_thumb === null OR custom_thumb === '',
+				copy(tooltip_thumb, scene[get(linkedscene)].thumburl);
+			,
+				copy(tooltip_thumb, custom_thumb);
+			);
+		,
+			copy(tooltip_txt, custom_title);
+			copy(tooltip_thumb, custom_thumb);
+		);
+
+		if(tooltip_txt,
 			set(layer[custom_tooltip].visible, true);
-			set(layer[custom_tooltip_text].html, get(custom_title));
+			set(layer[custom_tooltip_text].html, get(tooltip_txt));
 			
-			if(custom_thumb,
-				set(layer[custom_tooltip_thumb].url, get(custom_thumb));
+			if(tooltip_thumb,
+				set(layer[custom_tooltip_thumb].url, get(tooltip_thumb));
 				set(layer[custom_tooltip_thumb].visible, true);
 				set(layer[custom_tooltip].height, 125);
 				set(layer[custom_tooltip_text].y, 45);
