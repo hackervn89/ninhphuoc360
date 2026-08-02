@@ -38,6 +38,7 @@
 		<hotspot name="hs_new_056471" style="muiten" ath="147.8314" atv="30.2787" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_073770" style="muiten" ath="68.8841" atv="30.9833" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_654293" style="muiten" ath="-104.1824" atv="22.3311" linkedscene="scene_13" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_495606" style="muiten" ath="25.8218" atv="12.1963" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_6" title="Khu trưng bày" thumburl="panos/6.tiles/thumb.jpg">
 		<preview url="panos/6.tiles/preview.jpg" />
@@ -59,6 +60,7 @@
 		<hotspot name="hs_new_110671" style="muiten" ath="-74.4149" atv="19.8428" linkedscene="scene_7" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_135010" style="muiten" ath="12.6198" atv="40.8867" linkedscene="scene_8" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_171182" style="muiten" ath="-55.5263" atv="20.2418" linkedscene="scene_8" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_691769" style="muiten" ath="-104.8603" atv="14.8076" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_7" title="Khu trưng bày" thumburl="panos/7.tiles/thumb.jpg">
 		<preview url="panos/7.tiles/preview.jpg" />
@@ -79,6 +81,7 @@
 		<hotspot name="hs_new_187583" style="muiten" ath="-24.2685" atv="28.0225" linkedscene="scene_8" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_197950" style="muiten" ath="78.5741" atv="13.8735" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_206276" style="muiten" ath="46.1763" atv="15.3861" linkedscene="scene_9" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_310082" style="muiten" ath="-178.3900" atv="17.9180" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_8" title="Khu trưng bày" thumburl="panos/8.tiles/thumb.jpg">
 		<view hlookat="-112.3" vlookat="35.9" fov="84.3" maxpixelzoom="2.0" fovmin="60" fovmax="120" />
@@ -100,7 +103,8 @@
 		<hotspot name="hs_new_398468" style="muiten" ath="-15.2028" atv="18.6008" linkedscene="scene_9" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_405235" style="muiten" ath="12.1073" atv="14.8563" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_418242" style="muiten" ath="36.3162" atv="6.3268" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới" />
-		<hotspot name="hs_new_434663" style="muiten" ath="90.6562" atv="31.7565" linkedscene="scene_7" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_434663" style="muiten" ath="97.9496" atv="35.8297" linkedscene="scene_7" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_278070" style="muiten" ath="88.6294" atv="12.0664" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_9" title="Khu trưng bày" thumburl="panos/9.tiles/thumb.jpg">
 		<preview url="panos/9.tiles/preview.jpg" />
@@ -122,6 +126,7 @@
 		<hotspot name="hs_new_117931" style="muiten" ath="-161.0693" atv="12.2194" linkedscene="scene_9" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_125415" style="muiten" ath="95.0045" atv="19.0280" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_134970" style="muiten" ath="114.2564" atv="8.2962" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_253431" style="muiten" ath="161.5915" atv="9.1387" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	
 	<scene name="scene_14" title="Khu làm gốm" thumburl="panos/14.tiles/thumb.jpg">
@@ -158,5 +163,46 @@
 				<cube url="panos/13.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
+		<hotspot name="hs_new_865125" style="muiten" ath="20.7787" atv="20.0093" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_872207" style="muiten" ath="74.2654" atv="16.5800" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới" />
+	</scene>
+	<scene name="scene_nha_lam_viec1" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec1.tiles/thumb.jpg">
+		<preview url="panos/nha_lam_viec1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/nha_lam_viec1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nha_lam_viec1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nha_lam_viec1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nha_lam_viec1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_776473" style="muiten" ath="55.0452" atv="24.8911" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_789475" style="muiten" ath="65.8470" atv="6.3884" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
+	</scene>
+	<scene name="scene_nha_lam_viec2" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec2.tiles/thumb.jpg">
+		<preview url="panos/nha_lam_viec2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/nha_lam_viec2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nha_lam_viec2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nha_lam_viec2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nha_lam_viec2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_727511" style="muiten" ath="19.5735" atv="8.9513" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_752017" style="muiten" ath="-18.9152" atv="7.1802" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_764376" style="muiten" ath="-1641.8337" atv="23.9975" linkedscene="scene_nha_lam_viec1" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 </krpano>
