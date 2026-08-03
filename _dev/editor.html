@@ -907,7 +907,7 @@
                     <div class="view-params-grid">
                         <div class="view-param-box">
                             <label>FOV Min</label>
-                            <input type="number" id="input-fovmin" value="60" min="30" max="120" step="1" title="Giá trị nhỏ = zoom sâu hơn">
+                            <input type="number" id="input-fovmin" value="60" min="20" max="120" step="1" title="Giá trị nhỏ = zoom sâu hơn">
                         </div>
                         <div class="view-param-box">
                             <label>FOV Max</label>
@@ -917,6 +917,14 @@
                             <label>Pixel Zoom</label>
                             <input type="number" id="input-maxpixelzoom" value="2.0" min="0.5" max="5.0" step="0.1" title="Hệ số phóng to pixel tối đa">
                         </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px;">
+                        <button id="btn-set-fovmin" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 5px 4px;" title="Dùng độ zoom hiện tại làm giới hạn zoom sâu nhất">
+                            <i class="fa-solid fa-bullseye"></i> Đặt FOV Min
+                        </button>
+                        <button id="btn-set-fovmax" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 5px 4px;" title="Dùng độ zoom hiện tại làm giới hạn nhìn xa nhất">
+                            <i class="fa-solid fa-expand"></i> Đặt FOV Max
+                        </button>
                     </div>
 
                     <button id="btn-save-view" class="btn-action btn-view-save">
@@ -1953,24 +1961,55 @@
                 }
             });
 
-            // Live apply fovmin/fovmax/maxpixelzoom when user types
+            // Live apply fovmin/fovmax/maxpixelzoom when user types or changes input
             const inputFovMin = document.getElementById('input-fovmin');
             const inputFovMax = document.getElementById('input-fovmax');
             const inputMaxPixelZoom = document.getElementById('input-maxpixelzoom');
 
-            inputFovMin.addEventListener('change', () => {
+            const applyFovMin = () => {
                 if (krpanoObj) {
-                    krpanoObj.set('view.fovmin', parseFloat(inputFovMin.value));
+                    const val = parseFloat(inputFovMin.value) || 60;
+                    krpanoObj.set('view.fovmin', val);
+                }
+            };
+            const applyFovMax = () => {
+                if (krpanoObj) {
+                    const val = parseFloat(inputFovMax.value) || 120;
+                    krpanoObj.set('view.fovmax', val);
+                }
+            };
+            const applyMaxPixelZoom = () => {
+                if (krpanoObj) {
+                    const val = parseFloat(inputMaxPixelZoom.value) || 2.0;
+                    krpanoObj.set('view.maxpixelzoom', val);
+                }
+            };
+
+            inputFovMin.addEventListener('input', applyFovMin);
+            inputFovMin.addEventListener('change', applyFovMin);
+
+            inputFovMax.addEventListener('input', applyFovMax);
+            inputFovMax.addEventListener('change', applyFovMax);
+
+            inputMaxPixelZoom.addEventListener('input', applyMaxPixelZoom);
+            inputMaxPixelZoom.addEventListener('change', applyMaxPixelZoom);
+
+            // Quick Set FOV Min / Max to Current Zoom level
+            document.getElementById('btn-set-fovmin').addEventListener('click', () => {
+                if (krpanoObj) {
+                    const currentFov = Math.round(Number(krpanoObj.get('view.fov') || 60));
+                    inputFovMin.value = currentFov;
+                    krpanoObj.set('view.fovmin', currentFov);
+                    showToast(`🎯 Đã gán FOV Min = ${currentFov}° (Giới hạn zoom sâu nhất)`);
                 }
             });
-            inputFovMax.addEventListener('change', () => {
+
+            document.getElementById('btn-set-fovmax').addEventListener('click', () => {
                 if (krpanoObj) {
-                    krpanoObj.set('view.fovmax', parseFloat(inputFovMax.value));
-                }
-            });
-            inputMaxPixelZoom.addEventListener('change', () => {
-                if (krpanoObj) {
-                    krpanoObj.set('view.maxpixelzoom', parseFloat(inputMaxPixelZoom.value));
+                    const currentFov = Math.round(Number(krpanoObj.get('view.fov') || 120));
+                    inputFovMax.value = currentFov;
+                    krpanoObj.set('view.fovmax', currentFov);
+                    showToast(`🎯 Đã gán FOV Max = ${currentFov}° (Giới hạn zoom xa nhất)`);
                 }
             });
 
