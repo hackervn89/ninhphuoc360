@@ -1793,7 +1793,9 @@
                     atv: atv,
                     linkedscene: '',
                     custom_title: 'Mũi tên di chuyển mới',
-                    infoid: ''
+                    infoid: '',
+                    show_title: 'true',
+                    show_thumb: 'true'
                 };
 
                 // Add to array
@@ -1981,34 +1983,6 @@
             const inputFovMax = document.getElementById('input-fovmax');
             const inputMaxPixelZoom = document.getElementById('input-maxpixelzoom');
 
-            const applyFovMin = () => {
-                if (krpanoObj) {
-                    const val = parseFloat(inputFovMin.value) || 60;
-                    krpanoObj.set('view.fovmin', val);
-                }
-            };
-            const applyFovMax = () => {
-                if (krpanoObj) {
-                    const val = parseFloat(inputFovMax.value) || 120;
-                    krpanoObj.set('view.fovmax', val);
-                }
-            };
-            const applyMaxPixelZoom = () => {
-                if (krpanoObj) {
-                    const val = parseFloat(inputMaxPixelZoom.value) || 2.0;
-                    krpanoObj.set('view.maxpixelzoom', val);
-                }
-            };
-
-            inputFovMin.addEventListener('input', applyFovMin);
-            inputFovMin.addEventListener('change', applyFovMin);
-
-            inputFovMax.addEventListener('input', applyFovMax);
-            inputFovMax.addEventListener('change', applyFovMax);
-
-            inputMaxPixelZoom.addEventListener('input', applyMaxPixelZoom);
-            inputMaxPixelZoom.addEventListener('change', applyMaxPixelZoom);
-
             // Quick Set FOV Min / Max to Current Zoom level
             document.getElementById('btn-set-fovmin').addEventListener('click', () => {
                 if (krpanoObj) {
@@ -2042,20 +2016,6 @@
                     if (elH) elH.textContent = `${h}°`;
                     if (elV) elV.textContent = `${v}°`;
                     if (elF) elF.textContent = `${f}°`;
-
-                    // Sync zoom param inputs from KrPano (only if not focused)
-                    if (document.activeElement !== inputFovMin) {
-                        const fovmin = Number(krpanoObj.get('view.fovmin') || 60).toFixed(0);
-                        if (inputFovMin.value !== fovmin) inputFovMin.value = fovmin;
-                    }
-                    if (document.activeElement !== inputFovMax) {
-                        const fovmax = Number(krpanoObj.get('view.fovmax') || 120).toFixed(0);
-                        if (inputFovMax.value !== fovmax) inputFovMax.value = fovmax;
-                    }
-                    if (document.activeElement !== inputMaxPixelZoom) {
-                        const mpz = Number(krpanoObj.get('view.maxpixelzoom') || 2.0).toFixed(1);
-                        if (inputMaxPixelZoom.value !== mpz) inputMaxPixelZoom.value = mpz;
-                    }
                 }
             }, 200);
         }
@@ -2070,9 +2030,11 @@
             const hlookat = Number(krpanoObj.get("view.hlookat") || 0).toFixed(1);
             const vlookat = Number(krpanoObj.get("view.vlookat") || 0).toFixed(1);
             const fov = Number(krpanoObj.get("view.fov") || 100).toFixed(1);
-            const fovmin = Number(krpanoObj.get('view.fovmin') || 60).toFixed(0);
-            const fovmax = Number(krpanoObj.get('view.fovmax') || 120).toFixed(0);
-            const maxpixelzoom = Number(krpanoObj.get('view.maxpixelzoom') || 2.0).toFixed(1);
+            
+            // READ DIRECTLY FROM DOM INPUTS SO USER SELECTION IS ALWAYS SAVED ACCURATELY!
+            const fovmin = document.getElementById('input-fovmin').value || '60';
+            const fovmax = document.getElementById('input-fovmax').value || '120';
+            const maxpixelzoom = document.getElementById('input-maxpixelzoom').value || '1.0';
 
             try {
                 const res = await fetch('/api/scenes/view', {
