@@ -872,6 +872,24 @@
                         <input type="text" id="hs-title" placeholder="Ví dụ: Đi vào tháp">
                     </div>
 
+                    <!-- Toggle Tooltip Elements: Title & Thumb -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="hs-show-title" style="font-size: 11px;">Hiển thị Tên</label>
+                            <select id="hs-show-title" style="font-size: 12px; padding: 6px;">
+                                <option value="true">Có (Hiện)</option>
+                                <option value="false">Không (Ẩn)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="hs-show-thumb" style="font-size: 11px;">Hiển thị Ảnh (Thumb)</label>
+                            <select id="hs-show-thumb" style="font-size: 12px; padding: 6px;">
+                                <option value="true">Có (Hiện)</option>
+                                <option value="false">Không (Ẩn)</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Destination Scene (Only for link scenes: muiten, vitri, tructhang) -->
                     <div class="form-group" id="group-linkedscene">
                         <label for="hs-linkedscene">Đến Cảnh (linkedscene)</label>
@@ -1042,6 +1060,8 @@
         const inputHsId = document.getElementById('lbl-hs-id');
         const selectHsStyle = document.getElementById('hs-style');
         const inputHsTitle = document.getElementById('hs-title');
+        const selectHsShowTitle = document.getElementById('hs-show-title');
+        const selectHsShowThumb = document.getElementById('hs-show-thumb');
         const selectHsLinked = document.getElementById('hs-linkedscene');
         const inputHsInfo = document.getElementById('hs-infoid');
         const inputHsAth = document.getElementById('hs-ath');
@@ -1520,6 +1540,9 @@
                     const ath = Number(krpanoObj.get(`hotspot[${i}].ath`)).toFixed(4);
                     const atv = Number(krpanoObj.get(`hotspot[${i}].atv`)).toFixed(4);
                     
+                    const stVal = krpanoObj.get(`hotspot[${i}].show_title`);
+                    const smVal = krpanoObj.get(`hotspot[${i}].show_thumb`);
+
                     sceneHotspots.push({
                         name: name,
                         style: style,
@@ -1527,7 +1550,9 @@
                         atv: atv,
                         linkedscene: krpanoObj.get(`hotspot[${i}].linkedscene`) || '',
                         custom_title: krpanoObj.get(`hotspot[${i}].custom_title`) || krpanoObj.get(`hotspot[${i}].tooltip`) || '',
-                        infoid: krpanoObj.get(`hotspot[${i}].infoid`) || ''
+                        infoid: krpanoObj.get(`hotspot[${i}].infoid`) || '',
+                        show_title: stVal === 'false' || stVal === false ? 'false' : 'true',
+                        show_thumb: smVal === 'false' || smVal === false ? 'false' : 'true'
                     });
 
                     // Enable dragging in KrPano dynamically
@@ -1584,6 +1609,8 @@
             inputHsId.textContent = hs.name;
             selectHsStyle.value = hs.style;
             inputHsTitle.value = hs.custom_title;
+            selectHsShowTitle.value = hs.show_title || 'true';
+            selectHsShowThumb.value = hs.show_thumb || 'true';
             selectHsLinked.value = hs.linkedscene;
             inputHsInfo.value = hs.infoid;
             inputHsAth.value = hs.ath;
@@ -1720,6 +1747,26 @@
                 }
             });
 
+            selectHsShowTitle.addEventListener('change', (e) => {
+                const val = e.target.value;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.show_title = val;
+                    krpanoObj.set(`hotspot[${hs.name}].show_title`, val);
+                    markDirty();
+                }
+            });
+
+            selectHsShowThumb.addEventListener('change', (e) => {
+                const val = e.target.value;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.show_thumb = val;
+                    krpanoObj.set(`hotspot[${hs.name}].show_thumb`, val);
+                    markDirty();
+                }
+            });
+
             selectHsLinked.addEventListener('change', (e) => {
                 const val = e.target.value;
                 const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
@@ -1777,10 +1824,12 @@
                 } else {
                     let xmlCode = '';
                     sceneHotspots.forEach(h => {
+                        let showTitleAttr = h.show_title === 'false' ? ' show_title="false"' : '';
+                        let showThumbAttr = h.show_thumb === 'false' ? ' show_thumb="false"' : '';
                         if (h.style === 'thongtin') {
-                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid}" custom_title="${h.custom_title}" />\n`;
+                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid}" custom_title="${h.custom_title}"${showTitleAttr}${showThumbAttr} />\n`;
                         } else {
-                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene}" custom_title="${h.custom_title}" />\n`;
+                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene}" custom_title="${h.custom_title}"${showTitleAttr}${showThumbAttr} />\n`;
                         }
                     });
                     xmlTextarea.value = xmlCode.trimEnd();
@@ -1883,10 +1932,13 @@
             let hotspotsXml = '';
             if (hotspots && hotspots.length > 0) {
                 hotspots.forEach(h => {
+                    let showTitleAttr = h.show_title === 'false' ? ' show_title="false"' : '';
+                    let showThumbAttr = h.show_thumb === 'false' ? ' show_thumb="false"' : '';
+
                     if (h.style === 'thongtin') {
-                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}" />\n`;
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
                     } else {
-                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}" />\n`;
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
                     }
                 });
             }

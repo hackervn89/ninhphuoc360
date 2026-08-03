@@ -973,10 +973,13 @@ app.post('/api/scenes/save', async (req, res) => {
         if (hotspots && hotspots.length > 0) {
             hotspotsXml = '\n';
             hotspots.forEach(h => {
+                let showTitleAttr = (h.show_title === 'false' || h.show_title === false) ? ' show_title="false"' : '';
+                let showThumbAttr = (h.show_thumb === 'false' || h.show_thumb === false) ? ' show_thumb="false"' : '';
+
                 if (h.style === 'thongtin') {
-                    hotspotsXml += `\t\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}" />\n`;
+                    hotspotsXml += `\t\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
                 } else {
-                    hotspotsXml += `\t\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}" />\n`;
+                    hotspotsXml += `\t\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
                 }
             });
         }

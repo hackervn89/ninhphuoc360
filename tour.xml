@@ -233,51 +233,94 @@
 	<!-- ========================================== -->
 	<!-- CUSTOM TOOLTIP (Text + Thumbnail) -->
 	<!-- ========================================== -->
-	<style name="tooltip_text_style" type="text" background="false" css="color:#ffffff; font-family:'Segoe UI', Arial, sans-serif; font-size:13px; font-weight:bold; text-align:center; text-shadow:0px 1px 2px #000;" enabled="false" />
+	<!-- ========================================== -->
+	<!-- CUSTOM TOOLTIP CARD (Text + Thumbnail) -->
+	<!-- High Contrast & Crisp Sharp Styling -->
+	<!-- ========================================== -->
+	<style name="tooltip_text_style" type="text" background="false" css="color:#ffffff; font-family:'Roboto', 'Segoe UI', Arial, sans-serif; font-size:14px; font-weight:bold; text-align:center; text-shadow:0px 2px 5px rgba(0,0,0,0.9); padding:4px 8px; line-height:1.3;" enabled="false" />
 
-	<!-- Floating Container -->
-	<layer name="custom_tooltip" keep="true" type="container" align="lefttop" edge="bottom" width="160" height="35" bgcolor="0x1a202c" bgalpha="0.85" bgroundedge="6" bgshadow="0 4 10 0x000000 0.5" zorder="99" alpha="0" enabled="false" capture="false" visible="false">
-		<layer name="custom_tooltip_thumb" type="image" align="top" y="5" width="150" height="85" url="" visible="false" enabled="false" capture="false" />
-		<layer name="custom_tooltip_text" style="tooltip_text_style" align="center" edge="center" x="0" y="0" html="" enabled="false" capture="false" />
+	<!-- Floating Container Card -->
+	<layer name="custom_tooltip" keep="true" type="container" align="lefttop" edge="bottom" width="180" height="40" bgcolor="0x0a0f1d" bgalpha="0.95" bgroundedge="8" bgborder="2 0xffffff 0.85" bgshadow="0 8 24 0x000000 0.75" zorder="999" alpha="0" enabled="false" capture="false" visible="false">
+		<layer name="custom_tooltip_thumb" type="image" align="top" y="6" width="168" height="95" bgroundedge="5" url="" visible="false" enabled="false" capture="false" />
+		<layer name="custom_tooltip_text" style="tooltip_text_style" align="top" edge="top" x="0" y="6" html="" enabled="false" capture="false" />
 	</layer>
 
 	<action name="show_custom_tooltip">
-		<!-- Auto-fetch target scene title & thumb if custom_title is empty or default generic text -->
+		<!-- Check show_title and show_thumb options (default to true if not explicitly set to false) -->
+		set(can_show_title, true);
+		set(can_show_thumb, true);
+
+		if(show_title === 'false' OR show_title === false, set(can_show_title, false) );
+		if(show_thumb === 'false' OR show_thumb === false, set(can_show_thumb, false) );
+
 		set(tooltip_txt, '');
 		set(tooltip_thumb, '');
 
-		if(linkedscene,
-			if(custom_title === null OR custom_title === '' OR custom_title === 'Mũi tên di chuyển mới' OR custom_title === 'Ghim vị trí mới',
-				copy(tooltip_txt, scene[get(linkedscene)].title);
+		if(can_show_title,
+			if(linkedscene,
+				if(custom_title === null OR custom_title === '' OR custom_title === 'Mũi tên di chuyển mới' OR custom_title === 'Ghim vị trí mới',
+					copy(tooltip_txt, scene[get(linkedscene)].title);
+				,
+					copy(tooltip_txt, custom_title);
+				);
 			,
 				copy(tooltip_txt, custom_title);
 			);
-			if(custom_thumb === null OR custom_thumb === '',
-				copy(tooltip_thumb, scene[get(linkedscene)].thumburl);
+		);
+
+		if(can_show_thumb,
+			if(linkedscene,
+				if(custom_thumb === null OR custom_thumb === '',
+					copy(tooltip_thumb, scene[get(linkedscene)].thumburl);
+				,
+					copy(tooltip_thumb, custom_thumb);
+				);
 			,
 				copy(tooltip_thumb, custom_thumb);
 			);
-		,
-			copy(tooltip_txt, custom_title);
-			copy(tooltip_thumb, custom_thumb);
 		);
 
-		if(tooltip_txt,
+		<!-- Render Card only if title or thumb is visible -->
+		if(tooltip_txt OR tooltip_thumb,
 			set(layer[custom_tooltip].visible, true);
-			set(layer[custom_tooltip_text].html, get(tooltip_txt));
-			
-			if(tooltip_thumb,
+
+			<!-- Scenario 1: BOTH Title and Thumb -->
+			if(tooltip_txt AND tooltip_thumb,
+				set(layer[custom_tooltip_text].html, get(tooltip_txt));
+				set(layer[custom_tooltip_text].visible, true);
+				set(layer[custom_tooltip_text].y, 105);
+				
 				set(layer[custom_tooltip_thumb].url, get(tooltip_thumb));
 				set(layer[custom_tooltip_thumb].visible, true);
-				set(layer[custom_tooltip].height, 125);
-				set(layer[custom_tooltip_text].y, 45);
-			,
-				set(layer[custom_tooltip_thumb].visible, false);
-				set(layer[custom_tooltip].height, 35);
-				set(layer[custom_tooltip_text].y, 0);
+
+				set(layer[custom_tooltip].width, 180);
+				set(layer[custom_tooltip].height, 138);
 			);
 
-			<!-- Follow Mouse Position smoothly, offset above cursor to prevent mouse event conflict -->
+			<!-- Scenario 2: ONLY Thumb (No Title) -->
+			if(!tooltip_txt AND tooltip_thumb,
+				set(layer[custom_tooltip_text].visible, false);
+				
+				set(layer[custom_tooltip_thumb].url, get(tooltip_thumb));
+				set(layer[custom_tooltip_thumb].visible, true);
+
+				set(layer[custom_tooltip].width, 180);
+				set(layer[custom_tooltip].height, 107);
+			);
+
+			<!-- Scenario 3: ONLY Title (No Thumb) -->
+			if(tooltip_txt AND !tooltip_thumb,
+				set(layer[custom_tooltip_text].html, get(tooltip_txt));
+				set(layer[custom_tooltip_text].visible, true);
+				set(layer[custom_tooltip_text].y, 5);
+
+				set(layer[custom_tooltip_thumb].visible, false);
+
+				set(layer[custom_tooltip].width, 180);
+				set(layer[custom_tooltip].height, 36);
+			);
+
+			<!-- Follow Mouse Position smoothly, offset above cursor -->
 			asyncloop(layer[custom_tooltip].visible,
 				set(layer[custom_tooltip].x, get(mouse.x));
 				calc(layer[custom_tooltip].y, mouse.y - 45);
@@ -428,6 +471,8 @@
 		<include url="tours/lang_gom/scenes.xml" />
 
 		<include url="tours/nha_sinh_hoat/scenes.xml" />
+
+		<include url="tours/htx_gom_bautruc/scenes.xml" />
 
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">
