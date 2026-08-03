@@ -17,6 +17,7 @@
 			</level>
 		</image>
 		<hotspot name="hs_new_486451" style="muiten" ath="-132.9560" atv="21.5825" linkedscene="scene_duongdi1" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_410997" style="thongtin" ath="-127.2540" atv="-9.3047" infoid="info_356555" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_duongdi1" title="Đường đi 1" thumburl="panos/duongdi1.tiles/thumb.jpg">
 		<view hlookat="-88.1" vlookat="4.7" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
@@ -38,7 +39,7 @@
 		<hotspot name="hs_new_500049" style="muiten" ath="156.5868" atv="15.3792" linkedscene="scene_cong_lang" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_508183" style="muiten" ath="-98.2571" atv="24.4345" linkedscene="scene_duongdi2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
-	<scene name="scene_duongdi2" title="Đường đi 2" thumburl="panos/duongdi2.tiles/thumb.jpg">
+	<scene name="scene_duongdi2" title="Nhà sinh hoạt cộng đồng Chăm" thumburl="panos/duongdi2.tiles/thumb.jpg">
 		<view hlookat="-146.3" vlookat="9.9" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/duongdi2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">

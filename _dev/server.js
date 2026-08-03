@@ -1144,6 +1144,78 @@ app.delete('/api/scenes/:sceneId', async (req, res) => {
 });
 
 // ============================================================
+// API: INFO MANAGER — CRUD on tours/infos.json
+// ============================================================
+
+const INFOS_PATH = path.join(TOURS_DIR, 'infos.json');
+
+function readInfos() {
+    if (!fs.existsSync(INFOS_PATH)) {
+        fs.writeFileSync(INFOS_PATH, '{}', 'utf-8');
+    }
+    try {
+        return JSON.parse(fs.readFileSync(INFOS_PATH, 'utf-8'));
+    } catch {
+        return {};
+    }
+}
+
+// GET /api/infos — get all info entries
+app.get('/api/infos', (req, res) => {
+    try {
+        const infos = readInfos();
+        res.json({ success: true, infos });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// POST /api/infos/save — create or update an info entry
+app.post('/api/infos/save', (req, res) => {
+    try {
+        const { id, title, subtitle, content } = req.body;
+        if (!id || !id.trim()) {
+            return res.status(400).json({ success: false, error: 'Thiếu trường id' });
+        }
+        if (!title || !title.trim()) {
+            return res.status(400).json({ success: false, error: 'Thiếu trường title' });
+        }
+
+        const infos = readInfos();
+        infos[id] = {
+            id: id.trim(),
+            title: title.trim(),
+            subtitle: (subtitle || '').trim(),
+            content: content || '',
+            updatedAt: new Date().toISOString()
+        };
+
+        fs.writeFileSync(INFOS_PATH, JSON.stringify(infos, null, 2), 'utf-8');
+        console.log(`📝 Saved info "${id}"`);
+        res.json({ success: true, message: `Đã lưu bài viết "${id}"`, info: infos[id] });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// DELETE /api/infos/:id — delete one info entry
+app.delete('/api/infos/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const infos = readInfos();
+        if (!infos[id]) {
+            return res.status(404).json({ success: false, error: `Bài viết "${id}" không tồn tại` });
+        }
+        delete infos[id];
+        fs.writeFileSync(INFOS_PATH, JSON.stringify(infos, null, 2), 'utf-8');
+        console.log(`🗑️ Deleted info "${id}"`);
+        res.json({ success: true, message: `Đã xóa bài viết "${id}"` });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
 // ERROR HANDLING
 // ============================================================
 

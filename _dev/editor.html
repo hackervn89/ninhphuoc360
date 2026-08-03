@@ -844,6 +844,102 @@
             border-color: var(--primary);
             outline: none;
         }
+        .richbtn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.15s;
+        }
+        .richbtn:hover {
+            background: rgba(255,215,0,0.2);
+            border-color: rgba(255,215,0,0.5);
+            color: #FFD700;
+        }
+        .wysiwyg-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.15s;
+        }
+        .wysiwyg-btn:hover {
+            background: rgba(255,215,0,0.25);
+            border-color: #FFD700;
+            color: #FFD700;
+        }
+        .wysiwyg-color-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+        .wysiwyg-color-dot:hover {
+            transform: scale(1.3);
+            border-color: #ffffff;
+        }
+        #info-field-wysiwyg:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 16px rgba(59, 130, 246, 0.25);
+        }
+        #info-field-wysiwyg[contenteditable]:empty:before {
+            content: attr(placeholder);
+            color: #94a3b8;
+            font-style: italic;
+        }
+        #info-field-wysiwyg h3 {
+            font-size: 16px;
+            color: #1e3a8a;
+            margin: 12px 0 6px 0;
+            font-weight: 700;
+        }
+        #info-field-wysiwyg p {
+            margin-bottom: 8px;
+        }
+        #info-field-wysiwyg ul, #info-field-wysiwyg ol {
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+        .info-list-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            margin-bottom: 4px;
+            transition: all 0.15s;
+        }
+        .info-list-item:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .info-list-item.active {
+            background: rgba(255,215,0,0.12);
+            border-color: rgba(255,215,0,0.3);
+        }
+        .info-list-item .info-item-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f3f4f6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .info-list-item .info-item-id {
+            font-size: 10px;
+            color: #6b7280;
+            font-family: monospace;
+            margin-top: 2px;
+        }
     </style>
 </head>
 
@@ -885,8 +981,106 @@
                     <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">E</kbd> Xuất XML
                     <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">V</kbd> Lưu View
                 </span>
+                <button id="btn-open-info-manager" style="margin-left: auto; background: linear-gradient(135deg, #1d4ed8, #2563eb); border: none; color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-book-open"></i> Quản lý Thuyết minh
+                </button>
             </div>
             <div id="pano"></div>
+        </div>
+
+        <!-- Info Manager Modal -->
+        <div id="info-manager-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+            <div style="background:#0d1b2e; border:1px solid rgba(255,215,0,0.3); border-radius:16px; width:92vw; max-width:1200px; height:90vh; display:grid; grid-template-columns:300px 1fr; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.7);">
+                
+                <!-- Left: List Panel -->
+                <div style="border-right:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; background:rgba(0,0,0,0.3);">
+                    <div style="padding:20px 16px 12px; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                            <i class="fa-solid fa-book-open" style="color:#FFD700;"></i>
+                            <span style="font-weight:700; font-size:14px; color:#FFD700;">DANH SÁCH THUYẾT MINH</span>
+                        </div>
+                        <button id="btn-info-new" style="width:100%; background:linear-gradient(135deg,#1d4ed8,#2563eb); border:none; color:white; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600;">
+                            <i class="fa-solid fa-plus"></i> Tạo bài viết mới
+                        </button>
+                        <input type="text" id="info-search" placeholder="Tìm kiếm bài viết..." style="margin-top:8px; width:100%; padding:6px 10px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:white; font-size:12px;">
+                    </div>
+                    <div id="info-list-container" style="flex:1; overflow-y:auto; padding:8px;"></div>
+                </div>
+
+                <!-- Right: Editor Panel -->
+                <div style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
+                    <div style="padding:16px 20px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-weight:700; font-size:14px; color:white;"><i class="fa-solid fa-pen-to-square" style="color:#FFD700;"></i> <span id="info-editor-title-label">Chưa chọn bài viết</span></span>
+                        <button id="btn-close-info-manager" style="background:none; border:none; color:#9ca3af; cursor:pointer; font-size:20px; padding:4px;">&times;</button>
+                    </div>
+
+                    <div style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column;">
+                        <div id="info-empty-state" style="flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; color:#6b7280; min-height:400px;">
+                            <i class="fa-solid fa-book" style="font-size:48px; opacity:0.3;"></i>
+                            <p style="font-size:14px;">Chọn một bài viết hoặc tạo mới để bắt đầu soạn thảo</p>
+                        </div>
+
+                        <div id="info-form" style="display:none; flex-direction:column; gap:14px; height:100%;">
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                                <div>
+                                    <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">MÃ ID (infoid)</label>
+                                    <input type="text" id="info-field-id" placeholder="vd: info_lang_gom_lichsu" style="width:100%; padding:9px 12px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:white; font-size:13px; font-family:monospace;">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">PHỤ ĐỀ / TRÍCH DẪN (tùy chọn)</label>
+                                    <input type="text" id="info-field-subtitle" placeholder="vd: Di sản văn hóa phi vật thể UNESCO" style="width:100%; padding:9px 12px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:white; font-size:13px;">
+                                </div>
+                            </div>
+                            <div>
+                                <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">TIÊU ĐỀ CHÍNH</label>
+                                <input type="text" id="info-field-title" placeholder="vd: Nghệ thuật làm Gốm Bàu Trúc" style="width:100%; padding:9px 12px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:white; font-size:14px; font-weight:600;">
+                            </div>
+
+                            <!-- Single Large WYSIWYG Visual Editor -->
+                            <div style="flex:1; display:flex; flex-direction:column; min-height:360px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.06); padding:8px 12px; border:1px solid rgba(255,255,255,0.15); border-bottom:none; border-radius:10px 10px 0 0;">
+                                    <label style="font-size:12px; font-weight:700; color:#FFD700; display:flex; align-items:center; gap:6px;">
+                                        <i class="fa-solid fa-feather"></i> NỘI DUNG BÀI VIẾT (Soạn thảo trực tiếp)
+                                    </label>
+                                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                        <button class="wysiwyg-btn" data-cmd="bold" title="In đậm (Ctrl+B)"><b>B</b></button>
+                                        <button class="wysiwyg-btn" data-cmd="italic" title="In nghiêng (Ctrl+I)"><i>I</i></button>
+                                        <button class="wysiwyg-btn" data-cmd="underline" title="Gạch chân (Ctrl+U)"><u>U</u></button>
+                                        <span style="border-left:1px solid rgba(255,255,255,0.2); margin:0 2px;"></span>
+                                        <button class="wysiwyg-btn" data-cmd="formatBlock" data-val="h3" title="Tiêu đề H3"><b>H3</b></button>
+                                        <button class="wysiwyg-btn" data-cmd="formatBlock" data-val="p" title="Đoạn văn">¶</button>
+                                        <span style="border-left:1px solid rgba(255,255,255,0.2); margin:0 2px;"></span>
+                                        <button class="wysiwyg-btn" data-cmd="insertUnorderedList" title="Danh sách chấm">• Danh sách</button>
+                                        <button class="wysiwyg-btn" data-cmd="insertOrderedList" title="Danh sách số">1. Số</button>
+                                        <span style="border-left:1px solid rgba(255,255,255,0.2); margin:0 2px;"></span>
+                                        <div style="display:flex; align-items:center; gap:4px; background:rgba(0,0,0,0.2); padding:2px 6px; border-radius:6px;" title="Chọn màu chữ">
+                                            <button class="wysiwyg-color-dot" data-color="#1e293b" style="background:#1e293b;" title="Màu Đen tối"></button>
+                                            <button class="wysiwyg-color-dot" data-color="#b45309" style="background:#b45309;" title="Màu Vàng nâu"></button>
+                                            <button class="wysiwyg-color-dot" data-color="#dc2626" style="background:#dc2626;" title="Màu Đỏ"></button>
+                                            <button class="wysiwyg-color-dot" data-color="#16a34a" style="background:#16a34a;" title="Màu Xanh lá"></button>
+                                            <button class="wysiwyg-color-dot" data-color="#2563eb" style="background:#2563eb;" title="Màu Xanh dương"></button>
+                                            <button class="wysiwyg-color-dot" data-color="#ea580c" style="background:#ea580c;" title="Màu Cam"></button>
+                                            <input type="color" id="wysiwyg-custom-color" title="Chọn màu tùy chỉnh" style="width:20px; height:20px; border:none; padding:0; background:none; cursor:pointer;">
+                                        </div>
+                                        <span style="border-left:1px solid rgba(255,255,255,0.2); margin:0 2px;"></span>
+                                        <button class="wysiwyg-btn" data-cmd="removeFormat" title="Xóa định dạng"><i class="fa-solid fa-eraser"></i></button>
+                                    </div>
+                                </div>
+                                <div id="info-field-wysiwyg" contenteditable="true" style="flex:1; min-height:340px; padding:16px; background:#ffffff; border:1px solid rgba(255,255,255,0.2); border-radius:0 0 10px 10px; color:#1e293b; font-size:14px; line-height:1.8; overflow-y:auto; outline:none;" placeholder="Bấm vào đây để bắt đầu gõ nội dung bài thuyết minh..."></div>
+                            </div>
+
+                            <div style="display:flex; gap:10px; margin-top:8px;">
+                                <button id="btn-info-save" style="flex:1; background:linear-gradient(135deg,#16a34a,#22c55e); border:none; color:white; padding:12px; border-radius:10px; font-weight:700; cursor:pointer; font-size:14px;">
+                                    <i class="fa-solid fa-floppy-disk"></i> LƯU BÀI VIẾT VÀO TOUR
+                                </button>
+                                <button id="btn-info-delete" style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#f87171; padding:12px 18px; border-radius:10px; cursor:pointer; font-size:14px;" title="Xóa bài viết này">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Right Panel: Hotspot Inspector -->
@@ -1003,8 +1197,16 @@
 
                     <!-- Info ID (Only for thongtin style) -->
                     <div class="form-group" id="group-infoid" style="display: none;">
-                        <label for="hs-infoid">Mã thuyết minh (infoid)</label>
-                        <input type="text" id="hs-infoid" placeholder="Ví dụ: info_po_rome_lichsu">
+                        <label for="hs-infoid">Bài viết thuyết minh (infoid)</label>
+                        <div style="display:flex; gap:6px;">
+                            <select id="hs-infoid" style="flex:1;">
+                                <option value="">-- Chọn bài viết --</option>
+                                <!-- Populated dynamically -->
+                            </select>
+                            <button id="btn-quick-new-info" title="Tạo bài viết mới" style="background:linear-gradient(135deg,#1d4ed8,#2563eb); border:none; color:white; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:12px; white-space:nowrap;">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Readonly coordinates -->
@@ -1929,7 +2131,7 @@
                 }
             });
 
-            inputHsInfo.addEventListener('input', (e) => {
+            inputHsInfo.addEventListener('change', (e) => {
                 const val = e.target.value;
                 const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
                 if (hs) {
@@ -2568,10 +2770,245 @@
             });
         }
 
+        // =============================================================
+        // INFO MANAGER SYSTEM (tours/infos.json CRUD)
+        // =============================================================
+
+        let allInfos = {};
+        let currentEditingInfoId = null;
+
+        async function loadInfosFromApi() {
+            try {
+                const res = await fetch('/api/infos?v=' + Date.now());
+                const data = await res.json();
+                if (data.success) {
+                    allInfos = data.infos || {};
+                    renderInfoManagerList();
+                    populateInfoDropdown();
+                }
+            } catch (err) {
+                console.error('Lỗi khi tải thông tin thuyết minh:', err);
+            }
+        }
+
+        function populateInfoDropdown() {
+            const selectHsInfo = document.getElementById('hs-infoid');
+            if (!selectHsInfo) return;
+
+            const currentVal = selectHsInfo.value;
+            selectHsInfo.innerHTML = '<option value="">-- Chọn bài viết --</option>';
+
+            Object.keys(allInfos).forEach(id => {
+                const info = allInfos[id];
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = `${info.title || id} (${id})`;
+                selectHsInfo.appendChild(opt);
+            });
+
+            selectHsInfo.value = currentVal;
+        }
+
+        function renderInfoManagerList(filterText = '') {
+            const container = document.getElementById('info-list-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const query = (filterText || '').toLowerCase().trim();
+
+            const keys = Object.keys(allInfos).filter(id => {
+                const info = allInfos[id] || {};
+                return id.toLowerCase().includes(query) || 
+                       (info.title && info.title.toLowerCase().includes(query)) ||
+                       (info.subtitle && info.subtitle.toLowerCase().includes(query));
+            });
+
+            if (keys.length === 0) {
+                container.innerHTML = '<div style="font-size:12px; color:#6b7280; text-align:center; padding:20px;">Không tìm thấy bài viết nào.</div>';
+                return;
+            }
+
+            keys.forEach(id => {
+                const info = allInfos[id] || {};
+                const item = document.createElement('div');
+                item.className = `info-list-item ${currentEditingInfoId === id ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div class="info-item-title">${info.title || id}</div>
+                    <div class="info-item-id">${id}</div>
+                `;
+                item.addEventListener('click', () => editInfo(id));
+                container.appendChild(item);
+            });
+        }
+
+        function editInfo(id) {
+            currentEditingInfoId = id;
+            const info = allInfos[id] || { id: id, title: '', subtitle: '', content: '' };
+
+            document.getElementById('info-empty-state').style.display = 'none';
+            document.getElementById('info-form').style.display = 'flex';
+
+            document.getElementById('info-editor-title-label').textContent = info.title ? `Sửa: ${info.title}` : `Bài viết: ${id}`;
+            document.getElementById('info-field-id').value = info.id || '';
+            document.getElementById('info-field-id').disabled = !!allInfos[id];
+            document.getElementById('info-field-title').value = info.title || '';
+            document.getElementById('info-field-subtitle').value = info.subtitle || '';
+            document.getElementById('info-field-wysiwyg').innerHTML = info.content || '';
+
+            renderInfoManagerList(document.getElementById('info-search').value);
+        }
+
+        function createNewInfo() {
+            currentEditingInfoId = null;
+            const newId = `info_${Date.now().toString().slice(-6)}`;
+
+            document.getElementById('info-empty-state').style.display = 'none';
+            document.getElementById('info-form').style.display = 'flex';
+
+            document.getElementById('info-editor-title-label').textContent = 'Bài viết mới';
+            document.getElementById('info-field-id').value = newId;
+            document.getElementById('info-field-id').disabled = false;
+            document.getElementById('info-field-title').value = '';
+            document.getElementById('info-field-subtitle').value = '';
+            document.getElementById('info-field-wysiwyg').innerHTML = '';
+
+            renderInfoManagerList(document.getElementById('info-search').value);
+        }
+
+        function initInfoManagerSystem() {
+            const modal = document.getElementById('info-manager-modal');
+            const btnOpen = document.getElementById('btn-open-info-manager');
+            const btnClose = document.getElementById('btn-close-info-manager');
+            const btnNew = document.getElementById('btn-info-new');
+            const btnQuickNew = document.getElementById('btn-quick-new-info');
+            const btnSave = document.getElementById('btn-info-save');
+            const btnDelete = document.getElementById('btn-info-delete');
+            const searchInput = document.getElementById('info-search');
+
+            const openModal = async () => {
+                modal.style.display = 'flex';
+                await loadInfosFromApi();
+            };
+
+            const closeModal = () => {
+                modal.style.display = 'none';
+            };
+
+            if (btnOpen) btnOpen.addEventListener('click', openModal);
+            if (btnQuickNew) btnQuickNew.addEventListener('click', () => {
+                openModal().then(() => createNewInfo());
+            });
+            if (btnClose) btnClose.addEventListener('click', closeModal);
+
+            if (btnNew) btnNew.addEventListener('click', createNewInfo);
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => renderInfoManagerList(e.target.value));
+            }
+
+            // WYSIWYG Toolbar Commands
+            document.querySelectorAll('.wysiwyg-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const cmd = btn.dataset.cmd;
+                    const val = btn.dataset.val || null;
+                    document.execCommand(cmd, false, val);
+                    document.getElementById('info-field-wysiwyg').focus();
+                });
+            });
+
+            // Text Color Dots
+            document.querySelectorAll('.wysiwyg-color-dot').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const color = btn.dataset.color;
+                    document.execCommand('foreColor', false, color);
+                    document.getElementById('info-field-wysiwyg').focus();
+                });
+            });
+
+            // Custom Color Picker
+            const customColorPicker = document.getElementById('wysiwyg-custom-color');
+            if (customColorPicker) {
+                customColorPicker.addEventListener('input', (e) => {
+                    document.execCommand('foreColor', false, e.target.value);
+                    document.getElementById('info-field-wysiwyg').focus();
+                });
+            }
+
+            // Save Info
+            if (btnSave) {
+                btnSave.addEventListener('click', async () => {
+                    const id = document.getElementById('info-field-id').value.trim();
+                    const title = document.getElementById('info-field-title').value.trim();
+                    const subtitle = document.getElementById('info-field-subtitle').value.trim();
+                    const content = document.getElementById('info-field-wysiwyg').innerHTML.trim();
+
+                    if (!id) {
+                        showToast('❌ Vui lòng nhập mã ID (infoid)');
+                        return;
+                    }
+                    if (!title) {
+                        showToast('❌ Vui lòng nhập tiêu đề bài viết');
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch('/api/infos/save', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id, title, subtitle, content })
+                        });
+
+                        const data = await res.json();
+                        if (data.success) {
+                            showToast(`✅ ${data.message}`);
+                            await loadInfosFromApi();
+                            editInfo(id);
+                        } else {
+                            showToast(`❌ Lỗi: ${data.error}`);
+                        }
+                    } catch (err) {
+                        showToast(`❌ Lỗi kết nối server: ${err.message}`);
+                    }
+                });
+            }
+
+            // Delete Info
+            if (btnDelete) {
+                btnDelete.addEventListener('click', async () => {
+                    const id = document.getElementById('info-field-id').value.trim();
+                    if (!id || !allInfos[id]) return;
+
+                    if (!confirm(`Bạn có chắc muốn xóa bài viết "${id}"?`)) return;
+
+                    try {
+                        const res = await fetch(`/api/infos/${id}`, { method: 'DELETE' });
+                        const data = await res.json();
+                        if (data.success) {
+                            showToast(`✅ ${data.message}`);
+                            currentEditingInfoId = null;
+                            document.getElementById('info-form').style.display = 'none';
+                            document.getElementById('info-empty-state').style.display = 'flex';
+                            await loadInfosFromApi();
+                        } else {
+                            showToast(`❌ Lỗi: ${data.error}`);
+                        }
+                    } catch (err) {
+                        showToast(`❌ Lỗi kết nối: ${err.message}`);
+                    }
+                });
+            }
+
+            // Load initial infos list into dropdown
+            loadInfosFromApi();
+        }
+
         // Initialize upload & save systems after DOM ready
         document.addEventListener('DOMContentLoaded', () => {
             initUploadSystem();
             initSaveSystem();
+            initInfoManagerSystem();
         });
     </script>
 </body>

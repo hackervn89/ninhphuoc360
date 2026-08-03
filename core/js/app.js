@@ -676,25 +676,20 @@ function renderSidebar() {
 }
 
 // ── Info Modal Logic ───────────────────────────────────────────
-// TODO: Thêm dữ liệu thông tin cho các địa điểm Ninh Phước
-// Mỗi entry cần:
-//   "info_xxx": {
-//       title: "Tên địa điểm",
-//       content: `<p>Nội dung HTML mô tả...</p>`
-//   }
-const infoData = {
-    // === VÍ DỤ CẤU TRÚC ===
-    // "info_thapCham": {
-    //     title: "Tháp Chăm Hòa Lai",
-    //     content: `
-    //         <p><strong>Tháp Chăm Hòa Lai</strong> là cụm tháp Chăm cổ nổi tiếng...</p>
-    //         <h3>1. Lịch sử</h3>
-    //         <ul>
-    //             <li><strong>Niên đại:</strong> Thế kỷ IX</li>
-    //         </ul>
-    //     `
-    // },
-};
+// Dữ liệu thuyết minh được load động từ tours/infos.json
+// Soạn thảo nội dung trực tiếp trong Visual Editor (_dev/editor.html)
+let infoData = {};
+
+async function loadInfoData() {
+    try {
+        const res = await fetch(`tours/infos.json?v=${Date.now()}`);
+        if (!res.ok) throw new Error('Không tải được infos.json');
+        infoData = await res.json();
+    } catch (err) {
+        console.warn('⚠️ Không tải được dữ liệu thuyết minh:', err.message);
+        infoData = {};
+    }
+}
 
 function initInfoModal() {
     const overlay = document.getElementById('info-modal-overlay');
@@ -714,20 +709,25 @@ function initInfoModal() {
 }
 
 // Global function to be called from KrPano
-window.openInfoModal = function (infoId) {
+window.openInfoModal = async function (infoId) {
     const overlay = document.getElementById('info-modal-overlay');
     const titleEl = document.getElementById('modal-title');
     const bodyEl = document.getElementById('modal-body');
 
     if (!overlay || !titleEl || !bodyEl) return;
 
+    // Always reload fresh data so edits in Editor show immediately
+    await loadInfoData();
+
     const data = infoData[infoId];
     if (data) {
-        titleEl.innerHTML = data.title;
-        bodyEl.innerHTML = data.content;
+        titleEl.innerHTML = data.title + (data.subtitle ? `<br><small style="font-size:0.6em; opacity:0.75; font-weight:400;">${data.subtitle}</small>` : '');
+        bodyEl.innerHTML = data.content || '<p><em>Chưa có nội dung.</em></p>';
         overlay.classList.remove('hidden');
     } else {
-        console.warn('Info data not found for id:', infoId);
+        titleEl.innerHTML = infoId;
+        bodyEl.innerHTML = `<p style="color:#f87171;">⚠️ Không tìm thấy nội dung cho ID: <code>${infoId}</code>.<br>Vui lòng kiểm tra lại trong <strong>Visual Editor → Quản lý Thuyết minh</strong>.</p>`;
+        overlay.classList.remove('hidden');
     }
 };
 

@@ -1,0 +1,16 @@
+{
+  "info_vi_du_bai_viet": {
+    "id": "info_vi_du_bai_viet",
+    "title": "Ví dụ bài viết thuyết minh",
+    "subtitle": "Đây là bài viết ví dụ — Hãy xóa hoặc chỉnh sửa trong Editor",
+    "content": "<p>Đây là nội dung mẫu cho một hotspot Thông tin. Bạn có thể sử dụng <strong>chữ đậm</strong>, <em>chữ nghiêng</em>, và các định dạng HTML khác.</p><h3><font color=\"#dc2626\">Ví dụ tiêu đề phụ</font></h3><ol><li>Điểm thông tin 1</li><li><b>Điểm thông tin&nbsp;</b></li><li><b>sad assa</b></li></ol><b>dwadawdawdawdawdawdawdqawdawdawdawdawdawdawdwaddwd</b>",
+    "updatedAt": "2026-08-03T16:59:10.566Z"
+  },
+  "info_356555": {
+    "id": "info_356555",
+    "title": "123145667880012",
+    "subtitle": "123123213213",
+    "content": "<ol><li><font color=\"#dc2626\">awdawdawdawdawdawd&nbsp;</font></li><li><font color=\"#dc2626\">awdawdawdawd</font></li></ol><div><ul><li>awdawdawdawd</li><li><font color=\"#ffd500\">awdawdawdaw dawdaw awd awdawd aw</font></li></ul></div><div><b><i><font color=\"#ea580c\">d awd awd</font></i></b></div><div><b><i><font color=\"#ea580c\">&nbsp;awd&nbsp;</font></i></b></div><div><b><i><font color=\"#ea580c\">awd awd awdaw</font></i></b></div>",
+    "updatedAt": "2026-08-03T17:00:02.563Z"
+  }
+}
