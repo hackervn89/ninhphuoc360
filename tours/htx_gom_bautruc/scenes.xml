@@ -1,0 +1,93 @@
+<krpano>
+	<scene name="scene_cong_htx" title="Cổng HTX" thumburl="panos/cong_htx.tiles/thumb.jpg">
+		<view hlookat="-452.1" vlookat="-0.3" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<preview url="panos/cong_htx.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_416874" style="muiten" ath="-97.6096" atv="27.1836" linkedscene="scene_san_truoc_htx" custom_title="Sân trước" />
+	</scene>
+	<scene name="scene_san_phai" title="Sân trước" thumburl="panos/san_phai.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<preview url="panos/san_phai.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/san_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<preview url="panos/san_trai1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/san_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_san_trai2" title="Sân trước" thumburl="panos/san_trai2.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<preview url="panos/san_trai2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/san_trai2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_trai2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_trai2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_san_truoc_htx" title="Sân trước" thumburl="panos/san_truoc_htx.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<preview url="panos/san_truoc_htx.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="5120" tiledimageheight="5120">
+				<cube url="panos/san_truoc_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_truoc_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_truoc_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_truoc_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+</krpano>

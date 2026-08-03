@@ -1020,7 +1020,7 @@ app.post('/api/scenes/view', async (req, res) => {
         const v = parseFloat(vlookat || 0).toFixed(1);
         const f = parseFloat(fov || 100).toFixed(1);
         const fmin = parseFloat(fovmin || 60).toFixed(0);
-        const fmax = parseFloat(fovmax || 120).toFixed(0);
+        const fmax = parseFloat(fovmax || 95).toFixed(0);
         const mpz = parseFloat(maxpixelzoom || 2.0).toFixed(1);
 
         // Find which scenes.xml file contains this scene

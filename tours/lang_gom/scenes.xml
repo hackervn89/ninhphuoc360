@@ -1,6 +1,6 @@
 <krpano>
 	<scene name="scene_cong_lang" title="Cổng làng Bàu Trúc" thumburl="panos/cong_lang.tiles/thumb.jpg">
-		<view hlookat="-133.9" vlookat="1.3" fov="85.0" maxpixelzoom="1.0" fovmin="60" fovmax="110" />
+		<view hlookat="-133.5" vlookat="-5.6" fov="84.8" maxpixelzoom="1.0" fovmin="60" fovmax="95" />
 		<preview url="panos/cong_lang.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -19,7 +19,7 @@
 		<hotspot name="hs_new_486451" style="muiten" ath="-132.9560" atv="21.5825" linkedscene="scene_duongdi1" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_duongdi1" title="Đường đi 1" thumburl="panos/duongdi1.tiles/thumb.jpg">
-		<view hlookat="-88.1" vlookat="4.7" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="120" />
+		<view hlookat="-88.1" vlookat="4.7" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/duongdi1.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -39,7 +39,7 @@
 		<hotspot name="hs_new_508183" style="muiten" ath="-98.2571" atv="24.4345" linkedscene="scene_duongdi2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_duongdi2" title="Đường đi 2" thumburl="panos/duongdi2.tiles/thumb.jpg">
-		<view hlookat="-146.3" vlookat="9.9" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="120" />
+		<view hlookat="-146.3" vlookat="9.9" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/duongdi2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">

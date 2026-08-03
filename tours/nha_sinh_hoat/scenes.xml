@@ -1,6 +1,6 @@
 <krpano>
 	<scene name="scene_4" title="Sân trước" thumburl="panos/4.tiles/thumb.jpg">
-		<view hlookat="-899.3" vlookat="1.4" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="120" />
+		<view hlookat="-899.3" vlookat="1.4" fov="78.7" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/4.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -20,6 +20,7 @@
 		<hotspot name="hs_new_016199" style="muiten" ath="-168.6447" atv="26.2181" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_5" title="Sân trước" thumburl="panos/5.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/5.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -41,6 +42,7 @@
 		<hotspot name="hs_new_495606" style="muiten" ath="25.8218" atv="12.1963" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_6" title="Khu trưng bày" thumburl="panos/6.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/6.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -63,6 +65,7 @@
 		<hotspot name="hs_new_691769" style="muiten" ath="-104.8603" atv="14.8076" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_7" title="Khu trưng bày" thumburl="panos/7.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/7.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -84,7 +87,7 @@
 		<hotspot name="hs_new_310082" style="muiten" ath="-178.3900" atv="17.9180" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_8" title="Khu trưng bày" thumburl="panos/8.tiles/thumb.jpg">
-		<view hlookat="-112.3" vlookat="35.9" fov="84.3" maxpixelzoom="2.0" fovmin="60" fovmax="120" />
+		<view hlookat="-112.3" vlookat="35.9" fov="84.3" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/8.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -107,6 +110,7 @@
 		<hotspot name="hs_new_278070" style="muiten" ath="88.6294" atv="12.0664" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_9" title="Khu trưng bày" thumburl="panos/9.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/9.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -130,6 +134,7 @@
 	</scene>
 	
 	<scene name="scene_14" title="Khu làm gốm" thumburl="panos/14.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/14.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -148,6 +153,7 @@
 	</scene>
 
 	<scene name="scene_13" title="Khu làm gốm" thumburl="panos/13.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/13.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -167,6 +173,7 @@
 		<hotspot name="hs_new_872207" style="muiten" ath="74.2654" atv="16.5800" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_nha_lam_viec1" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec1.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/nha_lam_viec1.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
@@ -186,6 +193,7 @@
 		<hotspot name="hs_new_789475" style="muiten" ath="65.8470" atv="6.3884" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_nha_lam_viec2" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec2.tiles/thumb.jpg">
+		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
 		<preview url="panos/nha_lam_viec2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="5120" tiledimageheight="5120">
