@@ -1010,7 +1010,7 @@ app.post('/api/scenes/save', async (req, res) => {
 
 app.post('/api/scenes/view', async (req, res) => {
     try {
-        const { sceneId, hlookat, vlookat, fov } = req.body;
+        const { sceneId, hlookat, vlookat, fov, fovmin, fovmax, maxpixelzoom } = req.body;
 
         if (!sceneId) {
             return res.status(400).json({ success: false, error: 'Thiếu sceneId' });
@@ -1019,6 +1019,9 @@ app.post('/api/scenes/view', async (req, res) => {
         const h = parseFloat(hlookat || 0).toFixed(1);
         const v = parseFloat(vlookat || 0).toFixed(1);
         const f = parseFloat(fov || 100).toFixed(1);
+        const fmin = parseFloat(fovmin || 60).toFixed(0);
+        const fmax = parseFloat(fovmax || 120).toFixed(0);
+        const mpz = parseFloat(maxpixelzoom || 2.0).toFixed(1);
 
         // Find which scenes.xml file contains this scene
         const tourXml = fs.readFileSync(TOUR_XML_PATH, 'utf-8');
@@ -1068,7 +1071,7 @@ app.post('/api/scenes/view', async (req, res) => {
         const sceneCloseTag = sceneMatch[3];
 
         const viewTagRegex = /<view\s+[^>]*\/>/i;
-        const newViewTag = `\t\t<view hlookat="${h}" vlookat="${v}" fov="${f}" maxpixelzoom="2.0" fovmin="60" fovmax="120" />`;
+        const newViewTag = `\t\t<view hlookat="${h}" vlookat="${v}" fov="${f}" maxpixelzoom="${mpz}" fovmin="${fmin}" fovmax="${fmax}" />`;
 
         if (viewTagRegex.test(sceneBody)) {
             sceneBody = sceneBody.replace(viewTagRegex, newViewTag.trim());
@@ -1081,12 +1084,12 @@ app.post('/api/scenes/view', async (req, res) => {
 
         fs.writeFileSync(targetFile, content, 'utf-8');
 
-        console.log(`🎥 Đã lưu khung nhìn mặc định cho scene "${sceneId}": hlookat=${h}°, vlookat=${v}°, fov=${f}° → ${path.basename(targetFile)}`);
+        console.log(`🎥 Đã lưu view cho scene "${sceneId}": h=${h}°, v=${v}°, fov=${f}°, fovmin=${fmin}°, fovmax=${fmax}°, pixelzoom=${mpz}x → ${path.basename(targetFile)}`);
 
         res.json({
             success: true,
-            message: `Đã lưu khung nhìn mặc định (${h}°, ${v}°, fov: ${f}°)`,
-            view: { hlookat: h, vlookat: v, fov: f }
+            message: `Đã lưu view (fov: ${f}°, fovmin: ${fmin}°, fovmax: ${fmax}°, pixelzoom: ${mpz}x)`,
+            view: { hlookat: h, vlookat: v, fov: f, fovmin: fmin, fovmax: fmax, maxpixelzoom: mpz }
         });
     } catch (err) {
         console.error('Save view error:', err);

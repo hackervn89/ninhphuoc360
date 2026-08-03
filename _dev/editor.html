@@ -469,6 +469,66 @@
             color: white;
         }
 
+        /* View Params Editable Grid */
+        .view-params-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .view-param-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 8px 6px;
+            text-align: center;
+        }
+
+        .view-param-box label {
+            display: block;
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .view-param-box input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            font-family: monospace;
+            padding: 4px 2px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .view-param-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.25);
+        }
+
+        .view-section-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 10px 0 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .view-section-label i {
+            font-size: 10px;
+            color: var(--primary);
+        }
+
         .btn-view-save {
             background: #2563eb !important;
             color: white !important;
@@ -840,6 +900,25 @@
                             <strong id="val-fov">100.0°</strong>
                         </div>
                     </div>
+
+                    <div class="view-section-label">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i> GIỚI HẠN ZOOM
+                    </div>
+                    <div class="view-params-grid">
+                        <div class="view-param-box">
+                            <label>FOV Min</label>
+                            <input type="number" id="input-fovmin" value="60" min="30" max="120" step="1" title="Giá trị nhỏ = zoom sâu hơn">
+                        </div>
+                        <div class="view-param-box">
+                            <label>FOV Max</label>
+                            <input type="number" id="input-fovmax" value="120" min="60" max="179" step="1" title="Giá trị lớn = nhìn rộng hơn">
+                        </div>
+                        <div class="view-param-box">
+                            <label>Pixel Zoom</label>
+                            <input type="number" id="input-maxpixelzoom" value="2.0" min="0.5" max="5.0" step="0.1" title="Hệ số phóng to pixel tối đa">
+                        </div>
+                    </div>
+
                     <button id="btn-save-view" class="btn-action btn-view-save">
                         <i class="fa-solid fa-camera"></i> LƯU GÓC NHÌN MẶC ĐỊNH
                     </button>
@@ -1874,6 +1953,27 @@
                 }
             });
 
+            // Live apply fovmin/fovmax/maxpixelzoom when user types
+            const inputFovMin = document.getElementById('input-fovmin');
+            const inputFovMax = document.getElementById('input-fovmax');
+            const inputMaxPixelZoom = document.getElementById('input-maxpixelzoom');
+
+            inputFovMin.addEventListener('change', () => {
+                if (krpanoObj) {
+                    krpanoObj.set('view.fovmin', parseFloat(inputFovMin.value));
+                }
+            });
+            inputFovMax.addEventListener('change', () => {
+                if (krpanoObj) {
+                    krpanoObj.set('view.fovmax', parseFloat(inputFovMax.value));
+                }
+            });
+            inputMaxPixelZoom.addEventListener('change', () => {
+                if (krpanoObj) {
+                    krpanoObj.set('view.maxpixelzoom', parseFloat(inputMaxPixelZoom.value));
+                }
+            });
+
             // Start live view coordinate tracker
             setInterval(() => {
                 if (krpanoObj) {
@@ -1888,6 +1988,20 @@
                     if (elH) elH.textContent = `${h}°`;
                     if (elV) elV.textContent = `${v}°`;
                     if (elF) elF.textContent = `${f}°`;
+
+                    // Sync zoom param inputs from KrPano (only if not focused)
+                    if (document.activeElement !== inputFovMin) {
+                        const fovmin = Number(krpanoObj.get('view.fovmin') || 60).toFixed(0);
+                        if (inputFovMin.value !== fovmin) inputFovMin.value = fovmin;
+                    }
+                    if (document.activeElement !== inputFovMax) {
+                        const fovmax = Number(krpanoObj.get('view.fovmax') || 120).toFixed(0);
+                        if (inputFovMax.value !== fovmax) inputFovMax.value = fovmax;
+                    }
+                    if (document.activeElement !== inputMaxPixelZoom) {
+                        const mpz = Number(krpanoObj.get('view.maxpixelzoom') || 2.0).toFixed(1);
+                        if (inputMaxPixelZoom.value !== mpz) inputMaxPixelZoom.value = mpz;
+                    }
                 }
             }, 200);
         }
@@ -1902,6 +2016,9 @@
             const hlookat = Number(krpanoObj.get("view.hlookat") || 0).toFixed(1);
             const vlookat = Number(krpanoObj.get("view.vlookat") || 0).toFixed(1);
             const fov = Number(krpanoObj.get("view.fov") || 100).toFixed(1);
+            const fovmin = Number(krpanoObj.get('view.fovmin') || 60).toFixed(0);
+            const fovmax = Number(krpanoObj.get('view.fovmax') || 120).toFixed(0);
+            const maxpixelzoom = Number(krpanoObj.get('view.maxpixelzoom') || 2.0).toFixed(1);
 
             try {
                 const res = await fetch('/api/scenes/view', {
@@ -1909,14 +2026,17 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         sceneId: currentSceneId,
-                        hlookat: hlookat,
-                        vlookat: vlookat,
-                        fov: fov
+                        hlookat,
+                        vlookat,
+                        fov,
+                        fovmin,
+                        fovmax,
+                        maxpixelzoom
                     })
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast(`✅ Đã lưu khung nhìn mặc định (${hlookat}°, ${vlookat}°, fov: ${fov}°)`);
+                    showToast(`✅ Đã lưu View: fov=${fov}°, fovmin=${fovmin}°, fovmax=${fovmax}°, pixelzoom=${maxpixelzoom}x`);
                 } else {
                     showToast(`❌ Lỗi lưu view: ${data.error}`);
                 }
