@@ -1607,6 +1607,21 @@
                 item.classList.toggle('active', id === currentSceneId);
             });
 
+            // Sync View parameters inputs with current scene's stored view settings
+            if (krpanoObj) {
+                const fmin = Math.round(Number(krpanoObj.get('view.fovmin') || 60));
+                const fmax = Math.round(Number(krpanoObj.get('view.fovmax') || 120));
+                const mpz = Number(krpanoObj.get('view.maxpixelzoom') || 1.0).toFixed(1);
+
+                const elFmin = document.getElementById('input-fovmin');
+                const elFmax = document.getElementById('input-fovmax');
+                const elMpz = document.getElementById('input-maxpixelzoom');
+
+                if (elFmin) elFmin.value = fmin;
+                if (elFmax) elFmax.value = fmax;
+                if (elMpz) elMpz.value = mpz;
+            }
+
             // Extract scene hotspots currently present in KrPano
             loadSceneHotspots();
             deselectHotspot();
