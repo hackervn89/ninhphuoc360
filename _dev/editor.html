@@ -399,6 +399,22 @@
             outline: none;
         }
 
+        .form-group select optgroup {
+            background: #0d1b2e;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 12px;
+            padding: 6px 0;
+        }
+
+        .form-group select option {
+            background: #111827;
+            color: #f3f4f6;
+            font-weight: 400;
+            font-size: 13px;
+            padding: 4px 8px;
+        }
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1285,13 +1301,34 @@
                 allScenes.push({ id: name, title, thumb, locationId, locationName });
             }
 
-            // Populate linked scene dropdown
+            // Populate linked scene dropdown grouped by Location using <optgroup>
             selectHsLinked.innerHTML = '<option value="">-- Chọn scene liên kết --</option>';
+
+            const locationGroupsForSelect = {};
             allScenes.forEach(sc => {
-                const opt = document.createElement('option');
-                opt.value = sc.id;
-                opt.textContent = `${sc.title} (${sc.id})`;
-                selectHsLinked.appendChild(opt);
+                const locId = sc.locationId || 'default';
+                if (!locationGroupsForSelect[locId]) {
+                    locationGroupsForSelect[locId] = {
+                        id: locId,
+                        name: sc.locationName || locId,
+                        scenes: []
+                    };
+                }
+                locationGroupsForSelect[locId].scenes.push(sc);
+            });
+
+            Object.values(locationGroupsForSelect).forEach(group => {
+                const optGroup = document.createElement('optgroup');
+                optGroup.label = `📍 ${group.name.toUpperCase()}`;
+
+                group.scenes.forEach(sc => {
+                    const opt = document.createElement('option');
+                    opt.value = sc.id;
+                    opt.textContent = `  • ${sc.title} (${sc.id})`;
+                    optGroup.appendChild(opt);
+                });
+
+                selectHsLinked.appendChild(optGroup);
             });
 
             renderSceneList();
