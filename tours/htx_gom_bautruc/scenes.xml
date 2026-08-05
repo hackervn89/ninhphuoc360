@@ -1,19 +1,19 @@
-<krpano>
+﻿<krpano>
 	<scene name="scene_cong_htx" title="Cổng HTX" thumburl="panos/cong_htx.tiles/thumb.jpg">
-		<view hlookat="-453.3" vlookat="0.6" fov="84.3" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-453.3" vlookat="0.6" fov="84.3" fovmin="60" fovmax="95" />
 		<preview url="panos/cong_htx.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_416874" style="muiten" ath="-97.6096" atv="27.1836" linkedscene="scene_san_truoc_htx" custom_title="Sân trước" />
@@ -21,38 +21,38 @@
 		<hotspot name="hs_new_309204" style="muiten" ath="-105.3848" atv="11.6157" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
 	</scene>
 	<scene name="scene_san_phai" title="Sân trước" thumburl="panos/san_phai.tiles/thumb.jpg">
-		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/san_phai.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/san_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/san_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 	</scene>
 	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
-		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/san_trai1.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/san_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/san_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_853742" style="muiten" ath="18.3812" atv="26.5358" linkedscene="scene_san_truoc_htx" custom_title="Sân trước" />
@@ -60,40 +60,40 @@
 		<hotspot name="hs_new_890936" style="muiten" ath="-141.2464" atv="24.8180" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái" />
 	</scene>
 	<scene name="scene_san_trai2" title="Sân trước" thumburl="panos/san_trai2.tiles/thumb.jpg">
-		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/san_trai2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/san_trai2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/san_trai2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_trai2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_trai2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_trai2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_trai2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_934263" style="muiten" ath="-30.7100" atv="34.5184" linkedscene="scene_sanh_trai_2" custom_title="Sảnh Trái" />
 		<hotspot name="hs_new_945496" style="muiten" ath="62.4120" atv="32.7551" linkedscene="scene_san_trai1" custom_title="Sân trước" />
 	</scene>
 	<scene name="scene_san_truoc_htx" title="Sân trước" thumburl="panos/san_truoc_htx.tiles/thumb.jpg">
-		<view hlookat="0.0" vlookat="0.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/san_truoc_htx.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/san_truoc_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/san_truoc_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_truoc_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_truoc_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_truoc_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_truoc_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_truoc_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/san_truoc_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_278712" style="muiten" ath="74.0739" atv="30.8631" linkedscene="scene_cong_htx" custom_title="Cổng HTX" />
@@ -102,20 +102,20 @@
 		<hotspot name="hs_new_682673" style="muiten" ath="-90.7410" atv="35.9931" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" show_title="false" show_thumb="false" />
 	</scene>
 	<scene name="scene_sanh_giua" title="Sảnh trước" thumburl="panos/sanh_giua.tiles/thumb.jpg">
-		<view hlookat="-457.3" vlookat="24.8" fov="95.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-457.3" vlookat="24.8" fov="95.0" fovmin="60" fovmax="95" />
 		<preview url="panos/sanh_giua.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/sanh_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/sanh_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/sanh_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/sanh_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/sanh_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_157889" style="muiten" ath="171.9749" atv="42.3015" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái" />
@@ -124,58 +124,58 @@
 		<hotspot name="hs_new_210716" style="muiten" ath="-11.0972" atv="31.2871" linkedscene="scene_sanh_phai" custom_title="Sảnh phải" />
 	</scene>
 	<scene name="scene_sanh_phai" title="Sảnh phải" thumburl="panos/sanh_phai.tiles/thumb.jpg">
-		<view hlookat="-138.3" vlookat="35.6" fov="95.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-138.3" vlookat="35.6" fov="95.0" fovmin="60" fovmax="95" />
 		<preview url="panos/sanh_phai.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/sanh_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/sanh_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/sanh_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/sanh_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/sanh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 	</scene>
 	<scene name="scene_sanh_trai_1" title="Sảnh Trái" thumburl="panos/sanh_trai_1.tiles/thumb.jpg">
-		<view hlookat="323.6" vlookat="34.0" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="323.6" vlookat="34.0" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/sanh_trai_1.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/sanh_trai_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/sanh_trai_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/sanh_trai_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_trai_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/sanh_trai_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_trai_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/sanh_trai_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_trai_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_041062" style="muiten" ath="157.2601" atv="36.6591" linkedscene="scene_sanh_trai_2" custom_title="Sảnh Trái" />
 		<hotspot name="hs_new_059025" style="muiten" ath="0.0560" atv="34.6996" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
 	</scene>
 	<scene name="scene_sanh_trai_2" title="Sảnh Trái" thumburl="panos/sanh_trai_2.tiles/thumb.jpg">
-		<view hlookat="219.0" vlookat="35.4" fov="85.0" maxpixelzoom="2.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="219.0" vlookat="35.4" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/sanh_trai_2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="5120" tiledimageheight="5120">
-				<cube url="panos/sanh_trai_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+			<cube url="panos/sanh_trai_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/sanh_trai_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_trai_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/sanh_trai_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_trai_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/sanh_trai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			<cube url="panos/sanh_trai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
 		<hotspot name="hs_new_981156" style="muiten" ath="-144.7088" atv="47.6353" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái" />

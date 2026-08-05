@@ -985,7 +985,20 @@
                     <i class="fa-solid fa-book-open"></i> Quản lý Thuyết minh
                 </button>
             </div>
-            <div id="pano"></div>
+            <div id="pano-wrapper" style="position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden;">
+                <div id="pano" style="width: 100%; height: 100%;"></div>
+                <!-- Guideline Overlay for leveling horizon -->
+                <div id="horizon-grid-overlay" style="display: none; position: absolute; inset: 0; pointer-events: none; z-index: 50; border: 1px dashed rgba(0, 230, 255, 0.4);">
+                    <!-- Center Horizontal Line -->
+                    <div style="position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: #00e6ff; box-shadow: 0 0 8px #00e6ff; transform: translateY(-50%);"></div>
+                    <!-- Center Vertical Line -->
+                    <div style="position: absolute; left: 50%; top: 0; height: 100%; width: 2px; background: #00e6ff; box-shadow: 0 0 8px #00e6ff; transform: translateX(-50%);"></div>
+                    <!-- Quarter Horizontal Guide 1 -->
+                    <div style="position: absolute; top: 25%; left: 0; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.3);"></div>
+                    <!-- Quarter Horizontal Guide 2 -->
+                    <div style="position: absolute; top: 75%; left: 0; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.3);"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Info Manager Modal -->
@@ -1114,18 +1127,14 @@
                     <div class="view-section-label">
                         <i class="fa-solid fa-magnifying-glass-plus"></i> GIỚI HẠN ZOOM
                     </div>
-                    <div class="view-params-grid">
+                    <div class="view-params-grid" style="grid-template-columns: 1fr 1fr;">
                         <div class="view-param-box">
                             <label>FOV Min</label>
                             <input type="number" id="input-fovmin" value="60" min="20" max="120" step="1" title="Giá trị nhỏ = zoom sâu hơn">
                         </div>
                         <div class="view-param-box">
                             <label>FOV Max</label>
-                            <input type="number" id="input-fovmax" value="120" min="60" max="179" step="1" title="Giá trị lớn = nhìn rộng hơn">
-                        </div>
-                        <div class="view-param-box">
-                            <label>Pixel Zoom</label>
-                            <input type="number" id="input-maxpixelzoom" value="2.0" min="0.5" max="5.0" step="0.1" title="Hệ số phóng to pixel tối đa">
+                            <input type="number" id="input-fovmax" value="95" min="60" max="179" step="1" title="Giá trị lớn = nhìn rộng hơn">
                         </div>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px;">
@@ -1143,6 +1152,52 @@
                     <button id="btn-reset-view" class="btn-action btn-secondary" style="font-size: 11px; margin-bottom: 0; padding: 6px 10px;">
                         <i class="fa-solid fa-rotate-left"></i> VỀ GÓC NHÌN BAN ĐẦU
                     </button>
+                </div>
+
+                <!-- Horizon Leveling (Prealign) Panel -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                    <div class="view-section-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span><i class="fa-solid fa-compass-drafting" style="color: #00e6ff;"></i> CÂN BẰNG CHÂN TRỜI</span>
+                        <button id="btn-toggle-grid" class="btn-action btn-secondary" style="margin: 0; padding: 2px 8px; font-size: 10px;" title="Bật/tắt lưới căn chân trời">
+                            <i class="fa-solid fa-border-all"></i> Lưới căn
+                        </button>
+                    </div>
+
+                    <!-- Sliders for Roll, Pitch, Yaw -->
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
+                                <span>Nghiêng trái/phải (Roll)</span>
+                                <strong id="val-roll" style="color: #00e6ff;">0.0°</strong>
+                            </div>
+                            <input type="range" id="slider-roll" min="-15" max="15" step="0.1" value="0" style="width: 100%; cursor: pointer;">
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
+                                <span>Ngẩng/Cúi (Pitch)</span>
+                                <strong id="val-pitch" style="color: #00e6ff;">0.0°</strong>
+                            </div>
+                            <input type="range" id="slider-pitch" min="-15" max="15" step="0.1" value="0" style="width: 100%; cursor: pointer;">
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
+                                <span>Xoay hướng (Yaw)</span>
+                                <strong id="val-yaw" style="color: #ccc;">0.0°</strong>
+                            </div>
+                            <input type="range" id="slider-yaw" min="-180" max="180" step="1" value="0" style="width: 100%; cursor: pointer;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button id="btn-reset-prealign" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 6px 4px;">
+                            <i class="fa-solid fa-rotate-left"></i> Reset (0°)
+                        </button>
+                        <button id="btn-save-prealign" class="btn-action btn-view-save" style="font-size: 10px; margin-bottom: 0; padding: 6px 4px; background: linear-gradient(135deg, #0284c7, #0369a1);">
+                            <i class="fa-solid fa-floppy-disk"></i> LƯU ĐỘ NGHIÊNG
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Quick action: Add Hotspot -->
@@ -1854,11 +1909,28 @@
 
                 const elFmin = document.getElementById('input-fovmin');
                 const elFmax = document.getElementById('input-fovmax');
-                const elMpz = document.getElementById('input-maxpixelzoom');
 
                 if (elFmin) elFmin.value = fmin;
                 if (elFmax) elFmax.value = fmax;
-                if (elMpz) elMpz.value = mpz;
+
+                // Sync Prealign parameters sliders with current scene's stored prealign settings
+                const prealignVal = krpanoObj.get('image.prealign') || '0|0|0';
+                const pParts = prealignVal.split('|').map(v => parseFloat(v) || 0);
+
+                const sliderPitch = document.getElementById('slider-pitch');
+                const sliderYaw = document.getElementById('slider-yaw');
+                const sliderRoll = document.getElementById('slider-roll');
+                const valPitch = document.getElementById('val-pitch');
+                const valYaw = document.getElementById('val-yaw');
+                const valRoll = document.getElementById('val-roll');
+
+                if (sliderPitch) sliderPitch.value = pParts[0] || 0;
+                if (sliderYaw) sliderYaw.value = pParts[1] || 0;
+                if (sliderRoll) sliderRoll.value = pParts[2] || 0;
+
+                if (valPitch) valPitch.textContent = `${(pParts[0] || 0).toFixed(1)}°`;
+                if (valYaw) valYaw.textContent = `${(pParts[1] || 0).toFixed(1)}°`;
+                if (valRoll) valRoll.textContent = `${(pParts[2] || 0).toFixed(1)}°`;
             }
 
             // Extract scene hotspots currently present in KrPano
@@ -2142,19 +2214,23 @@
             });
 
             // Delete Hotspot
-            document.getElementById('btn-delete-hotspot').addEventListener('click', () => {
+            document.getElementById('btn-delete-hotspot').addEventListener('click', async () => {
                 if (!selectedHotspotName) return;
 
-                // Delete inside KrPano
-                krpanoObj.call(`removehotspot(${selectedHotspotName})`);
+                const targetHsName = selectedHotspotName;
+
+                // Delete inside KrPano canvas
+                krpanoObj.call(`removehotspot(${targetHsName})`);
 
                 // Remove from local tracker
-                sceneHotspots = sceneHotspots.filter(h => h.name !== selectedHotspotName);
+                sceneHotspots = sceneHotspots.filter(h => h.name !== targetHsName);
                 
                 deselectHotspot();
                 renderHotspotList();
-                markDirty();
-                showToast('Đã xóa Hotspot!');
+                
+                // Instantly save to XML file so main tour syncs immediately!
+                await saveHotspotsToServer();
+                showToast('🗑️ Đã xóa và đồng bộ Hotspot sang Tour!');
             });
 
             // Export XML Modal
@@ -2222,6 +2298,18 @@
             const inputFovMax = document.getElementById('input-fovmax');
             const inputMaxPixelZoom = document.getElementById('input-maxpixelzoom');
 
+            inputFovMin.addEventListener('input', () => {
+                if (krpanoObj && inputFovMin.value) {
+                    krpanoObj.set('view.fovmin', Number(inputFovMin.value));
+                }
+            });
+
+            inputFovMax.addEventListener('input', () => {
+                if (krpanoObj && inputFovMax.value) {
+                    krpanoObj.set('view.fovmax', Number(inputFovMax.value));
+                }
+            });
+
             // Quick Set FOV Min / Max to Current Zoom level
             document.getElementById('btn-set-fovmin').addEventListener('click', () => {
                 if (krpanoObj) {
@@ -2240,6 +2328,100 @@
                     showToast(`🎯 Đã gán FOV Max = ${currentFov}° (Giới hạn zoom xa nhất)`);
                 }
             });
+
+            // Horizon Leveling (Prealign) Live Controls
+            const sliderRoll = document.getElementById('slider-roll');
+            const sliderPitch = document.getElementById('slider-pitch');
+            const sliderYaw = document.getElementById('slider-yaw');
+            const valRoll = document.getElementById('val-roll');
+            const valPitch = document.getElementById('val-pitch');
+            const valYaw = document.getElementById('val-yaw');
+
+            function applyLivePrealign() {
+                if (!krpanoObj) return;
+                const p = parseFloat(sliderPitch.value || 0).toFixed(1);
+                const y = parseFloat(sliderYaw.value || 0).toFixed(1);
+                const r = parseFloat(sliderRoll.value || 0).toFixed(1);
+
+                if (valPitch) valPitch.textContent = `${p}°`;
+                if (valYaw) valYaw.textContent = `${y}°`;
+                if (valRoll) valRoll.textContent = `${r}°`;
+
+                const prealignStr = `${p}|${y}|${r}`;
+                krpanoObj.set('image.prealign', prealignStr);
+                try {
+                    krpanoObj.call('updateobject(true, true); updatescreen();');
+                } catch (e) {}
+            }
+
+            if (sliderRoll) sliderRoll.addEventListener('input', applyLivePrealign);
+            if (sliderPitch) sliderPitch.addEventListener('input', applyLivePrealign);
+            if (sliderYaw) sliderYaw.addEventListener('input', applyLivePrealign);
+
+            // Toggle Grid Guidelines Overlay
+            const btnToggleGrid = document.getElementById('btn-toggle-grid');
+            if (btnToggleGrid) {
+                btnToggleGrid.addEventListener('click', () => {
+                    const grid = document.getElementById('horizon-grid-overlay');
+                    if (grid) {
+                        if (grid.style.display === 'none' || !grid.style.display) {
+                            grid.style.display = 'block';
+                            showToast('📐 Đã bật lưới căn chân trời');
+                        } else {
+                            grid.style.display = 'none';
+                            showToast('📐 Đã tắt lưới căn chân trời');
+                        }
+                    }
+                });
+            }
+
+            // Reset Prealign to 0°
+            const btnResetPrealign = document.getElementById('btn-reset-prealign');
+            if (btnResetPrealign) {
+                btnResetPrealign.addEventListener('click', () => {
+                    if (sliderPitch) sliderPitch.value = 0;
+                    if (sliderYaw) sliderYaw.value = 0;
+                    if (sliderRoll) sliderRoll.value = 0;
+                    applyLivePrealign();
+                    showToast('🔄 Đã reset độ nghiêng về 0°');
+                });
+            }
+
+            // Save Prealign to Server XML
+            const btnSavePrealign = document.getElementById('btn-save-prealign');
+            if (btnSavePrealign) {
+                btnSavePrealign.addEventListener('click', async () => {
+                    if (!currentSceneId) {
+                        showToast('⚠️ Chưa chọn cảnh nào!');
+                        return;
+                    }
+
+                    const pitch = sliderPitch ? sliderPitch.value : 0;
+                    const yaw = sliderYaw ? sliderYaw.value : 0;
+                    const roll = sliderRoll ? sliderRoll.value : 0;
+
+                    try {
+                        const res = await fetch('/api/scenes/prealign', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                sceneId: currentSceneId,
+                                pitch,
+                                yaw,
+                                roll
+                            })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            showToast(`✅ Đã lưu độ nghiêng: Roll=${roll}°, Pitch=${pitch}°`);
+                        } else {
+                            showToast(`❌ Lỗi lưu độ nghiêng: ${data.error}`);
+                        }
+                    } catch (err) {
+                        showToast(`❌ Lỗi kết nối server: ${err.message}`);
+                    }
+                });
+            }
 
             // Start live view coordinate tracker
             setInterval(() => {
@@ -2272,8 +2454,7 @@
             
             // READ DIRECTLY FROM DOM INPUTS SO USER SELECTION IS ALWAYS SAVED ACCURATELY!
             const fovmin = document.getElementById('input-fovmin').value || '60';
-            const fovmax = document.getElementById('input-fovmax').value || '120';
-            const maxpixelzoom = document.getElementById('input-maxpixelzoom').value || '1.0';
+            const fovmax = document.getElementById('input-fovmax').value || '95';
 
             try {
                 const res = await fetch('/api/scenes/view', {
@@ -2285,13 +2466,12 @@
                         vlookat,
                         fov,
                         fovmin,
-                        fovmax,
-                        maxpixelzoom
+                        fovmax
                     })
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast(`✅ Đã lưu View: fov=${fov}°, fovmin=${fovmin}°, fovmax=${fovmax}°, pixelzoom=${maxpixelzoom}x`);
+                    showToast(`✅ Đã lưu View: fov=${fov}°, fovmin=${fovmin}°, fovmax=${fovmax}°`);
                 } else {
                     showToast(`❌ Lỗi lưu view: ${data.error}`);
                 }

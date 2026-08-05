@@ -1,6 +1,6 @@
 # NINH PHƯỚC 360° — HỆ THỐNG TOUR THỰC TẾ ẢO VÀ BỘ BIÊN TẬP 360 INTERACTIVE
 
-> **Phiên bản:** 2.1.0 (Cập nhật: 07/2026)  
+> **Phiên bản:** 2.2.0 (Cập nhật: 08/2026)  
 > **Tác giả:** Viet Design  
 > **Repository:** [https://github.com/hackervn89/ninhphuoc360](https://github.com/hackervn89/ninhphuoc360)  
 > **Website Live (GitHub Pages):** [https://hackervn89.github.io/ninhphuoc360/](https://hackervn89.github.io/ninhphuoc360/)  
@@ -14,8 +14,8 @@
 
 Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc lập**:
 
-1. **Trải nghiệm Người xem (Public Web Tour - `index.html`)**: Web tĩnh thuần HTML5/CSS3/JS + KrPano 360 Engine. Chạy siêu nhanh, tối ưu SEO, giao diện Glassmorphic hiện đại, tương thích 100% Mobile & VR Devices. **Hỗ trợ chạy tĩnh 100% trên GitHub Pages** nhờ cơ chế nạp dữ liệu địa điểm tĩnh (`tours/locations.json`).
-2. **Bộ biên tập Đồ họa Trực quan (Visual Editor - `_dev/editor.html` & `_dev/server.js`)**: Trình biên tập WYSIWYG chạy local/nội bộ qua NodeJS Express Server. Cho phép kéo thả hotspot, tạo multires tiles tự động, thêm/sửa/xóa cảnh, kéo thả di chuyển địa điểm và xuất mã KrPano XML tự động 100%.
+1. **Trải nghiệm Người xem (Public Web Tour - `index.html`)**: Web tĩnh thuần HTML5/CSS3/JS + KrPano 360 Engine. Chạy siêu nhanh, tối ưu SEO, giao diện Glassmorphic hiện đại, tương thích 100% Mobile & VR Devices. **Hỗ trợ chạy tĩnh 100% trên GitHub Pages** nhờ cơ chế nạp dữ liệu địa điểm tĩnh (`tours/locations.json`) & bài thuyết minh tĩnh (`tours/infos.json`).
+2. **Bộ biên tập Đồ họa Trực quan (Visual Editor - `_dev/editor.html` & `_dev/server.js`)**: Trình biên tập WYSIWYG chạy local/nội bộ qua NodeJS Express Server. Cho phép kéo thả hotspot, tạo multires tiles tự động, thêm/sửa/xóa cảnh, cân bằng đường chân trời (Horizon Leveling), quản lý bài viết thuyết minh WYSIWYG và đồng bộ mã KrPano XML tự động 100%.
 
 ---
 
@@ -26,16 +26,17 @@ Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc
 │ 🌐 LỚP 1: WEB FRONTEND (Public Tour - index.html / GitHub Pages)            │
 │    ├── UI Glassmorphic Overlay (Logo, Menu Địa điểm, Thanh điều khiển)      │
 │    ├── core/css/style.css (Design System, Responsive, Auto-wrap title)      │
-│    └── core/js/app.js (Tự động nạp tours/locations.json + Leaflet Minimap) │
+│    └── core/js/app.js (Tự động nạp tours/locations.json, tours/infos.json) │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 📜 LỚP 2: KRPANO 360 ENGINE & STATIC DATA SCHEMAS                           │
-│    ├── tour.xml (Master XML: Định nghĩa Hotspots style: muiten, vitri...)   │
+│    ├── tour.xml (Master XML: Định nghĩa Hotspots style: muiten, thongtin...)│
 │    ├── tours/locations.json (Ánh xạ ID thư mục → Tên hiển thị Tiếng Việt)  │
-│    └── tours/<dia_diem>/scenes.xml (Scene XML, view, image, hotspots)       │
+│    ├── tours/infos.json (Lưu trữ danh sách bài viết thuyết minh thông tin)  │
+│    └── tours/<dia_diem>/scenes.xml (Scene XML, view, image, prealign)       │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 🛠️ LỚP 3: VISUAL EDITOR & NODEJS BACKEND SERVER (_dev/ - LOCAL ONLY)         │
-│    ├── _dev/editor.html (WYSIWYG Editor: Drag Hotspot, Tree View, Drag Drop)│
-│    └── _dev/server.js (NodeJS Express API + KrPano CLI Makepano Tiling)     │
+│    ├── _dev/editor.html (WYSIWYG Editor: Prealign, Info Manager, Hotspots)  │
+│    └── _dev/server.js (NodeJS Express REST API + KrPano CLI Tiling Engine)  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -45,17 +46,26 @@ Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc
 
 ### 📱 Giao diện Trải nghiệm (`index.html`)
 - **Menu Địa điểm Phân cấp Tự động (Static Data Driven)**: Nạp phân nhóm từ `tours/locations.json` và đường dẫn ảnh `thumburl`, hiển thị chính xác 100% trên cả Localhost lẫn **GitHub Pages** mà không cần server backend.
+- **Popup Thuyết minh Thông tin sinh động**: Đọc bài viết phong phú có định dạng HTML/CSS từ `tours/infos.json` khi click hotspot loại `thongtin`.
 - **Tự động xuống dòng mềm mại**: Hiển thị tên địa điểm tiếng Việt đầy đủ 100% không bị cắt chữ. Tự động thu gọn khi click ra ngoài màn hình 360°.
 - **Bản đồ Thu nhỏ Minimap (Leaflet)**: Hiển thị vị trí thực tế và hướng nhìn nón Radar xoay theo camera 360° theo thời gian thực.
 - **Tương thích Đa thiết bị**: Hỗ trợ PC, Mobile, Máy tính bảng và Chế độ kính VR Headset.
 
 ### 🛠️ Bộ Biên Tập Visual Editor (`_dev/editor.html`)
-- **Thư mục Cây Phân cấp (Hierarchical Tree View)**: Hiển thị các Địa điểm thành từng Thư mục dạng cây (Accordion), kèm biểu tượng, số lượng cảnh và nút thao tác.
-- **Kéo Thả Di chuyển Cảnh (Drag & Drop Scene Relocation)**: Nhấn giữ biểu tượng ⠿ và kéo thả cảnh từ địa điểm này sang địa điểm khác. Hệ thống tự động di chuyển đĩa cứng, XML và dọn dẹp `tour.xml`.
-- **Upload Ảnh 360° Hàng loạt & Tự động Cắt Tiles (Batch Multi-Resolution Tiling)**: Chọn nhiều ảnh Panorama (`.jpg`, `.png`), chọn hoặc nhập tên Địa điểm đích -> Server tự động chạy `krpanotools` tạo ảnh cắt nhỏ tiles 4 cấp độ phân giải (`l1`, `l2`, `l3`, `l4`) siêu nét.
-- **Visual Hotspot Creator (Kéo thả Hotspot)**: Click chuột vào không gian 360° để đặt Hotspot mới (Mũi tên, Ghim vị trí, Trực thăng, Thuyết minh). Nhấn giữ kéo rê Hotspot trên màn hình để cập nhật tọa độ `ath`, `atv` realtime.
-- **Lưu Khung Nhìn Mặc Định (Save Default View)**: Xoay camera đến góc nhìn mong muốn -> Nhấn "LƯU GÓC NHÌN MẶC ĐỊNH", tự động cập nhật thẻ `<view hlookat="..." vlookat="..." fov="..." />` vào `scenes.xml`.
-- **Đổi tên & Xóa Cảnh / Địa điểm An toàn**: Đổi tên hiển thị mà không gãy đường dẫn. Xóa cảnh tự động xóa file tiles trên đĩa cứng và dọn dẹp dòng `<include>` trong `tour.xml`.
+- **Cân Bằng Đường Chân Trời (Prealign Horizon Leveling)**:
+  - Cung cấp thanh trượt điều chỉnh **Roll (Nghiêng trái/phải)**, **Pitch (Ngẩng/Cúi)**, **Yaw (Xoay hướng)** mượt mà theo thời gian thực.
+  - Tích hợp **Lưới chỉ la-ze xanh cyan (Grid Guidelines)** hiển thị đè trên ảnh 360° giúp soi căn chỉnh đường chân tường, mép bàn phẳng tuyệt đối.
+  - Lưu trực tiếp mã ma trận xoay 3D `prealign="Pitch|Yaw|Roll"` vào thẻ `<image>` trong `scenes.xml`.
+- **Hệ thống Quản Lý Bài Viết Thuyết Minh (Info Manager)**:
+  - Khung soạn thảo WYSIWYG hiện đại trên nền trắng nét căng, hỗ trợ định dạng Heading (H1, H2, H3), danh sách, đổi màu chữ cơ bản (Đen, Đỏ, Vàng, Xanh lá, Xanh dương, Cam...).
+  - Quản lý kho bài viết thuyết minh tập trung lưu tại `tours/infos.json`, tự động đồng bộ khi gán vào hotspot loại `thongtin`.
+- **Xử lý Tiles Cân bằng Kích thước Thực tế (Exact Tile Dimension Engine)**:
+  - Tự động bóc tách kích thước thực của các file tile mép (`l1=640px`, `l2=1280px`, `l3=2560px`, `l4=4864px`) triệt tiêu hoàn toàn viền đen ranh giới và hiện tượng hở 4 bức tường khi zoom.
+- **Visual Hotspot Creator & Instantly Auto-Sync**:
+  - Click chuột vào không gian 360° để đặt Hotspot mới (Mũi tên, Ghim vị trí, Trực thăng, Thuyết minh).
+  - Tự động lưu và đồng bộ tức thì sang file XML khi xóa hotspot hoặc lưu thuộc tính.
+- **Tùy biến Độ Zoom Linh Hoạt (Flexible FOV)**:
+  - Tự do cấu hình FOV Min, FOV Max cho từng cảnh mà không bị giới hạn cứng.
 
 ---
 
@@ -77,7 +87,7 @@ node _dev/server.js
 Khi thực hiện chỉnh sửa code hoặc thêm cảnh mới, sử dụng các câu lệnh Git sau:
 ```powershell
 git add .
-git commit -m "Mô tả thay đổi của bạn"
+git commit -m "Cập nhật tính năng Cân bằng đường chân trời và Info Manager"
 git push
 ```
 GitHub Pages sẽ tự động xây dựng và xuất bản phiên bản mới nhất sau ~1 phút.
@@ -89,27 +99,10 @@ Dự án được thiết kế hoàn hảo để bàn giao sản phẩm:
 
 ---
 
-## 🛠️ 5. QUY TRÌNH SỬA CODE VÀ NÂNG CẤP
+## ⚠️ 5. CÁC LƯU Ý KỸ THUẬT QUAN TRỌNG
 
-### 🎨 Thêm Loại Hotspot Style Mới
-1. Mở `tour.xml`, thêm đoạn thẻ `<style name="ten_style_moi" url="..." />`.
-2. Mở `_dev/editor.html`, thêm thẻ `<option value="ten_style_moi">` vào dropdown `#hs-style`.
-3. Mở `core/js/app.js` nếu muốn bổ sung xử lý sự kiện click riêng.
-
-### 📍 Đổi tên Địa điểm hiển thị
-- **Cách 1:** Mở `http://localhost:3600/editor.html`, bấm biểu tượng chiếc bút ✏️ bên cạnh tên Địa điểm để đổi tên trực tiếp.
-- **Cách 2:** Mở file `tours/locations.json`, chỉnh sửa cặp giá trị `"ma_thu_muc": "Tên Hiển Thị Mới"`.
-
-### 🔄 Di chuyển Cảnh từ Địa điểm này sang Địa điểm khác
-- **Cách 1:** Mở `editor.html`, nhấn giữ biểu tượng ⠿ cạnh cảnh và Kéo Thả vào Thư mục Địa điểm mong muốn.
-- **Cách 2:** Bấm nút chuyển đổi ↔ trên thẻ cảnh, chọn số thứ tự địa điểm đích.
-
----
-
-## ⚠️ 6. CÁC LƯU Ý KỸ THUẬT QUAN TRỌNG
-
-1. **Cơ chế Dữ liệu Tĩnh cho Menu Địa điểm**: `core/js/app.js` tự động đọc `tours/locations.json` tĩnh và bóc tách ID địa điểm từ `thumburl`. Không bắt buộc phải có Node.js backend để hiển thị phân nhóm menu.
-2. **Case-Sensitivity (Phân biệt chữ hoa/thường)**: Mã ID của Scene (`scene_xxx`) và Hotspot (`hs_xxx`) cũng như tên ảnh tile trên Linux (GitHub Pages) phải viết nhất quán, chính xác 100%.
-3. **Không đặt Hotspot trong thẻ `<image>`**: Mã XML chuẩn của KrPano yêu cầu thẻ `<hotspot>` phải nằm ngoài thẻ `<image>` và nằm trực tiếp trong `<scene>`.
-4. **Smart Preload bị tắt vĩnh viễn**: Không gọi `loadscene(..., PRELOAD)` vì bản KrPano 1.19 có lỗi tự động nhảy scene ngầm.
-5. **Dọn dẹp Tour XML**: Khi một địa điểm không còn cảnh nào, hệ thống sẽ tự động gỡ thẻ `<include url="tours/x/scenes.xml" />` khỏi `tour.xml` để tránh lỗi `404 Fatal Error: loading failed!`.
+1. **Cơ chế Dữ liệu Tĩnh cho Tour**: `core/js/app.js` tự động đọc `tours/locations.json` và `tours/infos.json` tĩnh. Không bắt buộc phải có Node.js backend để hiển thị menu hoặc bài thuyết minh.
+2. **Thuộc tính `prealign` trong KrPano**: Luôn giữ cú pháp `prealign="Pitch|Yaw|Roll"`. Khi thay đổi qua JS, cần gọi `updateobject(true, true)` để nạp lại ma trận WebGL.
+3. **Kích thước Tile Level**: `tiledimagewidth` trong `<level>` phải khớp chính xác tổng pixel tile (`(cols-1)*512 + lastTileWidth`) để tránh bị khoảng đen ranh giới.
+4. **Không đặt `maxpixelzoom` hạn chế**: Để `fovmin` và `fovmax` quản lý góc nhìn tự nhiên.
+5. **Smart Preload bị tắt vĩnh viễn**: Không gọi `loadscene(..., PRELOAD)` vì bản KrPano 1.19 có lỗi tự động nhảy scene ngầm.

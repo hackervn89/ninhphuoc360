@@ -783,6 +783,25 @@ async function fixScenesXml(sceneDir, sceneName, customTitle) {
     const faceDir = path.join(panosDir, tilesDirName, 'f');
     let levelsXml = '';
     
+// Helper to parse JPG pixel width from file header
+function getJpgWidth(filePath) {
+    try {
+        const buf = fs.readFileSync(filePath);
+        if (buf[0] !== 0xFF || buf[1] !== 0xD8) return 512;
+        let i = 2;
+        while (i < buf.length) {
+            if (buf[i] !== 0xFF) break;
+            const marker = buf[i + 1];
+            if (marker === 0xC0 || marker === 0xC2) {
+                return buf.readUInt16BE(i + 7);
+            }
+            const blockLength = buf.readUInt16BE(i + 2);
+            i += 2 + blockLength;
+        }
+    } catch (e) {}
+    return 512;
+}
+
     if (fs.existsSync(faceDir)) {
         const levelDirs = fs.readdirSync(faceDir)
             .filter(d => d.startsWith('l'))
@@ -794,8 +813,23 @@ async function fixScenesXml(sceneDir, sceneName, customTitle) {
 
         if (levelDirs.length > 0) {
             levelsXml = levelDirs.map(lDir => {
-                const lNum = parseInt(lDir.replace('l', ''), 10);
-                const dim = 320 * Math.pow(2, lNum);
+                const lPath = path.join(faceDir, lDir);
+                let dim = 5120;
+                if (fs.existsSync(lPath)) {
+                    const colDirs = fs.readdirSync(lPath)
+                        .filter(f => fs.statSync(path.join(lPath, f)).isDirectory())
+                        .sort();
+                    if (colDirs.length > 0) {
+                        const lastColPath = path.join(lPath, colDirs[colDirs.length - 1]);
+                        const tileFiles = fs.readdirSync(lastColPath).filter(f => f.endsWith('.jpg')).sort();
+                        if (tileFiles.length > 0) {
+                            const lastWidth = getJpgWidth(path.join(lastColPath, tileFiles[tileFiles.length - 1]));
+                            dim = (colDirs.length - 1) * 512 + lastWidth;
+                        } else {
+                            dim = colDirs.length * 512;
+                        }
+                    }
+                }
                 return `\t\t\t<level tiledimagewidth="${dim}" tiledimageheight="${dim}">\n\t\t\t\t<cube url="panos/${tilesDirName}/%s/${lDir}/%0v/${lDir}_%s_%0v_%0h.jpg" />\n\t\t\t</level>`;
             }).join('\n');
         }
@@ -806,6 +840,7 @@ async function fixScenesXml(sceneDir, sceneName, customTitle) {
     }
 
     const sceneBlock = `\t<scene name="scene_${sceneName}" title="${title}" thumburl="${thumbUrl}">
+\t\t<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
 \t\t<preview url="${previewUrl}" />
 \t\t<image type="CUBE" multires="true" tilesize="512">
 ${levelsXml}
@@ -961,10 +996,10 @@ app.post('/api/scenes/save', async (req, res) => {
         let sceneBody = sceneMatch[2];
         const sceneCloseTag = sceneMatch[3];
 
-        // Remove existing hotspot tags
-        sceneBody = sceneBody.replace(/<hotspot\s[^\/]*\/>/g, '');
+        // Remove existing hotspot tags cleanly
+        sceneBody = sceneBody.replace(/<hotspot[\s\S]*?\/>/gi, '');
         // Also remove hotspot tags with closing tag
-        sceneBody = sceneBody.replace(/<hotspot\s[^>]*>[\s\S]*?<\/hotspot>/g, '');
+        sceneBody = sceneBody.replace(/<hotspot[\s\S]*?<\/hotspot>/gi, '');
         // Clean up empty lines left behind
         sceneBody = sceneBody.replace(/\n\s*\n\s*\n/g, '\n');
 
@@ -1071,7 +1106,7 @@ app.post('/api/scenes/view', async (req, res) => {
         const sceneCloseTag = sceneMatch[3];
 
         const viewTagRegex = /<view\s+[^>]*\/>/i;
-        const newViewTag = `\t\t<view hlookat="${h}" vlookat="${v}" fov="${f}" maxpixelzoom="${mpz}" fovmin="${fmin}" fovmax="${fmax}" />`;
+        const newViewTag = `\t\t<view fovtype="MFOV" hlookat="${h}" vlookat="${v}" fov="${f}" fovmin="${fmin}" fovmax="${fmax}" />`;
 
         if (viewTagRegex.test(sceneBody)) {
             sceneBody = sceneBody.replace(viewTagRegex, newViewTag.trim());
@@ -1093,6 +1128,90 @@ app.post('/api/scenes/view', async (req, res) => {
         });
     } catch (err) {
         console.error('Save view error:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ============================================================
+// API: POST /api/scenes/prealign — Lưu thông số cân bằng độ nghiêng (prealign)
+// ============================================================
+
+app.post('/api/scenes/prealign', async (req, res) => {
+    try {
+        const { sceneId, pitch, yaw, roll } = req.body;
+
+        if (!sceneId) {
+            return res.status(400).json({ success: false, error: 'Thiếu sceneId' });
+        }
+
+        const p = parseFloat(pitch || 0).toFixed(1);
+        const y = parseFloat(yaw || 0).toFixed(1);
+        const r = parseFloat(roll || 0).toFixed(1);
+
+        const prealignStr = `${p}|${y}|${r}`;
+
+        // Find target file
+        const tourXml = fs.readFileSync(TOUR_XML_PATH, 'utf-8');
+        const includeRegex = /<include\s+url="([^"]+)"\s*\/>/g;
+        let match;
+        let targetFile = null;
+
+        while ((match = includeRegex.exec(tourXml)) !== null) {
+            const includeUrl = match[1];
+            if (includeUrl.startsWith('tours/') && includeUrl.endsWith('.xml')) {
+                const filePath = path.join(PROJECT_ROOT, includeUrl);
+                if (fs.existsSync(filePath)) {
+                    const content = fs.readFileSync(filePath, 'utf-8');
+                    if (content.includes(`name="${sceneId}"`)) {
+                        targetFile = filePath;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!targetFile) {
+            return res.status(404).json({ success: false, error: `Không tìm thấy file XML chứa scene "${sceneId}"` });
+        }
+
+        let content = fs.readFileSync(targetFile, 'utf-8');
+
+        const sceneRegex = new RegExp(`(<scene[^>]*name="${escapeRegex(sceneId)}"[^>]*>)([\\s\\S]*?)(</scene>)`, 'i');
+        const sceneMatch = content.match(sceneRegex);
+        if (!sceneMatch) {
+            return res.status(404).json({ success: false, error: `Scene "${sceneId}" không tìm thấy trong file XML` });
+        }
+
+        const sceneOpenTag = sceneMatch[1];
+        let sceneBody = sceneMatch[2];
+        const sceneCloseTag = sceneMatch[3];
+
+        // Update prealign on <image> tag in sceneBody
+        const imageTagRegex = /<image\s+([^>]*)>/i;
+        const imageMatch = sceneBody.match(imageTagRegex);
+
+        if (imageMatch) {
+            let imgAttrs = imageMatch[1];
+            if (/prealign="[^"]*"/i.test(imgAttrs)) {
+                imgAttrs = imgAttrs.replace(/prealign="[^"]*"/i, `prealign="${prealignStr}"`);
+            } else {
+                imgAttrs += ` prealign="${prealignStr}"`;
+            }
+            sceneBody = sceneBody.replace(imageTagRegex, `<image ${imgAttrs}>`);
+        }
+
+        const newSceneContent = sceneOpenTag + sceneBody.trimEnd() + '\n\t' + sceneCloseTag;
+        content = content.replace(sceneRegex, newSceneContent);
+
+        fs.writeFileSync(targetFile, content, 'utf-8');
+
+        res.json({
+            success: true,
+            message: `Đã lưu độ nghiêng prealign (${prealignStr}) cho ${sceneId}`,
+            prealign: prealignStr
+        });
+    } catch (err) {
+        console.error('Prealign save error:', err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
