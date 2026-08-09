@@ -9,18 +9,9 @@
 //       { id: 'scene_xxx', title: 'Tên', thumb: 'tours/.../thumb.jpg', lat: xx.xxx, lng: xxx.xxx }
 //       - mapTitle (tùy chọn): Tên hiển thị trên bản đồ (nếu khác title)
 // ─────────────────────────────────────────────────────────────
-const tourData = {
-    // === VÍ DỤ CẤU TRÚC (uncomment và sửa khi có panorama) ===
-    //
-    // diaDiem1: {
-    //     label: 'Tên địa điểm 1',
-    //     firstScene: 'scene_xxx',
-    //     scenes: [
-    //         { id: 'scene_xxx', title: 'Tên cảnh', thumb: 'tours/diaDiem1/panos/xxx.tiles/thumb.jpg', lat: 11.xxx, lng: 108.xxx },
-    //     ]
-    // },
-};
+const tourData = {};
 
+let krpanoObj = null;
 let currentTourKey = '';
 let leafMap = null;
 let radarMarker = null;
@@ -35,10 +26,9 @@ let isBackNavigating = false;
 // ── Startup ──────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
     embedpano({
-        swf: "engine/tour.swf",
         xml: "tour.xml",
         target: "pano",
-        html5: "auto",
+        html5: "always",
         mobilescale: 1.0,
         passQueryParameters: true,
         onready: krpanoReady
@@ -101,7 +91,7 @@ function krpanoReady(krpano) {
                 if (radarEl) radarEl.style.transform = `rotate(${ath}deg)`;
             }
         }
-    }, 100);
+    }, 200);
 }
 
 // ── Dynamic Tour Data Builder ────────────────────────────────

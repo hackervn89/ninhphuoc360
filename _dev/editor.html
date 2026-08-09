@@ -304,17 +304,6 @@
             gap: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
-
-        .mode-badge {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--primary);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
-
         /* Right Panel - Properties & Action */
         .properties-container {
             flex: 1;
@@ -970,18 +959,7 @@
         <!-- Central Viewport: KrPano Frame -->
         <div id="viewport-container">
             <div class="editor-top-bar">
-                <span class="mode-badge">EDITOR MODE</span>
-                <span style="font-size: 13px; color: var(--text-muted);">
-                    <i class="fa-solid fa-arrows-up-down-left-right"></i> Kéo thả trực tiếp hotspot trên màn hình
-                </span>
-                <span style="font-size: 11px; color: var(--text-muted); border-left: 1px solid var(--panel-border); padding-left: 12px;">
-                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px;">N</kbd> Thêm
-                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">Del</kbd> Xóa
-                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">Esc</kbd> Bỏ chọn
-                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">E</kbd> Xuất XML
-                    <kbd style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; margin-left:6px;">V</kbd> Lưu View
-                </span>
-                <button id="btn-open-info-manager" style="margin-left: auto; background: linear-gradient(135deg, #1d4ed8, #2563eb); border: none; color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <button id="btn-open-info-manager" style="background: linear-gradient(135deg, #1d4ed8, #2563eb); border: none; color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                     <i class="fa-solid fa-book-open"></i> Quản lý Thuyết minh
                 </button>
             </div>
@@ -2534,69 +2512,8 @@
             }
         }
 
-        // Keyboard shortcuts for productivity
+        // Keyboard shortcut: Ctrl+S to save hotspots
         function initKeyboardShortcuts() {
-            document.addEventListener('keydown', (e) => {
-                // Don't fire shortcuts when typing in form fields
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
-
-                // Ctrl+S: Save hotspots (works even in form fields)
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    document.getElementById('btn-save-hotspots').click();
-                    return;
-                }
-
-                switch (e.key) {
-                    case 'Delete':
-                    case 'Backspace':
-                        // Delete selected hotspot
-                        if (selectedHotspotName) {
-                            e.preventDefault();
-                            document.getElementById('btn-delete-hotspot').click();
-                        }
-                        break;
-                    case 'Escape':
-                        // Close modals or deselect
-                        e.preventDefault();
-                        const exportModal = document.getElementById('export-modal');
-                        const uploadModal = document.getElementById('upload-modal');
-                        if (uploadModal.style.display === 'flex') {
-                            closeUploadModal();
-                        } else if (exportModal.style.display === 'flex') {
-                            exportModal.style.display = 'none';
-                        } else {
-                            deselectHotspot();
-                        }
-                        break;
-                    case 'n':
-                    case 'N':
-                        // Add new hotspot (shortcut: N)
-                        if (!e.ctrlKey && !e.metaKey) {
-                            e.preventDefault();
-                            document.getElementById('btn-add-hotspot').click();
-                        }
-                        break;
-                    case 'e':
-                    case 'E':
-                        // Export XML (shortcut: E)
-                        if (!e.ctrlKey && !e.metaKey) {
-                            e.preventDefault();
-                            document.getElementById('btn-export-xml').click();
-                        }
-                        break;
-                    case 'v':
-                    case 'V':
-                        // Save view (shortcut: V)
-                        if (!e.ctrlKey && !e.metaKey) {
-                            e.preventDefault();
-                            saveCurrentViewAsDefault();
-                        }
-                        break;
-                }
-            });
-
-            // Ctrl+S from input fields
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();

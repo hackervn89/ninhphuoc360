@@ -1,6 +1,6 @@
 ﻿<krpano>
 	<scene name="scene_cong_htx" title="Cổng HTX" thumburl="panos/cong_htx.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-453.3" vlookat="0.6" fov="84.3" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-453.1" vlookat="-1.3" fov="90.0" fovmin="60" fovmax="95" />
 		<preview url="panos/cong_htx.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -21,7 +21,7 @@
 		<hotspot name="hs_new_309204" style="muiten" ath="-105.3848" atv="11.6157" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
 	</scene>
 	<scene name="scene_san_phai" title="Sân trước" thumburl="panos/san_phai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-71.2" vlookat="7.5" fov="85.0" fovmin="60" fovmax="95" />
 		<preview url="panos/san_phai.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -37,6 +37,8 @@
 			<cube url="panos/san_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
+		<hotspot name="hs_new_181680" style="muiten" ath="-174.6753" atv="27.2136" linkedscene="scene_san_truoc_htx" custom_title="Sân trước" />
+		<hotspot name="hs_new_228878" style="muiten" ath="137.2565" atv="22.5509" linkedscene="scene_cong_htx" custom_title="Cổng HTX" />
 	</scene>
 	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
@@ -183,7 +185,7 @@
 		<hotspot name="hs_new_024882" style="muiten" ath="-45.7271" atv="31.2348" linkedscene="scene_san_trai1" custom_title="Sân trước" />
 	</scene>
 	<scene name="scene_phong_chinh_1" title="Phòng trưng bày" thumburl="panos/phong_chinh_1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-86.9" vlookat="21.4" fov="85.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-120.6" vlookat="25.8" fov="95.0" fovmin="60" fovmax="95" />
 		<preview url="panos/phong_chinh_1.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -205,9 +207,10 @@
 		<hotspot name="hs_new_270615" style="muiten" ath="-109.8138" atv="34.2263" linkedscene="scene_phong_chinh_trai_2" custom_title="Phòng trưng bày" />
 		<hotspot name="hs_new_280855" style="muiten" ath="-99.7674" atv="21.0584" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
 		<hotspot name="hs_new_320503" style="muiten" ath="-52.1186" atv="21.7485" linkedscene="scene_phong_chinh_phai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_077160" style="thongtin" ath="-83.5402" atv="35.4986" infoid="info_vi_du_bai_viet" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_phong_chinh_2" title="Phòng trưng bày" thumburl="panos/phong_chinh_2.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-449.5" vlookat="21.6" fov="85.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-473.8" vlookat="19.3" fov="95.0" fovmin="60" fovmax="95" />
 		<preview url="panos/phong_chinh_2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">

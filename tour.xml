@@ -63,8 +63,8 @@
 	
 	<!-- Hotspot breathing animation using tween chain (leak-free) -->
 	<action name="hotspot_breathe">
-		tween(scale, 0.8, 0.8, easeInOutSine,
-			tween(scale, 0.8, 0.8, easeInOutSine, hotspot_breathe() )
+		tween(scale, 0.55, 0.8, easeInOutSine,
+			tween(scale, 0.45, 0.8, easeInOutSine, hotspot_breathe() )
 		);
 	</action>
 
@@ -133,20 +133,7 @@
 		);
 	</action>
 
-	<!-- Hiệu ứng mũi tên Pro: Bắt đầu nhỏ & mờ, lao vọt tới trước đồng thời to dần, sau đó mờ dần -->
-	<action name="hotspot_pro_anim">
-		if(loaded,
-			set(oy, 30);
-			set(alpha, 0.0);
-			set(scale, 0.15);
-			
-			tween(oy|alpha|scale, 0|1.0|0.25, 0.6, easeOutQuad,
-				tween(oy|alpha|scale, -40|0.0|0.2, 0.6, easeInQuad,
-					hotspot_pro_anim();
-				);
-			);
-		);
-	</action>
+
 
 	<!--
 	    Panorama Location Pin Hotspot Style
@@ -230,9 +217,6 @@
 	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
 	       />
 
-	<!-- ========================================== -->
-	<!-- CUSTOM TOOLTIP (Text + Thumbnail) -->
-	<!-- ========================================== -->
 	<!-- ========================================== -->
 	<!-- CUSTOM TOOLTIP CARD (Text + Thumbnail) -->
 	<!-- High Contrast & Crisp Sharp Styling -->
@@ -483,13 +467,6 @@
 		if(startactions !== null, startactions() );
 	</action>
 
-	<!--
-	    Smart Preload Strategy — DISABLED.
-	    In this KrPano 1.19 project, loadscene(..., PRELOAD) can still trigger
-	    an unwanted scene switch after the intro. Keep navigation fully user-controlled.
-	-->
-	<action name="enable_smart_preload">
-		trace('Smart preload disabled to prevent automatic scene switching.');
-	</action>
+
 
 </krpano>
