@@ -1,6 +1,6 @@
 ﻿<krpano>
 	<scene name="scene_cong_lang" title="Cổng làng Bàu Trúc" thumburl="panos/cong_lang.tiles/thumb.jpg">
-		<view hlookat="585.7" vlookat="-0.1" fov="78.0" maxpixelzoom="2.0" fovmin="76" fovmax="95" />
+		<view fovtype="MFOV" hlookat="585.3" vlookat="3.6" fov="110" fovmin="76" fovmax="120" />
 		<preview url="panos/cong_lang.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512" prealign="0.0|0.0|-1.8">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -19,7 +19,7 @@
 		<hotspot name="hs_new_936445" style="muiten" ath="-134.1677" atv="17.4869" linkedscene="scene_duongdi1" custom_title="Đường đi 1" />
 	</scene>
 	<scene name="scene_duongdi1" title="Đường đi 1" thumburl="panos/duongdi1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-88.1" vlookat="4.7" fov="78.7" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-101.2" vlookat="1.7" fov="110" fovmin="60" fovmax="110" />
 		<preview url="panos/duongdi1.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -39,7 +39,7 @@
 		<hotspot name="hs_new_508183" style="muiten" ath="-98.2571" atv="24.4345" linkedscene="scene_duongdi2" custom_title="Mũi tên di chuyển mới" />
 	</scene>
 	<scene name="scene_duongdi2" title="Nhà sinh hoạt cộng đồng Chăm" thumburl="panos/duongdi2.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-146.3" vlookat="9.9" fov="78.7" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-140.3" vlookat="4.9" fov="101.4" fovmin="60" fovmax="110" />
 		<preview url="panos/duongdi2.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -57,6 +57,7 @@
 		</image>
 		<hotspot name="hs_new_939305" style="muiten" ath="-45.2163" atv="21.9023" linkedscene="scene_duongdi1" custom_title="Mũi tên di chuyển mới" />
 		<hotspot name="hs_new_949468" style="muiten" ath="-166.9548" atv="26.3893" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới" />
+		<hotspot name="hs_new_738326" style="muiten" ath="139.1603" atv="17.3233" linkedscene="scene_cong_htx" custom_title="Cổng HTX" />
 	</scene>
 
 	

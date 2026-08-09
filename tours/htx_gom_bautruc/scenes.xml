@@ -182,4 +182,226 @@
 		<hotspot name="hs_new_006205" style="muiten" ath="-4.9159" atv="35.1011" linkedscene="scene_san_trai2" custom_title="Sân trước" />
 		<hotspot name="hs_new_024882" style="muiten" ath="-45.7271" atv="31.2348" linkedscene="scene_san_trai1" custom_title="Sân trước" />
 	</scene>
+	<scene name="scene_phong_chinh_1" title="Phòng trưng bày" thumburl="panos/phong_chinh_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-86.9" vlookat="21.4" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_499554" style="muiten" ath="8.4679" atv="29.2528" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
+		<hotspot name="hs_new_513996" style="muiten" ath="-66.7912" atv="39.6529" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_246906" style="muiten" ath="-132.8752" atv="48.5167" linkedscene="scene_phong_chinh_trai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_270615" style="muiten" ath="-109.8138" atv="34.2263" linkedscene="scene_phong_chinh_trai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_280855" style="muiten" ath="-99.7674" atv="21.0584" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_320503" style="muiten" ath="-52.1186" atv="21.7485" linkedscene="scene_phong_chinh_phai_1" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_2" title="Phòng trưng bày" thumburl="panos/phong_chinh_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-449.5" vlookat="21.6" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_265336" style="muiten" ath="154.8710" atv="23.8309" linkedscene="scene_phong_chinh_trai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_276642" style="muiten" ath="-169.5437" atv="28.2381" linkedscene="scene_phong_chinh_trai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_287554" style="muiten" ath="107.8707" atv="27.2226" linkedscene="scene_phong_chinh_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_297719" style="muiten" ath="-40.5235" atv="26.0087" linkedscene="scene_phong_chinh_phai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_336565" style="muiten" ath="-104.0354" atv="24.2716" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_trai_5" title="Phòng trưng bày" thumburl="panos/phong_chinh_trai_5.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_trai_5.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_trai_5.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_trai_5.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_trai_5.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_trai_5.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_550203" style="muiten" ath="-105.8716" atv="38.6515" linkedscene="scene_phong_chinh_giua" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_558884" style="muiten" ath="-5.4962" atv="44.5254" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_588948" style="muiten" ath="-15.4997" atv="21.9564" linkedscene="scene_phong_chinh_trai_2" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_giua" title="Phòng trưng bày" thumburl="panos/phong_chinh_giua.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_giua.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_591380" style="muiten" ath="-71.0859" atv="25.5900" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_604121" style="muiten" ath="-123.7388" atv="20.4315" linkedscene="scene_phong_chinh_phai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_620602" style="muiten" ath="171.8269" atv="34.4619" linkedscene="scene_phong_chinh_phai_3" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_601993" style="muiten" ath="-0.3855" atv="46.5657" linkedscene="scene_phong_chinh_trai_5" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_phai_1" title="Phòng trưng bày" thumburl="panos/phong_chinh_phai_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-80.5" vlookat="24.2" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_phai_1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_phai_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_phai_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_phai_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_phai_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_196441" style="muiten" ath="-55.8373" atv="31.0413" linkedscene="scene_phong_chinh_phai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_221772" style="muiten" ath="-124.0212" atv="29.3838" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_237392" style="muiten" ath="143.0893" atv="28.5646" linkedscene="scene_phong_chinh_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_251291" style="muiten" ath="172.6750" atv="36.5198" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_phai_2" title="Phòng trưng bày" thumburl="panos/phong_chinh_phai_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-83.4" vlookat="21.9" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_phai_2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_phai_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_phai_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_phai_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_phai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_281819" style="muiten" ath="-155.0146" atv="38.2069" linkedscene="scene_phong_chinh_phai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_290487" style="muiten" ath="-147.0108" atv="21.7879" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_311958" style="muiten" ath="-101.9379" atv="21.6576" linkedscene="scene_phong_chinh_phai_3" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_326523" style="muiten" ath="-42.6796" atv="23.9812" linkedscene="scene_phong_chinh_giua" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_phai_3" title="Phòng trưng bày" thumburl="panos/phong_chinh_phai_3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_phai_3.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_phai_3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_phai_3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_phai_3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_phai_3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_636578" style="muiten" ath="-96.6430" atv="35.6714" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
+		<hotspot name="hs_new_667532" style="muiten" ath="172.6221" atv="33.4336" linkedscene="scene_phong_chinh_phai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_680025" style="muiten" ath="-173.4287" atv="16.8740" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_trai_1" title="Phòng trưng bày" thumburl="panos/phong_chinh_trai_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-97.8" vlookat="11.6" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_trai_1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_trai_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_trai_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_trai_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_trai_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_670655" style="muiten" ath="-11.3735" atv="39.3180" linkedscene="scene_phong_chinh_trai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_091978" style="muiten" ath="-9.9384" atv="17.0613" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_102012" style="muiten" ath="40.1845" atv="32.6863" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_110746" style="muiten" ath="81.2553" atv="31.7076" linkedscene="scene_phong_chinh_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_117548" style="muiten" ath="89.8444" atv="12.9647" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
+	</scene>
+	<scene name="scene_phong_chinh_trai_2" title="Phòng trưng bày" thumburl="panos/phong_chinh_trai_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-104.9" vlookat="22.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_trai_2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_trai_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_trai_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_trai_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_trai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_438690" style="muiten" ath="-62.5424" atv="24.5713" linkedscene="scene_phong_chinh_trai_4" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_449513" style="muiten" ath="118.2739" atv="37.9063" linkedscene="scene_phong_chinh_trai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_464456" style="muiten" ath="41.9874" atv="41.2387" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_473822" style="muiten" ath="86.7814" atv="25.3831" linkedscene="scene_phong_chinh_1" custom_title="Phòng trưng bày" />
+	</scene>
+	<scene name="scene_phong_chinh_trai_4" title="Phòng trưng bày" thumburl="panos/phong_chinh_trai_4.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-125.8" vlookat="31.3" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_chinh_trai_4.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_chinh_trai_4.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_chinh_trai_4.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_chinh_trai_4.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_chinh_trai_4.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+		<hotspot name="hs_new_526218" style="muiten" ath="-80.3428" atv="41.8821" linkedscene="scene_phong_chinh_trai_2" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_537864" style="muiten" ath="-87.3054" atv="19.6899" linkedscene="scene_phong_chinh_trai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_550228" style="muiten" ath="-163.6071" atv="21.3566" linkedscene="scene_phong_chinh_phai_1" custom_title="Phòng trưng bày" />
+		<hotspot name="hs_new_501307" style="muiten" ath="108.3374" atv="16.0642" linkedscene="scene_phong_chinh_giua" custom_title="Phòng trưng bày" />
+	</scene>
 </krpano>
