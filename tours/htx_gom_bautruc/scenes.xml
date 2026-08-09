@@ -333,7 +333,7 @@
 				<cube url="panos/phong_chinh_phai_3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
 			</level>
 		</image>
-		<hotspot name="hs_new_636578" style="muiten" ath="-96.6430" atv="35.6714" linkedscene="scene_sanh_giua" custom_title="Sảnh trước" />
+		<hotspot name="hs_new_636578" style="muiten" ath="-96.6430" atv="35.6714" linkedscene="scene_phong_chinh_giua" custom_title="Sảnh trước" />
 		<hotspot name="hs_new_667532" style="muiten" ath="172.6221" atv="33.4336" linkedscene="scene_phong_chinh_phai_2" custom_title="Phòng trưng bày" />
 		<hotspot name="hs_new_680025" style="muiten" ath="-173.4287" atv="16.8740" linkedscene="scene_phong_chinh_2" custom_title="Phòng trưng bày" />
 	</scene>
