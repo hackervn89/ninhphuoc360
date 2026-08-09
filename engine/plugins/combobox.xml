@@ -53,8 +53,8 @@
 
 	<!-- path to the scrollarea plugin -->
 	<combobox_scrollareaplugin
-		url.html5="%SWFPATH%/plugins/scrollarea.js"
-		url.flash="%SWFPATH%/plugins/scrollarea.swf"
+		url.html5="%FIRSTXML%/engine/plugins/scrollarea.js"
+		url.flash="%FIRSTXML%/engine/plugins/scrollarea.swf"
 		/>
 
 	<!-- core internal layer styles -->

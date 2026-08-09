@@ -89,10 +89,10 @@
 	       linkedscene=""
 	       linkedscene_lookat=""
 	       onclick="arrow_hotspot_click();"
-	       onover="tween(scale,0.65,0.15); show_custom_tooltip();"
-	       onout="hotspot_breathe(); hide_custom_tooltip();"
+	       onover="hotspot_onover();"
+	       onout="hotspot_onout();"
 	       myframe="0"
-	       onloaded="hotspot_breathe(); set(myframe,0); delayedcall(calc(Math.random()*2), hotspot_sprite_anim(get(name)) );"
+	       onloaded="copy(base_scale, scale); set(myframe,0); delayedcall(calc(Math.random()*2), hotspot_sprite_anim(get(name)) );"
 	       />
 
 	<!-- Hiệu ứng khi click: Mũi tên lướt về phía trước trên mặt đất thay vì đứng dậy -->
@@ -135,6 +135,25 @@
 
 
 
+	<!-- Dynamic Hotspot Hover Scale Actions (Preserves custom hotspot scale) -->
+	<action name="hotspot_onover">
+		if(base_scale === null OR base_scale === undefined, copy(base_scale, scale));
+		mul(target_hover_scale, base_scale, 1.15);
+		tween(scale, get(target_hover_scale), 0.15);
+		tween(alpha, 1.0, 0.15);
+		show_custom_tooltip();
+	</action>
+
+	<action name="hotspot_onout">
+		if(base_scale !== null AND base_scale !== undefined,
+			tween(scale, get(base_scale), 0.15);
+		,
+			tween(scale, 0.5, 0.15);
+		);
+		tween(alpha, 0.9, 0.15);
+		hide_custom_tooltip();
+	</action>
+
 	<!--
 	    Panorama Location Pin Hotspot Style
 	    For overview/aerial scenes linking to ground-level locations.
@@ -154,8 +173,9 @@
 	       linkedscene=""
 	       linkedscene_lookat=""
 	       onclick="fly_transition_click();"
-	       onover="tween(scale,0.58,0.15); tween(alpha,1.0,0.15); show_custom_tooltip();"
-	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
+	       onover="hotspot_onover();"
+	       onout="hotspot_onout();"
+	       onloaded="copy(base_scale, scale);"
 	       />
 
 	<!--
@@ -177,8 +197,9 @@
 	       linkedscene=""
 	       linkedscene_lookat=""
 	       onclick="fly_transition_click();"
-	       onover="tween(scale,0.58,0.15); tween(alpha,1.0,0.15); show_custom_tooltip();"
-	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
+	       onover="hotspot_onover();"
+	       onout="hotspot_onout();"
+	       onloaded="copy(base_scale, scale);"
 	       />
 
 	<!-- Little Planet Transition for Vertical Movement -->
@@ -213,8 +234,34 @@
 	       tooltip=""
 	       infoid=""
 	       onclick="skin_hotspotstyle_click(); js(openInfoModal(get(infoid)));"
-	       onover="tween(scale,0.58,0.15); tween(alpha,1.0,0.15); show_custom_tooltip();"
-	       onout="tween(scale,0.5,0.15); tween(alpha,0.9,0.15); hide_custom_tooltip();"
+	       onover="hotspot_onover();"
+	       onout="hotspot_onout();"
+	       onloaded="copy(base_scale, scale);"
+	       />
+
+	<!--
+	    Polygon Ground Navigation Style
+	    Invisible floor areas that let visitors click to navigate between scenes.
+	    - Default: Fully transparent (invisible in public tour)
+	    - Hover: Subtle glow border + fill + tooltip
+	    - Click: Scene transition via arrow_hotspot_click()
+	-->
+	<style name="poly_ground_nav"
+	       type="polygon"
+	       fillcolor="0x0072ff"
+	       fillalpha="0.0"
+	       bordercolor="0xffffff"
+	       borderalpha="0.0"
+	       borderwidth="0.0"
+	       capture="false"
+	       cursor="pointer"
+	       linkedscene=""
+	       custom_title=""
+	       show_title="true"
+	       show_thumb="true"
+	       onclick="arrow_hotspot_click();"
+	       onover="show_custom_tooltip();"
+	       onout="hide_custom_tooltip();"
 	       />
 
 	<!-- ========================================== -->

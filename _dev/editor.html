@@ -1089,6 +1089,13 @@
             </div>
             <div id="pano-wrapper" style="position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden;">
                 <div id="pano" style="width: 100%; height: 100%;"></div>
+                <!-- Polygon Drawing Mode Banner -->
+                <div id="poly-drawing-banner" style="display: none; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 100; background: rgba(16, 185, 129, 0.92); color: #fff; padding: 8px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; backdrop-filter: blur(8px); box-shadow: 0 4px 16px rgba(0,0,0,0.4); display: none; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-draw-polygon"></i>
+                    <span>Chế độ vẽ đa giác — Click để chấm đỉnh, <b>Space</b> hoặc <b>Double-click</b> để hoàn tất, <b>Esc</b> để hủy</span>
+                    <button id="btn-finish-polygon" style="background: #fff; color: #059669; border: none; padding: 4px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px;">✓ Xong</button>
+                    <button id="btn-cancel-polygon" style="background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;">✕ Hủy</button>
+                </div>
                 <!-- Guideline Overlay for leveling horizon -->
                 <div id="horizon-grid-overlay" style="display: none; position: absolute; inset: 0; pointer-events: none; z-index: 50; border: 1px dashed rgba(0, 230, 255, 0.4);">
                     <!-- Center Horizontal Line -->
@@ -1306,9 +1313,14 @@
                 </div>
 
                 <!-- Quick action: Add Hotspot -->
-                <button id="btn-add-hotspot" class="btn-action">
-                    <i class="fa-solid fa-circle-plus"></i> THÊM HOTSPOT MỚI
-                </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button id="btn-add-hotspot" class="btn-action" style="margin-bottom: 0; font-size: 11px; padding: 8px 6px;">
+                        <i class="fa-solid fa-circle-plus"></i> Mới Hotspot
+                    </button>
+                    <button id="btn-draw-polygon" class="btn-action" style="margin-bottom: 0; font-size: 11px; padding: 8px 6px; background: linear-gradient(135deg, #059669, #10b981);">
+                        <i class="fa-solid fa-draw-polygon"></i> Vẽ Đa Giác (Sàn)
+                    </button>
+                </div>
 
                 <!-- Hotspot Editor Panel (Hidden when no hotspot selected) -->
                 <div id="property-editor" style="display: none;">
@@ -1321,6 +1333,7 @@
                             <option value="vitri">Ghim vị trí (Hạ cánh từ trên cao)</option>
                             <option value="tructhang">Trực thăng (Bay lên cao)</option>
                             <option value="thongtin">Thông tin (Mở thuyết minh)</option>
+                            <option value="poly_ground_nav">Đa giác sàn (Polygon)</option>
                         </select>
                     </div>
 
@@ -1369,6 +1382,15 @@
                         </div>
                     </div>
 
+                    <!-- Hotspot Scale / Size Control -->
+                    <div class="form-group" id="group-scale">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label for="hs-scale" style="margin-bottom: 0;">Kích thước (Scale)</label>
+                            <span id="lbl-scale-val" style="font-size: 11px; font-weight: bold; color: var(--primary);">0.50x</span>
+                        </div>
+                        <input type="range" id="hs-scale" min="0.20" max="1.50" step="0.05" value="0.50" style="width: 100%;">
+                    </div>
+
                     <!-- Readonly coordinates -->
                     <div class="form-group">
                         <label>Tọa độ Spherical</label>
@@ -1381,6 +1403,14 @@
                                 <span style="font-size: 10px; color: var(--text-muted);">atv</span>
                                 <input type="text" id="hs-atv" readonly style="font-family: monospace;">
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Polygon-specific controls (hidden for non-polygon) -->
+                    <div id="group-polygon-config" style="display: none;">
+                        <div class="form-group">
+                            <label>Số đỉnh đa giác</label>
+                            <div style="font-size: 13px; font-weight: bold; color: #10b981;" id="lbl-poly-vertex-count">0 đỉnh</div>
                         </div>
                     </div>
 
@@ -1401,39 +1431,19 @@
                         <!-- Loaded dynamically -->
                     </div>
                 </div>
+            </div>
 
-                <button id="btn-save-hotspots" class="btn-action btn-save" style="margin-top: 20px;">
+            <!-- Sticky Fixed Footer: Save Hotspots to File -->
+            <div class="panel-footer" style="padding: 14px 16px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); flex-shrink: 0;">
+                <button id="btn-save-hotspots" class="btn-action btn-save" style="margin-bottom: 0; width: 100%; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
                     <i class="fa-solid fa-floppy-disk"></i> LƯU HOTSPOTS VÀO FILE
                 </button>
-
-                <button id="btn-export-xml" class="btn-action btn-secondary" style="margin-top: 8px;">
-                    <i class="fa-solid fa-code"></i> XUẤT MÃ XML (XEM CODE)
-                </button>
             </div>
         </div>
 
     </div>
 
-    <!-- Export Modal -->
-    <div class="modal-overlay" id="export-modal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>Mã XML Hotspots được tạo</h3>
-                <button class="modal-close" id="btn-close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-                    Sao chép mã dưới đây và dán trực tiếp vào bên trong nút <code>&lt;scene&gt;</code> tương ứng trong tệp tin XML của cảnh (ví dụ: <code>tours/diaDiem/scenes.xml</code>).
-                </p>
-                <textarea class="xml-output" id="xml-textarea" readonly></textarea>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-action btn-secondary" style="margin-bottom: 0;" id="btn-copy-code">
-                    <i class="fa-solid fa-copy"></i> SAO CHÉP MÃ
-                </button>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Upload Progress Modal -->
     <div class="upload-modal-overlay" id="upload-modal">
@@ -1531,6 +1541,9 @@
         const inputHsInfo = document.getElementById('hs-infoid');
         const inputHsAth = document.getElementById('hs-ath');
         const inputHsAtv = document.getElementById('hs-atv');
+        const inputHsScale = document.getElementById('hs-scale');
+        const lblScaleVal = document.getElementById('lbl-scale-val');
+        const groupScale = document.getElementById('group-scale');
         const groupLinkedScene = document.getElementById('group-linkedscene');
         const groupInfoId = document.getElementById('group-infoid');
 
@@ -2047,23 +2060,28 @@
         // Parse custom hotspots already loaded in the active XML scene
         function loadSceneHotspots() {
             sceneHotspots = [];
+            clearVertexHandles();
             const count = krpanoObj.get("hotspot.count");
             
             for (let i = 0; i < count; i++) {
                 const name = krpanoObj.get(`hotspot[${i}].name`);
                 const style = krpanoObj.get(`hotspot[${i}].style`);
+                const hsType = krpanoObj.get(`hotspot[${i}].type`);
                 
                 // Track only our target custom style hotspots
-                if (['muiten', 'vitri', 'tructhang', 'thongtin'].includes(style)) {
-                    const ath = Number(krpanoObj.get(`hotspot[${i}].ath`)).toFixed(4);
-                    const atv = Number(krpanoObj.get(`hotspot[${i}].atv`)).toFixed(4);
+                if (['muiten', 'vitri', 'tructhang', 'thongtin', 'poly_ground_nav'].includes(style)) {
+                    const ath = Number(krpanoObj.get(`hotspot[${i}].ath`) || 0).toFixed(4);
+                    const atv = Number(krpanoObj.get(`hotspot[${i}].atv`) || 0).toFixed(4);
+                    const rawScale = krpanoObj.get(`hotspot[${i}].scale`);
+                    const hsScale = rawScale !== null && rawScale !== undefined ? Number(rawScale).toFixed(2) : '0.50';
                     
                     const stVal = krpanoObj.get(`hotspot[${i}].show_title`);
                     const smVal = krpanoObj.get(`hotspot[${i}].show_thumb`);
 
-                    sceneHotspots.push({
+                    const hsData = {
                         name: name,
                         style: style,
+                        scale: hsScale,
                         ath: ath,
                         atv: atv,
                         linkedscene: krpanoObj.get(`hotspot[${i}].linkedscene`) || '',
@@ -2071,11 +2089,35 @@
                         infoid: krpanoObj.get(`hotspot[${i}].infoid`) || '',
                         show_title: stVal === 'false' || stVal === false ? 'false' : 'true',
                         show_thumb: smVal === 'false' || smVal === false ? 'false' : 'true'
-                    });
+                    };
 
-                    // Enable dragging in KrPano dynamically
-                    krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
-                    krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                    // Parse polygon points
+                    if (style === 'poly_ground_nav' || hsType === 'polygon') {
+                        hsData.type = 'polygon';
+                        hsData.fillcolor = krpanoObj.get(`hotspot[${i}].fillcolor`) || '0x0072ff';
+                        hsData.fillalpha = Number(krpanoObj.get(`hotspot[${i}].fillalpha`) || 0.3);
+                        hsData.bordercolor = krpanoObj.get(`hotspot[${i}].bordercolor`) || '0xffffff';
+                        hsData.borderalpha = Number(krpanoObj.get(`hotspot[${i}].borderalpha`) || 0.8);
+                        hsData.borderwidth = Number(krpanoObj.get(`hotspot[${i}].borderwidth`) || 2.0);
+                        
+                        const pointCount = krpanoObj.get(`hotspot[${i}].point.count`) || 0;
+                        hsData.points = [];
+                        for (let pi = 0; pi < pointCount; pi++) {
+                            hsData.points.push({
+                                ath: Number(krpanoObj.get(`hotspot[${i}].point[${pi}].ath`) || 0).toFixed(4),
+                                atv: Number(krpanoObj.get(`hotspot[${i}].point[${pi}].atv`) || 0).toFixed(4)
+                            });
+                        }
+
+                        // Override onclick for editor mode
+                        krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                    } else {
+                        // Enable dragging in KrPano dynamically
+                        krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
+                        krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                    }
+
+                    sceneHotspots.push(hsData);
                 }
             }
         }
@@ -2169,9 +2211,20 @@
             selectHsShowTitle.value = hs.show_title || 'true';
             selectHsShowThumb.value = hs.show_thumb || 'true';
             selectHsLinked.value = hs.linkedscene;
-            inputHsInfo.value = hs.infoid;
+            inputHsInfo.value = hs.infoid || '';
             inputHsAth.value = hs.ath;
             inputHsAtv.value = hs.atv;
+
+            const hsScale = hs.scale ? Number(hs.scale).toFixed(2) : '0.50';
+            if (inputHsScale) inputHsScale.value = hsScale;
+            if (lblScaleVal) lblScaleVal.textContent = `${hsScale}x`;
+
+            // Polygon-specific fields
+            if (hs.style === 'poly_ground_nav' && hs.points) {
+                renderVertexHandles(hs);
+            } else {
+                clearVertexHandles();
+            }
 
             // Toggle conditional fields
             toggleConditionalFields(hs.style);
@@ -2190,6 +2243,7 @@
             selectedHotspotName = '';
             propertyEditor.style.display = 'none';
             noSelectedMsg.style.display = 'block';
+            clearVertexHandles();
 
             if (krpanoObj) {
                 sceneHotspots.forEach(h => {
@@ -2212,16 +2266,232 @@
                 }
                 markDirty();
             }
+
+            // Vertex handle drag: update polygon point position in real-time
+            if (name && name.startsWith('hs_vhandle_')) {
+                const parts = name.split('_');
+                const vidx = parseInt(parts[parts.length - 1]);
+                const polyName = parts.slice(2, parts.length - 1).join('_');
+                const polyHs = sceneHotspots.find(h => h.name === polyName);
+                if (polyHs && polyHs.points && polyHs.points[vidx]) {
+                    polyHs.points[vidx].ath = Number(ath).toFixed(4);
+                    polyHs.points[vidx].atv = Number(atv).toFixed(4);
+                    // Sync polygon hotspot point in KrPano
+                    krpanoObj.set(`hotspot[${polyName}].point[${vidx}].ath`, ath);
+                    krpanoObj.set(`hotspot[${polyName}].point[${vidx}].atv`, atv);
+                    markDirty();
+                }
+            }
         };
+
+        // ================================================================
+        // POLYGON DRAWING MODULE
+        // ================================================================
+        let isDrawingPolygon = false;
+        let drawingPoints = [];
+        const VERTEX_DOT_SVG = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><circle cx="7" cy="7" r="5" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/></svg>');
+
+        function startPolygonDrawing() {
+            isDrawingPolygon = true;
+            drawingPoints = [];
+            const banner = document.getElementById('poly-drawing-banner');
+            if (banner) banner.style.display = 'flex';
+            deselectHotspot();
+            showToast('🔷 Bấm vào mặt đất để chấm các đỉnh đa giác...');
+        }
+
+        function cancelPolygonDrawing(shouldShowToast = true) {
+            isDrawingPolygon = false;
+            drawingPoints = [];
+            if (krpanoObj) {
+                krpanoObj.call('removehotspot(hs_poly_draft);');
+                clearDraftPointMarkers();
+            }
+            const banner = document.getElementById('poly-drawing-banner');
+            if (banner) banner.style.display = 'none';
+            if (shouldShowToast) showToast('Đã hủy vẽ đa giác.');
+        }
+
+        function clearDraftPointMarkers() {
+            for (let i = 0; i < 100; i++) {
+                krpanoObj.call(`removehotspot(hs_draft_pt_${i});`);
+            }
+        }
+
+        function addDraftPointMarker(ath, atv, idx) {
+            const name = `hs_draft_pt_${idx}`;
+            krpanoObj.call(`addhotspot(${name});`);
+            krpanoObj.set(`hotspot[${name}].url`, VERTEX_DOT_SVG);
+            krpanoObj.set(`hotspot[${name}].scale`, 0.45);
+            krpanoObj.set(`hotspot[${name}].ath`, ath);
+            krpanoObj.set(`hotspot[${name}].atv`, atv);
+            krpanoObj.set(`hotspot[${name}].distorted`, true);
+            krpanoObj.set(`hotspot[${name}].renderer`, 'webgl');
+            krpanoObj.set(`hotspot[${name}].zorder`, 999);
+            krpanoObj.set(`hotspot[${name}].enabled`, false);
+        }
+
+        function renderDraftPolygon() {
+            if (drawingPoints.length < 2) return;
+            krpanoObj.call('removehotspot(hs_poly_draft);');
+            krpanoObj.call('addhotspot(hs_poly_draft);');
+            krpanoObj.set('hotspot[hs_poly_draft].type', 'polygon');
+            krpanoObj.set('hotspot[hs_poly_draft].fillcolor', '0x10b981');
+            krpanoObj.set('hotspot[hs_poly_draft].fillalpha', 0.2);
+            krpanoObj.set('hotspot[hs_poly_draft].bordercolor', '0x10b981');
+            krpanoObj.set('hotspot[hs_poly_draft].borderalpha', 0.8);
+            krpanoObj.set('hotspot[hs_poly_draft].borderwidth', 2);
+            krpanoObj.set('hotspot[hs_poly_draft].enabled', false);
+            drawingPoints.forEach((p, idx) => {
+                krpanoObj.set(`hotspot[hs_poly_draft].point[${idx}].ath`, p.ath);
+                krpanoObj.set(`hotspot[hs_poly_draft].point[${idx}].atv`, p.atv);
+            });
+        }
+
+        function finishPolygonDrawing() {
+            if (drawingPoints.length < 3) {
+                showToast('⚠️ Cần ít nhất 3 đỉnh để tạo đa giác!');
+                return;
+            }
+            const name = `hs_poly_${Date.now().toString().slice(-6)}`;
+            const newHs = {
+                name: name,
+                style: 'poly_ground_nav',
+                type: 'polygon',
+                linkedscene: '',
+                custom_title: '',
+                fillcolor: '0x0072ff',
+                fillalpha: 0.3,
+                bordercolor: '0xffffff',
+                borderalpha: 0.8,
+                borderwidth: 2.0,
+                points: drawingPoints.map(p => ({ ath: p.ath, atv: p.atv })),
+                show_title: 'true',
+                show_thumb: 'true'
+            };
+            sceneHotspots.push(newHs);
+            markDirty();
+            cancelPolygonDrawing(false);
+            renderPolygonInKrpano(newHs);
+            renderHotspotList();
+            onHotspotSelected(name);
+            showToast('✅ Đã tạo vùng đa giác! Hãy chọn scene liên kết.');
+        }
+
+        function renderPolygonInKrpano(hs) {
+            if (!krpanoObj) return;
+            krpanoObj.call(`removehotspot(${hs.name});`);
+
+            let fillAlpha = hs.fillalpha !== undefined ? hs.fillalpha : 0.3;
+            let borderAlpha = hs.borderalpha !== undefined ? hs.borderalpha : 0.8;
+
+            krpanoObj.call(`addhotspot(${hs.name});`);
+            krpanoObj.set(`hotspot[${hs.name}].type`, 'polygon');
+            krpanoObj.call(`hotspot[${hs.name}].loadstyle(${hs.style || 'poly_ground_nav'});`);
+            krpanoObj.set(`hotspot[${hs.name}].fillcolor`, hs.fillcolor || '0x0072ff');
+            krpanoObj.set(`hotspot[${hs.name}].fillalpha`, fillAlpha);
+            krpanoObj.set(`hotspot[${hs.name}].bordercolor`, hs.bordercolor || '0xffffff');
+            krpanoObj.set(`hotspot[${hs.name}].borderalpha`, borderAlpha);
+            krpanoObj.set(`hotspot[${hs.name}].borderwidth`, hs.borderwidth || 2.0);
+            krpanoObj.set(`hotspot[${hs.name}].custom_title`, hs.custom_title || '');
+            krpanoObj.set(`hotspot[${hs.name}].linkedscene`, hs.linkedscene || '');
+            krpanoObj.set(`hotspot[${hs.name}].capture`, false);
+            krpanoObj.set(`hotspot[${hs.name}].onclick`, 'js(onHotspotSelected(get(name)))');
+
+            (hs.points || []).forEach((p, idx) => {
+                krpanoObj.set(`hotspot[${hs.name}].point[${idx}].ath`, p.ath);
+                krpanoObj.set(`hotspot[${hs.name}].point[${idx}].atv`, p.atv);
+            });
+        }
+
+        function renderVertexHandles(hs) {
+            clearVertexHandles();
+            if (!hs || hs.style !== 'poly_ground_nav' || !Array.isArray(hs.points)) return;
+
+            hs.points.forEach((p, idx) => {
+                const handleName = `hs_vhandle_${hs.name}_${idx}`;
+                krpanoObj.call(`addhotspot(${handleName});`);
+                krpanoObj.set(`hotspot[${handleName}].url`, VERTEX_DOT_SVG);
+                krpanoObj.set(`hotspot[${handleName}].scale`, 0.5);
+                krpanoObj.set(`hotspot[${handleName}].ath`, p.ath);
+                krpanoObj.set(`hotspot[${handleName}].atv`, p.atv);
+                krpanoObj.set(`hotspot[${handleName}].distorted`, true);
+                krpanoObj.set(`hotspot[${handleName}].capture`, true);
+                krpanoObj.set(`hotspot[${handleName}].renderer`, 'webgl');
+                krpanoObj.set(`hotspot[${handleName}].ondown`, 'draghotspot();');
+                krpanoObj.set(`hotspot[${handleName}].zorder`, 999);
+            });
+
+            const vertexCountEl = document.getElementById('lbl-poly-vertex-count');
+            if (vertexCountEl) vertexCountEl.textContent = `${hs.points.length} đỉnh`;
+        }
+
+        function clearVertexHandles() {
+            if (!krpanoObj) return;
+            const count = krpanoObj.get('hotspot.count') || 0;
+            const toRemove = [];
+            for (let i = 0; i < count; i++) {
+                const n = krpanoObj.get(`hotspot[${i}].name`);
+                if (n && n.startsWith('hs_vhandle_')) toRemove.push(n);
+            }
+            toRemove.forEach(n => krpanoObj.call(`removehotspot(${n});`));
+        }
+
+        // Attach click listener on pano div for polygon drawing (using mousedown/mouseup delta)
+        document.addEventListener('DOMContentLoaded', () => {
+            const panoEl = document.getElementById('pano');
+            if (!panoEl) return;
+            let downX = 0, downY = 0;
+
+            panoEl.addEventListener('mousedown', (e) => {
+                downX = e.clientX;
+                downY = e.clientY;
+            });
+
+            panoEl.addEventListener('mouseup', (e) => {
+                if (!isDrawingPolygon || !krpanoObj) return;
+                const dist = Math.sqrt(Math.pow(e.clientX - downX, 2) + Math.pow(e.clientY - downY, 2));
+                if (dist > 6) return; // This was a drag, not a click
+
+                const mx = krpanoObj.get('mouse.stagex');
+                const my = krpanoObj.get('mouse.stagey');
+                const coords = krpanoObj.screentosphere(mx, my);
+                if (!coords) return;
+                const ath = Number(coords.x).toFixed(4);
+                const atv = Number(coords.y).toFixed(4);
+
+                drawingPoints.push({ ath, atv });
+                addDraftPointMarker(ath, atv, drawingPoints.length - 1);
+                renderDraftPolygon();
+            });
+
+            panoEl.addEventListener('dblclick', (e) => {
+                if (isDrawingPolygon && drawingPoints.length >= 3) {
+                    e.preventDefault();
+                    finishPolygonDrawing();
+                }
+            });
+        });
 
         // Toggle UI fields depending on selected hotspot type
         function toggleConditionalFields(style) {
+            const polyConfig = document.getElementById('group-polygon-config');
+
             if (style === 'thongtin') {
                 groupLinkedScene.style.display = 'none';
                 groupInfoId.style.display = 'block';
+                if (groupScale) groupScale.style.display = 'block';
+                if (polyConfig) polyConfig.style.display = 'none';
+            } else if (style === 'poly_ground_nav') {
+                groupLinkedScene.style.display = 'block';
+                groupInfoId.style.display = 'none';
+                if (groupScale) groupScale.style.display = 'none';
+                if (polyConfig) polyConfig.style.display = 'block';
             } else {
                 groupLinkedScene.style.display = 'block';
                 groupInfoId.style.display = 'none';
+                if (groupScale) groupScale.style.display = 'block';
+                if (polyConfig) polyConfig.style.display = 'none';
             }
         }
 
@@ -2237,6 +2507,28 @@
             searchInput.addEventListener('input', (e) => {
                 renderSceneList(e.target.value);
             });
+
+            // Polygon Drawing Buttons
+            document.getElementById('btn-draw-polygon')?.addEventListener('click', () => startPolygonDrawing());
+            document.getElementById('btn-finish-polygon')?.addEventListener('click', () => finishPolygonDrawing());
+            document.getElementById('btn-cancel-polygon')?.addEventListener('click', () => cancelPolygonDrawing());
+
+            // Hotspot Scale / Size live update
+            inputHsScale?.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value).toFixed(2);
+                if (lblScaleVal) lblScaleVal.textContent = `${val}x`;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (hs) {
+                    hs.scale = val;
+                    if (krpanoObj) {
+                        krpanoObj.set(`hotspot[${hs.name}].scale`, val);
+                        krpanoObj.set(`hotspot[${hs.name}].base_scale`, val);
+                    }
+                    markDirty();
+                }
+            });
+
+
 
             // Action: Add Hotspot in Center View
             document.getElementById('btn-add-hotspot').addEventListener('click', () => {
@@ -2381,48 +2673,6 @@
                 // Instantly save to XML file so main tour syncs immediately!
                 await saveHotspotsToServer();
                 showToast('🗑️ Đã xóa và đồng bộ Hotspot sang Tour!');
-            });
-
-            // Export XML Modal
-            const modal = document.getElementById('export-modal');
-            document.getElementById('btn-export-xml').addEventListener('click', () => {
-                const xmlTextarea = document.getElementById('xml-textarea');
-                
-                if (sceneHotspots.length === 0) {
-                    xmlTextarea.value = `<!-- Không có hotspot nào để xuất cho cảnh này -->`;
-                } else {
-                    let xmlCode = '';
-                    sceneHotspots.forEach(h => {
-                        let showTitleAttr = h.show_title === 'false' ? ' show_title="false"' : '';
-                        let showThumbAttr = h.show_thumb === 'false' ? ' show_thumb="false"' : '';
-                        if (h.style === 'thongtin') {
-                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid}" custom_title="${h.custom_title}"${showTitleAttr}${showThumbAttr} />\n`;
-                        } else {
-                            xmlCode += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene}" custom_title="${h.custom_title}"${showTitleAttr}${showThumbAttr} />\n`;
-                        }
-                    });
-                    xmlTextarea.value = xmlCode.trimEnd();
-                }
-
-                modal.style.display = 'flex';
-            });
-
-            // Close Modal
-            document.getElementById('btn-close-modal').addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.style.display = 'none';
-            });
-
-            // Copy Code to Clipboard
-            document.getElementById('btn-copy-code').addEventListener('click', () => {
-                const txt = document.getElementById('xml-textarea');
-                txt.select();
-                navigator.clipboard.writeText(txt.value).then(() => {
-                    showToast('Đã sao chép mã XML!');
-                });
             });
 
             // Save Hotspots to File button
@@ -2640,17 +2890,29 @@
                     let showTitleAttr = h.show_title === 'false' ? ' show_title="false"' : '';
                     let showThumbAttr = h.show_thumb === 'false' ? ' show_thumb="false"' : '';
 
-                    if (h.style === 'thongtin') {
-                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
+                    if (h.type === 'polygon' || h.style === 'poly_ground_nav') {
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="poly_ground_nav" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr}>\n`;
+                        if (Array.isArray(h.points)) {
+                            h.points.forEach(p => {
+                                hotspotsXml += `\t\t<point ath="${p.ath}" atv="${p.atv}" />\n`;
+                            });
+                        }
+                        hotspotsXml += `\t</hotspot>\n`;
+                    } else if (h.style === 'thongtin') {
+                        let scaleAttr = h.scale && h.scale !== '0.50' ? ` scale="${h.scale}"` : '';
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}"${scaleAttr} ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
                     } else {
-                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
+                        let scaleAttr = h.scale && h.scale !== '0.50' ? ` scale="${h.scale}"` : '';
+                        hotspotsXml += `\t<hotspot name="${h.name}" style="${h.style}"${scaleAttr} ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
                     }
                 });
             }
 
             let content = krpanoObj.get(`scene[${sceneId}].content`) || '';
-            content = content.replace(/<hotspot\s[^\/]*\/>/g, '');
-            content = content.replace(/<hotspot\s[^>]*>[\s\S]*?<\/hotspot>/g, '');
+            content = content.replace(/<hotspot\b[\s\S]*?<\/hotspot>/gi, '');
+            content = content.replace(/<hotspot\b[^>]*\/>/gi, '');
+            content = content.replace(/<point\b[^>]*\/>/gi, '');
+            content = content.replace(/<\/hotspot>/gi, '');
             content = content.trimEnd() + '\n' + hotspotsXml;
             krpanoObj.set(`scene[${sceneId}].content`, content);
         }
@@ -2684,12 +2946,20 @@
             }
         }
 
-        // Keyboard shortcut: Ctrl+S to save hotspots
+        // Keyboard shortcuts: Ctrl+S to save hotspots, Space/Esc for polygon drawing
         function initKeyboardShortcuts() {
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     document.getElementById('btn-save-hotspots').click();
+                } else if (isDrawingPolygon) {
+                    if (e.key === ' ' || e.code === 'Space') {
+                        e.preventDefault();
+                        finishPolygonDrawing();
+                    } else if (e.key === 'Escape' || e.code === 'Escape') {
+                        e.preventDefault();
+                        cancelPolygonDrawing();
+                    }
                 }
             });
         }

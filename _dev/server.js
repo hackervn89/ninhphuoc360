@@ -970,61 +970,80 @@ app.post('/api/scenes/save', async (req, res) => {
         // Parse the XML
         let content = fs.readFileSync(targetFile, 'utf-8');
         const parsed = await xml2js.parseStringPromise(content, { 
-            explicitArray: true,
-            preserveChildrenOrder: true,
-            explicitChildren: true
+            explicitArray: true
         });
 
-        // Rebuild: remove old hotspots, add new ones
-        // Strategy: regex-based replacement for reliability with KrPano's XML format
-        
-        // Remove existing hotspots within this scene
-        const sceneRegex = new RegExp(
-            `(<scene[^>]*name="${escapeRegex(sceneId)}"[^>]*>)([\\s\\S]*?)(</scene>)`,
-            'i'
-        );
-        
-        const sceneMatch = content.match(sceneRegex);
-        if (!sceneMatch) {
+        // Find target scene in AST
+        let sceneNode = null;
+        if (parsed.krpano && parsed.krpano.scene) {
+            sceneNode = parsed.krpano.scene.find(s => s.$ && s.$.name === sceneId);
+        }
+
+        if (!sceneNode) {
             return res.status(404).json({ 
                 success: false, 
                 error: `Scene "${sceneId}" không tìm thấy trong file XML` 
             });
         }
 
-        const sceneOpenTag = sceneMatch[1];
-        let sceneBody = sceneMatch[2];
-        const sceneCloseTag = sceneMatch[3];
+        // Always delete existing hotspots array first
+        delete sceneNode.hotspot;
 
-        // Remove existing hotspot tags cleanly
-        sceneBody = sceneBody.replace(/<hotspot[\s\S]*?\/>/gi, '');
-        // Also remove hotspot tags with closing tag
-        sceneBody = sceneBody.replace(/<hotspot[\s\S]*?<\/hotspot>/gi, '');
-        // Clean up empty lines left behind
-        sceneBody = sceneBody.replace(/\n\s*\n\s*\n/g, '\n');
-
-        // Build new hotspot XML tags
-        let hotspotsXml = '';
+        // Rebuild new hotspots array
+        const newHotspots = [];
         if (hotspots && hotspots.length > 0) {
-            hotspotsXml = '\n';
             hotspots.forEach(h => {
-                let showTitleAttr = (h.show_title === 'false' || h.show_title === false) ? ' show_title="false"' : '';
-                let showThumbAttr = (h.show_thumb === 'false' || h.show_thumb === false) ? ' show_thumb="false"' : '';
+                const attrs = {
+                    name: h.name,
+                    style: h.style || 'muiten'
+                };
 
-                if (h.style === 'thongtin') {
-                    hotspotsXml += `\t\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" infoid="${h.infoid || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
+                if (h.show_title === 'false' || h.show_title === false) attrs.show_title = 'false';
+                if (h.show_thumb === 'false' || h.show_thumb === false) attrs.show_thumb = 'false';
+                if (h.scale && String(h.scale) !== '0.50') {
+                    attrs.scale = String(h.scale);
+                }
+
+                if (h.type === 'polygon' || h.style === 'poly_ground_nav') {
+                    attrs.style = 'poly_ground_nav';
+                    attrs.linkedscene = h.linkedscene || '';
+                    attrs.custom_title = h.custom_title || '';
+
+                    const hsObj = { $: attrs };
+                    if (Array.isArray(h.points) && h.points.length > 0) {
+                        hsObj.point = h.points.map(p => ({
+                            $: { ath: String(p.ath), atv: String(p.atv) }
+                        }));
+                    }
+                    newHotspots.push(hsObj);
+                } else if (h.style === 'thongtin') {
+                    attrs.ath = String(h.ath);
+                    attrs.atv = String(h.atv);
+                    attrs.infoid = h.infoid || '';
+                    attrs.custom_title = h.custom_title || '';
+                    newHotspots.push({ $: attrs });
                 } else {
-                    hotspotsXml += `\t\t<hotspot name="${h.name}" style="${h.style}" ath="${h.ath}" atv="${h.atv}" linkedscene="${h.linkedscene || ''}" custom_title="${h.custom_title || ''}"${showTitleAttr}${showThumbAttr} />\n`;
+                    attrs.ath = String(h.ath);
+                    attrs.atv = String(h.atv);
+                    attrs.linkedscene = h.linkedscene || '';
+                    attrs.custom_title = h.custom_title || '';
+                    newHotspots.push({ $: attrs });
                 }
             });
         }
 
-        // Rebuild scene content
-        const newSceneContent = sceneOpenTag + sceneBody.trimEnd() + hotspotsXml + '\t' + sceneCloseTag;
-        content = content.replace(sceneRegex, newSceneContent);
+        if (newHotspots.length > 0) {
+            sceneNode.hotspot = newHotspots;
+        }
 
-        // Write back
-        fs.writeFileSync(targetFile, content, 'utf-8');
+        const builder = new xml2js.Builder({ 
+            renderOpts: { pretty: true, indent: '\t', newline: '\n' }, 
+            xmdec: false 
+        });
+        const newXmlContent = builder.buildObject(parsed);
+
+        // Write clean XML back to disk
+        fs.writeFileSync(targetFile, newXmlContent, 'utf-8');
 
         res.json({ 
             success: true, 
