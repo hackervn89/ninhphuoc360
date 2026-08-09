@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
 	<scene name="scene_cong_lang" title="Cổng làng Bàu Trúc" thumburl="panos/cong_lang.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="585.3" vlookat="3.6" fov="110" fovmin="76" fovmax="120"/>
+		<view fovtype="MFOV" hlookat="585.3" vlookat="3.6" fov="115.2" fovmin="76" fovmax="120" />
 		<preview url="panos/cong_lang.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512" prealign="0.0|0.0|-1.8">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
