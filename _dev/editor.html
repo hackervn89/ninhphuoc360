@@ -40,8 +40,7 @@
 
         /* App Layout */
         #app-container {
-            display: grid;
-            grid-template-columns: 320px 1fr 360px;
+            position: relative;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
@@ -63,30 +62,105 @@
             background: var(--primary);
         }
 
-        /* Panels Shared Styles */
-        .sidebar {
-            background: var(--panel-bg);
-            border-right: 1px solid var(--panel-border);
-            backdrop-filter: blur(16px);
+        /* Full Screen 360 Viewport */
+        #viewport-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             display: flex;
             flex-direction: column;
-            height: 100vh;
             overflow: hidden;
-            z-index: 10;
+        }
+
+        /* Floating Overlay Panels */
+        .sidebar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 320px;
+            height: 100vh;
+            background: rgba(13, 27, 46, 0.88);
+            border-right: 1px solid var(--panel-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 20;
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            transform: translateX(0);
+            opacity: 1;
+            box-shadow: 12px 0 36px rgba(0, 0, 0, 0.45);
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .sidebar-right {
-            border-right: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: auto;
+            width: 360px;
+            height: 100vh;
+            background: rgba(13, 27, 46, 0.88);
             border-left: 1px solid var(--panel-border);
+            border-right: none;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 20;
+            transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            transform: translateX(0);
+            opacity: 1;
+            box-shadow: -12px 0 36px rgba(0, 0, 0, 0.45);
+        }
+
+        .sidebar-right.collapsed {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .panel-header {
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-bottom: 1px solid var(--panel-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+        }
+
+        .panel-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .panel-close-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            color: #f87171;
+            transform: scale(1.1);
         }
 
         .panel-header h2 {
@@ -290,19 +364,59 @@
         /* Central Editor Controls */
         .editor-top-bar {
             position: absolute;
-            top: 20px;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
-            background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
-            backdrop-filter: blur(12px);
-            padding: 8px 16px;
+            background: rgba(10, 15, 30, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            padding: 6px 12px;
             border-radius: 30px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            gap: 8px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .top-bar-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .top-bar-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .top-bar-btn.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.22), rgba(255, 180, 0, 0.32));
+            border-color: #FFD700;
+            color: #FFD700;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);
+        }
+
+        .top-bar-btn.btn-info-accent {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .top-bar-btn.btn-info-accent:hover {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
         }
         /* Right Panel - Properties & Action */
         .properties-container {
@@ -936,10 +1050,13 @@
     <div id="app-container">
         
         <!-- Left Panel: Scene Manager -->
-        <div class="sidebar">
+        <div class="sidebar" id="left-sidebar">
             <div class="panel-header">
-                <h2>Cảnh Panorama</h2>
-                <i class="fa-solid fa-images"></i>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-images" style="color:var(--primary);"></i>
+                    <h2>Cảnh Panorama</h2>
+                </div>
+                <button id="btn-close-left-sidebar" class="panel-close-btn" title="Ẩn bảng Cảnh Panorama">&times;</button>
             </div>
             <!-- Upload Drop Zone -->
             <div class="upload-zone" id="upload-zone">
@@ -959,7 +1076,14 @@
         <!-- Central Viewport: KrPano Frame -->
         <div id="viewport-container">
             <div class="editor-top-bar">
-                <button id="btn-open-info-manager" style="background: linear-gradient(135deg, #1d4ed8, #2563eb); border: none; color: white; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <button id="btn-toggle-left-sidebar" class="top-bar-btn active" title="Ẩn/Hiện Cảnh Panorama">
+                    <i class="fa-solid fa-images"></i> Cảnh Panorama
+                </button>
+                <button id="btn-toggle-right-sidebar" class="top-bar-btn active" title="Ẩn/Hiện Cấu Hình Hotspot">
+                    <i class="fa-solid fa-sliders"></i> Cấu Hình Hotspot
+                </button>
+                <div style="width:1px; height:18px; background:rgba(255,255,255,0.15); margin:0 2px;"></div>
+                <button id="btn-open-info-manager" class="top-bar-btn btn-info-accent" title="Mở Quản lý Thuyết minh">
                     <i class="fa-solid fa-book-open"></i> Quản lý Thuyết minh
                 </button>
             </div>
@@ -1075,10 +1199,13 @@
         </div>
 
         <!-- Right Panel: Hotspot Inspector -->
-        <div class="sidebar sidebar-right">
+        <div class="sidebar sidebar-right" id="right-sidebar">
             <div class="panel-header">
-                <h2>Cấu Hình Hotspot</h2>
-                <i class="fa-solid fa-sliders"></i>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-sliders" style="color:var(--primary);"></i>
+                    <h2>Cấu Hình Hotspot</h2>
+                </div>
+                <button id="btn-close-right-sidebar" class="panel-close-btn" title="Ẩn bảng Cấu Hình Hotspot">&times;</button>
             </div>
             
             <div class="properties-container">
@@ -1983,18 +2110,57 @@
             });
         }
 
-        // 6. Selected hotspot callback (from screen clicks or sidebar list)
+        // 6. Sidebar Panel Toggle Logic
+        function toggleLeftSidebar(show) {
+            const sidebar = document.getElementById('left-sidebar');
+            const btn = document.getElementById('btn-toggle-left-sidebar');
+            if (!sidebar) return;
+
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            const shouldShow = (typeof show === 'boolean') ? show : isCollapsed;
+
+            sidebar.classList.toggle('collapsed', !shouldShow);
+            if (btn) btn.classList.toggle('active', shouldShow);
+
+            setTimeout(() => {
+                if (krpanoObj && typeof krpanoObj.call === 'function') {
+                    krpanoObj.call("updatescreen();");
+                }
+            }, 360);
+        }
+
+        function toggleRightSidebar(show) {
+            const sidebar = document.getElementById('right-sidebar');
+            const btn = document.getElementById('btn-toggle-right-sidebar');
+            if (!sidebar) return;
+
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            const shouldShow = (typeof show === 'boolean') ? show : isCollapsed;
+
+            sidebar.classList.toggle('collapsed', !shouldShow);
+            if (btn) btn.classList.toggle('active', shouldShow);
+
+            setTimeout(() => {
+                if (krpanoObj && typeof krpanoObj.call === 'function') {
+                    krpanoObj.call("updatescreen();");
+                }
+            }, 360);
+        }
+
+        // 7. Selected hotspot callback (from screen clicks or sidebar list)
         window.onHotspotSelected = function(name) {
             selectedHotspotName = name;
             const hs = sceneHotspots.find(h => h.name === name);
             if (!hs) return;
+
+            // Auto-open Right Panel when a hotspot is selected
+            toggleRightSidebar(true);
 
             // Highlight selected hotspot in sidebar list (toggle class instead of full re-render)
             document.querySelectorAll('.hotspot-item').forEach(item => {
                 const itemName = item.dataset.hsName;
                 item.classList.toggle('active', itemName === name);
             });
-
 
             // Populate property values
             inputHsId.textContent = hs.name;
@@ -2061,6 +2227,12 @@
 
         // Initialize event listeners for controls
         function initEventListeners() {
+            // Panel Toggle Buttons (Top menu bar & Panel headers)
+            document.getElementById('btn-toggle-left-sidebar')?.addEventListener('click', () => toggleLeftSidebar());
+            document.getElementById('btn-close-left-sidebar')?.addEventListener('click', () => toggleLeftSidebar(false));
+            document.getElementById('btn-toggle-right-sidebar')?.addEventListener('click', () => toggleRightSidebar());
+            document.getElementById('btn-close-right-sidebar')?.addEventListener('click', () => toggleRightSidebar(false));
+
             // Search scene
             searchInput.addEventListener('input', (e) => {
                 renderSceneList(e.target.value);
