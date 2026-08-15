@@ -6,18 +6,12 @@
 //   - label: Tên hiển thị trên sidebar
 //   - firstScene: Scene mặc định khi chọn nhóm
 //   - scenes: Mảng các scene, mỗi scene gồm:
-//       { id: 'scene_xxx', title: 'Tên', thumb: 'tours/.../thumb.jpg', lat: xx.xxx, lng: xxx.xxx }
-//       - mapTitle (tùy chọn): Tên hiển thị trên bản đồ (nếu khác title)
+//       { id: 'scene_xxx', title: 'Tên', thumb: 'tours/.../thumb.jpg' }
 // ─────────────────────────────────────────────────────────────
 const tourData = {};
 
 let krpanoObj = null;
 let currentTourKey = '';
-let leafMap = null;
-let radarMarker = null;
-let mapMarkers = [];
-let isMapInitializing = false;
-let boundaryLayer = null;
 
 // History for Back Button
 let sceneHistory = [];
@@ -78,20 +72,6 @@ function krpanoReady(krpano) {
     // Initial UI sync
     setTimeout(onSceneChange, 500);
 
-    // ── Update live coordinates for radar sync ──
-    setInterval(() => {
-        if (krpanoObj) {
-            let ath = Number(krpanoObj.get("view.hlookat"));
-            // Normalize ath to -180...180 range
-            ath = ((ath + 180) % 360 + 360) % 360 - 180;
-
-            // Sync Radar rotation
-            if (radarMarker) {
-                const radarEl = document.querySelector('.map-radar');
-                if (radarEl) radarEl.style.transform = `rotate(${ath}deg)`;
-            }
-        }
-    }, 200);
 }
 
 // ── Dynamic Tour Data Builder ────────────────────────────────
@@ -206,12 +186,10 @@ async function onSceneChange() {
     });
 
     // Update accordion active state and Location Subtitle
-    let activeSceneData = null;
     const titleEl = document.getElementById('current-scene-title');
     for (const [key, data] of Object.entries(tourData)) {
         const found = data.scenes.find(s => s.id === sceneId);
         if (found) {
-            activeSceneData = found;
             if (currentTourKey !== key) {
                 currentTourKey = key;
             }
@@ -219,13 +197,6 @@ async function onSceneChange() {
             if (titleEl) titleEl.textContent = `${data.label} - ${found.title}`;
             break;
         }
-    }
-
-    // Update Map
-    if (leafMap && activeSceneData && activeSceneData.lat) {
-        const pos = [activeSceneData.lat, activeSceneData.lng];
-        leafMap.setView(pos, 16);
-        if (radarMarker) radarMarker.setLatLng(pos);
     }
 
     // Auto-hide the sidebar when transitioning to a new scene
@@ -372,233 +343,6 @@ function initUI() {
                 alert('Đã copy đường dẫn để chia sẻ!');
             });
         }
-    });
-
-    // Minimap Toggle — lazy init to keep intro/first pano smooth
-    const btnToggleMap = document.getElementById('btn-toggle-map');
-    const mapPanel = document.getElementById('map-panel');
-    const mapHeader = document.getElementById('map-header');
-    if (btnToggleMap && mapPanel) {
-        // Start collapsed on all devices so Leaflet/map tiles don't compete with intro and first pano.
-        mapPanel.classList.add('collapsed');
-
-        const toggleMap = (event) => {
-            // Ngăn chặn đóng/mở nếu bấm vào các nút chức năng bên trong header
-            if (event && event.target.closest('button')) return;
-
-            if (window.innerWidth <= 1024) {
-                // Trên mobile, bấm vào header là phóng to luôn
-                toggleMaximize();
-            } else {
-                mapPanel.classList.toggle('collapsed');
-                if (!mapPanel.classList.contains('collapsed')) {
-                    ensureMapInitialized();
-                }
-            }
-        };
-
-        btnToggleMap.addEventListener('click', (event) => {
-            event.stopPropagation();
-            mapPanel.classList.toggle('collapsed');
-            if (!mapPanel.classList.contains('collapsed')) {
-                ensureMapInitialized();
-            }
-        });
-
-        if (mapHeader) {
-            mapHeader.addEventListener('click', toggleMap);
-        }
-
-        // Maximize Map Logic
-        const btnMaximize = document.getElementById('btn-maximize-map');
-        const mapOverlay = document.getElementById('map-maximized-overlay');
-
-        const toggleMaximize = (forceClose = false) => {
-            if (forceClose) {
-                mapPanel.classList.remove('maximized');
-                mapPanel.classList.add('collapsed'); // Đồng thời ẩn luôn
-            } else {
-                const wasMaximized = mapPanel.classList.contains('maximized');
-                mapPanel.classList.toggle('maximized');
-
-                // Nếu đang từ to chuyển về nhỏ -> ẩn luôn bản đồ
-                if (wasMaximized) {
-                    mapPanel.classList.add('collapsed');
-                } else {
-                    mapPanel.classList.remove('collapsed');
-                }
-            }
-
-            const isMaximized = mapPanel.classList.contains('maximized');
-
-            // Toggle Overlay
-            if (mapOverlay) {
-                mapOverlay.style.display = isMaximized ? 'block' : 'none';
-            }
-
-            if (btnMaximize) {
-                btnMaximize.innerHTML = isMaximized
-                    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7" /></svg>`
-                    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>`;
-                btnMaximize.title = isMaximized ? "Thu nhỏ bản đồ" : "Phóng to bản đồ";
-            }
-
-            ensureMapInitialized();
-
-            setTimeout(() => {
-                if (leafMap) {
-                    leafMap.invalidateSize({ pan: true });
-
-                    // Sử dụng setView để cố định vị trí và độ phóng đại theo ý muốn
-                    if (isMaximized) {
-                        // TODO: Đổi tọa độ trung tâm Ninh Phước khi có dữ liệu
-                        leafMap.setView([11.5667, 108.9833], 13, {
-                            animate: true
-                        });
-                    }
-                }
-            }, 550);
-        };
-
-        if (btnMaximize) {
-            btnMaximize.addEventListener('click', (event) => {
-                event.stopPropagation();
-                toggleMaximize();
-            });
-        }
-
-        if (mapOverlay) {
-            mapOverlay.addEventListener('click', () => toggleMaximize(true));
-        }
-
-        // Close map when clicking outside (Desktop & Mobile)
-        document.addEventListener('mousedown', (event) => {
-            const isMaximized = mapPanel.classList.contains('maximized');
-            const isExpanded = !mapPanel.classList.contains('collapsed');
-
-            if (isMaximized || isExpanded) {
-                if (!mapPanel.contains(event.target) && !event.target.closest('.icon-btn') && !event.target.closest('.sidebar-wrapper')) {
-                    if (isMaximized) {
-                        toggleMaximize(true);
-                    } else {
-                        mapPanel.classList.add('collapsed');
-                    }
-                }
-            }
-        });
-    }
-}
-
-// ── Map Logic ────────────────────────────────────────────────
-function ensureMapInitialized() {
-    if (leafMap || isMapInitializing) return;
-
-    isMapInitializing = true;
-
-    // Leaflet is loaded with defer/non-critical priority. If the user opens the
-    // map before it is ready, retry briefly instead of blocking initial load.
-    if (!window.L) {
-        setTimeout(() => {
-            isMapInitializing = false;
-            ensureMapInitialized();
-        }, 200);
-        return;
-    }
-
-    initMap();
-    isMapInitializing = false;
-    setTimeout(() => leafMap.invalidateSize(), 50);
-    onSceneChange();
-}
-
-function initMap() {
-    // TODO: Đổi tọa độ mặc định sang trung tâm Ninh Phước
-    leafMap = L.map('map-container', {
-        zoomControl: false,
-        attributionControl: false
-    }).setView([11.5667, 108.9833], 15);
-
-    // Premium Satellite Imagery (Esri World Imagery)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 19
-    }).addTo(leafMap);
-
-    // Optional labels overlay
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-        opacity: 0.6
-    }).addTo(leafMap);
-
-    // Load Administrative Boundary (TODO: Thay bằng GeoJSON ranh giới Ninh Phước)
-    fetch('core/data/ninhphuoc-boundary.json')
-        .then(response => response.json())
-        .then(data => {
-            boundaryLayer = L.geoJSON(data, {
-                style: {
-                    color: '#FFD700', // Vàng Gold
-                    weight: 2,        // Thanh mảnh hơn
-                    opacity: 0.8,
-                    fillColor: '#FFD700',
-                    fillOpacity: 0.08, // Trong suốt hơn
-                    dashArray: '8, 8',
-                    lineJoin: 'round'
-                }
-            }).addTo(leafMap);
-        })
-        .catch(err => console.warn('Chưa có file ranh giới GeoJSON:', err));
-
-    // Radar Marker
-    const radarIcon = L.divIcon({
-        className: 'map-radar-wrapper',
-        html: '<div class="map-radar"></div>',
-        iconSize: [0, 0]
-    });
-    radarMarker = L.marker([11.5667, 108.9833], { icon: radarIcon }).addTo(leafMap);
-
-    // Add Markers for all scenes that have coordinates
-    const glowingIcon = L.divIcon({
-        className: 'glowing-marker-wrapper',
-        html: '<div class="glowing-marker"></div>',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
-    });
-
-    Object.values(tourData).forEach(group => {
-        group.scenes.forEach(scene => {
-            if (scene.lat) {
-                const marker = L.marker([scene.lat, scene.lng], { icon: glowingIcon }).addTo(leafMap);
-
-                // Thêm nhãn tên vị trí khi di chuột vào (Ưu tiên mapTitle nếu có)
-                marker.bindTooltip(scene.mapTitle || scene.title, {
-                    direction: 'top',
-                    offset: [0, -10],
-                    className: 'custom-map-tooltip'
-                });
-
-                marker.on('click', (e) => {
-                    if (krpanoObj) {
-                        krpanoObj.call(`loadscene('${scene.id}', null, MERGE, BLEND(0.5))`);
-
-                        // Tự động đóng bản đồ khi đã chọn xong địa điểm
-                        const mapPanel = document.getElementById('map-panel');
-                        const mapOverlay = document.getElementById('map-maximized-overlay');
-                        const btnMaximize = document.getElementById('btn-maximize-map');
-
-                        if (mapPanel) {
-                            mapPanel.classList.add('collapsed');
-                            mapPanel.classList.remove('maximized');
-                        }
-                        if (mapOverlay) mapOverlay.style.display = 'none';
-
-                        // Cập nhật lại icon nút phóng to nếu cần
-                        if (btnMaximize) {
-                            btnMaximize.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>`;
-                        }
-                    }
-                });
-
-                mapMarkers.push({ id: scene.id, marker });
-            }
-        });
     });
 }
 

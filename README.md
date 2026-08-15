@@ -48,7 +48,6 @@ Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc
 - **Menu Địa điểm Phân cấp Tự động (Static Data Driven)**: Nạp phân nhóm từ `tours/locations.json` và đường dẫn ảnh `thumburl`, hiển thị chính xác 100% trên cả Localhost lẫn **GitHub Pages** mà không cần server backend.
 - **Popup Thuyết minh Thông tin sinh động**: Đọc bài viết phong phú có định dạng HTML/CSS từ `tours/infos.json` khi click hotspot loại `thongtin`.
 - **Tự động xuống dòng mềm mại**: Hiển thị tên địa điểm tiếng Việt đầy đủ 100% không bị cắt chữ. Tự động thu gọn khi click ra ngoài màn hình 360°.
-- **Bản đồ Thu nhỏ Minimap (Leaflet)**: Hiển thị vị trí thực tế và hướng nhìn nón Radar xoay theo camera 360° theo thời gian thực.
 - **Tương thích Đa thiết bị**: Hỗ trợ PC, Mobile, Máy tính bảng và Chế độ kính VR Headset.
 
 ### 🛠️ Bộ Biên Tập Visual Editor (`_dev/editor.html`)

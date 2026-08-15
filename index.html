@@ -55,9 +55,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="core/assets/favicon-32.png">
     <link rel="apple-touch-icon" href="core/assets/icon_ninhphuoc.png">
 
-    <!-- Preload Strategy: prioritize first-screen UI before non-critical map assets -->
+    <!-- Preload Strategy: prioritize first-screen UI -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="preconnect" href="https://unpkg.com" crossorigin>
     <link rel="preload" href="core/css/style.css" as="style">
     <link rel="preload" href="engine/tour.js" as="script">
     <link rel="preload" href="core/js/app.js" as="script">
@@ -70,17 +69,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Leaflet is non-critical for intro; load CSS/script without blocking first paint. -->
-    <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""
-        onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    </noscript>
-    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <!-- Google Analytics 4 (TODO: Thay bằng GA4 ID mới cho Ninh Phước) -->
     <!--
@@ -187,26 +175,6 @@
             <p>Quét xem trên<br>Điện thoại</p>
         </div>
 
-        <!-- Map Overlay (for clicking outside to close) -->
-        <div id="map-maximized-overlay"></div>
-
-        <!-- Map Panel (Bottom Right) -->
-        <div id="map-panel" class="glass-panel">
-            <div id="map-header">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
-                </svg>
-                <span>Bản đồ vị trí</span>
-                <button id="btn-maximize-map" title="Phóng to bản đồ">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                    </svg>
-                </button>
-                <button id="btn-toggle-map">▼</button>
-            </div>
-            <div id="map-container"></div>
-        </div>
 
         <!-- Unified Sidebar Navigation (Top Left) -->
         <div class="sidebar-wrapper" id="sidebar-wrapper">

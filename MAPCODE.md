@@ -24,9 +24,8 @@ e:\Viet Design\Ninhphuoc360\
 │   ├── css/
 │   │   └── style.css                    # CSS toàn bộ giao diện public tour (Glassmorphic, Responsive)
 │   ├── js/
-│   │   └── app.js                       # Logic JS public tour (Static locations.json, infos.json, Leaflet map)
-│   ├── assets/                          # Favicon, og-preview.png, logo icon, SVG markers
-│   └── data/                            # GeoJSON ranh giới bản đồ
+│   │   └── app.js                       # Logic JS public tour (Static locations.json, infos.json, dynamic scenes)
+│   └── assets/                          # Favicon, og-preview.png, logo icon, SVG markers
 │
 ├── engine/                              # [KRPANO BINARY ENGINE]
 │   ├── tour.js                          # Trình phát KrPano HTML5 Viewer Core (KHÔNG SỬA)
@@ -94,9 +93,8 @@ e:\Viet Design\Ninhphuoc360\
 
 | Khoảng dòng | Tên Hàm | Chức năng |
 |-------------|---------|-----------|
-| `L107 - L189` | `buildDynamicTourData()` | Nạp `tours/locations.json` & `tours/infos.json` tĩnh (hoạt động 100% trên GitHub Pages / Offline). |
-| `L297 - L324` | `Sidebar Click-Outside` | Tự động thu gọn Sidebar khi click/chạm ra ngoài ảnh 360°. |
-| `L419 - L530` | `ensureMapInitialized()` | Khởi tạo bản đồ Leaflet, tải GeoJSON ranh giới Ninh Phước và vẽ các marker. |
+| `L85 - L165` | `buildDynamicTourData()` | Nạp `tours/locations.json` tĩnh (hoạt động 100% trên GitHub Pages / Offline). |
+| `L275 - L300` | `Sidebar Click-Outside` | Tự động thu gọn Sidebar khi click/chạm ra ngoài ảnh 360°. |
 
 ---
 
