@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<krpano>
+	<scene name="scene_nha_tuong_niem_tranthi" title="Cổng nhà tưởng niệm" thumburl="panos/nha_tuong_niem_tranthi.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-270.4" vlookat="-4.4" fov="120.0" fovmin="60" fovmax="120"/>
+		<preview url="panos/nha_tuong_niem_tranthi.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/nha_tuong_niem_tranthi.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nha_tuong_niem_tranthi.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nha_tuong_niem_tranthi.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nha_tuong_niem_tranthi.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_853160" style="muiten" ath="-93.3426" atv="21.3535" linkedscene="scene_bia_tuong_niem_tham_sat_van_phuoc" custom_title="Bia tưởng niệm"/>
+		<hotspot name="hs_new_868975" style="muiten" ath="88.2741" atv="9.5741" linkedscene="scene_san_truoc" custom_title="Sân trước"/>
+	</scene>
+	<scene name="scene_phong_tho_tranthi" title="Phòng thờ Trần Thi" thumburl="panos/phong_tho_tranthi.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-92.8" vlookat="1.6" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/phong_tho_tranthi.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.1|-2.0|1.4">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_tho_tranthi.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_tho_tranthi.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_tho_tranthi.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_tho_tranthi.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_808488" style="muiten" ath="88.3835" atv="20.0085" linkedscene="scene_sanh_truoc" custom_title="Sảnh trước"/>
+	</scene>
+	<scene name="scene_san_truoc" title="Sân trước" thumburl="panos/san_truoc.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-446.0" vlookat="-1.0" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/san_truoc.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/san_truoc.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_truoc.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_truoc.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_truoc.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_915453" style="muiten" ath="-84.9746" atv="6.3763" linkedscene="scene_sanh_truoc" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_935267" style="muiten" ath="94.4752" atv="8.4821" linkedscene="scene_nha_tuong_niem_tranthi" custom_title="Cổng nhà tưởng niệm"/>
+	</scene>
+	<scene name="scene_sanh_phai" title="Sảnh trước" thumburl="panos/sanh_phai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/sanh_phai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/sanh_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/sanh_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/sanh_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/sanh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_sanh_trai" title="Sảnh trước" thumburl="panos/sanh_trai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="102.0" vlookat="-1.4" fov="120.0" fovmin="60" fovmax="120"/>
+		<preview url="panos/sanh_trai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/sanh_trai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/sanh_trai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/sanh_trai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/sanh_trai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_287088" style="muiten" ath="-137.1946" atv="27.7080" linkedscene="scene_sanh_truoc" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_328404" style="muiten" ath="-174.8069" atv="20.8457" linkedscene="scene_sanh_phai" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_348481" style="muiten" scale="0.35" ath="-100.1266" atv="12.7153" linkedscene="scene_san_truoc" custom_title="Sân trước"/>
+	</scene>
+	<scene name="scene_sanh_truoc" title="Sảnh trước" thumburl="panos/sanh_truoc.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-266.4" vlookat="2.7" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/sanh_truoc.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.9|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/sanh_truoc.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/sanh_truoc.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/sanh_truoc.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/sanh_truoc.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_997302" style="muiten" ath="-87.4612" atv="18.5423" linkedscene="scene_san_truoc" custom_title="Sân trước"/>
+		<hotspot name="hs_new_018976" style="muiten" ath="92.5386" atv="14.8822" linkedscene="scene_phong_tho_tranthi" custom_title="Phòng thờ Trần Thi"/>
+		<hotspot name="hs_new_026819" style="muiten" ath="59.7850" atv="18.1480" linkedscene="scene_sanh_trai" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_044085" style="muiten" ath="126.9117" atv="17.7257" linkedscene="scene_sanh_phai" custom_title="Sảnh trước"/>
+	</scene>
+	<scene name="scene_phong_tho_liet_si" title="Phòng thờ Liệt sĩ" thumburl="panos/phong_tho_liet_si.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-265.3" vlookat="4.9" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/phong_tho_liet_si.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.1|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_tho_liet_si.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_tho_liet_si.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_tho_liet_si.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_tho_liet_si.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_330850" style="muiten" ath="63.3677" atv="29.0803" linkedscene="" custom_title="Mũi tên di chuyển mới"/>
+		<hotspot name="hs_new_339189" style="muiten" ath="108.5156" atv="23.1199" linkedscene="scene_phong_tho_liet_si_phai" custom_title="Phòng thờ Liệt sĩ"/>
+	</scene>
+	<scene name="scene_phong_tho_liet_si_phai" title="Phòng thờ Liệt sĩ" thumburl="panos/phong_tho_liet_si_phai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/phong_tho_liet_si_phai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_tho_liet_si_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_tho_liet_si_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_tho_liet_si_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_tho_liet_si_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_phong_tho_liet_si_trai_1" title="Phòng thờ Liệt sĩ" thumburl="panos/phong_tho_liet_si_trai_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="39.6" vlookat="2.3" fov="94.9" fovmin="60" fovmax="95" />
+		<preview url="panos/phong_tho_liet_si_trai_1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_tho_liet_si_trai_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_tho_liet_si_trai_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_tho_liet_si_trai_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_tho_liet_si_trai_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_670248" style="muiten" ath="12.7863" atv="25.3695" linkedscene="scene_phong_tho_liet_si_trai_2" custom_title="Phòng thờ Liệt sĩ"/>
+		<hotspot name="hs_new_698193" style="muiten" ath="-169.5965" atv="32.6882" linkedscene="scene_phong_tho_liet_si" custom_title="Phòng thờ Liệt sĩ"/>
+		<hotspot name="hs_new_707875" style="muiten" ath="75.2913" atv="33.8310" linkedscene="scene_phong_tho_liet_si_phai" custom_title="Phòng thờ Liệt sĩ"/>
+	</scene>
+	<scene name="scene_phong_tho_liet_si_trai_2" title="Phòng thờ Liệt sĩ" thumburl="panos/phong_tho_liet_si_trai_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-278.7" vlookat="-11.7" fov="120.0" fovmin="60" fovmax="120"/>
+		<preview url="panos/phong_tho_liet_si_trai_2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/phong_tho_liet_si_trai_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/phong_tho_liet_si_trai_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/phong_tho_liet_si_trai_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/phong_tho_liet_si_trai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_397475" style="muiten" ath="-89.7895" atv="26.2259" linkedscene="scene_phong_tho_liet_si" custom_title="Phong Tho Liet Si"/>
+		<hotspot name="hs_new_411311" style="muiten" ath="-169.4774" atv="43.0937" linkedscene="scene_phong_tho_liet_si_phai" custom_title="Phòng thờ Liệt sĩ"/>
+		<hotspot name="hs_new_423849" style="muiten" ath="-86.1430" atv="47.6515" linkedscene="scene_phong_tho_liet_si_trai_1" custom_title="Phòng thờ Liệt sĩ"/>
+	</scene>
+</krpano>
