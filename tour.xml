@@ -505,6 +505,10 @@
 
 		<include url="tours/htx_gom_bautruc/scenes.xml" />
 
+		<include url="tours/bia_tuong_niem_van_phuoc/scenes.xml" />
+
+		<include url="tours/nha_tuong_niem_tranthi/scenes.xml" />
+
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">
 		if(startscene === null OR !scene[get(startscene)], copy(startscene, scene[0].name); );

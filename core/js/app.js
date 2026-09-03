@@ -69,6 +69,21 @@ function krpanoReady(krpano) {
     krpanoObj.set("events.onloadcomplete", "js(hideLoadingScreen());");
     setTimeout(hideLoadingScreen, 5000); // Safety fallback
 
+    // Realtime Sync: Radar Rotation with KrPano camera hlookat
+    setInterval(() => {
+        if (krpanoObj && radarMarker && leafMap) {
+            const mapPanel = document.getElementById('map-panel');
+            if (mapPanel && !mapPanel.classList.contains('hidden')) {
+                let ath = Number(krpanoObj.get("view.hlookat")) || 0;
+                ath = ((ath + 180) % 360 + 360) % 360 - 180;
+                const radarEl = document.querySelector('.map-radar');
+                if (radarEl) {
+                    radarEl.style.transform = `rotate(${ath}deg)`;
+                }
+            }
+        }
+    }, 60);
+
     // Initial UI sync
     setTimeout(onSceneChange, 500);
 
@@ -97,10 +112,14 @@ async function buildDynamicTourData() {
             const locData = await locRes.json();
             if (locData && locData.success && locData.locations) {
                 locData.locations.forEach(loc => {
-                    locationsMap[loc.id] = loc.name;
+                    locationsMap[loc.id] = {
+                        name: loc.name,
+                        lat: loc.lat,
+                        lng: loc.lng
+                    };
                 });
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     const sceneCount = Number(krpanoObj.get("scene.count")) || 0;
@@ -115,6 +134,8 @@ async function buildDynamicTourData() {
 
         let locId = 'default';
         let locLabel = 'Địa điểm Ninh Phước';
+        let locLat = null;
+        let locLng = null;
 
         // Extract location folder from thumburl (e.g. "tours/lang_gom/panos/...")
         const folderMatch = thumb.match(/^tours\/([^\/]+)\//);
@@ -122,8 +143,16 @@ async function buildDynamicTourData() {
             locId = folderMatch[1];
         }
 
-        if (locId !== 'default') {
-            locLabel = locationsMap[locId] || locId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        if (locationsMap[locId]) {
+            if (typeof locationsMap[locId] === 'object') {
+                locLabel = locationsMap[locId].name || locId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                locLat = locationsMap[locId].lat || null;
+                locLng = locationsMap[locId].lng || null;
+            } else {
+                locLabel = locationsMap[locId];
+            }
+        } else if (locId !== 'default') {
+            locLabel = locId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         }
 
         if (thumb && !thumb.startsWith('http') && !thumb.startsWith('/')) {
@@ -132,10 +161,18 @@ async function buildDynamicTourData() {
             }
         }
 
+        const sceneLat = krpanoObj.get(`scene[${i}].lat`);
+        const sceneLng = krpanoObj.get(`scene[${i}].lng`);
+        const hasSceneGps = (sceneLat !== null && sceneLat !== undefined && sceneLat !== '' && sceneLng !== null && sceneLng !== undefined && sceneLng !== '');
+        const effectiveLat = hasSceneGps ? Number(sceneLat) : locLat;
+        const effectiveLng = hasSceneGps ? Number(sceneLng) : locLng;
+
         if (!newTourData[locId]) {
             newTourData[locId] = {
                 label: locLabel,
                 firstScene: name,
+                lat: locLat,
+                lng: locLng,
                 scenes: []
             };
         }
@@ -143,7 +180,10 @@ async function buildDynamicTourData() {
         newTourData[locId].scenes.push({
             id: name,
             title: title,
-            thumb: thumb
+            thumb: thumb,
+            lat: effectiveLat,
+            lng: effectiveLng,
+            hasCustomGps: hasSceneGps
         });
     }
 
@@ -185,17 +225,30 @@ async function onSceneChange() {
         if (isActive) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     });
 
-    // Update accordion active state and Location Subtitle
-    const titleEl = document.getElementById('current-scene-title');
+    // Determine current location group & active scene
+    let activeLocation = null;
+    let currentScene = null;
     for (const [key, data] of Object.entries(tourData)) {
         const found = data.scenes.find(s => s.id === sceneId);
         if (found) {
-            if (currentTourKey !== key) {
-                currentTourKey = key;
-            }
-
+            activeLocation = data;
+            currentScene = found;
+            const titleEl = document.getElementById('current-scene-title');
             if (titleEl) titleEl.textContent = `${data.label} - ${found.title}`;
             break;
+        }
+    }
+
+    // Sync Map Position & Radar to active scene / location (Hierarchy GPS)
+    const activeLat = currentScene && currentScene.lat ? currentScene.lat : (activeLocation ? activeLocation.lat : null);
+    const activeLng = currentScene && currentScene.lng ? currentScene.lng : (activeLocation ? activeLocation.lng : null);
+
+    if (leafMap && activeLat && activeLng) {
+        const pos = [activeLat, activeLng];
+        if (radarMarker) radarMarker.setLatLng(pos);
+        const mapPanel = document.getElementById('map-panel');
+        if (mapPanel && !mapPanel.classList.contains('collapsed') && !mapPanel.classList.contains('hidden') && !mapPanel.classList.contains('maximized')) {
+            leafMap.panTo(pos, { animate: true, duration: 0.8 });
         }
     }
 
@@ -203,7 +256,6 @@ async function onSceneChange() {
     const sidebar = document.getElementById('sidebar');
     const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
     if (sidebar && !sidebar.classList.contains('hidden')) {
-        // Delay slightly for a smoother transition feel
         setTimeout(() => {
             sidebar.classList.add('hidden');
             if (btnToggleSidebar) btnToggleSidebar.classList.remove('active');
@@ -213,37 +265,25 @@ async function onSceneChange() {
 
 // ── Loading → Intro → Tour Flow ─────────────────────────────
 function hideLoadingScreen() {
-    // Phase 1 → Phase 2: Hide spinner, show intro card
     const loadingScreen = document.getElementById('loading-screen');
     const loaderPhase = document.getElementById('loader-phase');
     const introPhase = document.getElementById('intro-phase');
 
     if (loaderPhase) loaderPhase.style.display = 'none';
     if (introPhase) introPhase.classList.remove('hidden');
-    // Reveal panorama behind as blurred background
     if (loadingScreen) loadingScreen.classList.add('show-intro');
 }
 
 function startTour() {
-    // Phase 2 → Tour: Fade out entire loading screen
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) loadingScreen.classList.add('fade-out');
-
-    // GA4 (uncomment khi có tracking ID)
-    // if (typeof gtag === 'function') {
-    //     gtag('event', 'bat_dau_tham_quan', { event_category: 'tuong_tac' });
-    // }
-
-    // Scene preloading is intentionally disabled.
-    // In KrPano 1.19, loadscene(..., PRELOAD) can still trigger an unwanted scene switch
-    // in this project structure, so user-controlled navigation must take priority.
 }
 
 // ── Init UI ──────────────────────────────────────────────────
 function initUI() {
-    // Render Sidebar
     renderSidebar();
     initInfoModal();
+    initMapControls();
 
     // Intro Screen: "Bắt đầu khám phá" button
     const btnStart = document.getElementById('btn-start-tour');
@@ -289,7 +329,7 @@ function initUI() {
     const qrEl = document.getElementById('desktop-qr');
     const qrImg = document.getElementById('qr-img');
     if (qrEl && qrImg && window.innerWidth > 1024) {
-        const currentUrl = encodeURIComponent(window.location.href.split('#')[0]); // ignore hash
+        const currentUrl = encodeURIComponent(window.location.href.split('#')[0]);
         qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${currentUrl}`;
         qrEl.style.display = 'block';
     }
@@ -357,8 +397,7 @@ function renderSidebar() {
     for (const [key, data] of Object.entries(tourData)) {
         const group = document.createElement('div');
         const isCurrentGroup = data.scenes.some(s => s.id === currentSceneId);
-        
-        // Auto-expand group containing current scene
+
         const isCollapsed = isCurrentGroup ? '' : 'collapsed';
         group.className = `tour-group ${isCollapsed}`;
         group.id = `group-${key}`;
@@ -408,6 +447,308 @@ function renderSidebar() {
         sidebar.appendChild(group);
     }
 }
+
+// ── Google Maps Module (Leaflet + Google Maps Tile gl=VN) ───────────
+let leafMap = null;
+let googleRoadLayer = null;
+let googleSatLayer = null;
+let activeMapLayerType = 'road';
+let radarMarker = null;
+let mapMarkers = [];
+let boundaryLayer = null;
+let isMapInitializing = false;
+
+function initMapControls() {
+    const btnToggleMap = document.getElementById('btn-toggle-map');
+    const btnTogglePanel = document.getElementById('btn-toggle-map-panel');
+    const mapHeader = document.getElementById('map-header');
+    const btnMaximizeMap = document.getElementById('btn-maximize-map');
+    const overlay = document.getElementById('map-maximized-overlay');
+    const btnRoadLayer = document.getElementById('btn-map-layer-road');
+    const btnSatLayer = document.getElementById('btn-map-layer-sat');
+    const mapPanel = document.getElementById('map-panel');
+
+    // Header click or arrow click toggles collapse / expand
+    const toggleCollapse = (e) => {
+        if (e && e.target && (e.target.closest('#btn-maximize-map') || e.target.closest('.map-layer-switch') || e.target.closest('.map-layer-btn'))) {
+            return;
+        }
+        if (!mapPanel) return;
+        const isCollapsed = mapPanel.classList.toggle('collapsed');
+        if (!isCollapsed) {
+            ensureMapInitialized();
+            if (btnToggleMap) btnToggleMap.classList.add('active');
+        } else {
+            if (btnToggleMap) btnToggleMap.classList.remove('active');
+        }
+    };
+
+    if (btnTogglePanel) {
+        btnTogglePanel.addEventListener('click', toggleCollapse);
+    }
+    if (mapHeader) {
+        mapHeader.addEventListener('click', toggleCollapse);
+    }
+
+    // Bottom Navigation Bar Map button
+    if (btnToggleMap) {
+        btnToggleMap.addEventListener('click', () => {
+            if (!mapPanel) return;
+            if (mapPanel.classList.contains('collapsed')) {
+                mapPanel.classList.remove('collapsed');
+                ensureMapInitialized();
+                btnToggleMap.classList.add('active');
+            } else {
+                mapPanel.classList.add('collapsed');
+                btnToggleMap.classList.remove('active');
+            }
+        });
+    }
+
+    // Maximize / Restore
+    if (btnMaximizeMap) {
+        btnMaximizeMap.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!mapPanel) return;
+            const isMaximized = mapPanel.classList.toggle('maximized');
+            if (overlay) overlay.classList.toggle('hidden', !isMaximized);
+            if (isMaximized) {
+                mapPanel.classList.remove('collapsed');
+                ensureMapInitialized();
+                setTimeout(() => {
+                    if (leafMap) {
+                        leafMap.invalidateSize();
+                        if (boundaryLayer) {
+                            leafMap.fitBounds(boundaryLayer.getBounds(), {
+                                padding: [10, 10],
+                                animate: true
+                            });
+                        }
+                    }
+                }, 350);
+            } else {
+                setTimeout(() => {
+                    if (leafMap) {
+                        leafMap.invalidateSize();
+                        syncMapToCurrentScene();
+                    }
+                }, 350);
+            }
+        });
+    }
+
+    // Click on overlay to un-maximize
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            if (mapPanel) mapPanel.classList.remove('maximized');
+            overlay.classList.add('hidden');
+            setTimeout(() => {
+                if (leafMap) {
+                    leafMap.invalidateSize();
+                    syncMapToCurrentScene();
+                }
+            }, 350);
+        });
+    }
+
+    if (btnRoadLayer) {
+        btnRoadLayer.addEventListener('click', (e) => {
+            e.stopPropagation();
+            switchMapLayer('road');
+        });
+    }
+
+    if (btnSatLayer) {
+        btnSatLayer.addEventListener('click', (e) => {
+            e.stopPropagation();
+            switchMapLayer('sat');
+        });
+    }
+}
+
+function switchMapLayer(type) {
+    if (!leafMap || activeMapLayerType === type) return;
+    activeMapLayerType = type;
+
+    const btnRoad = document.getElementById('btn-map-layer-road');
+    const btnSat = document.getElementById('btn-map-layer-sat');
+
+    if (type === 'sat') {
+        if (googleRoadLayer) leafMap.removeLayer(googleRoadLayer);
+        if (googleSatLayer) leafMap.addLayer(googleSatLayer);
+        if (btnSat) btnSat.classList.add('active');
+        if (btnRoad) btnRoad.classList.remove('active');
+    } else {
+        if (googleSatLayer) leafMap.removeLayer(googleSatLayer);
+        if (googleRoadLayer) leafMap.addLayer(googleRoadLayer);
+        if (btnRoad) btnRoad.classList.add('active');
+        if (btnSat) btnSat.classList.remove('active');
+    }
+}
+
+function ensureMapInitialized() {
+    if (leafMap) {
+        setTimeout(() => leafMap.invalidateSize(), 200);
+        return;
+    }
+    if (isMapInitializing) return;
+    isMapInitializing = true;
+
+    if (!window.L) {
+        setTimeout(() => {
+            isMapInitializing = false;
+            ensureMapInitialized();
+        }, 150);
+        return;
+    }
+
+    initGoogleMap();
+    isMapInitializing = false;
+    setTimeout(() => leafMap.invalidateSize(), 200);
+}
+
+function initGoogleMap() {
+    const mapContainer = document.getElementById('map-container');
+    if (!mapContainer || leafMap) return;
+
+    // Center map around Ninh Phước (Bàu Trúc: 11.5365, 108.9520)
+    leafMap = L.map('map-container', {
+        zoomControl: false,
+        attributionControl: false,
+        preferCanvas: true,
+        zoomSnap: 0.1,     // Cho phép zoom mức thập phân (vd: 13.75) để fit sát mép màn hình
+        zoomDelta: 0.5     // Bước cuộn zoom mượt mà
+    }).setView([11.5365, 108.9520], 14);
+
+    // 1. Google Maps Roadmap Layer (Official Google Tile with Vietnamese territory parameters gl=VN & hl=vi)
+    googleRoadLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=vi&gl=VN', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        updateWhenIdle: true,
+        keepBuffer: 2
+    }).addTo(leafMap);
+
+    // 2. Google Maps Hybrid Satellite Layer (with road names & labels gl=VN)
+    googleSatLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}&hl=vi&gl=VN', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        updateWhenIdle: true,
+        keepBuffer: 2
+    });
+
+    // 3. Load & Render Boundary GeoJSON (Ranh giới hành chính Xã Ninh Phước)
+    fetch('core/data/ninhphuoc-boundary.json')
+        .then(res => {
+            if (!res.ok) throw new Error('Không tìm thấy file ranh giới');
+            return res.json();
+        })
+        .then(geoData => {
+            boundaryLayer = L.geoJSON(geoData, {
+                style: {
+                    color: '#c62828',       // Màu đỏ đậm sắc nét (Deep Red)
+                    weight: 3,              // Độ dày 3px rõ ràng
+                    opacity: 1.0,           // Đậm 100%
+                    fillColor: '#d32f2f',   // Màu phủ bóng nhẹ trong khu vực
+                    fillOpacity: 0.06,      // Phủ mờ 6%
+                    dashArray: null         // Nét liền (Solid Line)
+                }
+            }).addTo(leafMap);
+        })
+        .catch(err => console.log('Boundary GeoJSON Info:', err.message));
+
+    // 4. Radar Marker (Direction Cone)
+    const radarIcon = L.divIcon({
+        className: 'map-radar-wrapper',
+        html: '<div class="map-radar"></div>',
+        iconSize: [0, 0]
+    });
+    radarMarker = L.marker([11.5305, 108.9556], { icon: radarIcon, zIndexOffset: 500 }).addTo(leafMap);
+
+    // 5. Glowing Red Markers for Locations
+    const glowingIcon = L.divIcon({
+        className: 'glowing-marker-wrapper',
+        html: '<div class="glowing-marker"></div>',
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+    });
+
+    mapMarkers = [];
+    Object.entries(tourData).forEach(([locId, group]) => {
+        if (group.lat && group.lng) {
+            const marker = L.marker([group.lat, group.lng], { icon: glowingIcon, zIndexOffset: 1000 }).addTo(leafMap);
+
+            // Tooltip on Hover
+            marker.bindTooltip(group.label, {
+                direction: 'top',
+                offset: [0, -10],
+                className: 'custom-map-tooltip'
+            });
+
+            // Rich Popup Card
+            const firstThumb = group.scenes && group.scenes[0] ? group.scenes[0].thumb : 'core/assets/og-preview.png';
+            const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${group.lat},${group.lng}`;
+            const popupHtml = `
+                <div class="map-popup-card">
+                    <img src="${firstThumb}" alt="${group.label}" style="width:100%; height:84px; object-fit:cover; border-radius:8px; margin-bottom:6px;" onerror="this.onerror=null; this.src='core/assets/og-preview.png';">
+                    <div class="map-popup-title">${group.label}</div>
+                    <div style="font-size:11px; color:#6b7280; margin-bottom:8px;">${group.scenes.length} cảnh thực tế ảo 360°</div>
+                    <div class="map-popup-actions">
+                        <button class="btn-popup-teleport" onclick="teleportToLocation('${locId}')">
+                            <i class="fa-solid fa-play"></i> Xem 360°
+                        </button>
+                        <a class="btn-popup-directions" href="${directionsUrl}" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-solid fa-diamond-turn-right"></i> Chỉ đường
+                        </a>
+                    </div>
+                </div>
+            `;
+            marker.bindPopup(popupHtml);
+
+            mapMarkers.push({ locId, marker, firstScene: group.firstScene });
+        }
+    });
+
+    // Sync initial scene position
+    syncMapToCurrentScene();
+}
+
+function syncMapToCurrentScene() {
+    if (!krpanoObj || !leafMap) return;
+    const sceneId = krpanoObj.get("xml.scene");
+    if (!sceneId) return;
+
+    for (const [locId, data] of Object.entries(tourData)) {
+        const found = data.scenes.find(s => s.id === sceneId);
+        if (found) {
+            const targetLat = (found.lat !== null && found.lat !== undefined) ? found.lat : data.lat;
+            const targetLng = (found.lng !== null && found.lng !== undefined) ? found.lng : data.lng;
+            if (targetLat && targetLng) {
+                const pos = [targetLat, targetLng];
+                if (radarMarker) radarMarker.setLatLng(pos);
+                leafMap.panTo(pos, { animate: true, duration: 0.8 });
+            }
+            break;
+        }
+    }
+}
+
+window.teleportToLocation = function (locId) {
+    const group = tourData[locId];
+    if (group && group.firstScene && krpanoObj) {
+        krpanoObj.call(`loadscene('${group.firstScene}', null, MERGE, BLEND(0.5));`);
+        const mapPanel = document.getElementById('map-panel');
+        const overlay = document.getElementById('map-maximized-overlay');
+        if (mapPanel) {
+            if (mapPanel.classList.contains('maximized')) {
+                mapPanel.classList.remove('maximized');
+                if (overlay) overlay.classList.add('hidden');
+            }
+            if (window.innerWidth <= 768) {
+                mapPanel.classList.add('collapsed');
+            }
+        }
+    }
+};
 
 // ── Info Modal Logic ───────────────────────────────────────────
 // Dữ liệu thuyết minh được load động từ tours/infos.json

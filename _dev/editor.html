@@ -267,6 +267,46 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        /* Scene Reorder Buttons */
+        .scene-reorder-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-reorder-scene {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 9px;
+            width: 18px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: var(--transition);
+            opacity: 0.7;
+        }
+
+        .btn-reorder-scene:hover:not(:disabled) {
+            color: var(--primary);
+            background: rgba(255, 215, 0, 0.25);
+            border-color: rgba(255, 215, 0, 0.5);
+            opacity: 1;
+        }
+
+        .scene-item.drag-over-top {
+            border-top: 2px solid var(--primary) !important;
+        }
+
+        .scene-item.drag-over-bottom {
+            border-bottom: 2px solid var(--primary) !important;
+        }
+
         /* Location Folder Tree Structure */
         .location-folder.drag-over {
             border: 2px dashed var(--primary) !important;
@@ -1496,6 +1536,56 @@
         </div>
     </div>
 
+    <!-- GPS Coordinates Modal -->
+    <div id="gps-modal-overlay" class="upload-modal-overlay">
+        <div class="upload-modal" style="width: 440px; text-align: left; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 id="gps-modal-title" style="margin-bottom: 0; color: #10b981; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-location-dot"></i> <span>Cài đặt Tọa độ GPS</span>
+                </h3>
+                <button type="button" class="modal-close" onclick="closeGpsModal()" style="font-size: 18px; color: var(--text-muted); background: none; border: none; cursor: pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="gps-modal-target-name" style="font-size: 13px; font-weight: 700; color: #f3f4f6; margin-bottom: 12px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--panel-border);">
+                <!-- Target Name -->
+            </div>
+
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;" id="gps-modal-hint">
+                Nhập tọa độ GPS (Vĩ độ & Kinh độ). Có thể copy nhanh từ Google Maps dạng: <code>11.5305, 108.9556</code>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label for="gps-input-lat" style="font-size: 12px; color: #9ca3af; margin-bottom: 4px; display: block;">
+                    Vĩ độ (Latitude - Vĩ tuyến Bắc):
+                </label>
+                <input type="number" id="gps-input-lat" step="any" placeholder="Ví dụ: 11.530500" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); border-radius: 8px; color: #fff; font-size: 13px;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label for="gps-input-lng" style="font-size: 12px; color: #9ca3af; margin-bottom: 4px; display: block;">
+                    Kinh độ (Longitude - Kinh tuyến Đông):
+                </label>
+                <input type="number" id="gps-input-lng" step="any" placeholder="Ví dụ: 108.955600" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); border-radius: 8px; color: #fff; font-size: 13px;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-action" id="btn-save-gps" onclick="submitGpsModal()" style="flex: 1; margin: 0; background: #10b981; color: white;">
+                        <i class="fa-solid fa-floppy-disk"></i> Lưu Tọa Độ
+                    </button>
+                    <button class="btn-action btn-secondary" onclick="closeGpsModal()" style="margin: 0; width: 80px;">
+                        Hủy
+                    </button>
+                </div>
+                <button class="btn-action btn-secondary" id="btn-clear-scene-gps" onclick="clearSceneCustomGps()" style="display: none; margin: 0; font-size: 11px; color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">
+                    <i class="fa-solid fa-rotate-left"></i> Xóa tọa độ riêng (Dùng chung tọa độ Địa điểm)
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div id="toast">
         <i class="fa-solid fa-check-double"></i> <span id="toast-msg">Đã copy!</span>
@@ -1605,6 +1695,9 @@
             renderSceneList(searchInput.value);
         }
 
+        let currentGpsTarget = { type: '', id: '', name: '' };
+        let locationsDataMap = {};
+
         // 2. Query KrPano's built-in array of scenes with polling & API fallback
         async function detectScenesAndData() {
             if (!krpanoObj) return;
@@ -1620,6 +1713,7 @@
             }
 
             allScenes = [];
+            locationsDataMap = {};
 
             // Query server API for scenes & locations metadata
             let apiScenesMap = {};
@@ -1639,7 +1733,8 @@
                 }
                 if (locData.success && locData.locations) {
                     locData.locations.forEach(loc => {
-                        locationsMap[loc.id] = loc.name;
+                        locationsMap[loc.id] = loc;
+                        locationsDataMap[loc.id] = loc;
                     });
                 }
             } catch (e) {
@@ -1659,7 +1754,8 @@
                     const folderMatch = apiSc.sourceFile.match(/^tours\/([^\/]+)\/scenes\.xml$/);
                     if (folderMatch) {
                         locationId = folderMatch[1];
-                        locationName = locationsMap[locationId] || locationId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        const rawLoc = locationsMap[locationId];
+                        locationName = (typeof rawLoc === 'object' ? rawLoc.name : rawLoc) || locationId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                     }
                     if (thumb && !thumb.startsWith('http') && !thumb.startsWith('/')) {
                         if (!thumb.startsWith('tours/')) {
@@ -1673,7 +1769,18 @@
                     }
                 }
 
-                allScenes.push({ id: name, title, thumb, locationId, locationName });
+                const sceneLat = (apiSc && apiSc.lat !== null && apiSc.lat !== undefined) ? apiSc.lat : (krpanoObj.get(`scene[${i}].lat`) || null);
+                const sceneLng = (apiSc && apiSc.lng !== null && apiSc.lng !== undefined) ? apiSc.lng : (krpanoObj.get(`scene[${i}].lng`) || null);
+
+                allScenes.push({ 
+                    id: name, 
+                    title, 
+                    thumb, 
+                    locationId, 
+                    locationName,
+                    lat: (sceneLat !== null && sceneLat !== undefined && sceneLat !== '') ? Number(sceneLat) : null,
+                    lng: (sceneLng !== null && sceneLng !== undefined && sceneLng !== '') ? Number(sceneLng) : null
+                });
             }
 
             // Populate linked scene dropdown grouped by Location using <optgroup>
@@ -1726,6 +1833,9 @@
         function handleSceneDragEnd(e) {
             e.currentTarget.classList.remove('dragging');
             document.querySelectorAll('.location-folder').forEach(f => f.classList.remove('drag-over'));
+            document.querySelectorAll('.scene-item').forEach(item => {
+                item.classList.remove('drag-over-top', 'drag-over-bottom');
+            });
         }
 
         function handleLocationDragOver(e) {
@@ -1752,7 +1862,6 @@
             if (!sc) return;
 
             if (sc.locationId === targetLocationId) {
-                showToast('ℹ️ Cảnh đã ở sẵn trong Địa điểm này');
                 return;
             }
 
@@ -1768,6 +1877,147 @@
                     await detectScenesAndData();
                 } else {
                     showToast(`❌ Lỗi di chuyển: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        function handleSceneDragOver(e, targetSceneId, targetLocId) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.dataTransfer.dropEffect = 'move';
+
+            const item = e.currentTarget;
+            const rect = item.getBoundingClientRect();
+            const midY = rect.top + rect.height / 2;
+            if (e.clientY < midY) {
+                item.classList.add('drag-over-top');
+                item.classList.remove('drag-over-bottom');
+            } else {
+                item.classList.add('drag-over-bottom');
+                item.classList.remove('drag-over-top');
+            }
+        }
+
+        function handleSceneDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over-top', 'drag-over-bottom');
+        }
+
+        async function handleSceneDrop(e, targetSceneId, targetLocId) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('drag-over-top', 'drag-over-bottom');
+
+            const sourceSceneId = draggedSceneId || e.dataTransfer.getData('text/plain');
+            if (!sourceSceneId || sourceSceneId === targetSceneId) return;
+
+            const sourceScene = allScenes.find(s => s.id === sourceSceneId);
+            if (!sourceScene) return;
+
+            const sourceLocId = sourceScene.locationId || 'default';
+
+            // If dragged across different locations, move location
+            if (sourceLocId !== targetLocId) {
+                await handleLocationDrop(e, targetLocId);
+                return;
+            }
+
+            // Same location: Reorder within this location
+            const locScenes = allScenes.filter(s => (s.locationId || 'default') === targetLocId);
+            const sourceIdx = locScenes.findIndex(s => s.id === sourceSceneId);
+            let targetIdx = locScenes.findIndex(s => s.id === targetSceneId);
+            if (sourceIdx === -1 || targetIdx === -1) return;
+
+            const [moved] = locScenes.splice(sourceIdx, 1);
+            const rect = e.currentTarget.getBoundingClientRect();
+            const midY = rect.top + rect.height / 2;
+            let insertIdx = locScenes.findIndex(s => s.id === targetSceneId);
+            if (insertIdx === -1) insertIdx = targetIdx;
+            if (e.clientY >= midY) {
+                insertIdx++;
+            }
+            locScenes.splice(insertIdx, 0, moved);
+
+            const orderedSceneIds = locScenes.map(s => s.id);
+
+            try {
+                const res = await fetch('/api/scenes/reorder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ locationId: targetLocId, orderedSceneIds })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ Đã sắp xếp lại vị trí cảnh "${moved.title || moved.id}"`);
+                    
+                    const newAllScenes = [];
+                    let locInserted = false;
+                    allScenes.forEach(s => {
+                        const sLoc = s.locationId || 'default';
+                        if (sLoc === targetLocId) {
+                            if (!locInserted) {
+                                newAllScenes.push(...locScenes);
+                                locInserted = true;
+                            }
+                        } else {
+                            newAllScenes.push(s);
+                        }
+                    });
+                    allScenes = newAllScenes;
+
+                    renderSceneList(document.getElementById('scene-search')?.value || '');
+                } else {
+                    showToast(`❌ Lỗi sắp xếp: ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        async function moveSceneOrder(locationId, sceneId, direction) {
+            const locScenes = allScenes.filter(s => (s.locationId || 'default') === locationId);
+            const currentIndex = locScenes.findIndex(s => s.id === sceneId);
+            if (currentIndex === -1) return;
+
+            const targetIndex = currentIndex + direction;
+            if (targetIndex < 0 || targetIndex >= locScenes.length) return;
+
+            // Swap positions
+            const currentItem = locScenes[currentIndex];
+            locScenes[currentIndex] = locScenes[targetIndex];
+            locScenes[targetIndex] = currentItem;
+
+            const orderedSceneIds = locScenes.map(s => s.id);
+
+            try {
+                const res = await fetch('/api/scenes/reorder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ locationId, orderedSceneIds })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ Đã chuyển vị trí cảnh "${currentItem.title || currentItem.id}"`);
+                    
+                    const newAllScenes = [];
+                    let locInserted = false;
+                    allScenes.forEach(s => {
+                        const sLoc = s.locationId || 'default';
+                        if (sLoc === locationId) {
+                            if (!locInserted) {
+                                newAllScenes.push(...locScenes);
+                                locInserted = true;
+                            }
+                        } else {
+                            newAllScenes.push(s);
+                        }
+                    });
+                    allScenes = newAllScenes;
+
+                    renderSceneList(document.getElementById('scene-search')?.value || '');
+                } else {
+                    showToast(`❌ Lỗi sắp xếp: ${data.error}`);
                 }
             } catch (err) {
                 showToast(`❌ Lỗi kết nối server: ${err.message}`);
@@ -1814,6 +2064,10 @@
                 const isCurrentGroup = group.scenes.some(s => s.id === currentSceneId);
                 const isCollapsed = collapsedLocations[group.id] === true && !isCurrentGroup;
 
+                const locObj = locationsDataMap[group.id] || {};
+                const hasLocGps = (locObj.lat !== null && locObj.lat !== undefined && locObj.lat !== '' && locObj.lng !== null && locObj.lng !== undefined && locObj.lng !== '');
+                const locGpsTitle = hasLocGps ? `Tọa độ Địa điểm: ${locObj.lat}, ${locObj.lng}` : 'Chưa có tọa độ địa điểm (Click để thêm)';
+
                 folderEl.innerHTML = `
                     <div class="location-folder-header" onclick="toggleLocationFolder('${group.id}')">
                         <i class="fa-solid ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'}" style="font-size: 10px; color: var(--text-muted);"></i>
@@ -1822,32 +2076,64 @@
                             <span>${group.name}</span>
                             <span class="location-badge">${group.scenes.length} cảnh</span>
                         </div>
-                        <button class="btn-rename-scene" title="Đổi tên Địa Điểm" onclick="event.stopPropagation(); promptRenameLocation('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
+                        <div style="display: flex; gap: 2px;" onclick="event.stopPropagation();">
+                            <button class="btn-rename-scene" title="${locGpsTitle}" style="color: ${hasLocGps ? '#10b981' : '#6b7280'};" onclick="promptEditLocationGps('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </button>
+                            <button class="btn-rename-scene" title="Đổi tên Địa Điểm" onclick="promptRenameLocation('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="location-scenes-list" style="display: ${isCollapsed ? 'none' : 'block'};"></div>
                 `;
 
                 const scenesContainer = folderEl.querySelector('.location-scenes-list');
 
-                group.scenes.forEach(sc => {
+                group.scenes.forEach((sc, scIndex) => {
                     const el = document.createElement('div');
                     el.className = `scene-item ${sc.id === currentSceneId ? 'active' : ''}`;
                     el.setAttribute('draggable', 'true');
+                    el.dataset.sceneId = sc.id;
+                    el.dataset.locationId = group.id;
+
                     el.addEventListener('dragstart', (e) => handleSceneDragStart(e, sc.id));
                     el.addEventListener('dragend', handleSceneDragEnd);
+                    el.addEventListener('dragover', (e) => handleSceneDragOver(e, sc.id, group.id));
+                    el.addEventListener('dragleave', handleSceneDragLeave);
+                    el.addEventListener('drop', (e) => handleSceneDrop(e, sc.id, group.id));
 
                     const safeTitle = sc.title ? sc.title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
                     const safeId = sc.id ? sc.id.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+                    const isFirst = scIndex === 0;
+                    const isLast = scIndex === group.scenes.length - 1;
+
+                    const hasSceneGps = (sc.lat !== null && sc.lat !== undefined && sc.lng !== null && sc.lng !== undefined);
+                    const sceneGpsTitle = hasSceneGps 
+                        ? `Tọa độ riêng của cảnh: ${sc.lat}, ${sc.lng}` 
+                        : (hasLocGps ? `Đang dùng chung tọa độ Địa điểm (${locObj.lat}, ${locObj.lng})` : 'Chưa có tọa độ (Click để đặt tọa độ riêng)');
+
                     el.innerHTML = `
-                        <i class="fa-solid fa-grip-vertical scene-drag-handle" title="Kéo thả để di chuyển sang Địa điểm khác"></i>
+                        <div class="scene-reorder-btns">
+                            <button class="btn-reorder-scene" title="Đẩy lên trên" ${isFirst ? 'disabled style="opacity:0.2; cursor:not-allowed;"' : ''} onclick="event.stopPropagation(); moveSceneOrder('${group.id}', '${sc.id}', -1);">
+                                <i class="fa-solid fa-chevron-up"></i>
+                            </button>
+                            <button class="btn-reorder-scene" title="Đẩy xuống dưới" ${isLast ? 'disabled style="opacity:0.2; cursor:not-allowed;"' : ''} onclick="event.stopPropagation(); moveSceneOrder('${group.id}', '${sc.id}', 1);">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                        </div>
                         <img class="scene-thumb" src="${sc.thumb}" onerror="this.src='core/assets/og-preview.png'">
                         <div class="scene-info">
-                            <div class="scene-name" title="${safeTitle}">${safeTitle}</div>
+                            <div class="scene-name" title="${safeTitle}">
+                                ${safeTitle}
+                                ${hasSceneGps ? '<span style="font-size:10px; color:#10b981; margin-left:4px;" title="Có tọa độ riêng"><i class="fa-solid fa-location-crosshairs"></i></span>' : ''}
+                            </div>
                             <div class="scene-id">${safeId}</div>
                         </div>
                         <div style="display:flex; gap:2px;">
+                            <button class="btn-rename-scene" title="${sceneGpsTitle}" style="color: ${hasSceneGps ? '#10b981' : '#6b7280'};" onclick="event.stopPropagation(); promptEditSceneGps('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-location-crosshairs"></i>
+                            </button>
                             <button class="btn-rename-scene" title="Chuyển sang Địa điểm khác" style="color: #3b82f6;" onclick="event.stopPropagation(); promptMoveSceneLocation('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
                                 <i class="fa-solid fa-right-left"></i>
                             </button>
@@ -2006,6 +2292,128 @@
                 }
             } catch (err) {
                 showToast(`❌ Lỗi kết nối server: ${err.message}`);
+            }
+        }
+
+        // GPS Management Handlers
+        function promptEditLocationGps(locId, locName) {
+            currentGpsTarget = { type: 'location', id: locId, name: locName };
+            const locObj = locationsDataMap[locId] || {};
+            
+            document.getElementById('gps-modal-title').innerHTML = '<i class="fa-solid fa-location-dot"></i> <span>Tọa Độ GPS Địa Điểm</span>';
+            document.getElementById('gps-modal-target-name').innerHTML = `📍 Địa điểm: <strong>${locName}</strong> <span style="font-size:11px; opacity:0.7;">(${locId})</span>`;
+            document.getElementById('gps-modal-hint').innerHTML = 'Tọa độ này sẽ dùng làm <strong>mặc định chung</strong> cho tất cả các cảnh 360° trong địa điểm này (nếu cảnh không có tọa độ riêng).';
+            document.getElementById('gps-input-lat').value = (locObj.lat !== undefined && locObj.lat !== null) ? locObj.lat : '';
+            document.getElementById('gps-input-lng').value = (locObj.lng !== undefined && locObj.lng !== null) ? locObj.lng : '';
+            document.getElementById('btn-clear-scene-gps').style.display = 'none';
+
+            document.getElementById('gps-modal-overlay').style.display = 'flex';
+            document.getElementById('gps-input-lat').focus();
+        }
+
+        function promptEditSceneGps(sceneId, sceneTitle) {
+            const sc = allScenes.find(s => s.id === sceneId);
+            const locId = sc ? (sc.locationId || 'default') : 'default';
+            const locObj = locationsDataMap[locId] || {};
+
+            currentGpsTarget = { type: 'scene', id: sceneId, name: sceneTitle, locationId: locId };
+
+            document.getElementById('gps-modal-title').innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> <span>Tọa Độ GPS Riêng Từng Cảnh</span>';
+            document.getElementById('gps-modal-target-name').innerHTML = `🎯 Cảnh: <strong>${sceneTitle}</strong> <span style="font-size:11px; opacity:0.7;">(${sceneId})</span><br><span style="font-size:11px; color:var(--primary); font-weight:normal;">Thuộc địa điểm: ${sc ? sc.locationName : locId}</span>`;
+            
+            const hasLocGps = (locObj.lat !== null && locObj.lat !== undefined && locObj.lat !== '' && locObj.lng !== null && locObj.lng !== undefined && locObj.lng !== '');
+            const locGpsText = hasLocGps ? `(Tọa độ chung của Địa điểm: ${locObj.lat}, ${locObj.lng})` : '(Địa điểm này chưa có tọa độ chung)';
+            
+            document.getElementById('gps-modal-hint').innerHTML = `Đặt tọa độ riêng nếu ảnh này nằm ở vị trí cách xa các ảnh khác trong cùng địa điểm. Để trống nếu muốn dùng chung tọa độ địa điểm.<br><span style="color:#60a5fa;">${locGpsText}</span>`;
+
+            document.getElementById('gps-input-lat').value = (sc && sc.lat !== null && sc.lat !== undefined) ? sc.lat : '';
+            document.getElementById('gps-input-lng').value = (sc && sc.lng !== null && sc.lng !== undefined) ? sc.lng : '';
+
+            const hasCustomGps = (sc && sc.lat !== null && sc.lat !== undefined && sc.lng !== null && sc.lng !== undefined);
+            document.getElementById('btn-clear-scene-gps').style.display = hasCustomGps ? 'block' : 'none';
+
+            document.getElementById('gps-modal-overlay').style.display = 'flex';
+            document.getElementById('gps-input-lat').focus();
+        }
+
+        function closeGpsModal() {
+            document.getElementById('gps-modal-overlay').style.display = 'none';
+        }
+
+        async function submitGpsModal() {
+            const latVal = document.getElementById('gps-input-lat').value.trim();
+            const lngVal = document.getElementById('gps-input-lng').value.trim();
+
+            if ((latVal && !lngVal) || (!latVal && lngVal)) {
+                showToast('⚠️ Vui lòng nhập đầy đủ cả Vĩ độ (Lat) và Kinh độ (Lng)!');
+                return;
+            }
+
+            const lat = latVal !== '' ? Number(latVal) : null;
+            const lng = lngVal !== '' ? Number(lngVal) : null;
+
+            if (lat !== null && (isNaN(lat) || lat < -90 || lat > 90)) {
+                showToast('❌ Vĩ độ không hợp lệ (-90 đến 90)');
+                return;
+            }
+            if (lng !== null && (isNaN(lng) || lng < -180 || lng > 180)) {
+                showToast('❌ Kinh độ không hợp lệ (-180 đến 180)');
+                return;
+            }
+
+            try {
+                if (currentGpsTarget.type === 'location') {
+                    const res = await fetch('/api/locations/gps', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ locationId: currentGpsTarget.id, lat, lng })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast(`✅ ${data.message}`);
+                        closeGpsModal();
+                        await detectScenesAndData();
+                    } else {
+                        showToast(`❌ ${data.error}`);
+                    }
+                } else if (currentGpsTarget.type === 'scene') {
+                    const res = await fetch('/api/scenes/gps', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sceneId: currentGpsTarget.id, lat, lng })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast(`✅ ${data.message}`);
+                        closeGpsModal();
+                        await detectScenesAndData();
+                    } else {
+                        showToast(`❌ ${data.error}`);
+                    }
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối: ${err.message}`);
+            }
+        }
+
+        async function clearSceneCustomGps() {
+            if (!currentGpsTarget.id || currentGpsTarget.type !== 'scene') return;
+            try {
+                const res = await fetch('/api/scenes/gps', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sceneId: currentGpsTarget.id, lat: null, lng: null })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ Đã xóa tọa độ riêng của cảnh "${currentGpsTarget.name}"`);
+                    closeGpsModal();
+                    await detectScenesAndData();
+                } else {
+                    showToast(`❌ ${data.error}`);
+                }
+            } catch (err) {
+                showToast(`❌ Lỗi kết nối: ${err.message}`);
             }
         }
 

@@ -487,12 +487,14 @@ html {
     display: inline-block;
     animation: fadeInDown 0.5s ease-out;
     text-align: right;
-    pointer-events: none; /* Container doesn't block */
+    pointer-events: none;
+    /* Container doesn't block */
 }
 
-.logo-compact h1, 
+.logo-compact h1,
 .logo-compact .subtitle {
-    pointer-events: auto; /* Text remains interactive if needed (e.g. for selection or future links) */
+    pointer-events: auto;
+    /* Text remains interactive if needed (e.g. for selection or future links) */
 }
 
 .logo-compact h1 {
@@ -556,7 +558,8 @@ html {
     align-items: flex-start;
     gap: 10px;
     z-index: 10;
-    pointer-events: none; /* CRITICAL: Wrapper does NOT block the 360 scene */
+    pointer-events: none;
+    /* CRITICAL: Wrapper does NOT block the 360 scene */
 }
 
 .icon-btn-text {
@@ -576,7 +579,8 @@ html {
     cursor: pointer;
     transition: var(--transition);
     box-shadow: var(--glass-shadow);
-    pointer-events: auto; /* Only button is interactive */
+    pointer-events: auto;
+    /* Only button is interactive */
 }
 
 .icon-btn-text svg {
@@ -609,7 +613,8 @@ html {
     border: 1px solid var(--glass-border);
     scrollbar-width: thin;
     scrollbar-color: var(--primary) transparent;
-    pointer-events: auto; /* Content is interactive */
+    pointer-events: auto;
+    /* Content is interactive */
 }
 
 .sidebar::-webkit-scrollbar {
@@ -959,7 +964,8 @@ html {
     }
 
     /* Keep all buttons as requested */
-    #btn-share, #btn-fullscreen {
+    #btn-share,
+    #btn-fullscreen {
         display: flex !important;
     }
 
@@ -1102,4 +1108,368 @@ html {
 
 #modal-body strong {
     color: #222;
+}
+
+/* ============================================================
+   GOOGLE MAPS MINIMAP (White Glass & Red Accent Theme)
+   ============================================================ */
+
+/* 1. Màn che làm mờ khi phóng to bản đồ */
+#map-maximized-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 15, 30, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1050;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+#map-maximized-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* 2. Khung Map Panel White Glassmorphism */
+#map-panel {
+    position: absolute;
+    bottom: calc(20px + var(--safe-bottom));
+    right: calc(20px + var(--safe-right));
+    width: 290px;
+    height: 250px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16), 0 2px 10px rgba(211, 86, 86, 0.1);
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    pointer-events: auto;
+}
+
+/* Trạng thái thu gọn (Minimap Bar góc phải) */
+#map-panel.collapsed {
+    height: 48px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+#map-panel.collapsed #btn-toggle-map-panel {
+    transform: rotate(180deg);
+}
+
+/* Trạng thái phóng to toàn màn hình */
+#map-panel.maximized {
+    position: fixed;
+    width: min(85vw, 1050px);
+    height: min(82vh, 780px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    border-radius: 24px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+}
+
+/* Header */
+#map-header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    cursor: pointer;
+    user-select: none;
+    gap: 8px;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+#map-header:hover {
+    background: #ffffff;
+}
+
+.map-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--primary);
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+
+.map-header-icon {
+    width: 18px;
+    height: 18px;
+    fill: var(--primary);
+    flex-shrink: 0;
+}
+
+.map-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Switcher Lớp Bản Đồ */
+.map-layer-switch {
+    display: flex;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    padding: 2px;
+    gap: 2px;
+    margin-right: 4px;
+}
+
+.map-layer-btn {
+    background: transparent;
+    border: none;
+    color: #555555;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.map-layer-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(211, 86, 86, 0.35);
+}
+
+.map-action-btn {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: #444444;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: var(--transition);
+}
+
+.map-action-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.map-action-btn:hover {
+    color: var(--primary);
+    background: rgba(211, 86, 86, 0.12);
+    border-color: rgba(211, 86, 86, 0.25);
+    transform: scale(1.05);
+}
+
+#map-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: #f1f5f9;
+    z-index: 1;
+}
+
+/* 2. Điểm đánh dấu phát sáng Đỏ (Glowing Red Marker) */
+.glowing-marker {
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 2.5px solid #ffffff;
+    position: relative;
+    box-shadow: 0 0 12px rgba(211, 86, 86, 0.85);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.glowing-marker:hover {
+    transform: scale(1.35);
+}
+
+.glowing-marker::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background: rgba(211, 86, 86, 0.45);
+    border-radius: 50%;
+    animation: pulse-marker 2s infinite ease-out;
+    z-index: -1;
+}
+
+@keyframes pulse-marker {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(2.6);
+        opacity: 0;
+    }
+}
+
+/* 3. Radar quét góc nhìn màu Đỏ Nho (Red Radar Cone) */
+.map-radar {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 52px solid rgba(211, 86, 86, 0.42);
+    /* Màu đỏ trong suốt */
+    position: absolute;
+    top: -52px;
+    left: -20px;
+    transform-origin: 50% 100%;
+    pointer-events: none;
+    z-index: 1000;
+    filter: drop-shadow(0 0 6px rgba(211, 86, 86, 0.4));
+}
+
+.map-radar::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 8px;
+    height: 8px;
+    background: #ffffff;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* 4. Tooltip nhãn tên cảnh khi hover (White Glass) */
+.custom-map-tooltip {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(211, 86, 86, 0.3) !important;
+    border-radius: 8px !important;
+    color: #1f2937 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+.custom-map-tooltip::before {
+    border-top-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 5. Custom Popup Card (White Glass & Red) */
+.leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    border-radius: 14px !important;
+    color: #1f2937 !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), 0 2px 10px rgba(211, 86, 86, 0.1) !important;
+    padding: 4px !important;
+}
+
+.leaflet-popup-tip {
+    background: rgba(255, 255, 255, 0.96) !important;
+}
+
+.map-popup-card {
+    padding: 6px 8px;
+    text-align: center;
+}
+
+.map-popup-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.map-popup-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.btn-popup-teleport {
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 4px 12px rgba(211, 86, 86, 0.3);
+    transition: var(--transition);
+}
+
+.btn-popup-teleport:hover {
+    background: #b73f3f;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(211, 86, 86, 0.4);
+}
+
+.btn-popup-directions {
+    background: rgba(0, 0, 0, 0.05);
+    color: #374151;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.btn-popup-directions:hover {
+    background: rgba(211, 86, 86, 0.1);
+    color: var(--primary);
+    border-color: rgba(211, 86, 86, 0.3);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+    #map-panel {
+        width: 260px;
+        height: 220px;
+        bottom: calc(75px + var(--safe-bottom));
+        right: calc(12px + var(--safe-right));
+    }
+
+    #map-panel.collapsed {
+        height: 44px;
+    }
+
+    #map-panel.maximized {
+        width: calc(100vw - 24px);
+        height: calc(100vh - 120px);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }

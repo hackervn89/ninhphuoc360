@@ -78,6 +78,10 @@ const upload = multer({
     }
 });
 
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Map to track tiling jobs for SSE progress updates
 const tilingJobs = new Map();
 
@@ -101,9 +105,7 @@ function sanitizeTourXmlIncludes() {
         }
 
         if (!isValid) {
-            console.log(`   🧹 Tự động dọn dẹp include không tồn tại: ${includeUrl}`);
-            const lineRegex = new RegExp(`\\s*<include\\s+url="${escapeRegex(includeUrl)}"\\s*\\/>`, 'gi');
-            content = content.replace(lineRegex, '');
+            content = content.replace(match[0], `<!-- ${match[0]} (Tự động ẩn do file scenes.xml rỗng hoặc không tồn tại) -->`);
             modified = true;
         }
     }
@@ -114,18 +116,22 @@ function sanitizeTourXmlIncludes() {
 }
 
 // ============================================================
-// API: GET /api/scenes — Đọc danh sách scenes từ tour.xml
+// API: GET /api/scenes — Lấy danh sách scenes từ tour.xml và các scenes.xml con
 // ============================================================
-
 app.get('/api/scenes', async (req, res) => {
     try {
+        if (!fs.existsSync(TOUR_XML_PATH)) {
+            return res.status(404).json({ success: false, error: 'Không tìm thấy tour.xml' });
+        }
+
         sanitizeTourXmlIncludes();
 
-        // Parse tour.xml to find all <include> files
         const tourXml = fs.readFileSync(TOUR_XML_PATH, 'utf-8');
+        const scenes = [];
+
+        // Find all <include url="tours/xxx/scenes.xml" />
         const includeRegex = /<include\s+url="([^"]+)"\s*\/>/g;
         let match;
-        const scenes = [];
 
         while ((match = includeRegex.exec(tourXml)) !== null) {
             const includeUrl = match[1];
@@ -155,6 +161,8 @@ app.get('/api/scenes', async (req, res) => {
                                 name: attrs.name,
                                 title: attrs.title || attrs.name,
                                 thumburl: attrs.thumburl || '',
+                                lat: (attrs.lat !== undefined && attrs.lat !== null && attrs.lat !== '') ? Number(attrs.lat) : null,
+                                lng: (attrs.lng !== undefined && attrs.lng !== null && attrs.lng !== '') ? Number(attrs.lng) : null,
                                 sourceFile: includeUrl
                             });
                         });
@@ -205,9 +213,15 @@ app.get('/api/locations', (req, res) => {
                     const xmlPath = path.join(locPath, 'scenes.xml');
                     if (fs.existsSync(xmlPath)) {
                         const defaultName = d.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        const locInfo = customNames[d];
+                        const locName = typeof locInfo === 'object' ? (locInfo.name || defaultName) : (locInfo || defaultName);
+                        const lat = typeof locInfo === 'object' ? locInfo.lat : null;
+                        const lng = typeof locInfo === 'object' ? locInfo.lng : null;
                         locations.push({
                             id: d,
-                            name: customNames[d] || defaultName,
+                            name: locName,
+                            lat: lat,
+                            lng: lng,
                             xmlPath: `tours/${d}/scenes.xml`
                         });
                     }
@@ -229,10 +243,128 @@ app.post('/api/locations/rename', async (req, res) => {
         }
 
         const customNames = getCustomLocationNames();
-        customNames[locationId] = newName.trim();
+        if (typeof customNames[locationId] === 'object') {
+            customNames[locationId].name = newName.trim();
+        } else {
+            customNames[locationId] = newName.trim();
+        }
         saveCustomLocationNames(customNames);
 
         res.json({ success: true, message: `Đã đổi tên địa điểm thành "${newName.trim()}"` });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// API: POST /api/locations/gps — Cập nhật Tọa độ GPS của Địa Điểm
+app.post('/api/locations/gps', async (req, res) => {
+    try {
+        let { locationId, lat, lng } = req.body;
+        if (!locationId) {
+            return res.status(400).json({ success: false, error: 'Thiếu thông tin locationId' });
+        }
+
+        const customNames = getCustomLocationNames();
+        const defaultName = locationId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        let currentInfo = customNames[locationId] || { name: defaultName };
+        if (typeof currentInfo !== 'object') {
+            currentInfo = { name: currentInfo || defaultName };
+        }
+
+        if (lat !== undefined && lat !== null && lat !== '' && !isNaN(Number(lat))) {
+            currentInfo.lat = Number(lat);
+        } else {
+            delete currentInfo.lat;
+        }
+
+        if (lng !== undefined && lng !== null && lng !== '' && !isNaN(Number(lng))) {
+            currentInfo.lng = Number(lng);
+        } else {
+            delete currentInfo.lng;
+        }
+
+        customNames[locationId] = currentInfo;
+        saveCustomLocationNames(customNames);
+
+        res.json({
+            success: true,
+            locationId,
+            lat: currentInfo.lat || null,
+            lng: currentInfo.lng || null,
+            message: `Đã cập nhật tọa độ cho địa điểm "${currentInfo.name}"`
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// API: POST /api/scenes/gps — Cập nhật Tọa độ GPS riêng cho từng Cảnh (Scene)
+app.post('/api/scenes/gps', async (req, res) => {
+    try {
+        let { sceneId, lat, lng } = req.body;
+        if (!sceneId) {
+            return res.status(400).json({ success: false, error: 'Thiếu thông tin sceneId' });
+        }
+
+        const tourXml = fs.readFileSync(TOUR_XML_PATH, 'utf-8');
+        const includeRegex = /<include\s+url="([^"]+)"\s*\/>/g;
+        let match;
+        let targetFile = null;
+
+        while ((match = includeRegex.exec(tourXml)) !== null) {
+            const includeUrl = match[1];
+            if (includeUrl.startsWith('tours/') && includeUrl.endsWith('.xml')) {
+                const filePath = path.join(PROJECT_ROOT, includeUrl);
+                if (fs.existsSync(filePath)) {
+                    const content = fs.readFileSync(filePath, 'utf-8');
+                    if (content.includes(`name="${sceneId}"`)) {
+                        targetFile = filePath;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!targetFile) {
+            return res.status(404).json({ success: false, error: `Không tìm thấy scene "${sceneId}" trong các file scenes.xml` });
+        }
+
+        let content = fs.readFileSync(targetFile, 'utf-8');
+        
+        // Find the opening <scene ...> tag for this sceneId
+        const sceneTagRegex = new RegExp(`(<scene\\b[^>]*name="${escapeRegex(sceneId)}"[^>]*>)`, 'i');
+        const sceneTagMatch = content.match(sceneTagRegex);
+
+        if (!sceneTagMatch) {
+            return res.status(404).json({ success: false, error: `Không tìm thấy thẻ <scene> của "${sceneId}"` });
+        }
+
+        let tagStr = sceneTagMatch[1];
+        
+        // Remove existing lat and lng attributes if present
+        tagStr = tagStr.replace(/\s+lat="[^"]*"/gi, '');
+        tagStr = tagStr.replace(/\s+lng="[^"]*"/gi, '');
+
+        const hasValidLat = (lat !== undefined && lat !== null && lat !== '' && !isNaN(Number(lat)));
+        const hasValidLng = (lng !== undefined && lng !== null && lng !== '' && !isNaN(Number(lng)));
+
+        if (hasValidLat && hasValidLng) {
+            // Insert lat and lng before the closing '>'
+            tagStr = tagStr.replace(/>$/, ` lat="${Number(lat)}" lng="${Number(lng)}">`);
+        }
+
+        content = content.replace(sceneTagMatch[1], tagStr);
+        fs.writeFileSync(targetFile, content, 'utf-8');
+
+        res.json({
+            success: true,
+            sceneId,
+            lat: hasValidLat ? Number(lat) : null,
+            lng: hasValidLng ? Number(lng) : null,
+            message: (hasValidLat && hasValidLng) 
+                ? `Đã lưu tọa độ riêng cho cảnh "${sceneId}" (${lat}, ${lng})`
+                : `Đã xóa tọa độ riêng của cảnh "${sceneId}" (sẽ dùng chung tọa độ của Địa điểm)`
+        });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
@@ -417,6 +549,73 @@ app.post('/api/scenes/rename', async (req, res) => {
         fs.writeFileSync(targetFile, content, 'utf-8');
         res.json({ success: true, message: `Đã đổi tên cảnh thành "${newTitle.trim()}"` });
     } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// API: POST /api/scenes/reorder — Sắp xếp lại thứ tự các cảnh trong cùng một địa điểm
+app.post('/api/scenes/reorder', async (req, res) => {
+    try {
+        const { locationId, orderedSceneIds } = req.body;
+        if (!locationId || !Array.isArray(orderedSceneIds) || orderedSceneIds.length === 0) {
+            return res.status(400).json({ success: false, error: 'Thiếu locationId hoặc orderedSceneIds' });
+        }
+
+        const scenesXmlPath = path.join(TOURS_DIR, locationId, 'scenes.xml');
+        if (!fs.existsSync(scenesXmlPath)) {
+            return res.status(404).json({ success: false, error: `Không tìm thấy file scenes.xml cho địa điểm "${locationId}"` });
+        }
+
+        const originalXml = fs.readFileSync(scenesXmlPath, 'utf-8');
+        
+        // Extract all <scene ...>...</scene> blocks and map by scene name
+        const sceneBlockRegex = /<scene\b[^>]*name="([^"]+)"[^>]*>[\s\S]*?<\/scene>/gi;
+        const sceneBlocks = new Map();
+        let match;
+
+        while ((match = sceneBlockRegex.exec(originalXml)) !== null) {
+            const sceneName = match[1];
+            const fullBlock = match[0];
+            sceneBlocks.set(sceneName, fullBlock);
+        }
+
+        if (sceneBlocks.size === 0) {
+            return res.status(400).json({ success: false, error: 'Không tìm thấy thẻ <scene> nào trong file XML' });
+        }
+
+        // Build new scene blocks list in the requested order
+        const reorderedBlocks = [];
+        const processedNames = new Set();
+
+        orderedSceneIds.forEach(id => {
+            if (sceneBlocks.has(id)) {
+                reorderedBlocks.push(sceneBlocks.get(id));
+                processedNames.add(id);
+            }
+        });
+
+        // Safety fallback: append any remaining scenes that were not in orderedSceneIds to prevent data loss
+        for (const [name, block] of sceneBlocks.entries()) {
+            if (!processedNames.has(name)) {
+                reorderedBlocks.push(block);
+            }
+        }
+
+        // Reconstruct scenes.xml content
+        let header = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<krpano>';
+        if (originalXml.includes('<?xml')) {
+            const headerMatch = originalXml.match(/^([\s\S]*?<krpano[^>]*>)/i);
+            if (headerMatch) {
+                header = headerMatch[1].trim();
+            }
+        }
+
+        const newContent = `${header}\n\t${reorderedBlocks.join('\n\n\t')}\n</krpano>\n`;
+
+        fs.writeFileSync(scenesXmlPath, newContent, 'utf-8');
+        res.json({ success: true, message: `Đã cập nhật thứ tự ${reorderedBlocks.length} cảnh cho "${locationId}"` });
+    } catch (err) {
+        console.error('Reorder error:', err);
         res.status(500).json({ success: false, error: err.message });
     }
 });

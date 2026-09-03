@@ -1,6 +1,6 @@
 # NINH PHƯỚC 360° — HỆ THỐNG TOUR THỰC TẾ ẢO VÀ BỘ BIÊN TẬP 360 INTERACTIVE
 
-> **Phiên bản:** 2.2.0 (Cập nhật: 08/2026)  
+> **Phiên bản:** 2.3.0 (Cập nhật: 09/2026)  
 > **Tác giả:** Viet Design  
 > **Repository:** [https://github.com/hackervn89/ninhphuoc360](https://github.com/hackervn89/ninhphuoc360)  
 > **Website Live (GitHub Pages):** [https://hackervn89.github.io/ninhphuoc360/](https://hackervn89.github.io/ninhphuoc360/)  
@@ -14,8 +14,8 @@
 
 Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc lập**:
 
-1. **Trải nghiệm Người xem (Public Web Tour - `index.html`)**: Web tĩnh thuần HTML5/CSS3/JS + KrPano 360 Engine. Chạy siêu nhanh, tối ưu SEO, giao diện Glassmorphic hiện đại, tương thích 100% Mobile & VR Devices. **Hỗ trợ chạy tĩnh 100% trên GitHub Pages** nhờ cơ chế nạp dữ liệu địa điểm tĩnh (`tours/locations.json`) & bài thuyết minh tĩnh (`tours/infos.json`).
-2. **Bộ biên tập Đồ họa Trực quan (Visual Editor - `_dev/editor.html` & `_dev/server.js`)**: Trình biên tập WYSIWYG chạy local/nội bộ qua NodeJS Express Server. Cho phép kéo thả hotspot, tạo multires tiles tự động, thêm/sửa/xóa cảnh, cân bằng đường chân trời (Horizon Leveling), quản lý bài viết thuyết minh WYSIWYG và đồng bộ mã KrPano XML tự động 100%.
+1. **Trải nghiệm Người xem (Public Web Tour - `index.html`)**: Web tĩnh thuần HTML5/CSS3/JS + KrPano 360 Engine + Leaflet Google Maps Module (`gl=VN` chuẩn chủ quyền Hoàng Sa & Trường Sa). Chạy siêu nhanh, tối ưu SEO, giao diện White Glassmorphism & Red Accent hiện đại, tương thích 100% Mobile & VR Devices. **Hỗ trợ chạy tĩnh 100% trên GitHub Pages** nhờ cơ chế nạp dữ liệu địa điểm tĩnh (`tours/locations.json`), ranh giới GeoJSON (`core/data/ninhphuoc-boundary.json`) & bài thuyết minh tĩnh (`tours/infos.json`).
+2. **Bộ biên tập Đồ họa Trực quan (Visual Editor - `_dev/editor.html` & `_dev/server.js`)**: Trình biên tập WYSIWYG chạy local/nội bộ qua NodeJS Express Server. Cho phép quản lý tọa độ GPS phân cấp (Cấp Địa điểm & Cấp từng Cảnh), kéo thả hotspot, tạo multires tiles tự động, thêm/sửa/xóa/sắp xếp cảnh, cân bằng đường chân trời (Horizon Leveling), quản lý bài viết thuyết minh WYSIWYG và đồng bộ mã KrPano XML tự động 100%.
 
 ---
 
@@ -24,18 +24,20 @@ Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ 🌐 LỚP 1: WEB FRONTEND (Public Tour - index.html / GitHub Pages)            │
-│    ├── UI Glassmorphic Overlay (Logo, Menu Địa điểm, Thanh điều khiển)      │
-│    ├── core/css/style.css (Design System, Responsive, Auto-wrap title)      │
-│    └── core/js/app.js (Tự động nạp tours/locations.json, tours/infos.json) │
+│    ├── UI Glassmorphic White & Red (Logo, Menu Địa điểm, Thanh điều khiển)  │
+│    ├── Google Maps Minimap Module (Leaflet + Google Tile gl=VN, Radar FOV)  │
+│    ├── core/css/style.css (Design System, White Glass & Red, Responsive)   │
+│    ├── core/data/ninhphuoc-boundary.json (GeoJSON ranh giới hành chính Xã)  │
+│    └── core/js/app.js (Tự động nạp locations.json, infos.json, boundary)    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 📜 LỚP 2: KRPANO 360 ENGINE & STATIC DATA SCHEMAS                           │
 │    ├── tour.xml (Master XML: Định nghĩa Hotspots style: muiten, thongtin...)│
-│    ├── tours/locations.json (Ánh xạ ID thư mục → Tên hiển thị Tiếng Việt)  │
+│    ├── tours/locations.json (Ánh xạ ID thư mục → Tên hiển thị + GPS {lat,lng})│
 │    ├── tours/infos.json (Lưu trữ danh sách bài viết thuyết minh thông tin)  │
-│    └── tours/<dia_diem>/scenes.xml (Scene XML, view, image, prealign)       │
+│    └── tours/<dia_diem>/scenes.xml (Scene XML, view, image, lat/lng riêng)  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │ 🛠️ LỚP 3: VISUAL EDITOR & NODEJS BACKEND SERVER (_dev/ - LOCAL ONLY)         │
-│    ├── _dev/editor.html (WYSIWYG Editor: Prealign, Info Manager, Hotspots)  │
+│    ├── _dev/editor.html (WYSIWYG Editor: GPS Manager, Prealign, Hotspots)   │
 │    └── _dev/server.js (NodeJS Express REST API + KrPano CLI Tiling Engine)  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -45,12 +47,28 @@ Hệ thống được thiết kế theo mô hình **Tách biệt 2 tầng độc
 ## 🌟 3. CÁC TÍNH NĂNG NỔI BẬT
 
 ### 📱 Giao diện Trải nghiệm (`index.html`)
+- **Bản Đồ Google Maps Tương Tác 2 Chiều (Chuẩn Chủ Quyền Quốc Gia)**:
+  - Sử dụng tham số máy chủ Google Maps `gl=VN` & `hl=vi` hiển thị rõ nét, đầy đủ **Quần đảo Hoàng Sa & Trường Sa**.
+  - **100% Miễn phí**: Không cần API Key, không cần thẻ tín dụng, hoạt động độc lập trên GitHub Pages.
+  - **Nón quét Radar**: Xoay thời gian thực theo góc nhìn camera 360° (`view.hlookat`).
+  - **Đường viền ranh giới xã Ninh Phước**: Đọc file GeoJSON hiển thị đường viền đỏ đậm sắc nét, tự động `fitBounds` vừa vặn màn hình lớn khi phóng to (`zoomSnap: 0.1`).
+  - **Marker Phát Sáng & Popup Card**: Hiển thị ảnh thumbnail xem trước, nút "Xem 360°" và nút "Chỉ đường" (Google Directions) dẫn đường trên điện thoại.
+  - **Chuyển đổi 2 Lớp Bản Đồ**: Hỗ trợ chế độ Bản đồ Đường sá (Roadmap) và Bản đồ Vệ tinh (Hybrid Satellite).
+- **Hệ Thống Tọa Độ GPS Phân Cấp (Hierarchical GPS System)**:
+  - Hỗ trợ tọa độ GPS cấp Địa điểm (dùng chung) và tọa độ GPS riêng cho từng Cảnh (nếu các cảnh cách xa nhau).
+  - Tự động di chuyển tâm bản đồ và nón radar bám sát vị trí thực tế của từng bức ảnh.
 - **Menu Địa điểm Phân cấp Tự động (Static Data Driven)**: Nạp phân nhóm từ `tours/locations.json` và đường dẫn ảnh `thumburl`, hiển thị chính xác 100% trên cả Localhost lẫn **GitHub Pages** mà không cần server backend.
 - **Popup Thuyết minh Thông tin sinh động**: Đọc bài viết phong phú có định dạng HTML/CSS từ `tours/infos.json` khi click hotspot loại `thongtin`.
 - **Tự động xuống dòng mềm mại**: Hiển thị tên địa điểm tiếng Việt đầy đủ 100% không bị cắt chữ. Tự động thu gọn khi click ra ngoài màn hình 360°.
 - **Tương thích Đa thiết bị**: Hỗ trợ PC, Mobile, Máy tính bảng và Chế độ kính VR Headset.
 
 ### 🛠️ Bộ Biên Tập Visual Editor (`_dev/editor.html`)
+- **Quản Lý Tọa Độ GPS Trực Quan (GPS Manager Modal)**:
+  - Cài đặt tọa độ GPS cho từng Địa điểm (nút 📍) hoặc riêng cho từng Cảnh (nút 🎯).
+  - Nhập nhanh từ Google Maps, hỗ trợ xóa tọa độ riêng để quay về dùng chung bất cứ lúc nào.
+- **Sắp Xếp Lại Thứ Tự Cảnh (Reorder Scenes)**:
+  - Cung cấp nút **Lên ↑** và **Xuống ↓** cùng tính năng kéo thả trực quan trên danh sách cảnh.
+  - Cập nhật trực tiếp và sắp xếp lại các khối `<scene>` trong file `scenes.xml`.
 - **Cân Bằng Đường Chân Trời (Prealign Horizon Leveling)**:
   - Cung cấp thanh trượt điều chỉnh **Roll (Nghiêng trái/phải)**, **Pitch (Ngẩng/Cúi)**, **Yaw (Xoay hướng)** mượt mà theo thời gian thực.
   - Tích hợp **Lưới chỉ la-ze xanh cyan (Grid Guidelines)** hiển thị đè trên ảnh 360° giúp soi căn chỉnh đường chân tường, mép bàn phẳng tuyệt đối.

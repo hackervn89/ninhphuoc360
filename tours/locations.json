@@ -1,5 +1,27 @@
 {
-  "lang_gom": "Làng Gốm",
-  "nha_sinh_hoat": "Nhà Sinh hoạt cộng đồng Chăm",
-  "htx_gom_bautruc": "HTX Gốm Chăm Bàu Trúc"
+  "lang_gom": {
+    "name": "Làng Gốm Bàu Trúc",
+    "lat": 11.5305,
+    "lng": 108.9556
+  },
+  "nha_sinh_hoat": {
+    "name": "Nhà Sinh hoạt cộng đồng Chăm",
+    "lat": 11.5318,
+    "lng": 108.9542
+  },
+  "htx_gom_bautruc": {
+    "name": "HTX Gốm Chăm Bàu Trúc",
+    "lat": 11.5312,
+    "lng": 108.9568
+  },
+  "bia_tuong_niem_van_phuoc": {
+    "name": "Bia tưởng niệm sự kiện thảm sát làng Vạn Phước",
+    "lat": 11.545,
+    "lng": 108.941
+  },
+  "nha_tuong_niem_tranthi": {
+    "name": "Nhà tưởng niệm đồng chí Trần Thi",
+    "lat": 11.5462,
+    "lng": 108.9425
+  }
 }

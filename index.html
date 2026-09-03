@@ -70,6 +70,12 @@
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Leaflet.js (Map Library) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <!-- Google Analytics 4 (TODO: Thay bằng GA4 ID mới cho Ninh Phước) -->
     <!--
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -209,6 +215,13 @@
                     </svg>
                 </button>
 
+                <!-- Map Button (Google Maps) -->
+                <button id="btn-toggle-map" class="icon-btn" title="Bản đồ vị trí (Google Maps)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
+                    </svg>
+                </button>
+
                 <button id="btn-share" class="icon-btn" title="Chia sẻ">
                     <svg viewBox="0 0 24 24">
                         <path
@@ -235,6 +248,34 @@
                     </svg>
                 </button>
             </div>
+        </div>
+
+        <!-- Overlay mờ khi phóng to bản đồ -->
+        <div id="map-maximized-overlay" class="hidden"></div>
+
+        <!-- Khung Bản đồ Vị trí (Minimap Panel) -->
+        <div id="map-panel" class="glass-panel collapsed">
+            <div id="map-header">
+                <div class="map-header-left">
+                    <svg viewBox="0 0 24 24" class="map-header-icon">
+                        <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                    </svg>
+                    <span>Bản đồ vị trí</span>
+                </div>
+                <div class="map-header-controls">
+                    <div class="map-layer-switch">
+                        <button id="btn-map-layer-road" class="map-layer-btn active" title="Bản đồ đường">Đường</button>
+                        <button id="btn-map-layer-sat" class="map-layer-btn" title="Bản đồ vệ tinh">Vệ tinh</button>
+                    </div>
+                    <button id="btn-maximize-map" class="map-action-btn" title="Phóng to bản đồ">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                        </svg>
+                    </button>
+                    <button id="btn-toggle-map-panel" class="map-action-btn" title="Thu gọn / Mở rộng">▼</button>
+                </div>
+            </div>
+            <div id="map-container"></div>
         </div>
 
         <!-- Info Modal -->
