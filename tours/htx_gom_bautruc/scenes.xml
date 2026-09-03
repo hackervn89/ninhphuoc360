@@ -81,9 +81,9 @@
 				<cube url="panos/sanh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_522662" style="muiten" ath="146.3366" atv="36.7806" linkedscene="scene_phong_tho_liet_si" custom_title="Phòng thờ các Liệt sĩ"/>
-		<hotspot name="hs_new_552413" style="muiten" ath="3.0495" atv="15.2712" linkedscene="scene_sanh_trai" custom_title="Sảnh trước"/>
-		<hotspot name="hs_new_564807" style="muiten" ath="-35.4055" atv="26.4115" linkedscene="scene_sanh_truoc" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_708249" style="muiten" ath="-24.8684" atv="28.5566" linkedscene="scene_sanh_truoc" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_726619" style="muiten" ath="3.2835" atv="14.2761" linkedscene="scene_sanh_trai" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_742383" style="muiten" ath="142.6802" atv="28.9903" linkedscene="scene_phong_tho_liet_si" custom_title="Phòng thờ Liệt sĩ"/>
 	</scene>
 	<scene name="scene_sanh_trai_1" title="Sảnh Trái" thumburl="panos/sanh_trai_1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="342.1" vlookat="26.3" fov="110.0" fovmin="60" fovmax="110"/>

@@ -93,11 +93,10 @@ function krpanoReady(krpano) {
 async function buildDynamicTourData() {
     if (!krpanoObj) return;
 
+    // 1. Fetch static locations.json (cache-busting to ensure GitHub Pages always loads fresh names)
     let locationsMap = {};
-
-    // 1. Fetch static locations.json (works on GitHub Pages, CDNs, and offline)
     try {
-        const locRes = await fetch('tours/locations.json');
+        const locRes = await fetch('tours/locations.json?v=' + Date.now(), { cache: 'no-store' });
         if (locRes.ok) {
             locationsMap = await locRes.json();
         }
@@ -138,9 +137,17 @@ async function buildDynamicTourData() {
         let locLng = null;
 
         // Extract location folder from thumburl (e.g. "tours/lang_gom/panos/...")
-        const folderMatch = thumb.match(/^tours\/([^\/]+)\//);
+        let folderMatch = thumb.match(/(?:^|\/)tours\/([^\/]+)\//);
         if (folderMatch) {
             locId = folderMatch[1];
+        } else {
+            // Fallback: match scene name or thumb with locationsMap keys
+            for (const k of Object.keys(locationsMap)) {
+                if (name.includes(k) || thumb.includes(k)) {
+                    locId = k;
+                    break;
+                }
+            }
         }
 
         if (locationsMap[locId]) {
