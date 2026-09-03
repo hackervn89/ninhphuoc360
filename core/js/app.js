@@ -382,7 +382,7 @@ function initUI() {
         if (navigator.share) {
             navigator.share({
                 title: 'Ninh Phước 360 - Du lịch Thực tế ảo',
-                text: 'Khám phá vẻ đẹp huyện Ninh Phước qua trải nghiệm 360 độ.',
+                text: 'Khám phá vẻ đẹp xã Ninh Phước qua trải nghiệm 360 độ.',
                 url: url
             }).catch(console.error);
         } else {
