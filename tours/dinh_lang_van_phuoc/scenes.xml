@@ -1,524 +1,650 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
 	<scene name="scene_1_congdinh" title="Cổng đình Vạn Phước" thumburl="panos/1_congdinh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/1_congdinh.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+		<view fovtype="MFOV" hlookat="-91.4" vlookat="0.6" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/1_congdinh.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.1|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/1_congdinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/1_congdinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/1_congdinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/1_congdinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/1_congdinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/1_congdinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/1_congdinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/1_congdinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_new_610933" style="muiten" ath="156.1287" atv="6.3854" linkedscene="scene_bia_tuong_niem_tham_sat_van_phuoc" custom_title="Bia tưởng niệm"/>
+		<hotspot name="hs_new_861862" style="muiten" ath="-188.7680" atv="5.3405" linkedscene="scene_nha_tuong_niem_tranthi" custom_title="Cổng nhà tưởng niệm"/>
+		<hotspot name="hs_new_039830" style="muiten" ath="-92.7562" atv="17.6397" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
+			<hotspot name="hs_return_bia_tuong_niem_9881" style="muiten" ath="-84.4891" atv="6.1412" linkedscene="scene_bia_tuong_niem" custom_title="Bia tưởng niệm"/>
+			<hotspot name="hs_return_bia_tuong_niem_trai_5039" style="vitri" ath="-84.4935" atv="5.7179" linkedscene="scene_bia_tuong_niem_trai" custom_title="Bia tưởng niệm"/>
 	</scene>
 	<scene name="scene_2_san_dinh" title="Sân đình" thumburl="panos/2_san_dinh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/2_san_dinh.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+		<view fovtype="MFOV" hlookat="-635.2" vlookat="3.2" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/2_san_dinh.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.0|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/2_san_dinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/2_san_dinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/2_san_dinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/2_san_dinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/2_san_dinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/2_san_dinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/2_san_dinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/2_san_dinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_new_065451" style="muiten" ath="-116.4986" atv="22.8936" linkedscene="scene_1_congdinh" custom_title="Cổng đình Vạn Phước"/>
+		<hotspot name="hs_new_253702" style="muiten" ath="150.5687" atv="21.6346" linkedscene="scene_luoc_su_dinh" custom_title="Lược sử Đình Vạn Phước"/>
+		<hotspot name="hs_new_725540" style="muiten" ath="93.4570" atv="9.5598" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_028876" style="muiten" ath="47.5132" atv="5.3920" linkedscene="scene_3_san_thanhminh" custom_title="Sân đình"/>
+		<hotspot name="hs_return_tien_hien_san_4899" style="muiten" ath="-73.6465" atv="5.1887" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
+		<hotspot name="hs_new_144711" style="muiten" ath="126.6823" atv="7.6538" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
 	</scene>
-	<scene name="scene_3_san_thanhminh" title="Sân đình" thumburl="panos/3_san_thanhminh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/3_san_thanhminh.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_3_san_thanhminh" title="Sân Thanh Minh" thumburl="panos/3_san_thanhminh.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-4.6" vlookat="5.7" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/3_san_thanhminh.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.5|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/3_san_thanhminh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/3_san_thanhminh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/3_san_thanhminh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/3_san_thanhminh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/3_san_thanhminh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/3_san_thanhminh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/3_san_thanhminh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/3_san_thanhminh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_binhphong_9657" style="muiten" scale="0.35" ath="66.5858" atv="5.5885" linkedscene="scene_chinh_dien_binhphong" custom_title="Bình Phong"/>
+		<hotspot name="hs_new_649940" style="muiten" scale="0.35" ath="44.9026" atv="5.7650" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_770542" style="muiten" ath="-41.2885" atv="12.0870" linkedscene="scene_thanhminh_san" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_return_nghia_tu_duong_san_1996" style="muiten" ath="32.5466" atv="17.5293" linkedscene="scene_nghia_tu_duong_san" custom_title="Sân Nghĩa Tử Đường"/>
+		<hotspot name="hs_new_809378" style="muiten" ath="4.1264" atv="11.3478" linkedscene="scene_nghia_tu_duong_sanh" custom_title="Nghĩa Tử đường"/>
 	</scene>
-	<scene name="scene_chinh_dien_binhphong" title="Bình Phong" thumburl="panos/chinh_dien_binhphong.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_binhphong.tiles/preview.jpg" />
+	<scene name="scene_nghia_tu_duong_san" title="Sân Nghĩa Tử Đường" thumburl="panos/nghia_tu_duong_san.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-88.6" vlookat="6.3" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/nghia_tu_duong_san.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_binhphong.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/nghia_tu_duong_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_binhphong.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/nghia_tu_duong_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_binhphong.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/nghia_tu_duong_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_binhphong.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/nghia_tu_duong_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-	</scene>
-	<scene name="scene_chinh_dien_giua" title="Chính điện" thumburl="panos/chinh_dien_giua.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_giua.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_chinh_dien_san" title="Sân Chính điện" thumburl="panos/chinh_dien_san.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_san.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_chinh_dien_sauphai" title="Chính điện" thumburl="panos/chinh_dien_sauphai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_sauphai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_sauphai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_sauphai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_sauphai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_sauphai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_chinh_dien_sautrai" title="Chính điện" thumburl="panos/chinh_dien_sautrai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_sautrai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_sautrai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_sautrai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_sautrai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_sautrai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_chinh_dien_truocgiua" title="Chính điện" thumburl="panos/chinh_dien_truocgiua.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_truocgiua.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_chinh_dien_truocphai" title="Chính điện" thumburl="panos/chinh_dien_truocphai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_truocphai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_truocphai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_truocphai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_truocphai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_truocphai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
+		<hotspot name="hs_new_194642" style="muiten" ath="-172.2001" atv="18.2229" linkedscene="scene_3_san_thanhminh" custom_title="Sân Thanh Minh"/>
+		<hotspot name="hs_new_223550" style="muiten" ath="-5.6516" atv="7.7587" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_252870" style="muiten" ath="32.4836" atv="6.5345" linkedscene="scene_chinh_dien_binhphong" custom_title="Bình Phong"/>
+		<hotspot name="hs_new_073538" style="muiten" ath="-91.8002" atv="12.2036" linkedscene="scene_nghia_tu_duong_sanh" custom_title="Nghĩa Tử đường"/>
 	</scene>
 	<scene name="scene_luoc_su_dinh" title="Lược sử Đình Vạn Phước" thumburl="panos/luoc_su_dinh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/luoc_su_dinh.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+		<view fovtype="MFOV" hlookat="-98.0" vlookat="-1.1" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/luoc_su_dinh.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.6|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/luoc_su_dinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/luoc_su_dinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/luoc_su_dinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/luoc_su_dinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/luoc_su_dinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/luoc_su_dinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/luoc_su_dinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/luoc_su_dinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_2_san_dinh_7268" style="muiten" ath="-16.6987" atv="19.0848" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
+		<hotspot name="hs_new_057772" style="muiten" ath="80.2522" atv="7.9380" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_079121" style="muiten" ath="122.9876" atv="5.7794" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
+		<hotspot name="hs_new_264116" style="muiten" ath="58.4635" atv="11.4151" linkedscene="scene_chinh_dien_binhphong" custom_title="Bình Phong"/>
 	</scene>
-	<scene name="scene_nghia_tu_duong_phai" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_phai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/nghia_tu_duong_phai.tiles/preview.jpg" />
+	<scene name="scene_chinh_dien_binhphong" title="Bình Phong" thumburl="panos/chinh_dien_binhphong.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-270.4" vlookat="4.2" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/chinh_dien_binhphong.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_binhphong.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_binhphong.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_binhphong.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_binhphong.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_luoc_su_dinh_8038" style="muiten" ath="20.1224" atv="15.1736" linkedscene="scene_luoc_su_dinh" custom_title="Lược sử Đình Vạn Phước"/>
+		<hotspot name="hs_new_305940" style="muiten" ath="-54.3339" atv="9.5779" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
+		<hotspot name="hs_new_404117" style="muiten" ath="-90.6037" atv="17.2632" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_520974" style="muiten" ath="-157.1633" atv="8.8301" linkedscene="scene_3_san_thanhminh" custom_title="Sân đình"/>
+		<hotspot name="hs_return_nghia_tu_duong_san_1835" style="muiten" ath="-146.2485" atv="11.1075" linkedscene="scene_nghia_tu_duong_san" custom_title="Sân Nghĩa Tử Đường"/>
 	</scene>
-	<scene name="scene_nghia_tu_duong_san" title="Sân Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_san.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/nghia_tu_duong_san.tiles/preview.jpg" />
+	<scene name="scene_chinh_dien_san" title="Sân Chính điện" thumburl="panos/chinh_dien_san.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-447.6" vlookat="2.2" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/chinh_dien_san.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/nghia_tu_duong_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/nghia_tu_duong_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/nghia_tu_duong_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/nghia_tu_duong_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_binhphong_2419" style="muiten" ath="89.3963" atv="17.2632" linkedscene="scene_chinh_dien_binhphong" custom_title="Bình Phong"/>
+		<hotspot name="hs_return_3_san_thanhminh_1473" style="muiten" ath="-164.9851" atv="14.5006" linkedscene="scene_thanhminh_san" custom_title="Sân Nghĩa Tử đường"/>
+		<hotspot name="hs_return_3_san_thanhminh_1254" style="muiten" ath="-170.8549" atv="8.4648" linkedscene="scene_3_san_thanhminh" custom_title="Sân Thanh Minh"/>
+		<hotspot name="hs_new_389505" style="muiten" scale="0.40" ath="-19.4361" atv="8.1138" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
+		<hotspot name="hs_new_432281" style="muiten" ath="52.8456" atv="9.1181" linkedscene="scene_luoc_su_dinh" custom_title="Lược sử Đình Vạn Phước"/>
+		<hotspot name="hs_new_486498" style="muiten" ath="-84.0879" atv="16.0365" linkedscene="scene_chinh_dien_truocgiua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_nghia_tu_duong_san_3401" style="muiten" ath="174.3484" atv="7.7587" linkedscene="scene_nghia_tu_duong_san" custom_title="Sân Nghĩa Tử Đường"/>
 	</scene>
-	<scene name="scene_thanhminh_phai" title="Gian Thanh Minh" thumburl="panos/thanhminh_phai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/thanhminh_phai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_chinh_dien_truocgiua" title="Chính điện" thumburl="panos/chinh_dien_truocgiua.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-87.2" vlookat="6.4" fov="104.2" fovmin="60" fovmax="110"/>
+		<preview url="panos/chinh_dien_truocgiua.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="-2.2|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/thanhminh_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/thanhminh_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/thanhminh_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/thanhminh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocgiua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_san_3953" style="muiten" ath="90.4110" atv="43.3612" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_767286" style="muiten" ath="3.2161" atv="32.4836" linkedscene="scene_chinh_dien_truocphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_791574" style="muiten" ath="-81.8275" atv="24.0888" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_sautrai_5631" style="muiten" ath="81.7425" atv="14.7077" linkedscene="scene_chinh_dien_sautrai" custom_title="Chính điện"/>
 	</scene>
-	<scene name="scene_thanhminh_san" title="Gian Thanh Minh" thumburl="panos/thanhminh_san.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/thanhminh_san.tiles/preview.jpg" />
+	<scene name="scene_chinh_dien_truocphai" title="Chính điện" thumburl="panos/chinh_dien_truocphai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-83.1" vlookat="7.9" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/chinh_dien_truocphai.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/thanhminh_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocphai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/thanhminh_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocphai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/thanhminh_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocphai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/thanhminh_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_truocphai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_truocgiua_4063" style="muiten" ath="-176.7839" atv="32.4836" linkedscene="scene_chinh_dien_truocgiua" custom_title="Chính điện"/>
+		<hotspot name="hs_new_183984" style="muiten" ath="-82.5374" atv="29.2466" linkedscene="scene_chinh_dien_giuaphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_306260" style="muiten" ath="-105.6468" atv="25.8451" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_sauphai_3194" style="muiten" ath="96.3832" atv="14.3413" linkedscene="scene_chinh_dien_sauphai" custom_title="Chính điện"/>
 	</scene>
-	<scene name="scene_thanhminh_trai" title="Gian Thanh Minh" thumburl="panos/thanhminh_trai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/thanhminh_trai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_chinh_dien_giua" title="Chính điện" thumburl="panos/chinh_dien_giua.tiles/thumb.jpg" lat="11.571573" lng="108.951499">
+		<view fovtype="MFOV" hlookat="-627.9" vlookat="-14.6" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/chinh_dien_giua.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.9|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/thanhminh_trai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/thanhminh_trai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/thanhminh_trai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/thanhminh_trai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-	</scene>
-	<scene name="scene_tien_hien_giua" title="Gian Tiền Hiền" thumburl="panos/tien_hien_giua.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_giua.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_tien_hien_phai" title="Gian Tiền Hiền" thumburl="panos/tien_hien_phai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_phai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_tien_hien_san" title="Sân Tiền Hiền" thumburl="panos/tien_hien_san.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_san.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_tien_hien_trai" title="Gian Tiền Hiền" thumburl="panos/tien_hien_trai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_trai.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_trai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_trai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_trai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_trai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
+		<hotspot name="hs_return_chinh_dien_truocgiua_9290" style="muiten" ath="-85.4889" atv="28.4215" linkedscene="scene_chinh_dien_truocgiua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_truocphai_0633" style="muiten" ath="-112.5677" atv="23.2237" linkedscene="scene_chinh_dien_truocphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_468434" style="muiten" ath="4.1222" atv="36.5647" linkedscene="scene_chinh_dien_giuatrai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_493097" style="muiten" ath="-176.7404" atv="31.4859" linkedscene="scene_chinh_dien_giuaphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_698535" style="muiten" ath="72.6570" atv="29.6613" linkedscene="scene_chinh_dien_sautrai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_714142" style="muiten" ath="117.8686" atv="27.6523" linkedscene="scene_chinh_dien_sauphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_851492" style="muiten" ath="3.8065" atv="10.0853" linkedscene="scene_nghia_tu_duong_giua" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_new_878125" style="muiten" ath="-176.2528" atv="5.0927" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
 	</scene>
 	<scene name="scene_chinh_dien_giuaphai" title="Chính điện" thumburl="panos/chinh_dien_giuaphai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_giuaphai.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="62.7" vlookat="10.5" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/chinh_dien_giuaphai.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuaphai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_truocphai_8419" style="muiten" ath="-86.7681" atv="20.7330" linkedscene="scene_chinh_dien_truocphai" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_giua_2692" style="muiten" ath="-1.5429" atv="31.0983" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_giuatrai_8618" style="muiten" scale="0.35" ath="-2.5537" atv="18.5162" linkedscene="scene_chinh_dien_giuatrai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_667578" style="muiten" ath="74.8055" atv="27.7906" linkedscene="scene_chinh_dien_sauphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_907627" style="muiten" ath="173.6861" atv="10.8374" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_954489" style="muiten" scale="0.35" ath="-4.1609" atv="5.2074" linkedscene="scene_nghia_tu_duong_giua" custom_title="Nghĩa Tử đường"/>
 	</scene>
 	<scene name="scene_chinh_dien_giuatrai" title="Chính điện" thumburl="panos/chinh_dien_giuatrai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/chinh_dien_giuatrai.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="-98.3" vlookat="12.5" fov="99.9" fovmin="60" fovmax="100"/>
+		<preview url="panos/chinh_dien_giuatrai.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_giuatrai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_giua_0033" style="muiten" ath="-175.8778" atv="36.5647" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_new_566510" style="muiten" scale="0.35" ath="-174.7214" atv="21.2287" linkedscene="scene_chinh_dien_giuaphai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_801533" style="muiten" ath="100.5874" atv="30.2463" linkedscene="scene_chinh_dien_sautrai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_848299" style="muiten" ath="6.9511" atv="11.0669" linkedscene="scene_nghia_tu_duong_phai" custom_title="Nghĩa Tử đường"/>
 	</scene>
-	<scene name="scene_nghia_tu_duong_giua" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_giua.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/nghia_tu_duong_giua.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_chinh_dien_sautrai" title="Chính điện" thumburl="panos/chinh_dien_sautrai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-276.5" vlookat="8.7" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/chinh_dien_sautrai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.9|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sautrai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sautrai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sautrai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sautrai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_giua_0682" style="muiten" ath="-109.8273" atv="30.1750" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_sauphai_4892" style="muiten" ath="164.4990" atv="23.6241" linkedscene="scene_chinh_dien_sauphai" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_giuatrai_9477" style="muiten" ath="-86.4014" atv="31.6157" linkedscene="scene_chinh_dien_giuatrai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_199370" style="muiten" scale="0.30" ath="-98.2575" atv="14.7077" linkedscene="scene_chinh_dien_truocgiua" custom_title="Chính điện"/>
 	</scene>
-	<scene name="scene_nghia_tu_duong_phai1" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_phai1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/nghia_tu_duong_phai1.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_chinh_dien_sauphai" title="Chính điện" thumburl="panos/chinh_dien_sauphai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="99.2" vlookat="7.0" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/chinh_dien_sauphai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="4.2|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sauphai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sauphai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sauphai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/chinh_dien_sauphai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_chinh_dien_giuaphai_0670" style="muiten" ath="-87.4546" atv="34.3089" linkedscene="scene_chinh_dien_giuaphai" custom_title="Chính điện"/>
+		<hotspot name="hs_return_chinh_dien_giua_5139" style="muiten" ath="-60.8972" atv="29.5557" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_new_771991" style="muiten" ath="19.7905" atv="26.6439" linkedscene="scene_chinh_dien_sautrai" custom_title="Chính điện"/>
+		<hotspot name="hs_new_693981" style="muiten" scale="0.35" ath="-83.6168" atv="14.3413" linkedscene="scene_chinh_dien_truocphai" custom_title="Chính điện"/>
 	</scene>
-	<scene name="scene_nghia_tu_duong_sanh" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_sanh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/nghia_tu_duong_sanh.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_thanhminh_san" title="Gian Thanh Minh" thumburl="panos/thanhminh_san.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-87.2" vlookat="-0.7" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/thanhminh_san.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.1|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_3_san_thanhminh_1255" style="muiten" ath="60.2661" atv="15.4566" linkedscene="scene_3_san_thanhminh" custom_title="Sân Thanh Minh"/>
+		<hotspot name="hs_new_536522" style="muiten" ath="-90.7101" atv="18.9065" linkedscene="scene_thanhminh_sanh" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_return_chinh_dien_san_5835" style="muiten" ath="15.0149" atv="14.5006" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_return_thanhminh_phai_2763" style="muiten" ath="-63.3231" atv="11.2693" linkedscene="scene_thanhminh_phai" custom_title="Gian Thanh Minh"/>
 	</scene>
 	<scene name="scene_thanhminh_sanh" title="Gian Thanh Minh" thumburl="panos/thanhminh_sanh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/thanhminh_sanh.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="-91.0" vlookat="6.6" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/thanhminh_sanh.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/thanhminh_sanh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_sanh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/thanhminh_sanh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_sanh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/thanhminh_sanh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_sanh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/thanhminh_sanh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_sanh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_thanhminh_san_9349" style="muiten" ath="89.2899" atv="18.9065" linkedscene="scene_thanhminh_san" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_new_598132" style="muiten" ath="-112.3487" atv="37.5604" linkedscene="scene_thanhminh_trai" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_new_613235" style="muiten" ath="-50.4108" atv="35.1773" linkedscene="scene_thanhminh_phai" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_new_745917" style="muiten" ath="65.6688" atv="11.4562" linkedscene="scene_3_san_thanhminh" custom_title="Sân Thanh Minh"/>
 	</scene>
-	<scene name="scene_tien_hien_phai1" title="Gian Tiền Hiền" thumburl="panos/tien_hien_phai1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_phai1.tiles/preview.jpg" />
+	<scene name="scene_thanhminh_phai" title="Gian Thanh Minh" thumburl="panos/thanhminh_phai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-101.1" vlookat="5.8" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/thanhminh_phai.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_phai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_phai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_phai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_phai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/thanhminh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_thanhminh_sanh_3121" style="muiten" ath="120.7022" atv="30.7022" linkedscene="scene_thanhminh_sanh" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_new_645340" style="muiten" ath="168.7341" atv="30.5690" linkedscene="scene_thanhminh_trai" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_new_866966" style="muiten" ath="103.5702" atv="16.8614" linkedscene="scene_thanhminh_san" custom_title="Gian Thanh Minh"/>
+	</scene>
+	<scene name="scene_thanhminh_trai" title="Gian Thanh Minh" thumburl="panos/thanhminh_trai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-84.3" vlookat="1.8" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/thanhminh_trai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/thanhminh_trai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/thanhminh_trai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/thanhminh_trai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/thanhminh_trai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_thanhminh_sanh_2936" style="muiten" ath="67.6513" atv="37.5604" linkedscene="scene_thanhminh_sanh" custom_title="Gian Thanh Minh"/>
+		<hotspot name="hs_return_thanhminh_phai_1577" style="muiten" ath="-7.6242" atv="27.9564" linkedscene="scene_thanhminh_phai" custom_title="Gian Thanh Minh"/>
+	</scene>
+	<scene name="scene_tien_hien_san" title="Sân Tiền Hiền" thumburl="panos/tien_hien_san.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-96.2" vlookat="-3.6" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/tien_hien_san.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.0|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tien_hien_san.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tien_hien_san.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tien_hien_san.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tien_hien_san.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_luoc_su_dinh_3771" style="muiten" ath="93.9175" atv="7.3877" linkedscene="scene_luoc_su_dinh" custom_title="Lược sử Đình Vạn Phước"/>
+		<hotspot name="hs_return_2_san_dinh_0639" style="muiten" ath="107.0150" atv="7.1968" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
+		<hotspot name="hs_return_chinh_dien_binhphong_0781" style="muiten" ath="121.0793" atv="9.5981" linkedscene="scene_chinh_dien_binhphong" custom_title="Bình Phong"/>
+		<hotspot name="hs_return_chinh_dien_san_7548" style="muiten" ath="154.8520" atv="10.8808" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
+		<hotspot name="hs_new_303269" style="muiten" ath="-95.0781" atv="14.9255" linkedscene="scene_tien_hien_sanh" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_return_tien_hien_giua_3296" style="muiten" ath="-90.6554" atv="25.9384" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
 	</scene>
 	<scene name="scene_tien_hien_sanh" title="Gian Tiền Hiền" thumburl="panos/tien_hien_sanh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_sanh.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="-96.0" vlookat="0.4" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/tien_hien_sanh.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_sanh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_sanh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_sanh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_sanh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_sanh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_sanh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_sanh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_sanh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_tien_hien_san_0772" style="muiten" ath="84.9219" atv="14.9255" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
+		<hotspot name="hs_new_255529" style="muiten" ath="-97.2401" atv="28.0853" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
+	</scene>
+	<scene name="scene_tien_hien_trai" title="Gian Tiền Hiền" thumburl="panos/tien_hien_trai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-69.6" vlookat="12.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/tien_hien_trai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tien_hien_trai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tien_hien_trai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tien_hien_trai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tien_hien_trai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_tien_hien_giua_3140" style="muiten" ath="3.3136" atv="33.5677" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_return_tien_hien_phai_2754" style="muiten" ath="4.9025" atv="18.1302" linkedscene="scene_tien_hien_phai" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_return_tien_hien_trai1_9110" style="muiten" ath="-66.1660" atv="33.1373" linkedscene="scene_tien_hien_trai1" custom_title="Gian Tiền Hiền"/>
+	</scene>
+	<scene name="scene_tien_hien_giua" title="Gian Tiền Hiền" thumburl="panos/tien_hien_giua.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-86.4" vlookat="-1.1" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/tien_hien_giua.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tien_hien_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tien_hien_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tien_hien_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tien_hien_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_chinh_dien_giua_0014" style="muiten" scale="0.40" ath="-177.8927" atv="12.6860" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_tien_hien_san_3110" style="muiten" ath="89.3446" atv="25.9384" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
+		<hotspot name="hs_new_344139" style="muiten" ath="-0.5821" atv="31.4199" linkedscene="scene_tien_hien_phai" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_367189" style="muiten" ath="-176.6864" atv="33.5677" linkedscene="scene_tien_hien_trai" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_return_tien_hien_sanh_2308" style="muiten" ath="87.7806" atv="45.3292" linkedscene="scene_tien_hien_sanh" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_917868" style="muiten" ath="-113.9328" atv="24.6366" linkedscene="scene_tien_hien_trai1" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_930074" style="muiten" ath="-58.6169" atv="22.2605" linkedscene="scene_tien_hien_phai1" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_return_chinh_dien_giuaphai_7243" style="muiten" ath="-6.3139" atv="10.8374" linkedscene="scene_chinh_dien_giuaphai" custom_title="Chính điện"/>
+	</scene>
+	<scene name="scene_tien_hien_phai" title="Gian Tiền Hiền" thumburl="panos/tien_hien_phai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-112.1" vlookat="7.7" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/tien_hien_phai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tien_hien_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tien_hien_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tien_hien_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tien_hien_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_tien_hien_giua_0792" style="muiten" ath="172.3985" atv="32.4033" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_402308" style="muiten" scale="0.35" ath="171.8484" atv="17.9817" linkedscene="scene_tien_hien_trai" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_440665" style="muiten" scale="0.25" ath="170.0970" atv="9.0632" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_return_tien_hien_phai1_7178" style="muiten" ath="-124.2693" atv="32.8192" linkedscene="scene_tien_hien_phai1" custom_title="Gian Tiền Hiền"/>
+	</scene>
+	<scene name="scene_tien_hien_phai1" title="Gian Tiền Hiền" thumburl="panos/tien_hien_phai1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-106.0" vlookat="7.9" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/tien_hien_phai1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tien_hien_phai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tien_hien_phai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tien_hien_phai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tien_hien_phai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_tien_hien_giua_0286" style="muiten" ath="111.9904" atv="32.2416" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_950626" style="muiten" ath="52.6077" atv="32.4999" linkedscene="scene_tien_hien_phai" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_return_tien_hien_trai1_1942" style="muiten" ath="174.7006" atv="29.3317" linkedscene="scene_tien_hien_trai1" custom_title="Gian Tiền Hiền"/>
 	</scene>
 	<scene name="scene_tien_hien_trai1" title="Gian Tiền Hiền" thumburl="panos/tien_hien_trai1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tien_hien_trai1.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="-88.8" vlookat="1.0" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/tien_hien_trai1.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tien_hien_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tien_hien_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tien_hien_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tien_hien_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/tien_hien_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_tien_hien_giua_7883" style="muiten" ath="60.3061" atv="30.2209" linkedscene="scene_tien_hien_giua" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_970838" style="muiten" ath="113.8340" atv="33.1373" linkedscene="scene_tien_hien_trai" custom_title="Gian Tiền Hiền"/>
+		<hotspot name="hs_new_986463" style="muiten" ath="-3.3168" atv="26.6030" linkedscene="scene_tien_hien_phai1" custom_title="Gian Tiền Hiền"/>
+	</scene>
+	<scene name="scene_nghia_tu_duong_giua" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_giua.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-93.6" vlookat="0.3" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/nghia_tu_duong_giua.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="2.0|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nghia_tu_duong_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_chinh_dien_giua_2522" style="muiten" ath="-6.3909" atv="10.5018" linkedscene="scene_chinh_dien_giua" custom_title="Chính điện"/>
+		<hotspot name="hs_new_935808" style="muiten" ath="-57.8804" atv="35.0393" linkedscene="scene_nghia_tu_duong_phai" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_new_994433" style="muiten" ath="-62.9423" atv="19.0148" linkedscene="scene_nghia_tu_duong_phai1" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_new_042113" style="muiten" ath="83.6544" atv="25.9904" linkedscene="scene_nghia_tu_duong_sanh" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_return_chinh_dien_giuaphai_9075" style="muiten" ath="175.8391" atv="5.2074" linkedscene="scene_chinh_dien_giuaphai" custom_title="Chính điện"/>
+	</scene>
+	<scene name="scene_nghia_tu_duong_phai" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_phai.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-94.4" vlookat="3.1" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/nghia_tu_duong_phai.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nghia_tu_duong_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_chinh_dien_giuatrai_8514" style="muiten" ath="20.8773" atv="18.7645" linkedscene="scene_chinh_dien_giuatrai" custom_title="Chính điện"/>
+		<hotspot name="hs_return_nghia_tu_duong_giua_1243" style="muiten" ath="109.8020" atv="35.1843" linkedscene="scene_nghia_tu_duong_giua" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_new_115661" style="muiten" ath="-422.1565" atv="30.5958" linkedscene="scene_nghia_tu_duong_phai1" custom_title="Nghĩa Tử đường"/>
+	</scene>
+	<scene name="scene_nghia_tu_duong_phai1" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_phai1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-77.1" vlookat="2.0" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/nghia_tu_duong_phai1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nghia_tu_duong_phai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_nghia_tu_duong_giua_9116" style="muiten" ath="134.9271" atv="21.7760" linkedscene="scene_nghia_tu_duong_giua" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_return_nghia_tu_duong_phai_0617" style="muiten" ath="-242.1565" atv="30.5958" linkedscene="scene_nghia_tu_duong_phai" custom_title="Nghĩa Tử đường"/>
+	</scene>
+	<scene name="scene_nghia_tu_duong_sanh" title="Nghĩa Tử đường" thumburl="panos/nghia_tu_duong_sanh.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-85.1" vlookat="-0.6" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/nghia_tu_duong_sanh.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/nghia_tu_duong_sanh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_nghia_tu_duong_giua_4145" style="muiten" ath="-90.4133" atv="13.8647" linkedscene="scene_nghia_tu_duong_giua" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_return_nghia_tu_duong_san_3404" style="muiten" ath="88.1998" atv="12.2036" linkedscene="scene_nghia_tu_duong_san" custom_title="Sân Nghĩa Tử Đường"/>
+		<hotspot name="hs_return_3_san_thanhminh_1633" style="muiten" ath="139.0851" atv="17.1927" linkedscene="scene_3_san_thanhminh" custom_title="Sân Thanh Minh"/>
 	</scene>
 </krpano>

@@ -120,7 +120,7 @@
 
 	<!-- Animation Sprite Sheet (24 khung hình) - Đã tối ưu bằng Tween Chain để chống Lag -->
 	<action name="hotspot_sprite_anim">
-		if(hotspot[%1].loaded,
+		if(hotspot[%1].loaded AND hotspot[%1].style == 'muiten',
 			inc(hotspot[%1].myframe);
 			if(hotspot[%1].myframe GT 23, set(hotspot[%1].myframe, 0));
 			mul(hs_cx, hotspot[%1].myframe, 120);
@@ -157,17 +157,19 @@
 	<!--
 	    Panorama Location Pin Hotspot Style
 	    For overview/aerial scenes linking to ground-level locations.
-	    Uses the red pin icon with bounce + pulse animation (tween chain, leak-free).
+	    Uses the red pin icon with floating bounce animation.
 	-->
 	<style name="vitri"
 	       url="core/assets/iconlocation.png"
 	       scale="0.5"
 	       edge="bottom"
 	       distorted="true"
+	       renderer="webgl"
+	       depth="800"
+	       depthbuffer="false"
 	       rx="0"
 	       zoom="true"
-	       renderer="webgl"
-	       alpha="0.9"
+	       alpha="0.95"
 	       oy="0"
 	       tooltip=""
 	       linkedscene=""
@@ -175,8 +177,19 @@
 	       onclick="fly_transition_click();"
 	       onover="hotspot_onover();"
 	       onout="hotspot_onout();"
-	       onloaded="copy(base_scale, scale);"
+	       onloaded="copy(base_scale, scale); delayedcall(0.2, vitri_bounce(get(name)) );"
 	       />
+
+	<!-- Hiệu ứng lơ lửng nhấp nhô (Floating Bounce) mượt mà cho Ghim vị trí -->
+	<action name="vitri_bounce">
+		if(hotspot[%1].loaded AND hotspot[%1].style == 'vitri',
+			tween(hotspot[%1].oy, -16, 0.85, easeInOutSine,
+				tween(hotspot[%1].oy, 0, 0.85, easeInOutSine,
+					vitri_bounce(%1)
+				)
+			);
+		);
+	</action>
 
 	<!--
 	    Fly-up Location Hotspot Style
@@ -510,6 +523,22 @@
 		<include url="tours/nha_tuong_niem_tranthi/scenes.xml" />
 
 		<include url="tours/dinh_lang_van_phuoc/scenes.xml" />
+
+	<!-- Hotspot Drag Action for Visual Tour Editor -->
+	<action name="draghotspot">
+		stoptween(oy);
+		spheretoscreen(ath, atv, hotspotxy[get(name)].x, hotspotxy[get(name)].y);
+		sub(drag_adjustx, mouse.stagex, hotspotxy[get(name)].x);
+		sub(drag_adjusty, mouse.stagey, hotspotxy[get(name)].y);
+		asyncloop(pressed,
+			sub(dx, mouse.stagex, drag_adjustx);
+			sub(dy, mouse.stagey, drag_adjusty);
+			screentosphere(dx, dy, ath, atv);
+			js(onHotspotDrag(get(name), get(ath), get(atv)));
+		,
+			if(style == 'vitri', vitri_bounce(get(name)); );
+		);
+	</action>
 
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">

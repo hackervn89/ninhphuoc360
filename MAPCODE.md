@@ -1,6 +1,6 @@
 # BẢN ĐỒ MÃ NGUỒN CHI TIẾT (MAPCODE) — DỰ ÁN NINH PHƯỚC 360°
 
-> **Cập nhật:** 09/2026 (Phiên bản 2.3.0)  
+> **Cập nhật:** 09/2026 (Phiên bản 2.4.0)  
 > **Dành cho:** AI Agents, Lập trình viên, Team Lead.  
 > **Repository:** [https://github.com/hackervn89/ninhphuoc360](https://github.com/hackervn89/ninhphuoc360)  
 > **Website Live:** [https://hackervn89.github.io/ninhphuoc360/](https://hackervn89.github.io/ninhphuoc360/)  
@@ -13,7 +13,7 @@
 ```
 e:\Viet Design\Ninhphuoc360\
 ├── index.html                           # [PUBLIC UI] Giao diện tour chính cho người dùng (nạp Leaflet + Google Maps)
-├── tour.xml                             # [MASTER XML] Cấu hình master KrPano, styles hotspot, includes
+├── tour.xml                             # [MASTER XML] Cấu hình master KrPano, styles hotspot, includes, native draghotspot
 ├── .gitignore                           # [GIT] Cấu hình bỏ qua node_modules, temp, binaries nặng
 ├── README.md                            # [DOCS] Hướng dẫn tổng quan dự án & cách vận hành
 ├── MAPCODE.md                           # [DOCS] Bản đồ mã nguồn chi tiết (Tệp tin này)
@@ -26,7 +26,7 @@ e:\Viet Design\Ninhphuoc360\
 │   ├── css/
 │   │   └── style.css                    # (~1,440 dòng) CSS Design System, White Glass & Red Accent Minimap, Responsive
 │   ├── js/
-│   │   └── app.js                       # (~815 dòng) Logic JS public tour, Google Maps gl=VN, GPS phân cấp, Radar FOV Sync
+│   │   └── app.js                       # (~820 dòng) Logic JS public tour, Google Maps gl=VN, GPS phân cấp, Radar FOV Sync
 │   ├── data/
 │   │   └── ninhphuoc-boundary.json      # [GEOJSON] Tệp ranh giới đa giác khép kín Xã Ninh Phước (1.579 điểm)
 │   └── assets/                          # Favicon, og-preview.png, logo icon, SVG markers
@@ -51,13 +51,16 @@ e:\Viet Design\Ninhphuoc360\
 │   ├── bia_tuong_niem_van_phuoc/        # Địa điểm: Bia tưởng niệm làng Vạn Phước (GPS: 11.5450, 108.9410)
 │   │   ├── scenes.xml
 │   │   └── panos/
-│   └── nha_tuong_niem_tranthi/          # Địa điểm: Nhà tưởng niệm đồng chí Trần Thi (GPS: 11.5462, 108.9425)
+│   ├── nha_tuong_niem_tranthi/          # Địa điểm: Nhà tưởng niệm đồng chí Trần Thi (GPS: 11.5462, 108.9425)
+│   │   ├── scenes.xml
+│   │   └── panos/
+│   └── dinh_lang_van_phuoc/             # Địa điểm: Đình làng Vạn Phước
 │       ├── scenes.xml
 │       └── panos/
 │
 └── _dev/                                # [LOCAL VISUAL EDITOR TOOLING - BÀN GIAO CÓ THỂ XÓA]
-    ├── server.js                        # (~1,550 dòng) Express Server (REST API, GPS Endpoints, SSE Tiling, Reorder, Prealign, Polygon, Info API)
-    ├── editor.html                      # (~3,850 dòng) WYSIWYG Editor GUI (GPS Manager Modal, Reorder Up/Down & Drag, Hotspot Drag, Polygon Draw, Horizon Leveling, Info Manager)
+    ├── server.js                        # (~1,760 dòng) Express Server (REST API, GPS Endpoints, Return Hotspot API, SSE Tiling, Reorder, View/Prealign, Info API)
+    ├── editor.html                      # (~5,070 dòng) WYSIWYG Editor GUI (2-Tab Layout, Visual Return Hotspot Placement, View Angle Manager, Sidebar Resizer, Quick Toolbar)
     ├── test_hotspot.html                # Trang test hiển thị thử nghiệm hotspot
     ├── krpano-editor.config             # Config CLI template với %BASENAME% chống đè file
     └── krpano-tools/                    # KrPano CLI Executable & Templates (Loại trừ khỏi Git)
@@ -68,63 +71,75 @@ e:\Viet Design\Ninhphuoc360\
 
 ## 🗺️ 2. BẢN ĐỒ CHI TIẾT DÒNG CODE TRONG CÁC FILE CHÍNH
 
-### 📜 A. `_dev/server.js` (Express Server & REST API — ~1,550 dòng)
+### 📜 A. `_dev/server.js` (Express Server & REST API — ~1,760 dòng)
 
 | Khoảng dòng | Tên Hàm / Khối | Chức năng & Luồng xử lý |
 |-------------|----------------|--------------------------|
 | `L1 - L40`  | `Imports & Setup` | Import `express`, `fs`, `path`, `multer`, `child_process`. Cấu hình cổng `3600`, thư mục `PROJECT_ROOT`. |
-| `L41 - L82` | `Middleware & Static Routes` | No-cache header, static route `editor.html`, static `PROJECT_ROOT`, cấu hình multer upload temp, `tilingJobs` Map. |
-| `L84 - L118` | `sanitizeTourXmlIncludes()` | Tự động quét `tour.xml` khi khởi động server, xóa các dòng `<include>` rỗng/không tồn tại. |
-| `L120 - L194` | `GET /api/scenes` | Quét tất cả các thư mục trong `tours/`, phân tích cú pháp `scenes.xml` trả về danh sách cảnh + **GPS lat/lng riêng** + hotspots + views. |
-| `L196 - L222` | `GET /api/locations` | Đọc `tours/locations.json` và trả về danh sách toàn bộ các địa điểm kèm tọa độ `lat, lng`. |
-| `L224 - L240` | `POST /api/locations/rename` | Cập nhật tên hiển thị Tiếng Việt của địa điểm trong `tours/locations.json`. |
-| `L242 - L280` | `POST /api/locations/gps` | **Cập nhật GPS Địa điểm**: Lưu tọa độ mặc định chung `{ lat, lng }` vào `tours/locations.json`. |
-| `L282 - L345` | `POST /api/scenes/gps` | **Cập nhật GPS Riêng từng Cảnh**: Ghi đè hoặc gỡ bỏ thuộc tính `lat="..." lng="..."` trong thẻ `<scene>` của `scenes.xml`. |
-| `L347 - L385` | `POST /api/locations/create` | Tạo mới thư mục địa điểm trong `tours/`, tạo `scenes.xml` khởi tạo và thêm `<include>` vào `tour.xml`. |
-| `L387 - L460` | `POST /api/upload-pano-multi` | **Upload Hàng loạt Panorama**: Nhận nhiều file ảnh, lưu tạm và đẩy vào hàng đợi xử lý batch qua SSE. |
-| `L462 - L490` | `processBatchJobs()` | Xử lý tuần tự từng ảnh trong batch: gọi `runKrPanoTiling`, `fixScenesXml`, `addIncludeToTourXml` và bắn SSE. |
-| `L492 - L535` | `POST /api/scenes/rename` | Đổi title hoặc ID của thẻ `<scene>` trong `scenes.xml`. |
-| `L537 - L605` | `POST /api/scenes/reorder` | **Sắp Xếp Thứ Tự Cảnh (Reorder)**: Bóc tách chính xác các thẻ `<scene>` và sắp xếp lại theo thứ tự mảng `orderedSceneIds` trong `scenes.xml`. |
-| `L607 - L715` | `POST /api/scenes/move-location` | **Chuyển Địa điểm Cảnh**: Di chuyển thư mục tiles từ địa điểm cũ sang địa điểm mới, cắt `<scene>` cũ và chèn vào `scenes.xml` mới. |
-| `L717 - L795` | `POST /api/scenes/delete` | Xóa thẻ `<scene>` khỏi `scenes.xml` và xóa sạch thư mục ảnh tiles liên quan. |
-| `L797 - L855` | `POST /api/upload-pano` | Upload đơn lẻ 1 ảnh 360° và tạo tiles. |
-| `L857 - L885` | `GET /api/tiling-status/:jobId` | **SSE Endpoint**: Truyền tiến độ cắt tiles realtime (% hoàn thành, scene hiện tại) về cho trình duyệt. |
-| `L887 - L935` | `runKrPanoTiling()` | Thực thi `krpanotools64.exe makepano` tạo tiles 4 cấp độ phân giải. |
-| `L937 - L965` | `fixScenesXml()` | Đọc thẻ `<scene>` sau khi cắt tiles và gọi `getJpgWidth()` để sửa kích thước tile chuẩn. |
-| `L967 - L1065`| `getJpgWidth()` | **Exact Tile Engine**: Bóc tách chính xác độ rộng tile mép (`l1=640`, `l2=1280`, `l3=2560`, `l4=4864`), triệt tiêu khoảng đen ranh giới. |
-| `L1075 - L1115`| `addIncludeToTourXml()` | Thêm thẻ `<include url="tours/.../scenes.xml" />` vào `tour.xml` nếu chưa có. |
-| `L1117 - L1245`| `POST /api/scenes/save` | **Lưu Hotspots**: Hỗ trợ lưu cả Hotspot thường (`<hotspot .../>`) lẫn Hotspot đa giác (`<hotspot><point ath="..." atv="..."/></hotspot>`) vào `scenes.xml`. |
-| `L1247 - L1335`| `POST /api/scenes/view` | **Lưu View Mặc Định**: Ghi đè thẻ `<view fovtype="MFOV" hlookat="..." vlookat="..." fov="..." fovmin="..." fovmax="..." />`. |
-| `L1340 - L1420`| `POST /api/scenes/prealign` | **Lưu Cân Bằng Độ Nghiêng**: Lưu ma trận xoay 3D `prealign="Pitch|Yaw|Roll"` vào thẻ `<image>` trong `scenes.xml`. |
-| `L1425 - L1470`| `DELETE /api/scenes/:sceneId`| Xóa scene qua Restful parameter. |
-| `L1475 - L1555`| `GET/POST/DELETE /api/infos` | API Quản lý kho bài viết thuyết minh tĩnh (`tours/infos.json`). |
+| `L41 - L80` | `Middleware & Static Routes` | No-cache header, static route `editor.html`, static `PROJECT_ROOT`, cấu hình multer upload temp, `tilingJobs` Map. |
+| `L81 - L117` | `escapeRegex()`, `sanitizeTourXmlIncludes()` | Tự động quét `tour.xml` khi khởi động server, xóa các dòng `<include>` rỗng/không tồn tại. |
+| `L120 - L180` | `GET /api/scenes` | Quét tất cả các thư mục trong `tours/`, phân tích cú pháp `scenes.xml` trả về danh sách cảnh + **GPS lat/lng riêng** + hotspots + views. |
+| `L188 - L200` | `getCustomLocationNames()`, `saveCustomLocationNames()` | Đọc/ghi cấu hình tên hiển thị và tọa độ địa điểm vào `tours/locations.json`. |
+| `L204 - L235` | `GET /api/locations` | Đọc `tours/locations.json` và trả về danh sách toàn bộ các địa điểm kèm tọa độ `lat, lng`. |
+| `L238 - L258` | `POST /api/locations/rename` | Cập nhật tên hiển thị Tiếng Việt của địa điểm trong `tours/locations.json`. |
+| `L260 - L300` | `POST /api/locations/gps` | **Cập nhật GPS Địa điểm**: Lưu tọa độ mặc định chung `{ lat, lng }` vào `tours/locations.json`. |
+| `L302 - L372` | `POST /api/scenes/gps` | **Cập nhật GPS Riêng từng Cảnh**: Ghi đè hoặc gỡ bỏ thuộc tính `lat="..." lng="..."` trong thẻ `<scene>` của `scenes.xml`. |
+| `L374 - L412` | `POST /api/locations/create` | Tạo mới thư mục địa điểm trong `tours/`, tạo `scenes.xml` khởi tạo và thêm `<include>` vào `tour.xml`. |
+| `L414 - L484` | `POST /api/upload-pano-multi` | **Upload Hàng loạt Panorama**: Nhận nhiều file ảnh, lưu tạm và đẩy vào hàng đợi xử lý batch qua SSE. |
+| `L486 - L513` | `processBatchJobs()` | Xử lý tuần tự từng ảnh trong batch: gọi `runKrPanoTiling`, `fixScenesXml`, `addIncludeToTourXml` và bắn SSE. |
+| `L515 - L555` | `POST /api/scenes/rename` | Đổi title hoặc ID của thẻ `<scene>` trong `scenes.xml`. |
+| `L557 - L622` | `POST /api/scenes/reorder` | **Sắp Xếp Thứ Tự Cảnh (Reorder)**: Bóc tách chính xác các thẻ `<scene>` và sắp xếp lại theo thứ tự mảng `orderedSceneIds` trong `scenes.xml`. |
+| `L624 - L735` | `POST /api/scenes/move-location` | **Chuyển Địa điểm Cảnh**: Di chuyển thư mục tiles từ địa điểm cũ sang địa điểm mới, cắt `<scene>` cũ và chèn vào `scenes.xml` mới. |
+| `L737 - L815` | `POST /api/scenes/delete` | Xóa thẻ `<scene>` khỏi `scenes.xml` và xóa sạch thư mục ảnh tiles liên quan. |
+| `L817 - L873` | `POST /api/upload-pano` | Upload đơn lẻ 1 ảnh 360° và tạo tiles. |
+| `L875 - L905` | `GET /api/tiling-status/:jobId` | **SSE Endpoint**: Truyền tiến độ cắt tiles realtime (% hoàn thành, scene hiện tại) về cho trình duyệt. |
+| `L907 - L952` | `runKrPanoTiling()` | Thực thi `krpanotools64.exe makepano` tạo tiles 4 cấp độ phân giải. |
+| `L954 - L984` | `fixScenesXml()` | Đọc thẻ `<scene>` sau khi cắt tiles và gọi `getJpgWidth()` để sửa kích thước tile chuẩn. |
+| `L986 - L1084`| `getJpgWidth()` | **Exact Tile Engine**: Bóc tách chính xác độ rộng tile mép (`l1=640`, `l2=1280`, `l3=2560`, `l4=4864`), triệt tiêu khoảng đen ranh giới. |
+| `L1093 - L1128`| `addIncludeToTourXml()` | Thêm thẻ `<include url="tours/.../scenes.xml" />` vào `tour.xml` nếu chưa có. |
+| `L1134 - L1268`| `POST /api/scenes/save` | **Lưu Hotspots & Tự động Tạo Hotspot Quay Về**: Ghi hotspots vào `scenes.xml`, đồng thời tự động kích hoạt `ensureReturnHotspot()` tạo liên kết 2 chiều. |
+| `L1270 - L1297`| `findSceneFilePath(sceneId)` | **Helper định vị file**: Quét tìm chính xác file `tours/.../scenes.xml` chứa `sceneId` trên toàn dự án. |
+| `L1299 - L1392`| `ensureReturnHotspot()` | **Helper đồng bộ 2 chiều**: Tự động tính góc đảo 180° (hoặc nhận tọa độ chỉ định) và tạo/cập nhật thẻ `<hotspot>` quay về tại Cảnh B trỏ về Cảnh A. |
+| `L1398 - L1429`| `POST /api/scenes/create-return-hotspot` | **API Hotspot Quay Về 2 Chiều**: Tạo hoặc cập nhật tọa độ hotspot quay về ở Cảnh B khi người dùng xác nhận vị trí trong Editor. |
+| `L1435 - L1522`| `POST /api/scenes/view` | **Lưu View Mặc Định**: Ghi đè thẻ `<view fovtype="MFOV" hlookat="..." vlookat="..." fov="..." fovmin="..." fovmax="..." />`. |
+| `L1528 - L1606`| `POST /api/scenes/prealign` | **Lưu Cân Bằng Độ Nghiêng**: Lưu ma trận xoay 3D `prealign="Pitch|Yaw|Roll"` vào thẻ `<image>` trong `scenes.xml`. |
+| `L1612 - L1652`| `DELETE /api/scenes/:sceneId`| Xóa scene qua Restful parameter. |
+| `L1660 - L1724`| `GET/POST/DELETE /api/infos` | API Quản lý kho bài viết thuyết minh tĩnh (`tours/infos.json`). |
 
 ---
 
-### 🎨 B. `_dev/editor.html` (WYSIWYG Visual Editor — ~3,850 dòng)
+### 🎨 B. `_dev/editor.html` (WYSIWYG Visual Editor — ~5,070 dòng)
 
 | Khoảng dòng | Tên Khối / Hàm | Chức năng & Giao diện |
 |-------------|----------------|-----------------------|
-| `L13 - L1086`| `CSS Styles` | Toàn bộ giao diện Editor: Dark Theme, Reorder Buttons CSS, Tree Scene Sidebar, Hotspot Panel, Laser Grid Overlay, WYSIWYG White Modal, Polygon Tools. |
-| `L1093 - L1115`| `#left-sidebar` | Panel quản lý cảnh: Nút upload kéo thả, ô tìm kiếm cảnh, danh sách cây phân cấp. |
-| `L1118 - L1151`| `#viewport-container` | Top Bar điều khiển, `#pano-wrapper`, Khung banner chế độ vẽ Polygon (`#poly-drawing-banner`), Lưới la-ze xanh cyan (`#horizon-grid-overlay`). |
-| `L1154 - L1230`| `Info Manager Modal` | Hộp thoại quản lý thuyết minh WYSIWYG (nền trắng, bảng chọn màu, định dạng H1/H2/H3, danh sách). |
-| `L1535 - L1585`| `GPS Coordinates Modal`| **Hộp Thoại Cài Đặt Tọa Độ GPS**: Modal nhập Vĩ độ & Kinh độ cho Địa điểm (📍) hoặc từng Cảnh riêng biệt (🎯). |
-| `L1695 - L1800`| `detectScenesAndData()` | Bóc tách metadata cảnh và địa điểm, hỗ trợ nhận diện tọa độ riêng của scene hoặc thừa hưởng địa điểm. |
-| `L1802 - L1940`| `Scene Drag & Reorder Events` | `handleSceneDragStart`, `handleSceneDragOver`, `handleSceneDrop` (hỗ trợ kéo thả đổi thứ tự trong cùng địa điểm hoặc di chuyển sang địa điểm khác). |
-| `L1942 - L1985`| `moveSceneOrder()` | **Hàm Đổi Vị Trí Cảnh (Up/Down)**: Tráo đổi vị trí cảnh và gọi API `/api/scenes/reorder` cập nhật tức thì. |
-| `L1988 - L2120`| `renderSceneList()` | Hiển thị danh sách cảnh theo cây thư mục có các nút **📍 GPS Địa điểm**, **🎯 GPS Cảnh**, **Lên ↑**, **Xuống ↓**, Đổi tên, Xóa. |
-| `L2122 - L2250`| `Scene & Location CRUD` | Đổi tên địa điểm (`promptRenameLocation`), Đổi tên cảnh (`promptRenameScene`), Di chuyển cảnh (`promptMoveSceneLocation`), Xóa cảnh (`confirmDeleteScene`). |
-| `L2255 - L2345`| `GPS Handlers` | `promptEditLocationGps()`, `promptEditSceneGps()`, `submitGpsModal()`, `clearSceneCustomGps()`. |
-| `L2350 - L2405`| `window.onSceneChange` | Hook chuyển cảnh: Cập nhật camera, đồng bộ thanh trượt Prealign (Roll/Pitch/Yaw) và FOV. |
-| `L2410 - L2590`| `loadSceneHotspots()` | Nạp hotspots của cảnh hiện tại, cho phép kéo thả di chuyển vị trí trực tiếp trên canvas 360°. |
-| `L2600 - L2625`| `btn-delete-hotspot` | **Xóa & Đồng bộ tức thì**: Xóa hotspot khỏi canvas và gọi `saveHotspotsToServer()` ghi ngay vào XML. |
-| `L2630 - L2810`| **Hệ thống Hotspot Đa Giác (Polygon)** | `startPolygonDrawing()`, `renderDraftPolygon()`, `finishPolygonDrawing()`, `renderPolygonInKrpano()`, `renderVertexHandles()`. |
-| `L3080 - L3120`| `applyLivePrealign()` | Cập nhật `image.prealign` và gọi `updateobject(true, true)` xoay ảnh 360° trực quan realtime. |
+| `L13 - L1248`| `CSS Styles` | Toàn bộ giao diện Editor: Dark Theme, Resizer Handle, 2-Tab Navigation, Return Hotspot Placement Banner, Quick Toolbar, Laser Grid Overlay, GPS Modal. |
+| `L1255 - L1298`| `#left-sidebar` | Panel quản lý cảnh: Resizer handle `#sidebar-resizer`, Search box + Clear button, Header counter badge (`X cảnh trong Y địa điểm`), Nút Thu gọn/Mở rộng tất cả, Cây thư mục cảnh. |
+| `L1300 - L1335`| `#viewport-container` | Top Bar điều khiển, `#pano-wrapper`, Banner Đặt Hotspot Quay Về (`#return-pick-banner`), Khung banner vẽ Polygon, Lưới la-ze xanh cyan (`#horizon-grid-overlay`). |
+| `L1338 - L1760`| `#right-panel` | **Bố Cục 2 Tab Độc Lập**: Tab 1 (Hotspots & Thuộc tính) và Tab 2 (Góc nhìn & Cân bằng đường chân trời Prealign). |
+| `L1765 - L1820`| `Info Manager Modal` | Hộp thoại quản lý thuyết minh WYSIWYG (nền trắng, bảng chọn màu, định dạng H1/H2/H3, danh sách). |
+| `L1823 - L1870`| `GPS Coordinates Modal`| **Hộp Thoại Tọa Độ GPS**: Modal nhập Vĩ độ & Kinh độ cho Địa điểm (📍) hoặc từng Cảnh riêng biệt (🎯). |
+| `L1880 - L1965`| `embedpano & injectEditorXML()` | Khởi tạo KrPano Viewer, loại bỏ `loadxml(MERGE)` triệt tiêu lỗi camera bị nhảy về `(0, 0)` khi vào Editor. |
+| `L1972 - L2038`| `getSceneDefaultView()`, `updateDefaultViewUI()` | Bóc tách góc nhìn mặc định từ bộ nhớ KrPano (`scene.content` hoặc `xml.view`) và cập nhật thẻ hiển thị thông số đã lưu. |
+| `L2067 - L2180`| `detectScenesAndData()` | Bóc tách metadata cảnh và địa điểm, hỗ trợ nhận diện tọa độ riêng của scene hoặc thừa hưởng địa điểm. |
+| `L2182 - L2345`| `Scene Drag & Reorder Events` | `handleSceneDragStart`, `handleSceneDragOver`, `handleSceneDrop` (kéo thả đổi thứ tự hoặc chuyển địa điểm). |
+| `L2349 - L2397`| `moveSceneOrder()` | **Hàm Đổi Vị Trí Cảnh (Up/Down)**: Tráo đổi vị trí cảnh và gọi API `/api/scenes/reorder` cập nhật tức thì. |
+| `L2399 - L2680`| `renderSceneList()` | Hiển thị danh sách cảnh theo cây thư mục có nút **📍 GPS Địa điểm**, **🎯 GPS Cảnh**, **Lên ↑**, **Xuống ↓**, Đổi tên, Xóa. Tối ưu CSS không bị cắt chữ. |
+| `L2685 - L2795`| `GPS Handlers` | `promptEditLocationGps()`, `promptEditSceneGps()`, `submitGpsModal()`, `clearSceneCustomGps()`. |
+| `L2800 - L2879`| `window.onSceneChange` | Hook chuyển cảnh: Cập nhật camera, đồng bộ thẻ Live View & Default View ở Tab 2, tự động kích hoạt preview ghim quay về nếu ở Return Pick Mode. |
+| `L2881 - L3075`| `loadSceneHotspots()` | Nạp hotspots của cảnh hiện tại, hỗ trợ kéo thả mượt mà trên canvas 360°, tự động kích hoạt Tab 1 và hiển thị Quick Toolbar. |
+| `L3080 - L3150`| `switchRightSidebarTab()`, `initRightSidebarTabs()` | Quản lý chuyển đổi giữa **Tab 1: HOTSPOTS** và **Tab 2: GÓC NHÌN & CÂN BẰNG**. |
+| `L3155 - L3210`| `Mini Quick-Toolbar Module` | Thanh công cụ nổi mini hiển thị ngay trên canvas cạnh hotspot đang chọn (xóa nhanh, đổi loại icon). |
+| `L3215 - L3270`| `Click-to-Link Scene Module` | `startPickLinkMode()`, `cancelPickLinkMode()`, `onScenePickedForLink()` (chọn cảnh đích trực tiếp từ sidebar). |
+| `L3275 - L3495`| **Visual Return Hotspot Placement** | **Hệ thống Đặt Hotspot Quay Về Trực Quan**: `startReturnPickMode()`, `spawnReturnPreviewHotspot()`, `finishReturnPick()`, `cancelReturnPick()`. |
+| `L3624 - L3840`| **Hệ thống Hotspot Đa Giác (Polygon)** | `startPolygonDrawing()`, `renderDraftPolygon()`, `finishPolygonDrawing()`, `renderPolygonInKrpano()`, `renderVertexHandles()`. |
+| `L3848 - L4010`| `initSidebarResizer()` & Event Listeners | Kéo dãn thanh bên trái tùy ý (lưu `localStorage`), phím tắt Ctrl+S (lưu hotspot), Esc (hủy chế độ). |
+| `L4140 - L4185`| View & Zoom Event Listeners | Xử lý các nút `#btn-save-view`, `#btn-reset-view`, gán nhanh FOV Min/Max theo mức zoom hiện tại. |
+| `L4204 - L4250`| `applyLivePrealign()` | Cập nhật `image.prealign` và gọi `updateobject(true, true)` xoay ảnh 360° trực quan realtime. |
+| `L4309 - L4365`| `saveCurrentViewAsDefault()` | Lưu góc nhìn hiện tại làm mặc định và đồng bộ trực tiếp vào bộ nhớ KrPano + file XML. |
 
 ---
 
-### 🌐 C. `core/js/app.js` (Public Tour Logic — ~815 dòng)
+### 🌐 C. `core/js/app.js` (Public Tour Logic — ~820 dòng)
 
 | Khoảng dòng | Tên Khối / Hàm | Chức năng & Luồng xử lý |
 |-------------|----------------|--------------------------|
@@ -134,6 +149,18 @@ e:\Viet Design\Ninhphuoc360\
 | `L440 - L535`| `initMapControls()` | Xử lý click thu gọn (48px), phóng to màn hình lớn (`maximized` + `fitBounds`), chọn lớp Đường/Vệ tinh, màn che mờ overlay. |
 | `L580 - L705`| `initGoogleMap()` | Khởi tạo Leaflet map với `zoomSnap: 0.1`, nạp 2 lớp Google Maps Tile (`gl=VN` & `hl=vi`), nạp GeoJSON ranh giới xã Ninh Phước, cắm glowing marker và popup chỉ đường. |
 | `L715 - L735`| `syncMapToCurrentScene()`| Trượt tâm bản đồ và di chuyển radar đến tọa độ của cảnh đang mở. |
+
+---
+
+### ⚙️ D. `tour.xml` (KrPano Master Configuration — ~525 dòng)
+
+| Khoảng dòng | Tên Thẻ / Action | Chức năng |
+|-------------|------------------|-----------|
+| `L1 - L40`  | `<skin_settings>` | Cấu hình giao diện chuẩn KrPano (gyro, webvr, maps, layout). |
+| `L45 - L210`| `<style name="...">` | Định nghĩa các style Hotspot chuẩn: `muiten`, `vitri`, `tructhang`, `thongtin`. |
+| `L490 - L515`| `<include url="tours/.../scenes.xml" />` | Include toàn bộ các file scenes của từng địa điểm trong tour. |
+| `L514 - L526`| `<action name="draghotspot">` | **Action Native Kéo Thả Hotspot**: Xử lý biến đổi tọa độ cầu `ath, atv` theo chuyển động chuột cho Visual Editor mà không phụ thuộc `loadxml`. |
+| `L528 - L535`| `<action name="startup">` | Tự động tải cảnh đầu tiên khi khởi động tour. |
 
 ---
 
@@ -155,7 +182,8 @@ e:\Viet Design\Ninhphuoc360\
 | `POST` | `/api/scenes/delete` | `{ sceneId }` | Xóa cảnh khỏi `scenes.xml` và dọn sạch thư mục tiles. |
 | `DELETE`| `/api/scenes/:sceneId` | Param `:sceneId` | Xóa cảnh theo Restful parameter. |
 | `POST` | `/api/upload-pano` | `FormData: panorama, sceneName, customTitle, locationId` | Upload và tạo tiles cho 1 ảnh đơn lẻ. |
-| `POST` | `/api/scenes/save` | `{ sceneId, hotspots: [...] }` | Lưu danh sách hotspot (Point + Polygon) vào `scenes.xml`. |
+| `POST` | `/api/scenes/save` | `{ sceneId, hotspots: [...] }` | Lưu danh sách hotspot vào `scenes.xml` và tự động đồng bộ return hotspot. |
+| `POST` | `/api/scenes/create-return-hotspot` | `{ fromSceneId, toSceneId, ath, atv, style, isExplicitCoords }` | **Tạo hoặc cập nhật Hotspot quay về 2 chiều** ở Cảnh B trỏ ngược lại Cảnh A. |
 | `POST` | `/api/scenes/view` | `{ sceneId, hlookat, vlookat, fov, fovmin, fovmax }` | Lưu góc nhìn camera mặc định vào thẻ `<view>`. |
 | `POST` | `/api/scenes/prealign` | `{ sceneId, pitch, yaw, roll }` | Lưu ma trận xoay 3D `prealign="Pitch|Yaw|Roll"` vào thẻ `<image>`. |
 | `GET` | `/api/infos` | — | Lấy toàn bộ bài viết thuyết minh từ `tours/infos.json`. |
@@ -170,4 +198,3 @@ e:\Viet Design\Ninhphuoc360\
 2. **Đọc `MAPCODE.md` (file này)** để tra cứu chính xác vị trí file, hàm và số dòng cần sửa.
 3. **KHÔNG CẦN QUÉT THƯ MỤC HÌNH ẢNH**: Tuyệt đối không tự động đọc hay duyệt đệ quy các file bên trong `tours/*/panos/`.
 4. **Kiểm tra Server Status**: Đảm bảo `node _dev/server.js` đang chạy trên cổng `3600` nếu làm việc với trình Visual Editor.
-

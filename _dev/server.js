@@ -1244,6 +1244,15 @@ app.post('/api/scenes/save', async (req, res) => {
         // Write clean XML back to disk
         fs.writeFileSync(targetFile, newXmlContent, 'utf-8');
 
+        // Automatically ensure return hotspots exist for all navigation hotspots in this scene!
+        if (hotspots && Array.isArray(hotspots)) {
+            hotspots.forEach(h => {
+                if (h.linkedscene && h.style !== 'thongtin' && h.style !== 'poly_ground_nav') {
+                    ensureReturnHotspot(sceneId, h.linkedscene, h.ath, h.atv, h.style);
+                }
+            });
+        }
+
         res.json({ 
             success: true, 
             message: `Đã lưu ${hotspots ? hotspots.length : 0} hotspot(s) vào ${path.basename(targetFile)}`,
@@ -1253,6 +1262,168 @@ app.post('/api/scenes/save', async (req, res) => {
         console.log(`💾 Saved ${hotspots ? hotspots.length : 0} hotspot(s) for scene "${sceneId}" → ${path.basename(targetFile)}`);
     } catch (err) {
         console.error('Save error:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// Helper function: Find scenes.xml file containing a given sceneId
+function findSceneFilePath(sceneId) {
+    if (!sceneId) return null;
+    if (!fs.existsSync(TOUR_XML_PATH)) return null;
+
+    const tourXml = fs.readFileSync(TOUR_XML_PATH, 'utf-8');
+    const includeRegex = /<include\s+url="([^"]+)"\s*\/>/g;
+    let match;
+
+    while ((match = includeRegex.exec(tourXml)) !== null) {
+        const includeUrl = match[1];
+        if (includeUrl.startsWith('tours/') && includeUrl.endsWith('.xml')) {
+            const filePath = path.join(PROJECT_ROOT, includeUrl);
+            if (fs.existsSync(filePath)) {
+                const content = fs.readFileSync(filePath, 'utf-8');
+                if (content.includes(`name="${sceneId}"`)) {
+                    return filePath;
+                }
+            }
+        }
+    }
+
+    if (tourXml.includes(`name="${sceneId}"`)) {
+        return TOUR_XML_PATH;
+    }
+
+    return null;
+}
+
+// Helper function: Ensure return hotspot exists in target scene (Cảnh B)
+function ensureReturnHotspot(fromSceneId, toSceneId, ath, atv, style, isExplicitCoords = false) {
+    if (!fromSceneId || !toSceneId || fromSceneId === toSceneId) return false;
+
+    // 1. Find which scenes.xml file contains toSceneId (Cảnh B)
+    const targetFile = findSceneFilePath(toSceneId);
+    if (!targetFile) return false;
+
+    let content = fs.readFileSync(targetFile, 'utf-8');
+
+    // 2. Extract scene block for toSceneId
+    const sceneRegex = new RegExp(`(<scene\\b[^>]*name="${escapeRegex(toSceneId)}"[^>]*>[\\s\\S]*?)(<\\/scene>)`, 'i');
+    const sceneMatch = content.match(sceneRegex);
+    if (!sceneMatch) return false;
+
+    const sceneBody = sceneMatch[1];
+    const cleanFromId = fromSceneId.replace(/^scene_/, '');
+
+    // 3. Find title of fromSceneId (Cảnh A)
+    let fromSceneTitle = cleanFromId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    try {
+        const fromFile = findSceneFilePath(fromSceneId);
+        if (fromFile) {
+            const fc = fs.readFileSync(fromFile, 'utf-8');
+            const titleRegex = new RegExp(`<scene[^>]*name="${escapeRegex(fromSceneId)}"[^>]*title="([^"]+)"`, 'i');
+            const titleMatch = fc.match(titleRegex);
+            if (titleMatch) {
+                fromSceneTitle = titleMatch[1];
+            }
+        }
+    } catch (e) {}
+
+    // 4. Calculate coordinates (explicit pick vs auto 180°)
+    let returnAthStr;
+    let returnAtvStr;
+    if (isExplicitCoords && ath !== undefined && atv !== undefined) {
+        returnAthStr = parseFloat(ath || 0).toFixed(4);
+        returnAtvStr = parseFloat(atv || 0).toFixed(4);
+    } else {
+        let returnAth = (parseFloat(ath || 0) + 180) % 360;
+        if (returnAth > 180) returnAth -= 360;
+        returnAthStr = returnAth.toFixed(4);
+        returnAtvStr = parseFloat(atv || 0).toFixed(4);
+    }
+
+    const hsStyle = (style && style !== 'poly_ground_nav' && style !== 'thongtin') ? style : 'muiten';
+
+    // 5. Check if return hotspot ALREADY EXISTS in Cảnh B
+    const existingHsRegex = new RegExp(
+        `(<hotspot\\b[^>]*linkedscene="(?:${escapeRegex(fromSceneId)}|scene_${escapeRegex(cleanFromId)}|${escapeRegex(cleanFromId)})"[^>]*\\/?>)`,
+        'i'
+    );
+    const existingMatch = sceneBody.match(existingHsRegex);
+
+    if (existingMatch) {
+        if (isExplicitCoords) {
+            let updatedTag = existingMatch[1];
+            // Update ath
+            if (/ath="[^"]*"/.test(updatedTag)) {
+                updatedTag = updatedTag.replace(/ath="[^"]*"/, `ath="${returnAthStr}"`);
+            } else {
+                updatedTag = updatedTag.replace('<hotspot', `<hotspot ath="${returnAthStr}"`);
+            }
+            // Update atv
+            if (/atv="[^"]*"/.test(updatedTag)) {
+                updatedTag = updatedTag.replace(/atv="[^"]*"/, `atv="${returnAtvStr}"`);
+            } else {
+                updatedTag = updatedTag.replace('<hotspot', `<hotspot atv="${returnAtvStr}"`);
+            }
+            // Update style
+            if (hsStyle && /style="[^"]*"/.test(updatedTag)) {
+                updatedTag = updatedTag.replace(/style="[^"]*"/, `style="${hsStyle}"`);
+            }
+            // Update custom_title
+            if (fromSceneTitle && /custom_title="[^"]*"/.test(updatedTag)) {
+                updatedTag = updatedTag.replace(/custom_title="[^"]*"/, `custom_title="${fromSceneTitle}"`);
+            }
+
+            const updatedSceneBody = sceneBody.replace(existingMatch[1], updatedTag);
+            const newContent = content.replace(sceneMatch[0], `${updatedSceneBody}</scene>`);
+            fs.writeFileSync(targetFile, newContent, 'utf-8');
+            console.log(`🔄 Updated return hotspot coordinates in "${toSceneId}" -> "${fromSceneId}" (${path.basename(targetFile)}) at ath=${returnAthStr}, atv=${returnAtvStr}`);
+            return { success: true, updated: true, created: false, ath: returnAthStr, atv: returnAtvStr, file: targetFile };
+        }
+        return { success: true, updated: false, created: false, alreadyPresent: true, ath: returnAthStr, atv: returnAtvStr, file: targetFile };
+    }
+
+    // 6. Otherwise, create new return hotspot
+    const newHsName = `hs_return_${cleanFromId}_${Date.now().toString().slice(-4)}`;
+    const returnHsXml = `\t\t<hotspot name="${newHsName}" style="${hsStyle}" ath="${returnAthStr}" atv="${returnAtvStr}" linkedscene="${fromSceneId}" custom_title="${fromSceneTitle}"/>\n\t`;
+    const newContent = content.replace(sceneRegex, (m, p1, p2) => `${p1}${returnHsXml}${p2}`);
+    fs.writeFileSync(targetFile, newContent, 'utf-8');
+    console.log(`🔄 Created return hotspot in "${toSceneId}" -> "${fromSceneId}" (${path.basename(targetFile)}) at ath=${returnAthStr}, atv=${returnAtvStr}`);
+    return { success: true, created: true, updated: false, ath: returnAthStr, atv: returnAtvStr, file: targetFile };
+}
+
+// ============================================================
+// API: POST /api/scenes/create-return-hotspot — Tự động tạo/cập nhật hotspot quay về ở Cảnh B
+// ============================================================
+
+app.post('/api/scenes/create-return-hotspot', async (req, res) => {
+    try {
+        const { fromSceneId, toSceneId, ath, atv, style, isExplicitCoords } = req.body;
+        if (!fromSceneId || !toSceneId) {
+            return res.status(400).json({ success: false, error: 'Thiếu fromSceneId hoặc toSceneId' });
+        }
+
+        const result = ensureReturnHotspot(fromSceneId, toSceneId, ath, atv, style, !!isExplicitCoords);
+
+        if (!result) {
+            return res.status(404).json({ success: false, error: `Không tìm thấy cảnh "${toSceneId}" trên hệ thống` });
+        }
+
+        const message = result.updated
+            ? `Đã cập nhật vị trí Hotspot quay về ở cảnh "${toSceneId}"`
+            : (result.created
+                ? `Đã tạo Hotspot quay về ở cảnh "${toSceneId}"`
+                : `Cảnh "${toSceneId}" đã có sẵn Hotspot quay về`);
+
+        res.json({
+            success: true,
+            created: result.created,
+            updated: result.updated,
+            ath: result.ath,
+            atv: result.atv,
+            message
+        });
+    } catch (err) {
+        console.error('Create return hotspot error:', err);
         res.status(500).json({ success: false, error: err.message });
     }
 });

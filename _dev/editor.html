@@ -80,7 +80,9 @@
             top: 0;
             left: 0;
             bottom: 0;
-            width: 320px;
+            width: 360px;
+            min-width: 280px;
+            max-width: 700px;
             height: 100vh;
             background: rgba(13, 27, 46, 0.88);
             border-right: 1px solid var(--panel-border);
@@ -94,6 +96,23 @@
             transform: translateX(0);
             opacity: 1;
             box-shadow: 12px 0 36px rgba(0, 0, 0, 0.45);
+        }
+
+        .sidebar-resizer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            cursor: col-resize;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.05);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .sidebar-resizer:hover, .sidebar-resizer.resizing {
+            background: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
         }
 
         .sidebar.collapsed {
@@ -202,100 +221,172 @@
         .scene-item {
             display: flex;
             align-items: center;
-            padding: 8px;
-            margin-bottom: 8px;
-            border-radius: var(--radius);
+            padding: 6px 8px;
+            margin-bottom: 5px;
+            border-radius: 8px;
             cursor: pointer;
             border: 1px solid transparent;
-            transition: var(--transition);
+            transition: all 0.2s ease;
             position: relative;
+            gap: 8px;
         }
 
         .scene-item:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         .scene-item.active {
             background: rgba(255, 215, 0, 0.15);
-            border-color: rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .scene-drag-handle {
+            cursor: grab;
+            padding: 4px 2px;
+            color: var(--text-muted);
+            opacity: 0.25;
+            font-size: 12px;
+            flex-shrink: 0;
+            transition: opacity 0.2s, color 0.2s;
+        }
+
+        .scene-item:hover .scene-drag-handle {
+            opacity: 0.8;
+            color: var(--primary);
         }
 
         .scene-thumb {
-            width: 60px;
-            height: 40px;
+            width: 62px;
+            height: 42px;
             border-radius: 6px;
             object-fit: cover;
-            margin-right: 10px;
             background: #1e293b;
             flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .scene-item:hover .scene-thumb {
+            transform: scale(1.02);
+            border-color: rgba(255, 215, 0, 0.4);
         }
 
         .scene-info {
             flex: 1;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .scene-name {
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12.5px;
+            font-weight: 600;
+            line-height: 1.35;
+            color: #f1f5f9;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color 0.15s;
+        }
+
+        .scene-item:hover .scene-name {
+            -webkit-line-clamp: unset;
+            overflow: visible;
+        }
+
+        .scene-item.active .scene-name {
+            color: var(--primary);
+        }
+
+        .scene-id {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: monospace;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .scene-id {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-family: monospace;
-        }
-
-        .btn-rename-scene {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 13px;
-            padding: 6px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: var(--transition);
-            opacity: 0.6;
-        }
-
-        .btn-rename-scene:hover {
-            color: var(--primary);
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Scene Reorder Buttons */
-        .scene-reorder-btns {
+        /* Hover actions container: floats over the right side on row hover without squeezing title */
+        .scene-item-actions {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
-            flex-direction: column;
-            gap: 2px;
-            margin-right: 6px;
-            flex-shrink: 0;
+            align-items: center;
+            gap: 3px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease-in-out;
+            background: rgba(10, 18, 34, 0.96);
+            padding: 3px 5px;
+            border-radius: 6px;
+            box-shadow: -8px 0 16px rgba(10, 18, 34, 0.95), 0 2px 8px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            z-index: 5;
         }
 
-        .btn-reorder-scene {
-            background: rgba(255, 255, 255, 0.05);
+        .scene-item:hover .scene-item-actions {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-scene-action {
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-muted);
-            font-size: 9px;
-            width: 18px;
-            height: 16px;
+            font-size: 11px;
+            width: 26px;
+            height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border-radius: 3px;
-            transition: var(--transition);
-            opacity: 0.7;
+            border-radius: 5px;
+            transition: all 0.15s ease;
         }
 
-        .btn-reorder-scene:hover:not(:disabled) {
+        .btn-scene-action:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+        }
+
+        .btn-scene-action.action-danger:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-scene-action.action-gps:hover {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-scene-action.action-rename:hover {
             color: var(--primary);
-            background: rgba(255, 215, 0, 0.25);
-            border-color: rgba(255, 215, 0, 0.5);
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        /* Location Folder Header Actions */
+        .location-folder-actions {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            opacity: 0.35;
+            transition: opacity 0.18s;
+        }
+
+        .location-folder-header:hover .location-folder-actions {
             opacity: 1;
         }
 
@@ -318,19 +409,6 @@
             opacity: 0.35;
             border: 1px dashed var(--primary) !important;
             background: rgba(255, 255, 255, 0.1);
-        }
-
-        .scene-drag-handle {
-            cursor: grab;
-            padding: 4px 6px;
-            color: var(--text-muted);
-            opacity: 0.4;
-            transition: var(--transition);
-        }
-
-        .scene-item:hover .scene-drag-handle {
-            opacity: 1;
-            color: var(--primary);
         }
 
         .location-folder {
@@ -395,10 +473,15 @@
             flex-direction: column;
         }
 
-        #pano {
-            flex: 1;
-            width: 100%;
-            height: 100%;
+        #viewport-overlays {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        #viewport-overlays > * {
+            pointer-events: auto;
         }
 
         /* Central Editor Controls */
@@ -724,10 +807,15 @@
 
         .hotspot-item-title {
             font-weight: 500;
+            line-height: 1.35;
+            word-break: break-word;
+            flex: 1;
+            min-width: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 150px;
+            margin-right: 8px;
         }
 
         .hotspot-item-style {
@@ -856,35 +944,43 @@
         #toast.show {
             transform: translateX(-50%) translateY(0);
         }
-        /* Upload Drop Zone */
+        /* Compact Upload Drop Zone */
         .upload-zone {
-            margin: 10px;
-            padding: 20px 10px;
-            border: 2px dashed rgba(255, 215, 0, 0.3);
-            border-radius: var(--radius);
+            margin: 0;
+            padding: 7px 10px;
+            border: 1px dashed rgba(255, 215, 0, 0.35);
+            border-radius: 6px;
             text-align: center;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 215, 0, 0.03);
+            user-select: none;
         }
 
-        .upload-zone:hover, .upload-zone.drag-over {
+        .upload-zone:hover, .upload-zone.drag-over, .upload-zone.drag-over-active {
             border-color: var(--primary);
-            background: rgba(255, 215, 0, 0.05);
+            background: rgba(255, 215, 0, 0.12);
             color: var(--primary);
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.2);
+            transform: scale(1.01);
         }
 
         .upload-zone i {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 8px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 0;
             color: var(--primary);
-            opacity: 0.6;
+            opacity: 0.9;
         }
 
-        .upload-zone:hover i {
-            opacity: 1;
+        .upload-zone:hover i, .upload-zone.drag-over i {
+            transform: translateY(-1px);
         }
 
         /* Save Button Accent */
@@ -1083,6 +1179,72 @@
             font-family: monospace;
             margin-top: 2px;
         }
+
+        /* Right Panel 2-Tab Navigation */
+        .panel-tabs {
+            display: flex;
+            gap: 4px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-sizing: border-box;
+        }
+        .panel-tab-btn {
+            flex: 1;
+            padding: 7px 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            color: var(--text-muted);
+            user-select: none;
+        }
+        .panel-tab-btn.active {
+            background: var(--primary);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+        }
+        .panel-tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+        .tab-pane {
+            width: 100%;
+        }
+
+        /* Click-to-link highlight effects */
+        .sidebar.pick-link-active {
+            box-shadow: 0 0 32px rgba(37, 99, 235, 0.7) !important;
+            border-right: 2px solid #3b82f6 !important;
+        }
+
+        .scene-item.pick-link-candidate {
+            border: 1px dashed rgba(59, 130, 246, 0.8) !important;
+            background: rgba(37, 99, 235, 0.14) !important;
+            cursor: pointer !important;
+            animation: pulseCandidate 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseCandidate {
+            0%, 100% { border-color: rgba(59, 130, 246, 0.8); }
+            50% { border-color: var(--primary); background: rgba(255, 215, 0, 0.18); }
+        }
+
+        .scene-item.pick-link-candidate:hover {
+            border-color: var(--primary) !important;
+            background: rgba(255, 215, 0, 0.3) !important;
+            transform: translateX(4px);
+        }
     </style>
 </head>
 
@@ -1091,26 +1253,47 @@
         
         <!-- Left Panel: Scene Manager -->
         <div class="sidebar" id="left-sidebar">
-            <div class="panel-header">
+            <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);">
                 <div style="display:flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-images" style="color:var(--primary);"></i>
-                    <h2>Cảnh Panorama</h2>
+                    <h2 style="font-size: 14px; margin: 0; font-weight: 700;">Cảnh Panorama</h2>
+                    <span id="lbl-total-scenes-count" class="location-badge" style="font-size: 11px;">0 cảnh</span>
                 </div>
-                <button id="btn-close-left-sidebar" class="panel-close-btn" title="Ẩn bảng Cảnh Panorama">&times;</button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button id="btn-header-upload" class="richbtn" style="background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px; cursor: pointer; box-shadow: 0 2px 8px rgba(16,185,129,0.3);" title="Tải thêm ảnh 360° mới">
+                        <i class="fa-solid fa-plus"></i> Thêm Pano
+                    </button>
+                    <button id="btn-close-left-sidebar" class="panel-close-btn" title="Ẩn bảng Cảnh Panorama">&times;</button>
+                </div>
             </div>
-            <!-- Upload Drop Zone -->
-            <div class="upload-zone" id="upload-zone">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <div>Kéo thả ảnh 360° vào đây (Chọn được nhiều file)</div>
-                <div style="font-size: 10px; margin-top: 4px; opacity: 0.6;">hoặc bấm để chọn 1 hoặc nhiều file</div>
-                <input type="file" id="upload-input" accept=".jpg,.jpeg,.png,.tif,.tiff" multiple style="display:none;">
+
+            <!-- Compact Toolbar: Search & Tools & Compact Dropzone -->
+            <div style="padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.25);">
+                <!-- Search row + Collapse All Toggle -->
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <div style="position: relative; flex: 1;">
+                        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 11px; pointer-events: none;"></i>
+                        <input type="text" id="scene-search" placeholder="Tìm kiếm cảnh..." style="width: 100%; padding: 7px 26px 7px 28px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; color: #fff; font-size: 12px; outline: none; box-sizing: border-box; transition: border-color 0.2s;">
+                        <button id="btn-clear-search" style="display: none; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 0; line-height: 1;" title="Xóa tìm kiếm">&times;</button>
+                    </div>
+                    <button id="btn-toggle-collapse-all" class="richbtn" style="padding: 6px 10px; font-size: 11px; white-space: nowrap; height: 32px; display: flex; align-items: center; gap: 5px; border-radius: 6px;" title="Thu gọn hoặc Mở rộng tất cả thư mục">
+                        <i class="fa-solid fa-up-down"></i> <span id="lbl-collapse-toggle">Thu gọn</span>
+                    </button>
+                </div>
+
+                <!-- Compact Drag-Drop Strip (Click to pick or drop files) -->
+                <div class="upload-zone" id="upload-zone" title="Bấm để chọn file hoặc kéo thả ảnh 360° từ máy tính vào đây">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Kéo thả ảnh 360° vào đây hoặc <b style="color:var(--primary); text-decoration: underline;">chọn file</b></span>
+                    <input type="file" id="upload-input" accept=".jpg,.jpeg,.png,.tif,.tiff" multiple style="display:none;">
+                </div>
             </div>
-            <div class="search-box">
-                <input type="text" id="scene-search" placeholder="Tìm kiếm cảnh...">
-            </div>
+
             <div class="scene-list" id="scene-list-container">
                 <!-- Loaded dynamically by JS -->
             </div>
+            <!-- Draggable Sidebar Resizer Handle -->
+            <div class="sidebar-resizer" id="sidebar-resizer" title="Kéo mép này sang phải để mở rộng menu, hoặc nháy đúp để đặt lại mặc định (360px)"></div>
         </div>
 
         <!-- Central Viewport: KrPano Frame -->
@@ -1146,6 +1329,62 @@
                     <div style="position: absolute; top: 25%; left: 0; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.3);"></div>
                     <!-- Quarter Horizontal Guide 2 -->
                     <div style="position: absolute; top: 75%; left: 0; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.3);"></div>
+                </div>
+
+                <!-- Viewport Overlay Elements -->
+            <div id="viewport-overlays">
+                <!-- Prealign Horizon Canvas (Hidden by default) -->
+                <canvas id="prealign-canvas"></canvas>
+
+                <!-- Visual Return Hotspot Placement Banner (Cách 2) -->
+                <div id="return-pick-banner" style="display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 150; background: linear-gradient(135deg, rgba(6, 78, 59, 0.96), rgba(15, 23, 42, 0.96)); color: #fff; padding: 12px 24px; border-radius: 16px; font-size: 13px; font-weight: 600; backdrop-filter: blur(16px); box-shadow: 0 16px 40px rgba(0,0,0,0.7); align-items: center; gap: 14px; border: 2px solid #10b981; max-width: 90vw;">
+                    <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(16, 185, 129, 0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(16, 185, 129, 0.5);">
+                        <i class="fa-solid fa-location-crosshairs" style="font-size: 18px; color: #34d399;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 13.5px; font-weight: 700; color: #34d399;" id="return-pick-title">Đang đặt Hotspot quay về...</div>
+                        <div style="font-size: 11.5px; color: #cbd5e1; margin-top: 2px;">Kéo thả mũi tên hoặc click chuột lên cửa/lối đi trên ảnh 360° để chỉnh vị trí, rồi bấm <b>Xác nhận</b> ở bên dưới.</div>
+                    </div>
+                </div>
+
+                <!-- Visual Return Bottom Action Bar -->
+                <div id="return-pick-bottom-bar" style="display: none; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 150; background: rgba(10, 15, 30, 0.94); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 36px; padding: 8px 18px; backdrop-filter: blur(16px); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7); align-items: center; gap: 12px; color: #fff;">
+                    <span id="lbl-return-coords" style="font-size: 11px; font-weight: 600; color: var(--primary); font-family: monospace; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">ath: 0.0000, atv: 0.0000</span>
+                    <button id="btn-return-confirm" class="richbtn" style="background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; padding: 7px 18px; font-size: 12px; font-weight: 700; border-radius: 20px; box-shadow: 0 4px 14px rgba(16,185,129,0.4);" title="Lưu vị trí này làm Hotspot quay về">
+                        <i class="fa-solid fa-check"></i> Xác nhận vị trí này
+                    </button>
+                    <button id="btn-return-auto-180" class="richbtn" style="background: rgba(255, 215, 0, 0.12); border-color: var(--primary); color: var(--primary); font-size: 11.5px; padding: 6px 14px; border-radius: 20px;" title="Tự động đặt hotspot đối diện (180°)">
+                        <i class="fa-solid fa-arrows-spin"></i> Đặt đối diện (180°)
+                    </button>
+                    <button id="btn-return-cancel" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; padding: 6px 14px; border-radius: 20px; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all 0.2s;" title="Hủy và không tạo hotspot quay về">
+                        ✕ Bỏ qua
+                    </button>
+                </div>
+
+                <!-- Click-to-Link Scene Mode Banner -->
+                <div id="pick-link-banner" style="display: none; position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 120; background: rgba(37, 99, 235, 0.95); color: #fff; padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-crosshairs"></i>
+                    <span>Chế độ nối cảnh: Hãy click vào một cảnh ở <b>Cây danh sách bên trái</b> để liên kết</span>
+                    <button id="btn-cancel-pick-link" style="background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 3px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;">✕ Hủy</button>
+                </div>
+
+                <!-- Mini Quick-Toolbar for Selected Hotspot (Vấn đề 3) -->
+                <div id="hotspot-quick-toolbar" style="display: none; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 110; background: rgba(10, 15, 30, 0.92); border: 1px solid var(--primary); border-radius: 30px; padding: 6px 14px; backdrop-filter: blur(16px); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6); align-items: center; gap: 8px; color: #fff;">
+                    <span id="quick-tb-name" style="font-size: 11px; font-weight: 700; color: var(--primary); font-family: monospace; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">hs_xxxx</span>
+                    <span style="width: 1px; height: 16px; background: rgba(255,255,255,0.2); margin: 0 2px;"></span>
+                    <button id="quick-tb-pick" class="richbtn" style="background: rgba(255,215,0,0.18); border-color: var(--primary); color: var(--primary); padding: 4px 10px;" title="Chọn cảnh liên kết từ danh sách bên trái">
+                        <i class="fa-solid fa-crosshairs"></i> Nối Cảnh
+                    </button>
+                    <button id="quick-tb-rename" class="richbtn" style="padding: 4px 10px;" title="Đổi tiêu đề hiển thị">
+                        <i class="fa-solid fa-pen"></i> Tên
+                    </button>
+                    <button id="quick-tb-lookto" class="richbtn" style="padding: 4px 10px;" title="Xoay camera nhìn thẳng vào hotspot">
+                        <i class="fa-solid fa-eye"></i> Nhìn tới
+                    </button>
+                    <button id="quick-tb-del" class="richbtn" style="color: #f87171; border-color: rgba(239,68,68,0.4); padding: 4px 8px;" title="Xóa hotspot này">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    <button id="quick-tb-close" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 0 4px; line-height: 1;" title="Đóng">&times;</button>
                 </div>
             </div>
         </div>
@@ -1247,234 +1486,278 @@
 
         <!-- Right Panel: Hotspot Inspector -->
         <div class="sidebar sidebar-right" id="right-sidebar">
-            <div class="panel-header">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-sliders" style="color:var(--primary);"></i>
-                    <h2>Cấu Hình Hotspot</h2>
+            <div class="panel-header" style="padding: 12px 14px 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; width: 100%;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-sliders" style="color:var(--primary);"></i>
+                        <h2 style="font-size: 14px; margin: 0; font-weight: 700;">Cấu Hình</h2>
+                    </div>
+                    <button id="btn-close-right-sidebar" class="panel-close-btn" title="Ẩn bảng Cấu Hình">&times;</button>
                 </div>
-                <button id="btn-close-right-sidebar" class="panel-close-btn" title="Ẩn bảng Cấu Hình Hotspot">&times;</button>
+                
+                <!-- 2-Tab Navigation Bar -->
+                <div class="panel-tabs">
+                    <button id="tab-btn-hotspots" class="panel-tab-btn active" type="button">
+                        <i class="fa-solid fa-location-dot"></i> Hotspots
+                    </button>
+                    <button id="tab-btn-view" class="panel-tab-btn" type="button">
+                        <i class="fa-solid fa-camera"></i> Góc Nhìn & Cân Bằng
+                    </button>
+                </div>
             </div>
             
             <div class="properties-container">
-                <!-- Default View Settings Section -->
-                <div class="view-config-card">
-                    <div class="view-card-title">
-                        <i class="fa-solid fa-camera"></i> KHUNG NHÌN MẶC ĐỊNH (VIEW)
-                    </div>
-                    <div class="view-coords-grid">
-                        <div class="view-coord-box">
-                            <span>hlookat</span>
-                            <strong id="val-hlookat">0.0°</strong>
-                        </div>
-                        <div class="view-coord-box">
-                            <span>vlookat</span>
-                            <strong id="val-vlookat">0.0°</strong>
-                        </div>
-                        <div class="view-coord-box">
-                            <span>fov</span>
-                            <strong id="val-fov">100.0°</strong>
-                        </div>
-                    </div>
-
-                    <div class="view-section-label">
-                        <i class="fa-solid fa-magnifying-glass-plus"></i> GIỚI HẠN ZOOM
-                    </div>
-                    <div class="view-params-grid" style="grid-template-columns: 1fr 1fr;">
-                        <div class="view-param-box">
-                            <label>FOV Min</label>
-                            <input type="number" id="input-fovmin" value="60" min="20" max="120" step="1" title="Giá trị nhỏ = zoom sâu hơn">
-                        </div>
-                        <div class="view-param-box">
-                            <label>FOV Max</label>
-                            <input type="number" id="input-fovmax" value="95" min="60" max="179" step="1" title="Giá trị lớn = nhìn rộng hơn">
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px;">
-                        <button id="btn-set-fovmin" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 5px 4px;" title="Dùng độ zoom hiện tại làm giới hạn zoom sâu nhất">
-                            <i class="fa-solid fa-bullseye"></i> Đặt FOV Min
+                <!-- TAB 1: HOTSPOTS PANE -->
+                <div id="tab-pane-hotspots" class="tab-pane">
+                    <!-- Quick action: Add Hotspot -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px;">
+                        <button id="btn-add-hotspot" class="btn-action" style="margin-bottom: 0; font-size: 11px; padding: 8px 6px;">
+                            <i class="fa-solid fa-circle-plus"></i> Mới Hotspot
                         </button>
-                        <button id="btn-set-fovmax" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 5px 4px;" title="Dùng độ zoom hiện tại làm giới hạn nhìn xa nhất">
-                            <i class="fa-solid fa-expand"></i> Đặt FOV Max
+                        <button id="btn-draw-polygon" class="btn-action" style="margin-bottom: 0; font-size: 11px; padding: 8px 6px; background: linear-gradient(135deg, #059669, #10b981);">
+                            <i class="fa-solid fa-draw-polygon"></i> Vẽ Đa Giác (Sàn)
                         </button>
                     </div>
 
-                    <button id="btn-save-view" class="btn-action btn-view-save">
-                        <i class="fa-solid fa-camera"></i> LƯU GÓC NHÌN MẶC ĐỊNH
-                    </button>
-                    <button id="btn-reset-view" class="btn-action btn-secondary" style="font-size: 11px; margin-bottom: 0; padding: 6px 10px;">
-                        <i class="fa-solid fa-rotate-left"></i> VỀ GÓC NHÌN BAN ĐẦU
-                    </button>
-                </div>
-
-                <!-- Horizon Leveling (Prealign) Panel -->
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
-                    <div class="view-section-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span><i class="fa-solid fa-compass-drafting" style="color: #00e6ff;"></i> CÂN BẰNG CHÂN TRỜI</span>
-                        <button id="btn-toggle-grid" class="btn-action btn-secondary" style="margin: 0; padding: 2px 8px; font-size: 10px;" title="Bật/tắt lưới căn chân trời">
-                            <i class="fa-solid fa-border-all"></i> Lưới căn
-                        </button>
-                    </div>
-
-                    <!-- Sliders for Roll, Pitch, Yaw -->
-                    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
-                        <div>
-                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
-                                <span>Nghiêng trái/phải (Roll)</span>
-                                <strong id="val-roll" style="color: #00e6ff;">0.0°</strong>
-                            </div>
-                            <input type="range" id="slider-roll" min="-15" max="15" step="0.1" value="0" style="width: 100%; cursor: pointer;">
-                        </div>
-
-                        <div>
-                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
-                                <span>Ngẩng/Cúi (Pitch)</span>
-                                <strong id="val-pitch" style="color: #00e6ff;">0.0°</strong>
-                            </div>
-                            <input type="range" id="slider-pitch" min="-15" max="15" step="0.1" value="0" style="width: 100%; cursor: pointer;">
-                        </div>
-
-                        <div>
-                            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
-                                <span>Xoay hướng (Yaw)</span>
-                                <strong id="val-yaw" style="color: #ccc;">0.0°</strong>
-                            </div>
-                            <input type="range" id="slider-yaw" min="-180" max="180" step="1" value="0" style="width: 100%; cursor: pointer;">
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-                        <button id="btn-reset-prealign" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 6px 4px;">
-                            <i class="fa-solid fa-rotate-left"></i> Reset (0°)
-                        </button>
-                        <button id="btn-save-prealign" class="btn-action btn-view-save" style="font-size: 10px; margin-bottom: 0; padding: 6px 4px; background: linear-gradient(135deg, #0284c7, #0369a1);">
-                            <i class="fa-solid fa-floppy-disk"></i> LƯU ĐỘ NGHIÊNG
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Quick action: Add Hotspot -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-                    <button id="btn-add-hotspot" class="btn-action" style="margin-bottom: 0; font-size: 11px; padding: 8px 6px;">
-                        <i class="fa-solid fa-circle-plus"></i> Mới Hotspot
-                    </button>
-                    <button id="btn-draw-polygon" class="btn-action" style="margin-bottom: 0; font-size: 11px; padding: 8px 6px; background: linear-gradient(135deg, #059669, #10b981);">
-                        <i class="fa-solid fa-draw-polygon"></i> Vẽ Đa Giác (Sàn)
-                    </button>
-                </div>
-
-                <!-- Hotspot Editor Panel (Hidden when no hotspot selected) -->
-                <div id="property-editor" style="display: none;">
-                    <div style="font-size: 11px; color: var(--primary); font-weight: bold; margin-bottom: 12px; font-family: monospace;" id="lbl-hs-id">hs_xxxx</div>
-                    
-                    <div class="form-group">
-                        <label for="hs-style">Loại Hotspot (Style)</label>
-                        <select id="hs-style">
-                            <option value="muiten">Mũi tên (Di chuyển mặt đất)</option>
-                            <option value="vitri">Ghim vị trí (Hạ cánh từ trên cao)</option>
-                            <option value="tructhang">Trực thăng (Bay lên cao)</option>
-                            <option value="thongtin">Thông tin (Mở thuyết minh)</option>
-                            <option value="poly_ground_nav">Đa giác sàn (Polygon)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="hs-title">Tiêu đề Tooltip (custom_title)</label>
-                        <input type="text" id="hs-title" placeholder="Ví dụ: Đi vào tháp">
-                    </div>
-
-                    <!-- Toggle Tooltip Elements: Title & Thumb -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="hs-show-title" style="font-size: 11px;">Hiển thị Tên</label>
-                            <select id="hs-show-title" style="font-size: 12px; padding: 6px;">
-                                <option value="true">Có (Hiện)</option>
-                                <option value="false">Không (Ẩn)</option>
+                    <!-- Hotspot Editor Panel (Hidden when no hotspot selected) -->
+                    <div id="property-editor" style="display: none;">
+                        <div style="font-size: 11px; color: var(--primary); font-weight: bold; margin-bottom: 12px; font-family: monospace;" id="lbl-hs-id">hs_xxxx</div>
+                        
+                        <div class="form-group">
+                            <label for="hs-style">Loại Hotspot (Style)</label>
+                            <select id="hs-style">
+                                <option value="muiten">Mũi tên (Di chuyển mặt đất)</option>
+                                <option value="vitri">Ghim vị trí (Hạ cánh từ trên cao)</option>
+                                <option value="tructhang">Trực thăng (Bay lên cao)</option>
+                                <option value="thongtin">Thông tin (Mở thuyết minh)</option>
+                                <option value="poly_ground_nav">Đa giác sàn (Polygon)</option>
                             </select>
                         </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="hs-show-thumb" style="font-size: 11px;">Hiển thị Ảnh (Thumb)</label>
-                            <select id="hs-show-thumb" style="font-size: 12px; padding: 6px;">
-                                <option value="true">Có (Hiện)</option>
-                                <option value="false">Không (Ẩn)</option>
-                            </select>
+
+                        <div class="form-group">
+                            <label for="hs-title">Tiêu đề Tooltip (custom_title)</label>
+                            <input type="text" id="hs-title" placeholder="Ví dụ: Đi vào tháp">
                         </div>
-                    </div>
 
-                    <!-- Destination Scene (Only for link scenes: muiten, vitri, tructhang) -->
-                    <div class="form-group" id="group-linkedscene">
-                        <label for="hs-linkedscene">Đến Cảnh (linkedscene)</label>
-                        <select id="hs-linkedscene">
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
+                        <!-- Toggle Tooltip Elements: Title & Thumb -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="hs-show-title" style="font-size: 11px;">Hiển thị Tên</label>
+                                <select id="hs-show-title" style="font-size: 12px; padding: 6px;">
+                                    <option value="true">Có (Hiện)</option>
+                                    <option value="false">Không (Ẩn)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="hs-show-thumb" style="font-size: 11px;">Hiển thị Ảnh (Thumb)</label>
+                                <select id="hs-show-thumb" style="font-size: 12px; padding: 6px;">
+                                    <option value="true">Có (Hiện)</option>
+                                    <option value="false">Không (Ẩn)</option>
+                                </select>
+                            </div>
+                        </div>
 
-                    <!-- Info ID (Only for thongtin style) -->
-                    <div class="form-group" id="group-infoid" style="display: none;">
-                        <label for="hs-infoid">Bài viết thuyết minh (infoid)</label>
-                        <div style="display:flex; gap:6px;">
-                            <select id="hs-infoid" style="flex:1;">
-                                <option value="">-- Chọn bài viết --</option>
+                        <!-- Destination Scene (Only for link scenes: muiten, vitri, tructhang) -->
+                        <div class="form-group" id="group-linkedscene">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <label for="hs-linkedscene" style="margin-bottom: 0;">Đến Cảnh (linkedscene)</label>
+                                <button type="button" id="btn-pick-link-scene" class="btn-action btn-secondary" style="width: auto; padding: 3px 8px; font-size: 10px; margin-bottom: 0; background: rgba(37,99,235,0.25); border: 1px solid rgba(59,130,246,0.6); color: #60a5fa;" title="Click vào một cảnh trên cây danh sách bên trái để liên kết">
+                                    <i class="fa-solid fa-crosshairs"></i> Chọn từ DS trái
+                                </button>
+                            </div>
+                            <select id="hs-linkedscene">
                                 <!-- Populated dynamically -->
                             </select>
-                            <button id="btn-quick-new-info" title="Tạo bài viết mới" style="background:linear-gradient(135deg,#1d4ed8,#2563eb); border:none; color:white; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:12px; white-space:nowrap;">
-                                <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <!-- Info ID (Only for thongtin style) -->
+                        <div class="form-group" id="group-infoid" style="display: none;">
+                            <label for="hs-infoid">Bài viết thuyết minh (infoid)</label>
+                            <div style="display:flex; gap:6px;">
+                                <select id="hs-infoid" style="flex:1;">
+                                    <option value="">-- Chọn bài viết --</option>
+                                    <!-- Populated dynamically -->
+                                </select>
+                                <button id="btn-quick-new-info" title="Tạo bài viết mới" style="background:linear-gradient(135deg,#1d4ed8,#2563eb); border:none; color:white; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:12px; white-space:nowrap;">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hotspot Scale / Size Control -->
+                        <div class="form-group" id="group-scale">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <label for="hs-scale" style="margin-bottom: 0;">Kích thước (Scale)</label>
+                                <span id="lbl-scale-val" style="font-size: 11px; font-weight: bold; color: var(--primary);">0.50x</span>
+                            </div>
+                            <input type="range" id="hs-scale" min="0.20" max="1.50" step="0.05" value="0.50" style="width: 100%;">
+                        </div>
+
+                        <!-- Readonly coordinates -->
+                        <div class="form-group">
+                            <label>Tọa độ Spherical</label>
+                            <div class="form-row">
+                                <div>
+                                    <span style="font-size: 10px; color: var(--text-muted);">ath</span>
+                                    <input type="text" id="hs-ath" readonly style="font-family: monospace;">
+                                </div>
+                                <div>
+                                    <span style="font-size: 10px; color: var(--text-muted);">atv</span>
+                                    <input type="text" id="hs-atv" readonly style="font-family: monospace;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Polygon-specific controls (hidden for non-polygon) -->
+                        <div id="group-polygon-config" style="display: none;">
+                            <div class="form-group">
+                                <label>Số đỉnh đa giác</label>
+                                <div style="font-size: 13px; font-weight: bold; color: #10b981;" id="lbl-poly-vertex-count">0 đỉnh</div>
+                            </div>
+                        </div>
+
+                        <button id="btn-delete-hotspot" class="btn-action btn-danger" style="margin-top: 10px;">
+                            <i class="fa-solid fa-trash-can"></i> XÓA HOTSPOT
+                        </button>
+                    </div>
+
+                    <div id="no-selected-msg" style="text-align: center; padding: 40px 10px; color: var(--text-muted); font-size: 13px;">
+                        <i class="fa-solid fa-arrow-pointer" style="font-size: 24px; margin-bottom: 12px; display: block;"></i>
+                        Chọn một hotspot trong danh sách bên dưới hoặc trên màn hình 360 để chỉnh sửa.
+                    </div>
+
+                    <!-- Hotspots List in this Scene -->
+                    <div class="hotspot-list-section">
+                        <div class="hotspot-list-header">Hotspots trong cảnh này</div>
+                        <div class="hotspots-wrapper" id="scene-hotspots-container">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: VIEW & PREALIGN PANE -->
+                <div id="tab-pane-view" class="tab-pane" style="display: none;">
+                    <!-- Default View Settings Section -->
+                    <div class="view-config-card">
+                        <div class="view-card-title">
+                            <i class="fa-solid fa-camera"></i> KHUNG NHÌN MẶC ĐỊNH (VIEW)
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">
+                            🎯 Góc nhìn mặc định đã lưu của cảnh:
+                        </div>
+                        <div class="view-coords-grid" style="margin-bottom: 8px;">
+                            <div class="view-coord-box" style="border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.08);">
+                                <span style="color: #60a5fa;">hlookat</span>
+                                <strong id="val-def-hlookat" style="color: #93c5fd;">0.0°</strong>
+                            </div>
+                            <div class="view-coord-box" style="border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.08);">
+                                <span style="color: #60a5fa;">vlookat</span>
+                                <strong id="val-def-vlookat" style="color: #93c5fd;">0.0°</strong>
+                            </div>
+                            <div class="view-coord-box" style="border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.08);">
+                                <span style="color: #60a5fa;">fov</span>
+                                <strong id="val-def-fov" style="color: #93c5fd;">100.0°</strong>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">
+                            👀 Camera hiện tại (đang lia):
+                        </div>
+                        <div class="view-coords-grid" style="margin-bottom: 12px;">
+                            <div class="view-coord-box">
+                                <span>hlookat</span>
+                                <strong id="val-hlookat">0.0°</strong>
+                            </div>
+                            <div class="view-coord-box">
+                                <span>vlookat</span>
+                                <strong id="val-vlookat">0.0°</strong>
+                            </div>
+                            <div class="view-coord-box">
+                                <span>fov</span>
+                                <strong id="val-fov">100.0°</strong>
+                            </div>
+                        </div>
+
+                        <div class="view-section-label">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> GIỚI HẠN ZOOM
+                        </div>
+                        <div class="view-params-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="view-param-box">
+                                <label>FOV Min</label>
+                                <input type="number" id="input-fovmin" value="60" min="20" max="120" step="1" title="Giá trị nhỏ = zoom sâu hơn">
+                            </div>
+                            <div class="view-param-box">
+                                <label>FOV Max</label>
+                                <input type="number" id="input-fovmax" value="95" min="60" max="179" step="1" title="Giá trị lớn = nhìn rộng hơn">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px;">
+                            <button id="btn-set-fovmin" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 5px 4px;" title="Dùng độ zoom hiện tại làm giới hạn zoom sâu nhất">
+                                <i class="fa-solid fa-bullseye"></i> Đặt FOV Min
+                            </button>
+                            <button id="btn-set-fovmax" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 5px 4px;" title="Dùng độ zoom hiện tại làm giới hạn nhìn xa nhất">
+                                <i class="fa-solid fa-expand"></i> Đặt FOV Max
                             </button>
                         </div>
+
+                        <button id="btn-reset-view" class="btn-action btn-secondary" style="font-size: 11px; margin-bottom: 8px; padding: 6px 10px; width: 100%;">
+                            <i class="fa-solid fa-rotate-left"></i> VỀ GÓC NHÌN MẶC ĐỊNH ĐÃ LƯU
+                        </button>
+                        <button id="btn-save-view" class="btn-action btn-view-save" style="width: 100%; margin-bottom: 0;">
+                            <i class="fa-solid fa-camera"></i> LƯU GÓC NHÌN HIỆN TẠI LÀM MẶC ĐỊNH
+                        </button>
                     </div>
 
-                    <!-- Hotspot Scale / Size Control -->
-                    <div class="form-group" id="group-scale">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                            <label for="hs-scale" style="margin-bottom: 0;">Kích thước (Scale)</label>
-                            <span id="lbl-scale-val" style="font-size: 11px; font-weight: bold; color: var(--primary);">0.50x</span>
+                    <!-- Horizon Leveling (Prealign) Panel -->
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                        <div class="view-section-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span><i class="fa-solid fa-compass-drafting" style="color: #00e6ff;"></i> CÂN BẰNG CHÂN TRỜI</span>
+                            <button id="btn-toggle-grid" class="btn-action btn-secondary" style="margin: 0; padding: 2px 8px; font-size: 10px;" title="Bật/tắt lưới căn chân trời">
+                                <i class="fa-solid fa-border-all"></i> Lưới căn
+                            </button>
                         </div>
-                        <input type="range" id="hs-scale" min="0.20" max="1.50" step="0.05" value="0.50" style="width: 100%;">
-                    </div>
 
-                    <!-- Readonly coordinates -->
-                    <div class="form-group">
-                        <label>Tọa độ Spherical</label>
-                        <div class="form-row">
+                        <!-- Sliders for Roll, Pitch, Yaw -->
+                        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
                             <div>
-                                <span style="font-size: 10px; color: var(--text-muted);">ath</span>
-                                <input type="text" id="hs-ath" readonly style="font-family: monospace;">
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
+                                    <span>Nghiêng trái/phải (Roll)</span>
+                                    <strong id="val-roll" style="color: #00e6ff;">0.0°</strong>
+                                </div>
+                                <input type="range" id="slider-roll" min="-15" max="15" step="0.1" value="0" style="width: 100%; cursor: pointer;">
                             </div>
+
                             <div>
-                                <span style="font-size: 10px; color: var(--text-muted);">atv</span>
-                                <input type="text" id="hs-atv" readonly style="font-family: monospace;">
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
+                                    <span>Ngẩng/Cúi (Pitch)</span>
+                                    <strong id="val-pitch" style="color: #00e6ff;">0.0°</strong>
+                                </div>
+                                <input type="range" id="slider-pitch" min="-15" max="15" step="0.1" value="0" style="width: 100%; cursor: pointer;">
+                            </div>
+
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; color: #ccc;">
+                                    <span>Xoay hướng (Yaw)</span>
+                                    <strong id="val-yaw" style="color: #ccc;">0.0°</strong>
+                                </div>
+                                <input type="range" id="slider-yaw" min="-180" max="180" step="1" value="0" style="width: 100%; cursor: pointer;">
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Polygon-specific controls (hidden for non-polygon) -->
-                    <div id="group-polygon-config" style="display: none;">
-                        <div class="form-group">
-                            <label>Số đỉnh đa giác</label>
-                            <div style="font-size: 13px; font-weight: bold; color: #10b981;" id="lbl-poly-vertex-count">0 đỉnh</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                            <button id="btn-reset-prealign" class="btn-action btn-secondary" style="font-size: 10px; margin-bottom: 0; padding: 6px 4px;">
+                                <i class="fa-solid fa-rotate-left"></i> Reset (0°)
+                            </button>
+                            <button id="btn-save-prealign" class="btn-action btn-view-save" style="font-size: 10px; margin-bottom: 0; padding: 6px 4px; background: linear-gradient(135deg, #0284c7, #0369a1);">
+                                <i class="fa-solid fa-floppy-disk"></i> LƯU ĐỘ NGHIÊNG
+                            </button>
                         </div>
-                    </div>
-
-                    <button id="btn-delete-hotspot" class="btn-action btn-danger" style="margin-top: 10px;">
-                        <i class="fa-solid fa-trash-can"></i> XÓA HOTSPOT
-                    </button>
-                </div>
-
-                <div id="no-selected-msg" style="text-align: center; padding: 40px 10px; color: var(--text-muted); font-size: 13px;">
-                    <i class="fa-solid fa-arrow-pointer" style="font-size: 24px; margin-bottom: 12px; display: block;"></i>
-                    Chọn một hotspot trong danh sách bên dưới hoặc trên màn hình 360 để chỉnh sửa.
-                </div>
-
-                <!-- Hotspots List in this Scene -->
-                <div class="hotspot-list-section">
-                    <div class="hotspot-list-header">Hotspots trong cảnh này</div>
-                    <div class="hotspots-wrapper" id="scene-hotspots-container">
-                        <!-- Loaded dynamically -->
                     </div>
                 </div>
             </div>
 
             <!-- Sticky Fixed Footer: Save Hotspots to File -->
-            <div class="panel-footer" style="padding: 14px 16px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); flex-shrink: 0;">
+            <div class="panel-footer" id="tab-pane-hotspots-footer" style="padding: 14px 16px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); flex-shrink: 0;">
                 <button id="btn-save-hotspots" class="btn-action btn-save" style="margin-bottom: 0; width: 100%; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
                     <i class="fa-solid fa-floppy-disk"></i> LƯU HOTSPOTS VÀO FILE
                 </button>
@@ -1658,41 +1941,126 @@
             initKeyboardShortcuts();
         });
 
-        // 1. Inject drag actions and click handlers dynamically into KrPano XML
+        // 1. Inject drag actions and click handlers dynamically into KrPano without loadxml
         function injectEditorXML() {
-            const dragActionXml = '<krpano><action name="draghotspot">' +
-                'spheretoscreen(ath, atv, hotspotxy[get(name)].x, hotspotxy[get(name)].y);' +
-                'sub(drag_adjustx, mouse.stagex, hotspotxy[get(name)].x);' +
-                'sub(drag_adjusty, mouse.stagey, hotspotxy[get(name)].y);' +
-                'asyncloop(pressed,' +
-                '  sub(dx, mouse.stagex, drag_adjustx);' +
-                '  sub(dy, mouse.stagey, drag_adjusty);' +
-                '  screentosphere(dx, dy, ath, atv);' +
-                '  js(onHotspotDrag(get(name), get(ath), get(atv)));' +
-                ');' +
-                '</action></krpano>';
-            krpanoObj.call("loadxml('" + dragActionXml + "', null, MERGE);");
+            // Overrides hotspot clicks inside editor mode (without loadxml to prevent resetting camera view)
+            krpanoObj.set("action[arrow_hotspot_click].content", "js(onHotspotSelected(get(name)));");
+            krpanoObj.set("action[fly_transition_click].content", "js(onHotspotSelected(get(name)));");
+            krpanoObj.set("action[skin_hotspotstyle_click].content", "js(onHotspotSelected(get(name)));");
 
-            // Overrides hotspot clicks inside editor mode
-            const hotspotHookXml = '<krpano>' +
-                '<action name="arrow_hotspot_click">js(onHotspotSelected(get(name)));</action>' +
-                '<action name="fly_transition_click">js(onHotspotSelected(get(name)));</action>' +
-                '<action name="skin_hotspotstyle_click">js(onHotspotSelected(get(name)));</action>' +
-                '</krpano>';
-            krpanoObj.call("loadxml('" + hotspotHookXml + "', null, MERGE);");
+            // Drag hotspot action fallback in memory
+            krpanoObj.set("action[draghotspot].content", 
+                "stoptween(oy); " +
+                "spheretoscreen(ath, atv, hotspotxy[get(name)].x, hotspotxy[get(name)].y); " +
+                "sub(drag_adjustx, mouse.stagex, hotspotxy[get(name)].x); " +
+                "sub(drag_adjusty, mouse.stagey, hotspotxy[get(name)].y); " +
+                "asyncloop(pressed, " +
+                "  sub(dx, mouse.stagex, drag_adjustx); " +
+                "  sub(dy, mouse.stagey, drag_adjusty); " +
+                "  screentosphere(dx, dy, ath, atv); " +
+                "  js(onHotspotDrag(get(name), get(ath), get(atv))); " +
+                ", " +
+                "  if(style == 'vitri', vitri_bounce(get(name)); ); " +
+                ");"
+            );
 
             // Listen for scene load completes
             krpanoObj.set("events.onnewscene", "js(onSceneChange());");
 
             // Delay scene detection briefly for KrPano parsing
-            setTimeout(detectScenesAndData, 500);
+            setTimeout(detectScenesAndData, 300);
+        }
+
+        // Helper: Extract saved default view for any scene
+        function getSceneDefaultView(sceneId) {
+            if (!krpanoObj || !sceneId) return null;
+
+            // 1. Try reading from KrPano's in-memory scene XML content
+            try {
+                const scContent = krpanoObj.get(`scene[${sceneId}].content`) || '';
+                const vMatch = scContent.match(/<view\s+([^>]+)\/?>/i);
+                if (vMatch) {
+                    const attrs = vMatch[1];
+                    const getAttr = (name) => {
+                        const m = attrs.match(new RegExp(`${name}="([^"]+)"`, 'i'));
+                        return m ? parseFloat(m[1]) : null;
+                    };
+                    const hlookat = getAttr('hlookat');
+                    const vlookat = getAttr('vlookat');
+                    const fov = getAttr('fov');
+                    const fovmin = getAttr('fovmin');
+                    const fovmax = getAttr('fovmax');
+                    const maxpixelzoom = getAttr('maxpixelzoom');
+                    if (hlookat !== null && vlookat !== null) {
+                        return {
+                            hlookat: Number(hlookat).toFixed(1),
+                            vlookat: Number(vlookat).toFixed(1),
+                            fov: fov !== null ? Number(fov).toFixed(1) : '100.0',
+                            fovmin: fovmin !== null ? Math.round(fovmin) : 60,
+                            fovmax: fovmax !== null ? Math.round(fovmax) : 120,
+                            maxpixelzoom: maxpixelzoom !== null ? Number(maxpixelzoom).toFixed(1) : '1.0'
+                        };
+                    }
+                }
+            } catch (e) {}
+
+            // 2. Fallback: Try reading from krpano's xml.view backup object
+            try {
+                const xmlH = krpanoObj.get('xml.view.hlookat');
+                const xmlV = krpanoObj.get('xml.view.vlookat');
+                const xmlFov = krpanoObj.get('xml.view.fov');
+                if (xmlH !== null && xmlH !== undefined && xmlV !== null && xmlV !== undefined) {
+                    return {
+                        hlookat: Number(xmlH).toFixed(1),
+                        vlookat: Number(xmlV).toFixed(1),
+                        fov: xmlFov !== null && xmlFov !== undefined ? Number(xmlFov).toFixed(1) : '100.0',
+                        fovmin: Math.round(Number(krpanoObj.get('xml.view.fovmin') || 60)),
+                        fovmax: Math.round(Number(krpanoObj.get('xml.view.fovmax') || 120)),
+                        maxpixelzoom: Number(krpanoObj.get('xml.view.maxpixelzoom') || 1.0).toFixed(1)
+                    };
+                }
+            } catch (e) {}
+
+            return null;
+        }
+
+        function updateDefaultViewUI(defView) {
+            const elDefH = document.getElementById('val-def-hlookat');
+            const elDefV = document.getElementById('val-def-vlookat');
+            const elDefFov = document.getElementById('val-def-fov');
+            if (defView) {
+                if (elDefH) elDefH.textContent = `${defView.hlookat}°`;
+                if (elDefV) elDefV.textContent = `${defView.vlookat}°`;
+                if (elDefFov) elDefFov.textContent = `${defView.fov}°`;
+            } else {
+                if (elDefH) elDefH.textContent = `--`;
+                if (elDefV) elDefV.textContent = `--`;
+                if (elDefFov) elDefFov.textContent = `--`;
+            }
         }
 
         const collapsedLocations = {};
+        let areAllFoldersCollapsed = false;
 
         function toggleLocationFolder(locId) {
             collapsedLocations[locId] = !collapsedLocations[locId];
-            renderSceneList(searchInput.value);
+            renderSceneList(searchInput ? searchInput.value : '');
+        }
+
+        function toggleCollapseAllFolders() {
+            areAllFoldersCollapsed = !areAllFoldersCollapsed;
+            const btnLabel = document.getElementById('lbl-collapse-toggle');
+            if (btnLabel) {
+                btnLabel.textContent = areAllFoldersCollapsed ? 'Mở rộng' : 'Thu gọn';
+            }
+            const allLocationIds = new Set();
+            allScenes.forEach(sc => {
+                allLocationIds.add(sc.locationId || 'default');
+            });
+            allLocationIds.forEach(locId => {
+                collapsedLocations[locId] = areAllFoldersCollapsed;
+            });
+            renderSceneList(searchInput ? searchInput.value : '');
         }
 
         let currentGpsTarget = { type: '', id: '', name: '' };
@@ -1814,11 +2182,17 @@
             });
 
             renderSceneList();
+            const activeScene = krpanoObj.get("xml.scene") || (allScenes.length > 0 ? allScenes[0].id : '');
             if (!krpanoObj.get("xml.scene") && allScenes.length > 0) {
-                krpanoObj.call(`loadscene('${allScenes[0].id}', null, MERGE)`);
-            } else {
-                onSceneChange();
+                krpanoObj.call(`loadscene('${allScenes[0].id}', null, MERGE);`);
             }
+            if (activeScene) {
+                const defView = getSceneDefaultView(activeScene);
+                if (defView) {
+                    krpanoObj.call(`lookat(${defView.hlookat}, ${defView.vlookat}, ${defView.fov});`);
+                }
+            }
+            onSceneChange();
         }
 
         let draggedSceneId = null;
@@ -2033,6 +2407,16 @@
                 (sc.locationName && sc.locationName.toLowerCase().includes(filter.toLowerCase()))
             );
 
+            // Update header count badge
+            const totalCountBadge = document.getElementById('lbl-total-scenes-count');
+            if (totalCountBadge) {
+                if (filter.trim()) {
+                    totalCountBadge.textContent = `${filtered.length}/${allScenes.length} cảnh`;
+                } else {
+                    totalCountBadge.textContent = `${allScenes.length} cảnh`;
+                }
+            }
+
             if (filtered.length === 0) {
                 sceneListContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">Chưa có cảnh nào</div>';
                 return;
@@ -2062,7 +2446,7 @@
                 folderEl.addEventListener('drop', (e) => handleLocationDrop(e, group.id));
 
                 const isCurrentGroup = group.scenes.some(s => s.id === currentSceneId);
-                const isCollapsed = collapsedLocations[group.id] === true && !isCurrentGroup;
+                const isCollapsed = collapsedLocations[group.id] === true;
 
                 const locObj = locationsDataMap[group.id] || {};
                 const hasLocGps = (locObj.lat !== null && locObj.lat !== undefined && locObj.lat !== '' && locObj.lng !== null && locObj.lng !== undefined && locObj.lng !== '');
@@ -2070,17 +2454,17 @@
 
                 folderEl.innerHTML = `
                     <div class="location-folder-header" onclick="toggleLocationFolder('${group.id}')">
-                        <i class="fa-solid ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'}" style="font-size: 10px; color: var(--text-muted);"></i>
+                        <i class="fa-solid ${isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'}" style="font-size: 10px; color: var(--text-muted); width: 12px; text-align: center;"></i>
                         <i class="fa-solid ${isCollapsed ? 'fa-folder' : 'fa-folder-open'}" style="color: var(--primary); font-size: 14px;"></i>
                         <div class="location-folder-title">
                             <span>${group.name}</span>
                             <span class="location-badge">${group.scenes.length} cảnh</span>
                         </div>
-                        <div style="display: flex; gap: 2px;" onclick="event.stopPropagation();">
-                            <button class="btn-rename-scene" title="${locGpsTitle}" style="color: ${hasLocGps ? '#10b981' : '#6b7280'};" onclick="promptEditLocationGps('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
+                        <div class="location-folder-actions" onclick="event.stopPropagation();">
+                            <button class="btn-scene-action" title="${locGpsTitle}" style="color: ${hasLocGps ? '#10b981' : 'inherit'};" onclick="promptEditLocationGps('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
                                 <i class="fa-solid fa-location-dot"></i>
                             </button>
-                            <button class="btn-rename-scene" title="Đổi tên Địa Điểm" onclick="promptRenameLocation('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
+                            <button class="btn-scene-action" title="Đổi tên Địa Điểm" onclick="promptRenameLocation('${group.id}', '${group.name.replace(/'/g, "\\'")}');">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </div>
@@ -2105,8 +2489,6 @@
 
                     const safeTitle = sc.title ? sc.title.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
                     const safeId = sc.id ? sc.id.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
-                    const isFirst = scIndex === 0;
-                    const isLast = scIndex === group.scenes.length - 1;
 
                     const hasSceneGps = (sc.lat !== null && sc.lat !== undefined && sc.lng !== null && sc.lng !== undefined);
                     const sceneGpsTitle = hasSceneGps 
@@ -2114,14 +2496,7 @@
                         : (hasLocGps ? `Đang dùng chung tọa độ Địa điểm (${locObj.lat}, ${locObj.lng})` : 'Chưa có tọa độ (Click để đặt tọa độ riêng)');
 
                     el.innerHTML = `
-                        <div class="scene-reorder-btns">
-                            <button class="btn-reorder-scene" title="Đẩy lên trên" ${isFirst ? 'disabled style="opacity:0.2; cursor:not-allowed;"' : ''} onclick="event.stopPropagation(); moveSceneOrder('${group.id}', '${sc.id}', -1);">
-                                <i class="fa-solid fa-chevron-up"></i>
-                            </button>
-                            <button class="btn-reorder-scene" title="Đẩy xuống dưới" ${isLast ? 'disabled style="opacity:0.2; cursor:not-allowed;"' : ''} onclick="event.stopPropagation(); moveSceneOrder('${group.id}', '${sc.id}', 1);">
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </button>
-                        </div>
+                        <i class="fa-solid fa-grip-vertical scene-drag-handle" title="Kéo để sắp xếp lại thứ tự hoặc chuyển sang địa điểm khác"></i>
                         <img class="scene-thumb" src="${sc.thumb}" onerror="this.src='core/assets/og-preview.png'">
                         <div class="scene-info">
                             <div class="scene-name" title="${safeTitle}">
@@ -2130,24 +2505,38 @@
                             </div>
                             <div class="scene-id">${safeId}</div>
                         </div>
-                        <div style="display:flex; gap:2px;">
-                            <button class="btn-rename-scene" title="${sceneGpsTitle}" style="color: ${hasSceneGps ? '#10b981' : '#6b7280'};" onclick="event.stopPropagation(); promptEditSceneGps('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                        <div class="scene-item-actions" onclick="event.stopPropagation();">
+                            <button class="btn-scene-action action-gps" title="${sceneGpsTitle}" style="${hasSceneGps ? 'color: #10b981;' : ''}" onclick="promptEditSceneGps('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
                                 <i class="fa-solid fa-location-crosshairs"></i>
                             </button>
-                            <button class="btn-rename-scene" title="Chuyển sang Địa điểm khác" style="color: #3b82f6;" onclick="event.stopPropagation(); promptMoveSceneLocation('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
-                                <i class="fa-solid fa-right-left"></i>
+                            <button class="btn-scene-action action-rename" title="Đổi tên cảnh" onclick="promptRenameScene('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                                <i class="fa-solid fa-pen"></i>
                             </button>
-                            <button class="btn-rename-scene" title="Đổi tên cảnh" onclick="event.stopPropagation(); promptRenameScene('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button class="btn-rename-scene" title="Xóa cảnh này" style="color: #ef4444;" onclick="event.stopPropagation(); confirmDeleteScene('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
+                            <button class="btn-scene-action action-danger" title="Xóa cảnh này" onclick="confirmDeleteScene('${sc.id}', '${safeTitle.replace(/'/g, "\\'")}');">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
                     `;
                     el.addEventListener('click', () => {
-                        if (currentSceneId === sc.id) return;
-                        krpanoObj.call(`loadscene('${sc.id}', null, MERGE, BLEND(0.4))`);
+                        if (isPickLinkingMode) {
+                            onScenePickedForLink(sc.id, sc.title);
+                            return;
+                        }
+                        if (currentSceneId === sc.id) {
+                            // If clicking current scene, smoothly orient camera to its default view
+                            const defView = getSceneDefaultView(sc.id);
+                            if (defView) {
+                                krpanoObj.call(`lookto(${defView.hlookat}, ${defView.vlookat}, ${defView.fov}, smooth(100,50,50));`);
+                            }
+                            return;
+                        }
+                        krpanoObj.call(`loadscene('${sc.id}', null, MERGE, BLEND(0.4));`);
+                        setTimeout(() => {
+                            const defView = getSceneDefaultView(sc.id);
+                            if (defView) {
+                                krpanoObj.call(`lookat(${defView.hlookat}, ${defView.vlookat}, ${defView.fov});`);
+                            }
+                        }, 200);
                     });
                     scenesContainer.appendChild(el);
                 });
@@ -2459,10 +2848,36 @@
                 if (valRoll) valRoll.textContent = `${(pParts[2] || 0).toFixed(1)}°`;
             }
 
+            // Sync default view values display in Tab 2 (VIEW pane)
+            const defView = getSceneDefaultView(currentSceneId);
+            updateDefaultViewUI(defView);
+
+            // Auto-align to scene's default view if camera is sitting at (0, 0)
+            if (!isReturnPickingMode && defView && krpanoObj) {
+                const curH = Number(krpanoObj.get("view.hlookat") || 0);
+                const curV = Number(krpanoObj.get("view.vlookat") || 0);
+                const defH = Number(defView.hlookat);
+                const defV = Number(defView.vlookat);
+                if (Math.abs(curH) < 0.05 && Math.abs(curV) < 0.05 && (Math.abs(defH) >= 0.05 || Math.abs(defV) >= 0.05)) {
+                    krpanoObj.call(`lookat(${defView.hlookat}, ${defView.vlookat}, ${defView.fov});`);
+                }
+            }
+
             // Extract scene hotspots currently present in KrPano
             loadSceneHotspots();
             deselectHotspot();
             renderHotspotList();
+
+            // If in Visual Return Hotspot Placement mode, spawn the preview return hotspot in target Scene B
+            if (isReturnPickingMode && returnPickContext) {
+                const isTarget = returnPickContext.toSceneId === currentSceneId ||
+                    returnPickContext.toSceneId.replace(/^scene_/, '') === currentSceneId.replace(/^scene_/, '');
+                if (isTarget) {
+                    setTimeout(() => {
+                        spawnReturnPreviewHotspot();
+                    }, 200);
+                }
+            }
         };
 
         // Parse custom hotspots already loaded in the active XML scene
@@ -2606,6 +3021,9 @@
             // Auto-open Right Panel when a hotspot is selected
             toggleRightSidebar(true);
 
+            // Switch to Tab 1 (Hotspots) so properties are immediately visible
+            switchRightSidebarTab('hotspots');
+
             // Highlight selected hotspot in sidebar list (toggle class instead of full re-render)
             document.querySelectorAll('.hotspot-item').forEach(item => {
                 const itemName = item.dataset.hsName;
@@ -2645,6 +3063,9 @@
             sceneHotspots.forEach(h => {
                 krpanoObj.set(`hotspot[${h.name}].alpha`, h.name === name ? 1.0 : 0.6);
             });
+
+            // Show mini quick-toolbar (Vấn đề 3)
+            showQuickToolbar(hs);
         };
 
         function deselectHotspot() {
@@ -2658,10 +3079,529 @@
                     krpanoObj.set(`hotspot[${h.name}].alpha`, 0.9);
                 });
             }
+
+            hideQuickToolbar();
+        }
+
+        // ================================================================
+        // 2-TAB RIGHT SIDEBAR MODULE (Vấn đề 2)
+        // ================================================================
+        function switchRightSidebarTab(tabName) {
+            const btnHotspots = document.getElementById('tab-btn-hotspots');
+            const btnView = document.getElementById('tab-btn-view');
+            const paneHotspots = document.getElementById('tab-pane-hotspots');
+            const paneView = document.getElementById('tab-pane-view');
+            const footerHotspots = document.getElementById('tab-pane-hotspots-footer');
+
+            if (!btnHotspots || !btnView || !paneHotspots || !paneView) return;
+
+            if (tabName === 'hotspots') {
+                btnHotspots.classList.add('active');
+                btnView.classList.remove('active');
+                paneHotspots.style.display = 'block';
+                paneView.style.display = 'none';
+                if (footerHotspots) footerHotspots.style.display = 'block';
+            } else if (tabName === 'view') {
+                btnView.classList.add('active');
+                btnHotspots.classList.remove('active');
+                paneView.style.display = 'block';
+                paneHotspots.style.display = 'none';
+                if (footerHotspots) footerHotspots.style.display = 'none';
+            }
+        }
+
+        function initRightSidebarTabs() {
+            document.getElementById('tab-btn-hotspots')?.addEventListener('click', () => {
+                switchRightSidebarTab('hotspots');
+            });
+            document.getElementById('tab-btn-view')?.addEventListener('click', () => {
+                switchRightSidebarTab('view');
+            });
+        }
+
+        // ================================================================
+        // MINI QUICK-TOOLBAR MODULE (Vấn đề 3)
+        // ================================================================
+        function showQuickToolbar(hs) {
+            const tb = document.getElementById('hotspot-quick-toolbar');
+            if (!tb || !hs) return;
+            const nameEl = document.getElementById('quick-tb-name');
+            if (nameEl) {
+                nameEl.textContent = hs.custom_title || hs.name;
+                nameEl.title = `ID: ${hs.name}`;
+            }
+            const pickBtn = document.getElementById('quick-tb-pick');
+            if (pickBtn) {
+                pickBtn.style.display = (hs.style === 'thongtin' || hs.style === 'poly_ground_nav') ? 'none' : 'inline-flex';
+            }
+            tb.style.display = 'flex';
+        }
+
+        function hideQuickToolbar() {
+            const tb = document.getElementById('hotspot-quick-toolbar');
+            if (tb) tb.style.display = 'none';
+        }
+
+        function initQuickToolbarListeners() {
+            document.getElementById('quick-tb-pick')?.addEventListener('click', () => {
+                startPickLinkMode();
+            });
+
+            document.getElementById('quick-tb-rename')?.addEventListener('click', () => {
+                if (!selectedHotspotName) return;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (!hs) return;
+                const newTitle = prompt('Đổi tiêu đề hiển thị (Tooltip):', hs.custom_title || '');
+                if (newTitle !== null) {
+                    hs.custom_title = newTitle.trim();
+                    inputHsTitle.value = hs.custom_title;
+                    krpanoObj.set(`hotspot[${hs.name}].custom_title`, hs.custom_title);
+                    const nameEl = document.getElementById('quick-tb-name');
+                    if (nameEl) nameEl.textContent = hs.custom_title || hs.name;
+                    markDirty();
+                    renderHotspotList();
+                }
+            });
+
+            document.getElementById('quick-tb-lookto')?.addEventListener('click', () => {
+                if (!selectedHotspotName || !krpanoObj) return;
+                const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+                if (!hs) return;
+                krpanoObj.call(`looktohotspot(${hs.name}, 85, smooth(100,20,50))`);
+            });
+
+            document.getElementById('quick-tb-del')?.addEventListener('click', () => {
+                document.getElementById('btn-delete-hotspot')?.click();
+            });
+
+            document.getElementById('quick-tb-close')?.addEventListener('click', () => {
+                hideQuickToolbar();
+            });
+        }
+
+        // ================================================================
+        // CLICK-TO-LINK SCENE MODULE (Vấn đề 1 - Phương án A)
+        // ================================================================
+        let isPickLinkingMode = false;
+
+        function startPickLinkMode() {
+            if (!selectedHotspotName) {
+                showToast('⚠️ Hãy chọn một hotspot trước khi nối cảnh!');
+                return;
+            }
+            const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+            if (!hs || hs.style === 'thongtin' || hs.style === 'poly_ground_nav') {
+                showToast('⚠️ Chỉ có thể nối cảnh cho Hotspot chuyển cảnh (mũi tên, ghim, trực thăng)!');
+                return;
+            }
+
+            isPickLinkingMode = true;
+            toggleLeftSidebar(true);
+            const sidebarLeft = document.getElementById('left-sidebar');
+            if (sidebarLeft) sidebarLeft.classList.add('pick-link-active');
+
+            document.querySelectorAll('.scene-item').forEach(item => {
+                if (item.dataset.sceneId !== currentSceneId) {
+                    item.classList.add('pick-link-candidate');
+                }
+            });
+
+            const banner = document.getElementById('pick-link-banner');
+            if (banner) banner.style.display = 'flex';
+
+            showToast('🎯 Hãy click vào cảnh bạn muốn liên kết ở Cây danh sách bên trái...');
+        }
+
+        function cancelPickLinkMode() {
+            isPickLinkingMode = false;
+            const sidebarLeft = document.getElementById('left-sidebar');
+            if (sidebarLeft) sidebarLeft.classList.remove('pick-link-active');
+
+            document.querySelectorAll('.scene-item').forEach(item => {
+                item.classList.remove('pick-link-candidate');
+            });
+
+            const banner = document.getElementById('pick-link-banner');
+            if (banner) banner.style.display = 'none';
+        }
+
+        function onScenePickedForLink(targetSceneId, targetSceneTitle) {
+            cancelPickLinkMode();
+
+            if (targetSceneId === currentSceneId) {
+                showToast('⚠️ Không thể liên kết cảnh tới chính nó!');
+                return;
+            }
+
+            const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
+            if (!hs) return;
+
+            selectHsLinked.value = targetSceneId;
+            hs.linkedscene = targetSceneId;
+            krpanoObj.set(`hotspot[${hs.name}].linkedscene`, targetSceneId);
+
+            if (!hs.custom_title || hs.custom_title.startsWith('Mũi tên') || hs.custom_title.startsWith('Ghim')) {
+                hs.custom_title = targetSceneTitle;
+                inputHsTitle.value = targetSceneTitle;
+                krpanoObj.set(`hotspot[${hs.name}].custom_title`, targetSceneTitle);
+                const qName = document.getElementById('quick-tb-name');
+                if (qName) qName.textContent = targetSceneTitle;
+            }
+
+            markDirty();
+            renderHotspotList();
+            showToast(`🔗 Đã liên kết tới "${targetSceneTitle}"!`);
+
+            // Automatically enter Visual Return Hotspot Placement (Cách 2)
+            startReturnPickMode(currentSceneId, targetSceneId, hs.ath, hs.atv, hs.style, hs.name);
+        }
+
+        // ================================================================
+        // VISUAL RETURN HOTSPOT PLACEMENT (Cách 2)
+        // ================================================================
+        let isReturnPickingMode = false;
+        let returnPickContext = null;
+        let currentReturnAth = '0.0000';
+        let currentReturnAtv = '0.0000';
+
+        async function startReturnPickMode(fromSceneId, toSceneId, ath, atv, style, hsName) {
+            if (!krpanoObj || !fromSceneId || !toSceneId || fromSceneId === toSceneId) return;
+
+            const toSceneObj = allScenes.find(s => s.id === toSceneId);
+            const toTitle = toSceneObj ? toSceneObj.title : toSceneId;
+            const fromSceneObj = allScenes.find(s => s.id === fromSceneId);
+            const fromTitle = fromSceneObj ? fromSceneObj.title : fromSceneId;
+
+            // 1. Persist Scene A before leaving it so its newly added hotspot is NOT lost!
+            updateKrpanoInMemoryScene(fromSceneId, sceneHotspots);
+            const fromHotspotsBackup = JSON.parse(JSON.stringify(sceneHotspots));
+
+            try {
+                await fetch('/api/scenes/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sceneId: fromSceneId,
+                        hotspots: sceneHotspots
+                    })
+                });
+                isDirty = false;
+            } catch (err) {
+                console.warn('Auto-save fromScene error:', err);
+            }
+
+            let initialAth = (parseFloat(ath || 0) + 180) % 360;
+            if (initialAth > 180) initialAth -= 360;
+            currentReturnAth = initialAth.toFixed(4);
+
+            let initialAtv = parseFloat(atv || 0);
+            if (initialAtv < 10) initialAtv = 18.0; // Place on walkway ground level by default
+            currentReturnAtv = initialAtv.toFixed(4);
+
+            returnPickContext = {
+                fromSceneId,
+                fromSceneTitle: fromTitle,
+                toSceneId,
+                toSceneTitle: toTitle,
+                fromAth: ath,
+                fromAtv: atv,
+                style: (style && style !== 'poly_ground_nav' && style !== 'thongtin') ? style : 'muiten',
+                hsName: hsName,
+                fromHotspotsBackup: fromHotspotsBackup
+            };
+
+            isReturnPickingMode = true;
+
+            const titleEl = document.getElementById('return-pick-title');
+            if (titleEl) {
+                titleEl.innerHTML = `Đang ở <b>"${toTitle}"</b>: Đặt Hotspot quay về <b>"${fromTitle}"</b>`;
+            }
+
+            const banner = document.getElementById('return-pick-banner');
+            if (banner) banner.style.display = 'flex';
+            const bottomBar = document.getElementById('return-pick-bottom-bar');
+            if (bottomBar) bottomBar.style.display = 'flex';
+
+            const lblCoords = document.getElementById('lbl-return-coords');
+            if (lblCoords) lblCoords.textContent = `ath: ${currentReturnAth}, atv: ${currentReturnAtv}`;
+
+            // Temporarily hide Top Bar to avoid overlap
+            const topBar = document.querySelector('.editor-top-bar');
+            if (topBar) topBar.style.display = 'none';
+
+            toggleLeftSidebar(false);
+            toggleRightSidebar(false);
+            hideQuickToolbar();
+
+            // Transition KrPano to target scene B
+            krpanoObj.call(`loadscene('${toSceneId}', null, MERGE, BLEND(0.4));`);
+            showToast(`🚀 Đang chuyển sang "${toTitle}"... Đặt vị trí quay về!`);
+
+            // Safeguard fallback: trigger preview spawn after scene transition
+            setTimeout(() => {
+                if (isReturnPickingMode && returnPickContext) {
+                    spawnReturnPreviewHotspot();
+                }
+            }, 450);
+        }
+
+        // Add the draggable preview return hotspot in Scene B
+        function spawnReturnPreviewHotspot() {
+            if (!krpanoObj || !returnPickContext) return;
+            const ctx = returnPickContext;
+            const safeTitle = ctx.fromSceneTitle.replace(/'/g, "\\'");
+
+            // If target scene already contains a return hotspot linking back to fromSceneId,
+            // inherit its existing coordinates and temporarily hide it during preview
+            const cleanFromId = ctx.fromSceneId.replace(/^scene_/, '');
+            const existingReturn = sceneHotspots.find(h => 
+                h.linkedscene === ctx.fromSceneId || 
+                h.linkedscene === cleanFromId ||
+                h.linkedscene === `scene_${cleanFromId}`
+            );
+            if (existingReturn) {
+                currentReturnAth = Number(existingReturn.ath || 0).toFixed(4);
+                currentReturnAtv = Number(existingReturn.atv || 0).toFixed(4);
+                krpanoObj.set(`hotspot[${existingReturn.name}].visible`, false);
+                const lblCoords = document.getElementById('lbl-return-coords');
+                if (lblCoords) lblCoords.textContent = `ath: ${currentReturnAth}, atv: ${currentReturnAtv}`;
+            }
+
+            const labelAtv = (parseFloat(currentReturnAtv) - 7.0).toFixed(4);
+            const previewStyle = (ctx.style && ctx.style !== 'poly_ground_nav' && ctx.style !== 'thongtin') ? ctx.style : 'muiten';
+
+            // Clean any existing preview hotspots before creating
+            krpanoObj.call('removehotspot(hs_preview_return); removehotspot(hs_preview_return_label);');
+
+            // 1. Create main preview navigation hotspot with loadstyle
+            krpanoObj.call(`addhotspot(hs_preview_return);`);
+            krpanoObj.call(`hotspot[hs_preview_return].loadstyle(${previewStyle});`);
+            krpanoObj.set('hotspot[hs_preview_return].ath', currentReturnAth);
+            krpanoObj.set('hotspot[hs_preview_return].atv', currentReturnAtv);
+            krpanoObj.set('hotspot[hs_preview_return].renderer', 'webgl');
+            krpanoObj.set('hotspot[hs_preview_return].scale', '0.70');
+            krpanoObj.set('hotspot[hs_preview_return].alpha', '1.0');
+            krpanoObj.set('hotspot[hs_preview_return].zorder', 100);
+            krpanoObj.set('hotspot[hs_preview_return].ondown', 'draghotspot();');
+            krpanoObj.set('hotspot[hs_preview_return].visible', true);
+            if (previewStyle === 'vitri') {
+                krpanoObj.set('hotspot[hs_preview_return].crop', null);
+                krpanoObj.set('hotspot[hs_preview_return].distorted', false);
+                krpanoObj.call('vitri_bounce(hs_preview_return);');
+            }
+
+            // 2. Create floating permanent tooltip/badge hotspot above it
+            krpanoObj.call(`addhotspot(hs_preview_return_label);`);
+            krpanoObj.set('hotspot[hs_preview_return_label].type', 'text');
+            krpanoObj.set('hotspot[hs_preview_return_label].html', `<div style="font-weight:700;font-size:13px;letter-spacing:0.3px;">📍 Quay về: ${safeTitle}</div><div style="font-size:10.5px;opacity:0.9;font-weight:400;margin-top:2px;">(Kéo thả hoặc bấm sàn để dời vị trí)</div>`);
+            krpanoObj.set('hotspot[hs_preview_return_label].ath', currentReturnAth);
+            krpanoObj.set('hotspot[hs_preview_return_label].atv', labelAtv);
+            krpanoObj.set('hotspot[hs_preview_return_label].edge', 'bottom');
+            krpanoObj.set('hotspot[hs_preview_return_label].distorted', false);
+            krpanoObj.set('hotspot[hs_preview_return_label].bg', true);
+            krpanoObj.set('hotspot[hs_preview_return_label].bgcolor', '0x0d9488');
+            krpanoObj.set('hotspot[hs_preview_return_label].bgalpha', '0.95');
+            krpanoObj.set('hotspot[hs_preview_return_label].bgroundedge', '8');
+            krpanoObj.set('hotspot[hs_preview_return_label].bgborder', '2 0xffffff 0.9');
+            krpanoObj.set('hotspot[hs_preview_return_label].css', 'color:#ffffff; font-family:system-ui,-apple-system,sans-serif; text-align:center; padding:6px 12px; cursor:move; user-select:none;');
+            krpanoObj.set('hotspot[hs_preview_return_label].zorder', 101);
+            krpanoObj.set('hotspot[hs_preview_return_label].ondown', 'draghotspot();');
+            krpanoObj.set('hotspot[hs_preview_return_label].visible', true);
+
+            // 3. Smoothly rotate camera straight towards the preview hotspot
+            krpanoObj.call(`lookto(${currentReturnAth}, ${currentReturnAtv}, 90, smooth(100, 50, 100));`);
+
+            // Attach native click listener on the KrPano sphere to relocate hotspot on click
+            krpanoObj.set("events[editor_return_picker].onclick", "js(onPanoReturnPickClick());");
+        }
+
+        // When clicking anywhere on the KrPano 360 panorama in return pick mode, relocate preview hotspot
+        window.onPanoReturnPickClick = function() {
+            if (!isReturnPickingMode || !krpanoObj) return;
+            const ath = Number(krpanoObj.get("mouse.ath")).toFixed(4);
+            const atv = Number(krpanoObj.get("mouse.atv")).toFixed(4);
+            if (isNaN(ath) || isNaN(atv)) return;
+
+            currentReturnAth = ath;
+            currentReturnAtv = atv;
+
+            krpanoObj.set("hotspot[hs_preview_return].ath", ath);
+            krpanoObj.set("hotspot[hs_preview_return].atv", atv);
+            krpanoObj.set("hotspot[hs_preview_return_label].ath", ath);
+            krpanoObj.set("hotspot[hs_preview_return_label].atv", (Number(atv) - 7.0).toFixed(4));
+
+            const lblCoords = document.getElementById('lbl-return-coords');
+            if (lblCoords) lblCoords.textContent = `ath: ${ath}, atv: ${atv}`;
+        };
+
+        async function finishReturnPick(ath, atv, isExplicitCoords = false) {
+            if (!returnPickContext) return;
+            const ctx = { ...returnPickContext };
+            
+            isReturnPickingMode = false;
+
+            // Cleanup preview hotspot & KrPano picker event
+            if (krpanoObj) {
+                krpanoObj.call('removehotspot(hs_preview_return); removehotspot(hs_preview_return_label);');
+                krpanoObj.set("events[editor_return_picker].onclick", null);
+            }
+
+            const banner = document.getElementById('return-pick-banner');
+            if (banner) banner.style.display = 'none';
+            const bottomBar = document.getElementById('return-pick-bottom-bar');
+            if (bottomBar) bottomBar.style.display = 'none';
+
+            const topBar = document.querySelector('.editor-top-bar');
+            if (topBar) topBar.style.display = 'flex';
+
+            showToast('⏳ Đang lưu Hotspot quay về...');
+
+            const saveAth = isExplicitCoords ? ath : ctx.fromAth;
+            const saveAtv = isExplicitCoords ? atv : ctx.fromAtv;
+
+            try {
+                const res = await fetch('/api/scenes/create-return-hotspot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        fromSceneId: ctx.fromSceneId,
+                        toSceneId: ctx.toSceneId,
+                        ath: saveAth,
+                        atv: saveAtv,
+                        style: ctx.style,
+                        isExplicitCoords: !!isExplicitCoords
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(`✅ ${data.message}`);
+                    // Sync target scene B's in-memory content in KrPano
+                    try {
+                        let toContent = krpanoObj.get(`scene[${ctx.toSceneId}].content`) || '';
+                        const cleanFromId = ctx.fromSceneId.replace(/^scene_/, '');
+                        const escClean = cleanFromId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const escFrom = ctx.fromSceneId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const toHsRegex = new RegExp(`<hotspot\\b[^>]*linkedscene="(?:${escFrom}|scene_${escClean}|${escClean})"[^>]*\\/?>`, 'gi');
+                        toContent = toContent.replace(toHsRegex, '');
+                        const newReturnTag = `\t<hotspot name="hs_return_${cleanFromId}_${Date.now().toString().slice(-4)}" style="${ctx.style}" ath="${saveAth}" atv="${saveAtv}" linkedscene="${ctx.fromSceneId}" custom_title="${ctx.fromSceneTitle}" show_title="true" show_thumb="true" />\n`;
+                        toContent = toContent.trimEnd() + '\n' + newReturnTag;
+                        krpanoObj.set(`scene[${ctx.toSceneId}].content`, toContent);
+                    } catch (e) {
+                        console.warn('Sync toScene in-memory content:', e);
+                    }
+                } else {
+                    showToast(`⚠️ ${data.error || 'Không thể tạo hotspot quay về'}`);
+                }
+            } catch (err) {
+                console.error('Lỗi khi lưu hotspot quay về:', err);
+                showToast('❌ Lỗi kết nối khi lưu hotspot quay về');
+            }
+
+            // Return camera back to Scene A
+            krpanoObj.call(`loadscene('${ctx.fromSceneId}', null, MERGE, BLEND(0.4));`);
+            toggleRightSidebar(true);
+
+            setTimeout(() => {
+                // Ensure Scene A hotspots are intact in memory
+                if (ctx.fromHotspotsBackup && ctx.fromHotspotsBackup.length > 0) {
+                    ctx.fromHotspotsBackup.forEach(bh => {
+                        if (!sceneHotspots.some(sh => sh.name === bh.name)) {
+                            sceneHotspots.push(bh);
+                            krpanoObj.call(`addhotspot(${bh.name})`);
+                            krpanoObj.call(`hotspot[${bh.name}].loadstyle(${bh.style})`);
+                            krpanoObj.set(`hotspot[${bh.name}].renderer`, 'webgl');
+                            krpanoObj.set(`hotspot[${bh.name}].ath`, bh.ath);
+                            krpanoObj.set(`hotspot[${bh.name}].atv`, bh.atv);
+                            krpanoObj.set(`hotspot[${bh.name}].linkedscene`, bh.linkedscene || '');
+                            krpanoObj.set(`hotspot[${bh.name}].custom_title`, bh.custom_title || '');
+                            krpanoObj.set(`hotspot[${bh.name}].ondown`, 'draghotspot();');
+                            krpanoObj.set(`hotspot[${bh.name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                            if (bh.style === 'vitri') {
+                                krpanoObj.set(`hotspot[${bh.name}].crop`, null);
+                                krpanoObj.set(`hotspot[${bh.name}].distorted`, false);
+                                krpanoObj.call(`vitri_bounce(${bh.name});`);
+                            }
+                        }
+                    });
+                    renderHotspotList();
+                }
+                if (ctx.hsName) {
+                    onHotspotSelected(ctx.hsName);
+                }
+            }, 600);
+        }
+
+        function cancelReturnPick() {
+            if (!returnPickContext) return;
+            const ctx = { ...returnPickContext };
+
+            isReturnPickingMode = false;
+
+            // Cleanup preview hotspot & KrPano picker event
+            if (krpanoObj) {
+                krpanoObj.call('removehotspot(hs_preview_return); removehotspot(hs_preview_return_label);');
+                krpanoObj.set("events[editor_return_picker].onclick", null);
+            }
+
+            const banner = document.getElementById('return-pick-banner');
+            if (banner) banner.style.display = 'none';
+            const bottomBar = document.getElementById('return-pick-bottom-bar');
+            if (bottomBar) bottomBar.style.display = 'none';
+
+            const topBar = document.querySelector('.editor-top-bar');
+            if (topBar) topBar.style.display = 'flex';
+
+            // Return camera back to Scene A
+            krpanoObj.call(`loadscene('${ctx.fromSceneId}', null, MERGE, BLEND(0.4));`);
+            toggleRightSidebar(true);
+            showToast('Đã bỏ qua tạo Hotspot quay về.');
+
+            setTimeout(() => {
+                if (ctx.fromHotspotsBackup && ctx.fromHotspotsBackup.length > 0) {
+                    ctx.fromHotspotsBackup.forEach(bh => {
+                        if (!sceneHotspots.some(sh => sh.name === bh.name)) {
+                            sceneHotspots.push(bh);
+                            krpanoObj.call(`addhotspot(${bh.name})`);
+                            krpanoObj.call(`hotspot[${bh.name}].loadstyle(${bh.style})`);
+                            krpanoObj.set(`hotspot[${bh.name}].renderer`, 'webgl');
+                            krpanoObj.set(`hotspot[${bh.name}].ath`, bh.ath);
+                            krpanoObj.set(`hotspot[${bh.name}].atv`, bh.atv);
+                            krpanoObj.set(`hotspot[${bh.name}].linkedscene`, bh.linkedscene || '');
+                            krpanoObj.set(`hotspot[${bh.name}].custom_title`, bh.custom_title || '');
+                            krpanoObj.set(`hotspot[${bh.name}].ondown`, 'draghotspot();');
+                            krpanoObj.set(`hotspot[${bh.name}].onclick`, `js(onHotspotSelected(get(name)))`);
+                            if (bh.style === 'vitri') {
+                                krpanoObj.set(`hotspot[${bh.name}].crop`, null);
+                                krpanoObj.set(`hotspot[${bh.name}].distorted`, false);
+                                krpanoObj.call(`vitri_bounce(${bh.name});`);
+                            }
+                        }
+                    });
+                    renderHotspotList();
+                }
+                if (ctx.hsName) {
+                    onHotspotSelected(ctx.hsName);
+                }
+            }, 600);
         }
 
         // 7. Realtime coordinates dragging callback from KrPano
         window.onHotspotDrag = function(name, ath, atv) {
+            // Live update preview return hotspot coordinates
+            if (name === 'hs_preview_return' || name === 'hs_preview_return_label') {
+                currentReturnAth = Number(ath).toFixed(4);
+                currentReturnAtv = Number(atv).toFixed(4);
+
+                krpanoObj.set('hotspot[hs_preview_return].ath', currentReturnAth);
+                krpanoObj.set('hotspot[hs_preview_return].atv', currentReturnAtv);
+                krpanoObj.set('hotspot[hs_preview_return_label].ath', currentReturnAth);
+                krpanoObj.set('hotspot[hs_preview_return_label].atv', (Number(currentReturnAtv) - 7.0).toFixed(4));
+
+                const lblCoords = document.getElementById('lbl-return-coords');
+                if (lblCoords) lblCoords.textContent = `ath: ${currentReturnAth}, atv: ${currentReturnAtv}`;
+                return;
+            }
+
             const hs = sceneHotspots.find(h => h.name === name);
             if (hs) {
                 hs.ath = Number(ath).toFixed(4);
@@ -2857,9 +3797,30 @@
             });
 
             panoEl.addEventListener('mouseup', (e) => {
-                if (!isDrawingPolygon || !krpanoObj) return;
+                if (!krpanoObj) return;
                 const dist = Math.sqrt(Math.pow(e.clientX - downX, 2) + Math.pow(e.clientY - downY, 2));
                 if (dist > 6) return; // This was a drag, not a click
+
+                // Visual Return Hotspot Placement click hook: relocate preview hotspot
+                if (isReturnPickingMode) {
+                    const mx = krpanoObj.get('mouse.stagex');
+                    const my = krpanoObj.get('mouse.stagey');
+                    const coords = krpanoObj.screentosphere(mx, my);
+                    if (!coords) return;
+                    const ath = Number(coords.x).toFixed(4);
+                    const atv = Number(coords.y).toFixed(4);
+                    currentReturnAth = ath;
+                    currentReturnAtv = atv;
+                    krpanoObj.set("hotspot[hs_preview_return].ath", ath);
+                    krpanoObj.set("hotspot[hs_preview_return].atv", atv);
+                    krpanoObj.set("hotspot[hs_preview_return_label].ath", ath);
+                    krpanoObj.set("hotspot[hs_preview_return_label].atv", (Number(atv) - 7.0).toFixed(4));
+                    const lblCoords = document.getElementById('lbl-return-coords');
+                    if (lblCoords) lblCoords.textContent = `ath: ${ath}, atv: ${atv}`;
+                    return;
+                }
+
+                if (!isDrawingPolygon) return;
 
                 const mx = krpanoObj.get('mouse.stagex');
                 const my = krpanoObj.get('mouse.stagey');
@@ -2903,18 +3864,120 @@
             }
         }
 
+        function initSidebarResizer() {
+            const sidebar = document.getElementById('left-sidebar');
+            const resizer = document.getElementById('sidebar-resizer');
+            if (!sidebar || !resizer) return;
+
+            // Restore saved width from localStorage if exists
+            const savedWidth = localStorage.getItem('vtour_left_sidebar_width');
+            if (savedWidth) {
+                const parsed = parseInt(savedWidth, 10);
+                if (!isNaN(parsed) && parsed >= 280 && parsed <= 700) {
+                    sidebar.style.width = `${parsed}px`;
+                }
+            }
+
+            let isResizing = false;
+            let startX = 0;
+            let startWidth = 0;
+
+            resizer.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                startX = e.clientX;
+                startWidth = sidebar.offsetWidth;
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+                resizer.classList.add('resizing');
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                const newWidth = Math.max(280, Math.min(700, startWidth + (e.clientX - startX)));
+                sidebar.style.width = `${newWidth}px`;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (!isResizing) return;
+                isResizing = false;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+                resizer.classList.remove('resizing');
+                localStorage.setItem('vtour_left_sidebar_width', sidebar.offsetWidth);
+            });
+
+            // Double click to reset to default 360px
+            resizer.addEventListener('dblclick', () => {
+                sidebar.style.width = '360px';
+                localStorage.removeItem('vtour_left_sidebar_width');
+                showToast('📐 Đã đặt lại độ rộng menu về 360px');
+            });
+        }
+
         // Initialize event listeners for controls
         function initEventListeners() {
+            // Draggable Resizer for Left Sidebar
+            initSidebarResizer();
+
+            // 2-Tab Navigation in Right Sidebar
+            initRightSidebarTabs();
+
+            // Quick Toolbar Action Buttons
+            initQuickToolbarListeners();
+
+            // Click-to-Link Scene Buttons
+            document.getElementById('btn-pick-link-scene')?.addEventListener('click', () => startPickLinkMode());
+            document.getElementById('btn-cancel-pick-link')?.addEventListener('click', () => cancelPickLinkMode());
+
+            // Visual Return Hotspot Placement Buttons
+            document.getElementById('btn-return-confirm')?.addEventListener('click', () => {
+                finishReturnPick(currentReturnAth, currentReturnAtv, true);
+            });
+            document.getElementById('btn-return-auto-180')?.addEventListener('click', () => {
+                if (!returnPickContext) return;
+                let oppAth = (parseFloat(returnPickContext.fromAth || 0) + 180) % 360;
+                if (oppAth > 180) oppAth -= 360;
+                finishReturnPick(oppAth.toFixed(4), parseFloat(returnPickContext.fromAtv || 0).toFixed(4), true);
+            });
+            document.getElementById('btn-return-cancel')?.addEventListener('click', () => cancelReturnPick());
+
             // Panel Toggle Buttons (Top menu bar & Panel headers)
             document.getElementById('btn-toggle-left-sidebar')?.addEventListener('click', () => toggleLeftSidebar());
             document.getElementById('btn-close-left-sidebar')?.addEventListener('click', () => toggleLeftSidebar(false));
             document.getElementById('btn-toggle-right-sidebar')?.addEventListener('click', () => toggleRightSidebar());
             document.getElementById('btn-close-right-sidebar')?.addEventListener('click', () => toggleRightSidebar(false));
 
-            // Search scene
-            searchInput.addEventListener('input', (e) => {
-                renderSceneList(e.target.value);
+            // Header Upload Button
+            document.getElementById('btn-header-upload')?.addEventListener('click', () => {
+                document.getElementById('upload-input')?.click();
             });
+
+            // Toggle Collapse All Folders
+            document.getElementById('btn-toggle-collapse-all')?.addEventListener('click', () => {
+                toggleCollapseAllFolders();
+            });
+
+            // Search scene + Clear search button
+            const btnClearSearch = document.getElementById('btn-clear-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    if (btnClearSearch) {
+                        btnClearSearch.style.display = e.target.value ? 'block' : 'none';
+                    }
+                    renderSceneList(e.target.value);
+                });
+            }
+            if (btnClearSearch) {
+                btnClearSearch.addEventListener('click', () => {
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.focus();
+                    }
+                    btnClearSearch.style.display = 'none';
+                    renderSceneList('');
+                });
+            }
 
             // Polygon Drawing Buttons
             document.getElementById('btn-draw-polygon')?.addEventListener('click', () => startPolygonDrawing());
@@ -2984,14 +4047,35 @@
                 const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
                 if (hs) {
                     hs.style = style;
+
+                    // Stop any existing tween timers from previous styles
+                    krpanoObj.call(`stoptween(hotspot[${hs.name}].myframe_timer);`);
+                    krpanoObj.call(`stoptween(hotspot[${hs.name}].oy);`);
+                    krpanoObj.call(`stoptween(hotspot[${hs.name}].scale);`);
+
+                    // Clean up crop, frame & offset
+                    krpanoObj.set(`hotspot[${hs.name}].crop`, null);
+                    krpanoObj.set(`hotspot[${hs.name}].myframe`, 0);
+                    krpanoObj.set(`hotspot[${hs.name}].oy`, 0);
+
                     krpanoObj.call(`hotspot[${hs.name}].loadstyle(${style})`);
                     krpanoObj.set(`hotspot[${hs.name}].renderer`, 'webgl');
-                    krpanoObj.set(`hotspot[${hs.name}].distorted`, true);
+
                     if (style === 'muiten') {
+                        krpanoObj.set(`hotspot[${hs.name}].distorted`, true);
                         krpanoObj.set(`hotspot[${hs.name}].rx`, 80);
-                    } else {
+                    } else if (style === 'vitri') {
+                        // Vitri: 2D upright billboard (distorted=false eliminates WebGL Z-fighting)
+                        krpanoObj.set(`hotspot[${hs.name}].distorted`, false);
                         krpanoObj.set(`hotspot[${hs.name}].rx`, 0);
-                        krpanoObj.set(`hotspot[${hs.name}].scale`, 0.5);
+                        krpanoObj.set(`hotspot[${hs.name}].crop`, null);
+                        krpanoObj.set(`hotspot[${hs.name}].scale`, hs.scale || 0.5);
+                        krpanoObj.call(`vitri_bounce(${hs.name});`);
+                    } else {
+                        krpanoObj.set(`hotspot[${hs.name}].distorted`, false);
+                        krpanoObj.set(`hotspot[${hs.name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${hs.name}].crop`, null);
+                        krpanoObj.set(`hotspot[${hs.name}].scale`, hs.scale || 0.5);
                     }
                     krpanoObj.set(`hotspot[${hs.name}].ondown`, 'draghotspot();');
                     krpanoObj.set(`hotspot[${hs.name}].onclick`, `js(onHotspotSelected(get(name)))`);
@@ -3032,7 +4116,7 @@
                 }
             });
 
-            selectHsLinked.addEventListener('change', (e) => {
+            selectHsLinked.addEventListener('change', async (e) => {
                 const val = e.target.value;
                 const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
                 if (hs) {
@@ -3041,12 +4125,17 @@
 
                     // Auto-fill hotspot title from target scene title if current title is default/empty
                     if (val && krpanoObj) {
-                        const targetTitle = krpanoObj.get(`scene[${val}].title`);
+                        const targetTitle = krpanoObj.get(`scene[${val}].title`) || val;
                         if (targetTitle && (!hs.custom_title || hs.custom_title === 'Mũi tên di chuyển mới' || hs.custom_title === 'Ghim vị trí mới')) {
                             hs.custom_title = targetTitle;
                             inputHsTitle.value = targetTitle;
                             krpanoObj.set(`hotspot[${hs.name}].custom_title`, targetTitle);
                             renderHotspotList();
+                        }
+
+                        // Trigger Visual Return Hotspot Placement (Cách 2)
+                        if (val !== currentSceneId && hs.style !== 'thongtin' && hs.style !== 'poly_ground_nav') {
+                            startReturnPickMode(currentSceneId, val, hs.ath, hs.atv, hs.style, hs.name);
                         }
                     }
                     markDirty();
@@ -3095,9 +4184,15 @@
 
             // Reset to Default View button
             document.getElementById('btn-reset-view').addEventListener('click', () => {
-                if (krpanoObj) {
-                    krpanoObj.call('lookat(get(view.hlookat), get(view.vlookat), get(view.fov));');
-                    showToast('🔄 Đã làm mới góc nhìn!');
+                if (krpanoObj && currentSceneId) {
+                    const defView = getSceneDefaultView(currentSceneId);
+                    if (defView) {
+                        krpanoObj.call(`lookto(${defView.hlookat}, ${defView.vlookat}, ${defView.fov}, smooth(100,50,50));`);
+                        showToast(`🎯 Đã quay về góc nhìn mặc định: (${defView.hlookat}°, ${defView.vlookat}°)`);
+                    } else {
+                        krpanoObj.call('lookto(0, 0, 100, smooth(100,50,50));');
+                        showToast('🔄 Đã làm mới góc nhìn!');
+                    }
                 }
             });
 
@@ -3279,7 +4374,27 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    showToast(`✅ Đã lưu View: fov=${fov}°, fovmin=${fovmin}°, fovmax=${fovmax}°`);
+                    showToast(`✅ Đã lưu View: hlookat=${hlookat}°, vlookat=${vlookat}°, fov=${fov}°`);
+
+                    // Sync in-memory KrPano content and default view display immediately
+                    try {
+                        let scContent = krpanoObj.get(`scene[${currentSceneId}].content`) || '';
+                        const newViewTag = `<view fovtype="MFOV" hlookat="${hlookat}" vlookat="${vlookat}" fov="${fov}" fovmin="${fovmin}" fovmax="${fovmax}" />`;
+                        if (/<view\s+[^>]*\/?>/i.test(scContent)) {
+                            scContent = scContent.replace(/<view\s+[^>]*\/?>/i, newViewTag);
+                        } else {
+                            scContent = newViewTag + '\n' + scContent;
+                        }
+                        krpanoObj.set(`scene[${currentSceneId}].content`, scContent);
+                        krpanoObj.set('xml.view.hlookat', hlookat);
+                        krpanoObj.set('xml.view.vlookat', vlookat);
+                        krpanoObj.set('xml.view.fov', fov);
+                        krpanoObj.set('xml.view.fovmin', fovmin);
+                        krpanoObj.set('xml.view.fovmax', fovmax);
+                    } catch (e) {}
+
+                    const updatedDefView = getSceneDefaultView(currentSceneId);
+                    updateDefaultViewUI(updatedDefView);
                 } else {
                     showToast(`❌ Lỗi lưu view: ${data.error}`);
                 }
@@ -3354,20 +4469,31 @@
             }
         }
 
-        // Keyboard shortcuts: Ctrl+S to save hotspots, Space/Esc for polygon drawing
+        // Keyboard shortcuts: Ctrl+S to save hotspots, Space/Esc for canceling or completing modes
         function initKeyboardShortcuts() {
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     document.getElementById('btn-save-hotspots').click();
-                } else if (isDrawingPolygon) {
-                    if (e.key === ' ' || e.code === 'Space') {
+                } else if (e.key === 'Escape' || e.code === 'Escape') {
+                    if (isReturnPickingMode) {
                         e.preventDefault();
-                        finishPolygonDrawing();
-                    } else if (e.key === 'Escape' || e.code === 'Escape') {
+                        cancelReturnPick();
+                    } else if (isPickLinkingMode) {
+                        e.preventDefault();
+                        cancelPickLinkMode();
+                    } else if (isDrawingPolygon) {
                         e.preventDefault();
                         cancelPolygonDrawing();
+                    } else if (selectedHotspotName) {
+                        deselectHotspot();
                     }
+                } else if (isDrawingPolygon && (e.key === ' ' || e.code === 'Space')) {
+                    e.preventDefault();
+                    finishPolygonDrawing();
+                } else if (isReturnPickingMode && (e.key === 'Enter' || e.code === 'Enter')) {
+                    e.preventDefault();
+                    finishReturnPick(currentReturnAth, currentReturnAtv, true);
                 }
             });
         }
@@ -3418,12 +4544,30 @@
 
             uploadZone.addEventListener('drop', (e) => {
                 e.preventDefault();
-                uploadZone.classList.remove('drag-over');
+                uploadZone.classList.remove('drag-over', 'drag-over-active');
                 if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                     pendingUploadFiles = Array.from(e.dataTransfer.files);
                     openUploadModal(pendingUploadFiles);
                 }
             });
+
+            // Drag files over sidebar highlight
+            const leftSidebar = document.getElementById('left-sidebar');
+            if (leftSidebar) {
+                leftSidebar.addEventListener('dragover', (e) => {
+                    if (e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files')) {
+                        uploadZone.classList.add('drag-over-active');
+                    }
+                });
+                leftSidebar.addEventListener('dragleave', (e) => {
+                    if (!leftSidebar.contains(e.relatedTarget)) {
+                        uploadZone.classList.remove('drag-over-active');
+                    }
+                });
+                leftSidebar.addEventListener('drop', (e) => {
+                    uploadZone.classList.remove('drag-over-active');
+                });
+            }
 
             // Create new location button inside modal
             document.getElementById('btn-create-location').addEventListener('click', async () => {
