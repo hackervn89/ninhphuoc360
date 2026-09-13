@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_cong_lang" title="Cổng làng Bàu Trúc" thumburl="panos/cong_lang.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="585.3" vlookat="3.6" fov="115.2" fovmin="76" fovmax="120" />
-		<preview url="panos/cong_lang.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512" prealign="0.0|0.0|-1.8">
+	<scene name="scene_cong_lang_bau_truc" title="Cổng làng gốm Bàu Trúc" thumburl="panos/cong_lang_bau_truc.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-135.1" vlookat="3.7" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/cong_lang_bau_truc.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="-1.8|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/cong_lang.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+				<cube url="panos/cong_lang_bau_truc.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/cong_lang.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+				<cube url="panos/cong_lang_bau_truc.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/cong_lang.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+				<cube url="panos/cong_lang_bau_truc.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/cong_lang.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+				<cube url="panos/cong_lang_bau_truc.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_936445" style="muiten" ath="-134.1677" atv="17.4869" linkedscene="scene_duongdi1" custom_title="Đường đi 1"/>
+		<hotspot name="hs_new_698153" style="muiten" ath="-128.9333" atv="13.9891" linkedscene="scene_duongdi1" custom_title="Đường đi 1"/>
 	</scene>
 	<scene name="scene_duongdi1" title="Đường đi 1" thumburl="panos/duongdi1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-101.2" vlookat="1.7" fov="110" fovmin="60" fovmax="110"/>
@@ -38,6 +38,6 @@
 		</image>
 		<hotspot name="hs_new_500049" style="muiten" ath="156.5868" atv="15.3792" linkedscene="scene_cong_lang" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_508183" style="muiten" ath="-98.2571" atv="24.4345" linkedscene="scene_duongdi2" custom_title="Mũi tên di chuyển mới"/>
+			<hotspot name="hs_return_cong_lang_bau_truc_1747" style="muiten" ath="51.0667" atv="13.9891" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
 	</scene>
-	
 </krpano>

@@ -165,8 +165,6 @@
 	       edge="bottom"
 	       distorted="true"
 	       renderer="webgl"
-	       depth="800"
-	       depthbuffer="false"
 	       rx="0"
 	       zoom="true"
 	       alpha="0.95"
@@ -177,16 +175,23 @@
 	       onclick="fly_transition_click();"
 	       onover="hotspot_onover();"
 	       onout="hotspot_onout();"
-	       onloaded="copy(base_scale, scale); delayedcall(0.2, vitri_bounce(get(name)) );"
+	       onloaded="copy(base_scale, scale); delayedcall(0.1, vitri_bounce(get(name)));"
 	       />
 
 	<!-- Hiệu ứng lơ lửng nhấp nhô (Floating Bounce) mượt mà cho Ghim vị trí -->
 	<action name="vitri_bounce">
-		if(hotspot[%1].loaded AND hotspot[%1].style == 'vitri',
-			tween(hotspot[%1].oy, -16, 0.85, easeInOutSine,
-				tween(hotspot[%1].oy, 0, 0.85, easeInOutSine,
-					vitri_bounce(%1)
-				)
+		if(%1 !== null AND %1 !== '%1',
+			set(hs_name, %1);
+		,
+			copy(hs_name, name);
+		);
+		if(hotspot[get(hs_name)] !== null,
+			if(hotspot[get(hs_name)].style == 'vitri',
+				tween(hotspot[get(hs_name)].oy, -16, 0.85, easeInOutSine,
+					tween(hotspot[get(hs_name)].oy, 0, 0.85, easeInOutSine,
+						vitri_bounce(get(hs_name))
+					)
+				);
 			);
 		);
 	</action>
@@ -539,6 +544,8 @@
 			if(style == 'vitri', vitri_bounce(get(name)); );
 		);
 	</action>
+
+		<include url="tours/lang_my_nghiep/scenes.xml" />
 
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">

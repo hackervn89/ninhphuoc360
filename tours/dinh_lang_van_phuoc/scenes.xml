@@ -20,8 +20,7 @@
 		<hotspot name="hs_new_610933" style="muiten" ath="156.1287" atv="6.3854" linkedscene="scene_bia_tuong_niem_tham_sat_van_phuoc" custom_title="Bia tưởng niệm"/>
 		<hotspot name="hs_new_861862" style="muiten" ath="-188.7680" atv="5.3405" linkedscene="scene_nha_tuong_niem_tranthi" custom_title="Cổng nhà tưởng niệm"/>
 		<hotspot name="hs_new_039830" style="muiten" ath="-92.7562" atv="17.6397" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
-			<hotspot name="hs_return_bia_tuong_niem_9881" style="muiten" ath="-84.4891" atv="6.1412" linkedscene="scene_bia_tuong_niem" custom_title="Bia tưởng niệm"/>
-			<hotspot name="hs_return_bia_tuong_niem_trai_5039" style="vitri" ath="-84.4935" atv="5.7179" linkedscene="scene_bia_tuong_niem_trai" custom_title="Bia tưởng niệm"/>
+			<hotspot name="hs_return_bia_tuong_niem_phai_4604" style="vitri" ath="-67.9037" atv="7.2330" linkedscene="scene_bia_tuong_niem_phai" custom_title="Bia tưởng niệm"/>
 	</scene>
 	<scene name="scene_2_san_dinh" title="Sân đình" thumburl="panos/2_san_dinh.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-635.2" vlookat="3.2" fov="100.0" fovmin="60" fovmax="100"/>

@@ -21,6 +21,7 @@
 		<hotspot name="hs_new_635264" style="muiten" ath="8.0095" atv="18.8374" linkedscene="scene_nha_tuong_niem_tranthi" custom_title="Cổng nhà tưởng niệm"/>
 		<hotspot name="hs_new_341962" style="muiten" scale="0.40" ath="9.5287" atv="6.2098" linkedscene="scene_san_truoc" custom_title="Sân trước"/>
 		<hotspot name="hs_new_390198" style="vitri" scale="0.20" ath="108.2895" atv="4.8505" linkedscene="scene_1_congdinh" custom_title="Cổng đình Vạn Phước"/>
+			<hotspot name="hs_return_bia_tuong_niem_phai_4601" style="muiten" ath="-68.4152" atv="19.6650" linkedscene="scene_bia_tuong_niem_phai" custom_title="Bia tưởng niệm"/>
 	</scene>
 	<scene name="scene_bia_tuong_niem" title="Bia tưởng niệm" thumburl="panos/bia_tuong_niem.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-90.4" vlookat="6.8" fov="120.0" fovmin="60" fovmax="120"/>
@@ -64,6 +65,7 @@
 		<hotspot name="hs_new_558532" style="muiten" ath="125.2377" atv="37.5077" linkedscene="scene_bia_tuong_niem" custom_title="Bia tưởng niệm"/>
 		<hotspot name="hs_new_567810" style="muiten" ath="111.5848" atv="19.6650" linkedscene="scene_bia_tuong_niem_tham_sat_van_phuoc" custom_title="Bia tưởng niệm"/>
 		<hotspot name="hs_new_579922" style="muiten" ath="-145.8428" atv="40.0441" linkedscene="scene_bia_tuong_niem_trai" custom_title="Bia tưởng niệm"/>
+		<hotspot name="hs_new_721652" style="vitri" scale="0.20" ath="112.0963" atv="7.2330" linkedscene="scene_1_congdinh" custom_title="Cổng đình Vạn Phước"/>
 	</scene>
 	<scene name="scene_bia_tuong_niem_trai" title="Bia tưởng niệm" thumburl="panos/bia_tuong_niem_trai.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-65.8" vlookat="7.8" fov="120.0" fovmin="60" fovmax="120"/>

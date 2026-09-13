@@ -3379,15 +3379,16 @@
             krpanoObj.set('hotspot[hs_preview_return].ath', currentReturnAth);
             krpanoObj.set('hotspot[hs_preview_return].atv', currentReturnAtv);
             krpanoObj.set('hotspot[hs_preview_return].renderer', 'webgl');
+            krpanoObj.set('hotspot[hs_preview_return].distorted', true);
             krpanoObj.set('hotspot[hs_preview_return].scale', '0.70');
             krpanoObj.set('hotspot[hs_preview_return].alpha', '1.0');
             krpanoObj.set('hotspot[hs_preview_return].zorder', 100);
             krpanoObj.set('hotspot[hs_preview_return].ondown', 'draghotspot();');
             krpanoObj.set('hotspot[hs_preview_return].visible', true);
             if (previewStyle === 'vitri') {
-                krpanoObj.set('hotspot[hs_preview_return].crop', null);
-                krpanoObj.set('hotspot[hs_preview_return].distorted', false);
-                krpanoObj.call('vitri_bounce(hs_preview_return);');
+                krpanoObj.set('hotspot[hs_preview_return].rx', 0);
+                krpanoObj.set('hotspot[hs_preview_return].edge', 'bottom');
+                krpanoObj.call('delayedcall(0.1, vitri_bounce(hs_preview_return));');
             }
 
             // 2. Create floating permanent tooltip/badge hotspot above it
@@ -3517,9 +3518,10 @@
                             krpanoObj.set(`hotspot[${bh.name}].ondown`, 'draghotspot();');
                             krpanoObj.set(`hotspot[${bh.name}].onclick`, `js(onHotspotSelected(get(name)))`);
                             if (bh.style === 'vitri') {
-                                krpanoObj.set(`hotspot[${bh.name}].crop`, null);
-                                krpanoObj.set(`hotspot[${bh.name}].distorted`, false);
-                                krpanoObj.call(`vitri_bounce(${bh.name});`);
+                                krpanoObj.set(`hotspot[${bh.name}].rx`, 0);
+                                krpanoObj.set(`hotspot[${bh.name}].edge`, 'bottom');
+                                krpanoObj.set(`hotspot[${bh.name}].distorted`, true);
+                                krpanoObj.call(`delayedcall(0.1, vitri_bounce(${bh.name}));`);
                             }
                         }
                     });
@@ -3571,9 +3573,10 @@
                             krpanoObj.set(`hotspot[${bh.name}].ondown`, 'draghotspot();');
                             krpanoObj.set(`hotspot[${bh.name}].onclick`, `js(onHotspotSelected(get(name)))`);
                             if (bh.style === 'vitri') {
-                                krpanoObj.set(`hotspot[${bh.name}].crop`, null);
-                                krpanoObj.set(`hotspot[${bh.name}].distorted`, false);
-                                krpanoObj.call(`vitri_bounce(${bh.name});`);
+                                krpanoObj.set(`hotspot[${bh.name}].rx`, 0);
+                                krpanoObj.set(`hotspot[${bh.name}].edge`, 'bottom');
+                                krpanoObj.set(`hotspot[${bh.name}].distorted`, true);
+                                krpanoObj.call(`delayedcall(0.1, vitri_bounce(${bh.name}));`);
                             }
                         }
                     });
@@ -4030,6 +4033,7 @@
                 krpanoObj.call(`addhotspot(${name})`);
                 krpanoObj.call(`hotspot[${name}].loadstyle(${newHs.style})`);
                 krpanoObj.set(`hotspot[${name}].renderer`, 'webgl');
+                krpanoObj.set(`hotspot[${name}].distorted`, true);
                 krpanoObj.set(`hotspot[${name}].ath`, ath);
                 krpanoObj.set(`hotspot[${name}].atv`, atv);
                 krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
@@ -4047,38 +4051,48 @@
                 const hs = sceneHotspots.find(h => h.name === selectedHotspotName);
                 if (hs) {
                     hs.style = style;
+                    const name = hs.name;
+                    const ath = hs.ath;
+                    const atv = hs.atv;
+                    const hsScale = hs.scale || '0.50';
 
-                    // Stop any existing tween timers from previous styles
-                    krpanoObj.call(`stoptween(hotspot[${hs.name}].myframe_timer);`);
-                    krpanoObj.call(`stoptween(hotspot[${hs.name}].oy);`);
-                    krpanoObj.call(`stoptween(hotspot[${hs.name}].scale);`);
+                    // 1. Clean up running tweens on this hotspot
+                    krpanoObj.call(`stoptween(hotspot[${name}].myframe_timer); stoptween(hotspot[${name}].oy); stoptween(hotspot[${name}].scale);`);
 
-                    // Clean up crop, frame & offset
-                    krpanoObj.set(`hotspot[${hs.name}].crop`, null);
-                    krpanoObj.set(`hotspot[${hs.name}].myframe`, 0);
-                    krpanoObj.set(`hotspot[${hs.name}].oy`, 0);
+                    // 2. Destroy and recreate cleanly in KrPano to clear all previous textures, crops & sprite animations
+                    krpanoObj.call(`removehotspot(${name});`);
+                    krpanoObj.call(`addhotspot(${name});`);
+                    krpanoObj.call(`hotspot[${name}].loadstyle(${style});`);
 
-                    krpanoObj.call(`hotspot[${hs.name}].loadstyle(${style})`);
-                    krpanoObj.set(`hotspot[${hs.name}].renderer`, 'webgl');
+                    // 3. Re-apply coordinates and base settings
+                    krpanoObj.set(`hotspot[${name}].ath`, ath);
+                    krpanoObj.set(`hotspot[${name}].atv`, atv);
+                    krpanoObj.set(`hotspot[${name}].scale`, hsScale);
+                    krpanoObj.set(`hotspot[${name}].renderer`, 'webgl');
+                    krpanoObj.set(`hotspot[${name}].distorted`, true);
+                    krpanoObj.set(`hotspot[${name}].linkedscene`, hs.linkedscene || '');
+                    krpanoObj.set(`hotspot[${name}].custom_title`, hs.custom_title || '');
+                    krpanoObj.set(`hotspot[${name}].infoid`, hs.infoid || '');
+                    krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
+                    krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
 
                     if (style === 'muiten') {
-                        krpanoObj.set(`hotspot[${hs.name}].distorted`, true);
-                        krpanoObj.set(`hotspot[${hs.name}].rx`, 80);
+                        krpanoObj.set(`hotspot[${name}].rx`, 80);
+                        krpanoObj.set(`hotspot[${name}].edge`, 'center');
                     } else if (style === 'vitri') {
-                        // Vitri: 2D upright billboard (distorted=false eliminates WebGL Z-fighting)
-                        krpanoObj.set(`hotspot[${hs.name}].distorted`, false);
-                        krpanoObj.set(`hotspot[${hs.name}].rx`, 0);
-                        krpanoObj.set(`hotspot[${hs.name}].crop`, null);
-                        krpanoObj.set(`hotspot[${hs.name}].scale`, hs.scale || 0.5);
-                        krpanoObj.call(`vitri_bounce(${hs.name});`);
-                    } else {
-                        krpanoObj.set(`hotspot[${hs.name}].distorted`, false);
-                        krpanoObj.set(`hotspot[${hs.name}].rx`, 0);
-                        krpanoObj.set(`hotspot[${hs.name}].crop`, null);
-                        krpanoObj.set(`hotspot[${hs.name}].scale`, hs.scale || 0.5);
+                        krpanoObj.set(`hotspot[${name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${name}].edge`, 'bottom');
+                        krpanoObj.set(`hotspot[${name}].oy`, 0);
+                        krpanoObj.call(`delayedcall(0.1, vitri_bounce(${name}));`);
+                    } else if (style === 'tructhang') {
+                        krpanoObj.set(`hotspot[${name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${name}].edge`, 'bottom');
+                        krpanoObj.set(`hotspot[${name}].oy`, -10);
+                    } else if (style === 'thongtin') {
+                        krpanoObj.set(`hotspot[${name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${name}].edge`, 'center');
                     }
-                    krpanoObj.set(`hotspot[${hs.name}].ondown`, 'draghotspot();');
-                    krpanoObj.set(`hotspot[${hs.name}].onclick`, `js(onHotspotSelected(get(name)))`);
+
                     toggleConditionalFields(style);
                     renderHotspotList();
                     markDirty();
