@@ -1,0 +1,95 @@
+<krpano>
+	<scene name="scene_trung_tam_hanh_chinh" title="Trung tâm hành chính xã" thumburl="panos/trung_tam_hanh_chinh.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/trung_tam_hanh_chinh.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+			<hotspot name="hs_return_duong_vao_bau_truc_7374" style="muiten" ath="54.9990" atv="14.4393" linkedscene="scene_duong_vao_bau_truc" custom_title="Đường vào làng Bàu Trúc"/>
+	</scene>
+	<scene name="scene_quang_truong_2" title="Quảng trường" thumburl="panos/quang_truong_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/quang_truong_2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/quang_truong_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/quang_truong_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/quang_truong_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/quang_truong_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_tru_so_xa" title="Trụ sở xã Ninh Phước" thumburl="panos/tru_so_xa.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/tru_so_xa.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tru_so_xa.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tru_so_xa.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tru_so_xa.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tru_so_xa.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_quang_truong_1" title="Quảng trường 1" thumburl="panos/quang_truong_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/quang_truong_1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/quang_truong_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/quang_truong_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/quang_truong_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/quang_truong_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+
+	<scene name="scene_cong_chao_ninh_phuoc" title="Cổng chào xã Ninh Phước" thumburl="panos/cong_chao_ninh_phuoc.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-129.3" vlookat="2.6" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cong_chao_ninh_phuoc.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cong_chao_ninh_phuoc.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cong_chao_ninh_phuoc.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cong_chao_ninh_phuoc.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cong_chao_ninh_phuoc.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cong_lang_bau_truc_0685" style="muiten" ath="-122.8613" atv="9.5221" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+	</scene>
+</krpano>
