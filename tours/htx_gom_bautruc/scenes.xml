@@ -295,6 +295,7 @@
 		</image>
 		<hotspot name="hs_new_144533" style="muiten" ath="-90.1146" atv="15.1086" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
 		<hotspot name="hs_new_169815" style="muiten" ath="9.2934" atv="11.3026" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
+			<hotspot name="hs_return_cong_lang_my_nghiep_5895" style="muiten" ath="134.0670" atv="11.1401" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
 	</scene>
 	<scene name="scene_san_phai2" title="Sân trước" thumburl="panos/san_phai2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-60.4" vlookat="9.2" fov="112.0" fovmin="60" fovmax="112"/>

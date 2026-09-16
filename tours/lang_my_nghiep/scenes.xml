@@ -1,55 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/cong_htx.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
+	<scene name="scene_cong_lang_my_nghiep" title="Cổng làng Mỹ Nghiệp" thumburl="panos/cong_lang_my_nghiep.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-140.5" vlookat="-1.5" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/cong_lang_my_nghiep.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.6|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_lang_my_nghiep.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_lang_my_nghiep.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_lang_my_nghiep.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_lang_my_nghiep.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_539818" style="muiten" ath="-145.1500" atv="8.9901" linkedscene="scene_mynghiep_cong_htx" custom_title="HTX Thổ cẩm Chăm"/>
+	</scene>
+	<scene name="scene_mynghiep_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cong_htx.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
 	</scene>
 	<scene name="scene_san_nha_trung_bay" title="Sân Nhà trưng bày" thumburl="panos/san_nha_trung_bay.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/san_nha_trung_bay.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/san_nha_trung_bay.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/san_nha_trung_bay.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/san_nha_trung_bay.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_nha_trung_bay.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/san_nha_trung_bay.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_nha_trung_bay.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/san_nha_trung_bay.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_nha_trung_bay.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/san_nha_trung_bay.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
 	</scene>
 	<scene name="scene_sanh_nha_trung_bay" title="Sảnh Nhà trưng bày" thumburl="panos/sanh_nha_trung_bay.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/sanh_nha_trung_bay.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/sanh_nha_trung_bay.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
 	</scene>

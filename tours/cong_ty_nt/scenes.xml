@@ -1,0 +1,182 @@
+<krpano>
+	<scene name="scene_ctnt_1" title="Khu trưng bày" thumburl="panos/1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/1.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_2" title="Khu trưng bày" thumburl="panos/2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/2.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_3" title="Khu trưng bày" thumburl="panos/3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/3.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_4" title="Khu trưng bày" thumburl="panos/4.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/4.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/4.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/4.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/4.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/4.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_5" title="Khu trưng bày" thumburl="panos/5.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/5.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/5.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/5.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/5.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/5.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_6" title="Khu trưng bày" thumburl="panos/6.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/6.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/6.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/6.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/6.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/6.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_7" title="Khu trưng bày" thumburl="panos/7.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/7.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/7.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/7.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/7.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/7.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_8" title="Khu trưng bày" thumburl="panos/8.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/8.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/8.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/8.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/8.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/8.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_ctnt_9" title="Khu trưng bày" thumburl="panos/9.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/9.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/9.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/9.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/9.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/9.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+	<scene name="scene_cng_ty_nt" title="Công ty bảo tồn di sản văn hoá Chăm NT" thumburl="panos/cng_ty_nt.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/cng_ty_nt.tiles/preview.jpg" />
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cng_ty_nt.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cng_ty_nt.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cng_ty_nt.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cng_ty_nt.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+			</level>
+		</image>
+	</scene>
+</krpano>

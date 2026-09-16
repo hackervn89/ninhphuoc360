@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
+	<scene name="scene_duong_vao_bau_truc" title="Đường vào làng Bàu Trúc" thumburl="panos/duong_vao_bau_truc.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="58.0" vlookat="8.4" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/duong_vao_bau_truc.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/duong_vao_bau_truc.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/duong_vao_bau_truc.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/duong_vao_bau_truc.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/duong_vao_bau_truc.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cong_lang_bau_truc_9661" style="muiten" ath="56.7804" atv="12.6258" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+		<hotspot name="hs_return_cong_chao_ninh_phuoc_4313" style="muiten" ath="165.8606" atv="12.4234" linkedscene="scene_cong_chao_ninh_phuoc" custom_title="Cổng chào xã Ninh Phước"/>
+		<hotspot name="hs_new_857454" style="muiten" ath="-46.5806" atv="18.3928" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
+	</scene>
 	<scene name="scene_cong_lang_bau_truc" title="Cổng làng gốm Bàu Trúc" thumburl="panos/cong_lang_bau_truc.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-135.1" vlookat="3.7" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/cong_lang_bau_truc.tiles/preview.jpg"/>
@@ -17,27 +38,50 @@
 				<cube url="panos/cong_lang_bau_truc.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_698153" style="muiten" ath="-128.9333" atv="13.9891" linkedscene="scene_duongdi1" custom_title="Đường đi 1"/>
+		<hotspot name="hs_return_cong_chao_ninh_phuoc_3681" style="muiten" ath="42.2037" atv="4.4496" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng chào Xã Ninh Phước"/>
+		<hotspot name="hs_new_510913" style="muiten" ath="-130.3342" atv="17.9943" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
+		<hotspot name="hs_return_duong_lang_1_9316" style="muiten" ath="-19.0955" atv="6.7256" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
 	</scene>
-	<scene name="scene_duongdi1" title="Đường đi 1" thumburl="panos/duongdi1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-101.2" vlookat="1.7" fov="110" fovmin="60" fovmax="110"/>
-		<preview url="panos/duongdi1.tiles/preview.jpg"/>
+	<scene name="scene_duong_vao_co_so" title="Đường vào cơ sở Gốm" thumburl="panos/duong_vao_co_so.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-2.2" vlookat="11.5" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/duong_vao_co_so.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/duongdi1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+				<cube url="panos/duong_vao_co_so.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/duongdi1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+				<cube url="panos/duong_vao_co_so.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/duongdi1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+				<cube url="panos/duong_vao_co_so.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/duongdi1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+				<cube url="panos/duong_vao_co_so.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_500049" style="muiten" ath="156.5868" atv="15.3792" linkedscene="scene_cong_lang" custom_title="Mũi tên di chuyển mới"/>
-		<hotspot name="hs_new_508183" style="muiten" ath="-98.2571" atv="24.4345" linkedscene="scene_duongdi2" custom_title="Mũi tên di chuyển mới"/>
-			<hotspot name="hs_return_cong_lang_bau_truc_1747" style="muiten" ath="51.0667" atv="13.9891" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+		<hotspot name="hs_return_cong_lang_bau_truc_5696" style="vitri" scale="0.20" ath="171.7992" atv="1.9617" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+		<hotspot name="hs_new_575924" style="muiten" ath="-4.9036" atv="11.1021" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
+		<hotspot name="hs_return_duong_lang_1_9317" style="muiten" ath="170.1900" atv="12.7144" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
+	</scene>
+	<scene name="scene_duong_lang_1" title="Đường làng Bàu trúc" thumburl="panos/duong_lang_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="262.6" vlookat="9.0" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/duong_lang_1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/duong_lang_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/duong_lang_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/duong_lang_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/duong_lang_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cong_lang_bau_truc_3162" style="muiten" ath="160.9045" atv="6.7256" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+		<hotspot name="hs_new_067980" style="vitri" scale="0.20" ath="-101.4795" atv="2.4698" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
+		<hotspot name="hs_new_792943" style="muiten" ath="-100.3840" atv="10.0288" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
 	</scene>
 </krpano>

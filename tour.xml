@@ -547,6 +547,12 @@
 
 		<include url="tours/lang_my_nghiep/scenes.xml" />
 
+		<include url="tours/trung_tam_hanh_chinh/scenes.xml" />
+
+		<include url="tours/gom_hai_au/scenes.xml" />
+
+		<include url="tours/cong_ty_nt/scenes.xml" />
+
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">
 		if(startscene === null OR !scene[get(startscene)], copy(startscene, scene[0].name); );

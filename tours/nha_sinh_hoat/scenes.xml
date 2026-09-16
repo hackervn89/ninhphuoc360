@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
+	<scene name="scene_duongdi2" title="Nhà sinh hoạt cộng đồng Chăm" thumburl="panos/duongdi2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-140.3" vlookat="4.9" fov="101.4" fovmin="60" fovmax="110"/>
+		<preview url="panos/duongdi2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/duongdi2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/duongdi2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/duongdi2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/duongdi2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_949468" style="muiten" ath="-166.9548" atv="26.3893" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới"/>
+		<hotspot name="hs_new_738326" style="muiten" ath="139.1603" atv="17.3233" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
+		<hotspot name="hs_return_duong_lang_1_2547" style="muiten" ath="-45.1002" atv="17.5336" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
+			<hotspot name="hs_return_duong_vao_co_so_0900" style="muiten" ath="-44.9034" atv="12.0566" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
+	</scene>
 	<scene name="scene_4" title="Sân trước" thumburl="panos/4.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-889.5" vlookat="-1.7" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/4.tiles/preview.jpg"/>
@@ -24,7 +46,7 @@
 		<hotspot name="hs_new_415761" style="muiten" scale="0.40" ath="-126.8961" atv="10.0989" linkedscene="scene_nha_lam_viec1" custom_title="Khu sinh hoạt"/>
 	</scene>
 	<scene name="scene_5" title="Sân trước" thumburl="panos/5.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="22.5" vlookat="5.2" fov="95.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="22.5" vlookat="5.2" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/5.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -46,7 +68,7 @@
 		<hotspot name="hs_new_495606" style="muiten" ath="25.8218" atv="12.1963" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
 	<scene name="scene_6" title="Khu trưng bày" thumburl="panos/6.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-58.7" vlookat="-1.9" fov="95.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-58.7" vlookat="-1.9" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/6.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -69,7 +91,7 @@
 		<hotspot name="hs_new_691769" style="muiten" ath="-104.8603" atv="14.8076" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
 	<scene name="scene_7" title="Khu trưng bày" thumburl="panos/7.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-110.2" vlookat="11.8" fov="110.0" fovmin="60" fovmax="110" />
+		<view fovtype="MFOV" hlookat="-110.2" vlookat="11.8" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/7.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -91,7 +113,7 @@
 		<hotspot name="hs_new_310082" style="muiten" ath="-178.3900" atv="17.9180" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
 	<scene name="scene_8" title="Khu trưng bày" thumburl="panos/8.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-101.4" vlookat="28.9" fov="104.6" fovmin="60" fovmax="110" />
+		<view fovtype="MFOV" hlookat="-101.4" vlookat="28.9" fov="104.6" fovmin="60" fovmax="110"/>
 		<preview url="panos/8.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -114,7 +136,7 @@
 		<hotspot name="hs_new_278070" style="muiten" ath="88.6294" atv="12.0664" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
 	<scene name="scene_9" title="Khu trưng bày" thumburl="panos/9.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-147.6" vlookat="17.2" fov="110.0" fovmin="60" fovmax="110" />
+		<view fovtype="MFOV" hlookat="-147.6" vlookat="17.2" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/9.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -238,27 +260,5 @@
 		<hotspot name="hs_new_906615" style="muiten" ath="27.4600" atv="20.8701" linkedscene="scene_5" custom_title="Sân trước"/>
 		<hotspot name="hs_new_917092" style="muiten" ath="-95.3106" atv="19.9387" linkedscene="scene_13" custom_title="Khu làm gốm"/>
 		<hotspot name="hs_new_936762" style="muiten" ath="177.8552" atv="24.2970" linkedscene="scene_14" custom_title="Khu làm gốm"/>
-	</scene>
-
-	<scene name="scene_duongdi2" title="Nhà sinh hoạt cộng đồng Chăm" thumburl="panos/duongdi2.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-140.3" vlookat="4.9" fov="101.4" fovmin="60" fovmax="110"/>
-		<preview url="panos/duongdi2.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/duongdi2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/duongdi2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/duongdi2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/duongdi2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
-			</level>
-		</image>
-		<hotspot name="hs_new_939305" style="muiten" ath="-45.2163" atv="21.9023" linkedscene="scene_duongdi1" custom_title="Mũi tên di chuyển mới"/>
-		<hotspot name="hs_new_949468" style="muiten" ath="-166.9548" atv="26.3893" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới"/>
-		<hotspot name="hs_new_738326" style="muiten" ath="139.1603" atv="17.3233" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
 	</scene>
 </krpano>
