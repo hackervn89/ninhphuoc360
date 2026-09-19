@@ -17,6 +17,7 @@
 			</level>
 		</image>
 			<hotspot name="hs_return_duong_vao_bau_truc_7374" style="muiten" ath="54.9990" atv="14.4393" linkedscene="scene_duong_vao_bau_truc" custom_title="Đường vào làng Bàu Trúc"/>
+			<hotspot name="hs_return_cong_lang_my_nghiep_2077" style="muiten" ath="131.2787" atv="8.4337" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
 	</scene>
 	<scene name="scene_quang_truong_2" title="Quảng trường" thumburl="panos/quang_truong_2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />

@@ -92,7 +92,7 @@
 	       onover="hotspot_onover();"
 	       onout="hotspot_onout();"
 	       myframe="0"
-	       onloaded="copy(base_scale, scale); set(myframe,0); delayedcall(calc(Math.random()*2), hotspot_sprite_anim(get(name)) );"
+	       onloaded="hotspot_init_scale(); set(myframe,0); delayedcall(calc(Math.random()*2), hotspot_sprite_anim(get(name)) );"
 	       />
 
 	<!-- Hiệu ứng khi click: Mũi tên lướt về phía trước trên mặt đất thay vì đứng dậy -->
@@ -135,22 +135,43 @@
 
 
 
-	<!-- Dynamic Hotspot Hover Scale Actions (Preserves custom hotspot scale) -->
+	<!-- Dynamic Hotspot Hover Scale Actions (Preserves per-hotspot custom scale) -->
+	<action name="hotspot_init_scale">
+		if(caller !== null,
+			copy(caller.base_scale, caller.scale);
+			if(caller.alpha !== null AND caller.alpha !== undefined,
+				copy(caller.base_alpha, caller.alpha);
+			,
+				set(caller.base_alpha, 1.0);
+			);
+		);
+	</action>
+
 	<action name="hotspot_onover">
-		if(base_scale === null OR base_scale === undefined, copy(base_scale, scale));
-		mul(target_hover_scale, base_scale, 1.15);
-		tween(scale, get(target_hover_scale), 0.15);
-		tween(alpha, 1.0, 0.15);
+		if(caller !== null,
+			if(caller.base_scale === null OR caller.base_scale === undefined,
+				copy(caller.base_scale, caller.scale);
+			);
+			mul(hs_target_scale, caller.base_scale, 1.15);
+			tween(caller.scale, get(hs_target_scale), 0.15);
+			tween(caller.alpha, 1.0, 0.15);
+		);
 		show_custom_tooltip();
 	</action>
 
 	<action name="hotspot_onout">
-		if(base_scale !== null AND base_scale !== undefined,
-			tween(scale, get(base_scale), 0.15);
-		,
-			tween(scale, 0.5, 0.15);
+		if(caller !== null,
+			if(caller.base_scale !== null AND caller.base_scale !== undefined,
+				tween(caller.scale, get(caller.base_scale), 0.15);
+			,
+				tween(caller.scale, 0.5, 0.15);
+			);
+			if(caller.base_alpha !== null AND caller.base_alpha !== undefined,
+				tween(caller.alpha, get(caller.base_alpha), 0.15);
+			,
+				tween(caller.alpha, 0.9, 0.15);
+			);
 		);
-		tween(alpha, 0.9, 0.15);
 		hide_custom_tooltip();
 	</action>
 
@@ -175,7 +196,7 @@
 	       onclick="fly_transition_click();"
 	       onover="hotspot_onover();"
 	       onout="hotspot_onout();"
-	       onloaded="copy(base_scale, scale); delayedcall(0.1, vitri_bounce(get(name)));"
+	       onloaded="hotspot_init_scale(); delayedcall(0.1, vitri_bounce(get(name)));"
 	       />
 
 	<!-- Hiệu ứng lơ lửng nhấp nhô (Floating Bounce) mượt mà cho Ghim vị trí -->
@@ -217,7 +238,7 @@
 	       onclick="fly_transition_click();"
 	       onover="hotspot_onover();"
 	       onout="hotspot_onout();"
-	       onloaded="copy(base_scale, scale);"
+	       onloaded="hotspot_init_scale();"
 	       />
 
 	<!-- Little Planet Transition for Vertical Movement -->
@@ -254,7 +275,7 @@
 	       onclick="skin_hotspotstyle_click(); js(openInfoModal(get(infoid)));"
 	       onover="hotspot_onover();"
 	       onout="hotspot_onout();"
-	       onloaded="copy(base_scale, scale);"
+	       onloaded="hotspot_init_scale();"
 	       />
 
 	<!--

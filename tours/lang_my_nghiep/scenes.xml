@@ -18,9 +18,10 @@
 			</level>
 		</image>
 		<hotspot name="hs_new_539818" style="muiten" ath="-145.1500" atv="8.9901" linkedscene="scene_mynghiep_cong_htx" custom_title="HTX Thổ cẩm Chăm"/>
+		<hotspot name="hs_new_485670" style="muiten" ath="-324.4440" atv="4.3890" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
 	</scene>
 	<scene name="scene_mynghiep_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-130.8" vlookat="2.6" fov="90.7" fovmin="60" fovmax="95"/>
 		<preview url="panos/cong_htx.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -36,11 +37,12 @@
 				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_new_518552" style="muiten" ath="-117.7489" atv="14.0699" linkedscene="scene_san_nha_trung_bay" custom_title="Sân Nhà trưng bày"/>
 	</scene>
 	<scene name="scene_san_nha_trung_bay" title="Sân Nhà trưng bày" thumburl="panos/san_nha_trung_bay.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-129.7" vlookat="5.8" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/san_nha_trung_bay.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512">
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.6|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
 				<cube url="panos/san_nha_trung_bay.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
@@ -54,11 +56,14 @@
 				<cube url="panos/san_nha_trung_bay.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_new_203190" style="muiten" ath="93.5737" atv="15.5973" linkedscene="scene_mynghiep_cong_htx" custom_title="HTX Thổ cẩm Chăm"/>
+		<hotspot name="hs_new_286315" style="muiten" scale="0.60" ath="-127.2971" atv="20.3332" linkedscene="scene_sanh_nha_trung_bay" custom_title="Sảnh Nhà trưng bày"/>
+		<hotspot name="hs_new_303192" style="muiten" scale="0.30" ath="-127.5011" atv="10.1479" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
 	</scene>
 	<scene name="scene_sanh_nha_trung_bay" title="Sảnh Nhà trưng bày" thumburl="panos/sanh_nha_trung_bay.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-117.9" vlookat="14.7" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/sanh_nha_trung_bay.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512">
+		<image type="CUBE" multires="true" tilesize="512" prealign="1.7|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
 				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
@@ -72,5 +77,259 @@
 				<cube url="panos/sanh_nha_trung_bay.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_san_nha_trung_bay_7117" style="muiten" ath="63.9051" atv="32.8446" linkedscene="scene_san_nha_trung_bay" custom_title="Sân Nhà trưng bày"/>
+		<hotspot name="hs_new_337862" style="muiten" scale="0.35" ath="91.4945" atv="14.8615" linkedscene="scene_mynghiep_cong_htx" custom_title="HTX Thổ cẩm Chăm"/>
+		<hotspot name="hs_new_353933" style="muiten" ath="-117.6862" atv="26.6387" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_376702" style="muiten" ath="-116.6913" atv="14.6633" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai2_2967" style="muiten" ath="-15.8387" atv="11.4944" linkedscene="scene_trung_bay_trai2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai3_0456" style="muiten" ath="-29.1274" atv="10.8960" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_1_8081" style="muiten" ath="-150.0999" atv="33.2338" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_giua1" title="Phòng Trưng bày" thumburl="panos/trung_bay_giua1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-110.1" vlookat="14.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_giua1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.5|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_giua1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_giua1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_giua1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_giua1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_san_nha_trung_bay_9791" style="muiten" ath="70.0359" atv="14.4179" linkedscene="scene_san_nha_trung_bay" custom_title="Sân Nhà trưng bày"/>
+		<hotspot name="hs_return_sanh_nha_trung_bay_5391" style="muiten" ath="70.8002" atv="35.2216" linkedscene="scene_sanh_nha_trung_bay" custom_title="Sảnh Nhà trưng bày"/>
+		<hotspot name="hs_new_405188" style="muiten" ath="-109.4597" atv="30.0756" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_466975" style="muiten" ath="-175.0657" atv="36.1989" linkedscene="scene_trung_bay_trai1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_505996" style="muiten" ath="-52.2851" atv="24.2378" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_537744" style="muiten" scale="0.35" ath="-109.2855" atv="17.4150" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_579110" style="muiten" ath="-84.2301" atv="22.8413" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_649758" style="muiten" scale="0.20" ath="-97.0901" atv="9.6772" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_giua2" title="Phòng Trưng bày" thumburl="panos/trung_bay_giua2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-44.2" vlookat="17.4" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_giua2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="0.7|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_giua2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_giua2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_giua2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_giua2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_sanh_nha_trung_bay_6705" style="muiten" scale="0.35" ath="72.3028" atv="13.0152" linkedscene="scene_sanh_nha_trung_bay" custom_title="Sảnh Nhà trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua1_3328" style="muiten" ath="70.5403" atv="30.0756" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_743544" style="muiten" ath="-107.7544" atv="31.9384" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_757626" style="muiten" ath="-33.9296" atv="39.8116" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_776217" style="muiten" ath="103.1942" atv="28.9958" linkedscene="scene_trung_bay_trai1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_794885" style="muiten" scale="0.30" ath="-87.7530" atv="15.7072" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai3_0151" style="muiten" ath="-145.4195" atv="31.0097" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_1_8079" style="muiten" ath="-67.2915" atv="26.8148" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_giua3" title="Phòng Trưng bày" thumburl="panos/trung_bay_giua3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-199.1" vlookat="11.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_giua3.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_giua3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_giua3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_giua3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_giua3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua1_8525" style="muiten" scale="0.35" ath="79.9818" atv="16.5518" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua2_5192" style="muiten" ath="79.6296" atv="33.0922" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_186465" style="muiten" ath="39.4866" atv="30.7806" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_206271" style="muiten" ath="-70.0124" atv="24.4934" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_234407" style="muiten" ath="128.9012" atv="28.6614" linkedscene="scene_trung_bay_trai2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_270229" style="muiten" ath="-189.1349" atv="31.7944" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_298288" style="muiten" scale="0.40" ath="-668.3572" atv="19.9796" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai1_7534" style="muiten" ath="92.6441" atv="18.4788" linkedscene="scene_trung_bay_trai1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_437760" style="muiten" scale="0.30" ath="169.7125" atv="15.8958" linkedscene="scene_sanh_giua" custom_title="Sảnh giữa"/>
+	</scene>
+	<scene name="scene_trung_bay_phai_1" title="Phòng Trưng bày" thumburl="panos/trung_bay_phai_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-273.1" vlookat="25.1" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_phai_1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_phai_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_phai_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_phai_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_phai_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua1_8180" style="muiten" ath="58.5276" atv="40.9212" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua3_8421" style="muiten" scale="0.40" ath="135.8964" atv="16.3134" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_345746" style="muiten" ath="-203.5935" atv="34.7737" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_369867" style="muiten" ath="-247.2915" atv="26.8148" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_472699" style="muiten" ath="29.9001" atv="33.2338" linkedscene="scene_sanh_nha_trung_bay" custom_title="Sảnh Nhà trưng bày"/>
+		<hotspot name="hs_new_494153" style="muiten" scale="0.30" ath="120.3046" atv="15.7659" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_phai_2" title="Phòng Trưng bày" thumburl="panos/trung_bay_phai_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-306.2" vlookat="23.2" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_phai_2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_phai_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_phai_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_phai_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_phai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua1_1886" style="muiten" ath="46.4637" atv="38.5829" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua2_0423" style="muiten" ath="88.8438" atv="36.2204" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua3_0581" style="muiten" ath="154.2472" atv="27.7926" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_1_1448" style="muiten" ath="18.4634" atv="28.4206" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_461461" style="muiten" scale="0.40" ath="-159.7593" atv="12.8846" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_480483" style="muiten" ath="134.5035" atv="19.2879" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai2_0058" style="muiten" ath="119.0163" atv="21.2672" linkedscene="scene_trung_bay_trai2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_556005" style="muiten" scale="0.35" ath="70.8147" atv="16.3731" linkedscene="scene_trung_bay_trai1" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_phai_3" title="Phòng Trưng bày" thumburl="panos/trung_bay_phai_3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="21.5" vlookat="-2.0" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_phai_3.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_phai_3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_phai_3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_phai_3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_phai_3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua1_6950" style="muiten" scale="0.40" ath="8.3165" atv="11.2709" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua2_8368" style="muiten" ath="19.6285" atv="17.9395" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_556571" style="muiten" scale="0.40" ath="37.8491" atv="15.2661" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_588128" style="muiten" scale="0.30" ath="27.4402" atv="11.7962" linkedscene="scene_trung_bay_trai2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai1_6587" style="muiten" ath="106.2850" atv="8.9641" linkedscene="scene_trung_bay_trai1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua3_0629" style="muiten" ath="109.9876" atv="24.4934" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_2_8914" style="muiten" ath="20.2407" atv="12.8846" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_trai1" title="Phòng Trưng bày" thumburl="panos/trung_bay_trai1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-100.0" vlookat="18.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_trai1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua1_7513" style="muiten" ath="8.1953" atv="43.4538" linkedscene="scene_trung_bay_giua1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua2_6841" style="muiten" ath="-68.2669" atv="28.7851" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_669505" style="muiten" ath="-111.8458" atv="31.7577" linkedscene="scene_trung_bay_trai2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_687978" style="muiten" scale="0.30" ath="-80.7831" atv="15.4327" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_727893" style="muiten" scale="0.30" ath="-73.7150" atv="8.9641" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_2_4523" style="muiten" ath="-48.2578" atv="18.4432" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_trai2" title="Phòng Trưng bày" thumburl="panos/trung_bay_trai2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="95.6" vlookat="25.4" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/trung_bay_trai2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_trai2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_trai2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_trai2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua3_2084" style="muiten" ath="54.3117" atv="27.4942" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_3_4148" style="muiten" ath="44.8522" atv="12.8614" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_trai1_3705" style="muiten" ath="178.3535" atv="30.3684" linkedscene="scene_trung_bay_trai1" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_785091" style="muiten" ath="96.8915" atv="19.6005" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_816777" style="muiten" ath="115.5113" atv="26.1502" linkedscene="" custom_title="Mũi tên di chuyển mới"/>
+		<hotspot name="hs_new_911846" style="muiten" scale="0.30" ath="164.1613" atv="11.4944" linkedscene="scene_sanh_nha_trung_bay" custom_title="Sảnh Nhà trưng bày"/>
+	</scene>
+	<scene name="scene_trung_bay_trai3" title="Phòng Trưng bày" thumburl="panos/trung_bay_trai3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-74.9" vlookat="26.4" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/trung_bay_trai3.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_bay_trai3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_bay_trai3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_bay_trai3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_bay_trai3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_giua3_3396" style="muiten" ath="79.1167" atv="37.6201" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_2_2003" style="muiten" ath="105.7042" atv="20.3772" linkedscene="scene_trung_bay_phai_2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_phai_3_0469" style="muiten" ath="39.9453" atv="20.3858" linkedscene="scene_trung_bay_phai_3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_942777" style="muiten" ath="130.7078" atv="25.5157" linkedscene="scene_trung_bay_giua2" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_new_961771" style="muiten" scale="0.35" ath="150.8726" atv="10.8960" linkedscene="scene_sanh_nha_trung_bay" custom_title="Sảnh Nhà trưng bày"/>
+		<hotspot name="hs_new_329828" style="muiten" ath="-102.3916" atv="23.3928" linkedscene="scene_sanh_giua" custom_title="Sảnh giữa"/>
+		<hotspot name="hs_return_trung_bay_phai_1_5394" style="muiten" ath="-59.6954" atv="15.7659" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
+	</scene>
+	<scene name="scene_sanh_giua" title="Sảnh giữa" thumburl="panos/sanh_giua.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="88.3" vlookat="0.8" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/sanh_giua.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/sanh_giua.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/sanh_giua.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/sanh_giua.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/sanh_giua.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_bay_trai3_1840" style="muiten" ath="-91.6346" atv="19.0802" linkedscene="scene_trung_bay_trai3" custom_title="Phòng Trưng bày"/>
+		<hotspot name="hs_return_trung_bay_giua3_0635" style="muiten" ath="-91.3845" atv="11.6045" linkedscene="scene_trung_bay_giua3" custom_title="Phòng Trưng bày"/>
 	</scene>
 </krpano>

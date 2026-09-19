@@ -916,33 +916,40 @@
             gap: 10px;
         }
 
-        /* Notification Toast */
+        /* Notification Toast (Positioned top-center below top bar, never overlaps bottom toolbars) */
         #toast {
             position: fixed;
-            bottom: 25px;
+            top: 68px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #10b981;
-            color: #000;
-            padding: 10px 25px;
-            border-radius: 30px;
+            transform: translateX(-50%) translateY(-35px);
+            opacity: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.96), rgba(5, 150, 105, 0.96));
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 24px;
             font-weight: 600;
-            font-size: 14px;
-            z-index: 2000;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 13.5px;
+            z-index: 2500;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            backdrop-filter: blur(12px);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
+            user-select: none;
         }
 
-        /* Hide krpano error text overlay */
-        #pano div, #pano span {
-            font-family: inherit;
-        }
-        
         #toast.show {
             transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #toast:hover {
+            transform: translateX(-50%) translateY(0) scale(1.02);
+            filter: brightness(1.05);
         }
         /* Compact Upload Drop Zone */
         .upload-zone {
@@ -1870,8 +1877,9 @@
     </div>
 
     <!-- Notification Toast -->
-    <div id="toast">
+    <div id="toast" title="Bấm để đóng nhanh">
         <i class="fa-solid fa-check-double"></i> <span id="toast-msg">Đã copy!</span>
+        <span style="font-size: 11px; opacity: 0.75; margin-left: 6px; padding: 1px 5px; border-radius: 10px; background: rgba(0,0,0,0.25);">✕</span>
     </div>
 
     <!-- Embedding KrPano Core -->
@@ -2895,7 +2903,7 @@
                 if (['muiten', 'vitri', 'tructhang', 'thongtin', 'poly_ground_nav'].includes(style)) {
                     const ath = Number(krpanoObj.get(`hotspot[${i}].ath`) || 0).toFixed(4);
                     const atv = Number(krpanoObj.get(`hotspot[${i}].atv`) || 0).toFixed(4);
-                    const rawScale = krpanoObj.get(`hotspot[${i}].scale`);
+                    const rawScale = krpanoObj.get(`hotspot[${i}].base_scale`) || krpanoObj.get(`hotspot[${i}].scale`);
                     const hsScale = rawScale !== null && rawScale !== undefined ? Number(rawScale).toFixed(2) : '0.50';
                     
                     const stVal = krpanoObj.get(`hotspot[${i}].show_title`);
@@ -3500,6 +3508,7 @@
 
             // Return camera back to Scene A
             krpanoObj.call(`loadscene('${ctx.fromSceneId}', null, MERGE, BLEND(0.4));`);
+            toggleLeftSidebar(true);
             toggleRightSidebar(true);
 
             setTimeout(() => {
@@ -3555,6 +3564,7 @@
 
             // Return camera back to Scene A
             krpanoObj.call(`loadscene('${ctx.fromSceneId}', null, MERGE, BLEND(0.4));`);
+            toggleLeftSidebar(true);
             toggleRightSidebar(true);
             showToast('Đã bỏ qua tạo Hotspot quay về.');
 
@@ -4039,6 +4049,7 @@
                 krpanoObj.set(`hotspot[${name}].ondown`, 'draghotspot();');
                 krpanoObj.set(`hotspot[${name}].onclick`, `js(onHotspotSelected(get(name)))`);
                 krpanoObj.set(`hotspot[${name}].custom_title`, newHs.custom_title);
+                krpanoObj.set(`hotspot[${name}].base_scale`, '0.50');
 
                 renderHotspotList();
                 onHotspotSelected(name);
@@ -4068,6 +4079,7 @@
                     krpanoObj.set(`hotspot[${name}].ath`, ath);
                     krpanoObj.set(`hotspot[${name}].atv`, atv);
                     krpanoObj.set(`hotspot[${name}].scale`, hsScale);
+                    krpanoObj.set(`hotspot[${name}].base_scale`, hsScale);
                     krpanoObj.set(`hotspot[${name}].renderer`, 'webgl');
                     krpanoObj.set(`hotspot[${name}].distorted`, true);
                     krpanoObj.set(`hotspot[${name}].linkedscene`, hs.linkedscene || '');
@@ -4513,14 +4525,25 @@
         }
 
         // Show toast
+        let toastTimer = null;
         function showToast(msg) {
             const t = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
+            if (!t) return;
+            const msgEl = document.getElementById('toast-msg');
+            if (msgEl) msgEl.textContent = msg;
             t.classList.add('show');
-            setTimeout(() => {
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
                 t.classList.remove('show');
-            }, 3000);
+            }, 2200);
         }
+
+        function hideToast() {
+            const t = document.getElementById('toast');
+            if (t) t.classList.remove('show');
+            if (toastTimer) clearTimeout(toastTimer);
+        }
+        document.getElementById('toast')?.addEventListener('click', hideToast);
 
         // =============================================================
         // UPLOAD PANORAMA SYSTEM (Multi-File & Location Support)
