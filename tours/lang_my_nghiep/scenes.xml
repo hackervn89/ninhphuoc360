@@ -19,6 +19,7 @@
 		</image>
 		<hotspot name="hs_new_539818" style="muiten" ath="-145.1500" atv="8.9901" linkedscene="scene_mynghiep_cong_htx" custom_title="HTX Thổ cẩm Chăm"/>
 		<hotspot name="hs_new_485670" style="muiten" ath="-324.4440" atv="4.3890" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
+			<hotspot name="hs_return_cong_htx_1466" style="muiten" ath="-45.9330" atv="11.1401" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
 	</scene>
 	<scene name="scene_mynghiep_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-130.8" vlookat="2.6" fov="90.7" fovmin="60" fovmax="95"/>

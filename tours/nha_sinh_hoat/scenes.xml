@@ -24,6 +24,7 @@
 		<hotspot name="hs_return_tru_so_xa_1821" style="vitri" scale="0.20" ath="-8.6852" atv="-11.7980" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã Ninh Phước"/>
 			<hotspot name="hs_return_tru_so_xa_9517" style="vitri" ath="3.7352" atv="-2.7556" linkedscene="scene_tru_so_xa" custom_title="Trụ sở xã Ninh Phước"/>
 	</scene>
+
 	<scene name="scene_4" title="Sân trước" thumburl="panos/4.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-889.5" vlookat="-1.7" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/4.tiles/preview.jpg"/>
@@ -47,6 +48,7 @@
 		<hotspot name="hs_new_359386" style="muiten" ath="164.6029" atv="22.3032" linkedscene="scene_12" custom_title="Khu làm gốm"/>
 		<hotspot name="hs_new_415761" style="muiten" scale="0.40" ath="-126.8961" atv="10.0989" linkedscene="scene_nha_lam_viec1" custom_title="Khu sinh hoạt"/>
 	</scene>
+
 	<scene name="scene_5" title="Sân trước" thumburl="panos/5.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="22.5" vlookat="5.2" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/5.tiles/preview.jpg"/>
@@ -69,6 +71,7 @@
 		<hotspot name="hs_new_654293" style="muiten" ath="-104.1824" atv="22.3311" linkedscene="scene_13" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_495606" style="muiten" ath="25.8218" atv="12.1963" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_6" title="Khu trưng bày" thumburl="panos/6.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-58.7" vlookat="-1.9" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/6.tiles/preview.jpg"/>
@@ -92,6 +95,7 @@
 		<hotspot name="hs_new_171182" style="muiten" ath="-55.5263" atv="20.2418" linkedscene="scene_8" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_691769" style="muiten" ath="-104.8603" atv="14.8076" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_7" title="Khu trưng bày" thumburl="panos/7.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-110.2" vlookat="11.8" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/7.tiles/preview.jpg"/>
@@ -114,6 +118,7 @@
 		<hotspot name="hs_new_206276" style="muiten" ath="46.1763" atv="15.3861" linkedscene="scene_9" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_310082" style="muiten" ath="-178.3900" atv="17.9180" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_8" title="Khu trưng bày" thumburl="panos/8.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-101.4" vlookat="28.9" fov="104.6" fovmin="60" fovmax="110"/>
 		<preview url="panos/8.tiles/preview.jpg"/>
@@ -137,6 +142,7 @@
 		<hotspot name="hs_new_434663" style="muiten" ath="97.9496" atv="35.8297" linkedscene="scene_7" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_278070" style="muiten" ath="88.6294" atv="12.0664" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_9" title="Khu trưng bày" thumburl="panos/9.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-147.6" vlookat="17.2" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/9.tiles/preview.jpg"/>
@@ -159,6 +165,7 @@
 		<hotspot name="hs_new_134970" style="muiten" ath="114.2564" atv="8.2962" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_253431" style="muiten" ath="161.5915" atv="9.1387" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_14" title="Khu làm gốm" thumburl="panos/14.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-475.3" vlookat="12.1" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/14.tiles/preview.jpg"/>
@@ -180,6 +187,9 @@
 		<hotspot name="hs_new_318645" style="muiten" ath="90.8001" atv="15.6629" linkedscene="scene_4" custom_title="Sân trước"/>
 		<hotspot name="hs_new_383729" style="muiten" ath="-78.2748" atv="18.7500" linkedscene="scene_12" custom_title="Khu làm gốm"/>
 	</scene>
+
+	
+
 	<scene name="scene_13" title="Khu làm gốm" thumburl="panos/13.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-129.7" vlookat="13.4" fov="85.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/13.tiles/preview.jpg"/>
@@ -200,6 +210,7 @@
 		<hotspot name="hs_new_865125" style="muiten" ath="20.7787" atv="20.0093" linkedscene="scene_5" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_872207" style="muiten" ath="74.2654" atv="16.5800" linkedscene="scene_4" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_nha_lam_viec1" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-115.9" vlookat="2.2" fov="90.7" fovmin="60" fovmax="95"/>
 		<preview url="panos/nha_lam_viec1.tiles/preview.jpg"/>
@@ -220,6 +231,7 @@
 		<hotspot name="hs_new_776473" style="muiten" ath="55.0452" atv="24.8911" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_789475" style="muiten" ath="65.8470" atv="6.3884" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_nha_lam_viec2" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="1.8" vlookat="-3.4" fov="85.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/nha_lam_viec2.tiles/preview.jpg"/>
@@ -241,6 +253,7 @@
 		<hotspot name="hs_new_752017" style="muiten" ath="-18.9152" atv="7.1802" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_764376" style="muiten" ath="158.1663" atv="23.9975" linkedscene="scene_nha_lam_viec1" custom_title="Mũi tên di chuyển mới"/>
 	</scene>
+
 	<scene name="scene_12" title="Khu làm gốm" thumburl="panos/12.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-126.8" vlookat="12.5" fov="90.7" fovmin="60" fovmax="95"/>
 		<preview url="panos/12.tiles/preview.jpg"/>

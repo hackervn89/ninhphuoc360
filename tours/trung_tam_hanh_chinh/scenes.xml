@@ -105,4 +105,6 @@
 		<hotspot name="hs_return_quang_truong_2_7310" style="muiten" ath="-105.9992" atv="9.1091" linkedscene="scene_quang_truong_2" custom_title="Quảng trường"/>
 		<hotspot name="hs_new_213554" style="muiten" ath="157.3297" atv="6.7713" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
 	</scene>
+
+	
 </krpano>

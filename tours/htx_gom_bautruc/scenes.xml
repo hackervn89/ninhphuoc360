@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
+	<scene name="scene_cong_htx" title="Cổng HTX" thumburl="panos/cong_htx.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-437.4" vlookat="0.9" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cong_htx.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="2.8|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_144533" style="muiten" ath="-90.1146" atv="15.1086" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
+		<hotspot name="hs_new_169815" style="muiten" ath="9.2934" atv="11.3026" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
+		<hotspot name="hs_return_cong_lang_my_nghiep_5895" style="muiten" ath="134.0670" atv="11.1401" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
+		<hotspot name="hs_new_537824" style="muiten" ath="-167.1117" atv="5.5861" linkedscene="scene_duong_703" custom_title="Đường 703"/>
+	</scene>
 	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-103.6" vlookat="17.3" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/san_trai1.tiles/preview.jpg"/>
@@ -276,27 +298,6 @@
 		<hotspot name="hs_new_404143" style="muiten" ath="-137.5009" atv="25.3458" linkedscene="scene_san_phai2" custom_title="Sân trước"/>
 		<hotspot name="hs_new_426820" style="muiten" ath="171.4995" atv="13.9164" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
 	</scene>
-	<scene name="scene_cong_htx" title="Cổng HTX" thumburl="panos/cong_htx.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-437.4" vlookat="0.9" fov="95.0" fovmin="60" fovmax="95"/>
-		<preview url="panos/cong_htx.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512" prealign="2.8|0.0|0.0">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/cong_htx.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/cong_htx.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/cong_htx.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/cong_htx.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
-			</level>
-		</image>
-		<hotspot name="hs_new_144533" style="muiten" ath="-90.1146" atv="15.1086" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
-		<hotspot name="hs_new_169815" style="muiten" ath="9.2934" atv="11.3026" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
-			<hotspot name="hs_return_cong_lang_my_nghiep_5895" style="muiten" ath="134.0670" atv="11.1401" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
-	</scene>
 	<scene name="scene_san_phai2" title="Sân trước" thumburl="panos/san_phai2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-60.4" vlookat="9.2" fov="112.0" fovmin="60" fovmax="112"/>
 		<preview url="panos/san_phai2.tiles/preview.jpg"/>
@@ -317,5 +318,24 @@
 		<hotspot name="hs_new_463383" style="muiten" ath="13.1361" atv="16.8589" linkedscene="scene_san_phai" custom_title="Sân trước"/>
 		<hotspot name="hs_new_471209" style="muiten" ath="134.0353" atv="18.2007" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
 		<hotspot name="hs_new_488402" style="muiten" ath="-138.0872" atv="26.7856" linkedscene="scene_sanh_phai" custom_title="Sảnh phải"/>
+	</scene>
+	<scene name="scene_duong_703" title="Đường 703" thumburl="panos/duong_703.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/duong_703.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/duong_703.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/duong_703.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/duong_703.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/duong_703.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+			<hotspot name="hs_return_cong_htx_1467" style="muiten" ath="69.3579" atv="7.7294" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
 	</scene>
 </krpano>

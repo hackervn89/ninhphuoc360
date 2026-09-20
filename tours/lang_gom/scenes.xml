@@ -792,4 +792,5 @@
 		<hotspot name="hs_return_ngoc_huynh_4_3951" style="muiten" ath="-9.2835" atv="27.3872" linkedscene="scene_ngoc_huynh_4" custom_title="Cơ sở Ngọc Huỳnh"/>
 		<hotspot name="hs_new_428277" style="muiten" scale="0.40" ath="2.8185" atv="12.6747" linkedscene="scene_ngoc_huynh_3" custom_title="Cơ sở Ngọc Huỳnh"/>
 	</scene>
+	
 </krpano>
