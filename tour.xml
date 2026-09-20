@@ -553,8 +553,6 @@
 
 		<include url="tours/lang_my_nghiep/scenes.xml" />
 
-		<include url="tours/cong_ty_nt/scenes.xml" />
-
 	<!-- Hotspot Drag Action for Visual Tour Editor -->
 	<action name="draghotspot">
 		stoptween(oy);
