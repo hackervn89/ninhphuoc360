@@ -20,7 +20,7 @@
 		<hotspot name="hs_new_144533" style="muiten" ath="-90.1146" atv="15.1086" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
 		<hotspot name="hs_new_169815" style="muiten" ath="9.2934" atv="11.3026" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
 		<hotspot name="hs_return_cong_lang_my_nghiep_5895" style="muiten" ath="134.0670" atv="11.1401" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
-		<hotspot name="hs_new_537824" style="muiten" ath="-167.1117" atv="5.5861" linkedscene="scene_duong_703" custom_title="Đường 703"/>
+		<hotspot name="hs_new_166304" style="muiten" ath="-167.0681" atv="7.3333" linkedscene="scene_duong_703" custom_title="Đường 703"/>
 	</scene>
 	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-103.6" vlookat="17.3" fov="110.0" fovmin="60" fovmax="110"/>
@@ -320,7 +320,7 @@
 		<hotspot name="hs_new_488402" style="muiten" ath="-138.0872" atv="26.7856" linkedscene="scene_sanh_phai" custom_title="Sảnh phải"/>
 	</scene>
 	<scene name="scene_duong_703" title="Đường 703" thumburl="panos/duong_703.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-63.1" vlookat="5.6" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/duong_703.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -336,6 +336,7 @@
 				<cube url="panos/duong_703.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-			<hotspot name="hs_return_cong_htx_1467" style="muiten" ath="69.3579" atv="7.7294" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
+		<hotspot name="hs_new_147514" style="muiten" ath="67.0783" atv="8.7885" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
+		<hotspot name="hs_new_196302" style="muiten" ath="-36.0876" atv="9.5815" linkedscene="scene_duong_703_den" custom_title="Đường vào Đền Po Klaong Car"/>
 	</scene>
 </krpano>

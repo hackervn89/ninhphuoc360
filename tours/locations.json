@@ -6,31 +6,32 @@
   },
   "nha_sinh_hoat": {
     "name": "Nhà Sinh hoạt cộng đồng Chăm",
-    "lat": 11.5318,
-    "lng": 108.9542
+    "lat": 11.529623563168903,
+    "lng": 108.92541919832796
   },
   "htx_gom_bautruc": {
     "name": "HTX Gốm Chăm Bàu Trúc",
-    "lat": 11.5312,
-    "lng": 108.9568
+    "lat": 11.529656960123733,
+    "lng": 108.92493600150426
   },
   "bia_tuong_niem_van_phuoc": {
     "name": "Bia tưởng niệm sự kiện thảm sát làng Vạn Phước",
-    "lat": 11.545,
-    "lng": 108.941
+    "lat": 11.571198636008175,
+    "lng": 108.9517567932289
   },
   "nha_tuong_niem_tranthi": {
     "name": "Nhà tưởng niệm đồng chí Trần Thi",
-    "lat": 11.5462,
-    "lng": 108.9425
+    "lat": 11.571200651831813,
+    "lng": 108.9515485182481
   },
   "dinh_lang_van_phuoc": {
     "name": "Đình Làng Vạn Phước",
-    "lat": 11.571658,
-    "lng": 108.95142
+    "lat": 11.57156653231954,
+    "lng": 108.95147977494686
   },
   "lang_my_nghiep": "Làng dệt Mỹ Nghiệp",
   "trung_tam_hanh_chinh": "Trung tâm hành chính xã Ninh Phước",
   "gom_hai_au": "Cơ sở gốm Hải Âu",
-  "cong_ty_nt": "Công ty bảo tồn di sản văn hoá Chăm NT"
+  "cong_ty_nt": "Công ty bảo tồn di sản văn hoá Chăm NT",
+  "den_po_klaong_car": "Đền Po Klaong Car"
 }

@@ -571,6 +571,8 @@
 
 		
 
+		<include url="tours/den_po_klaong_car/scenes.xml" />
+
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">
 		if(startscene === null OR !scene[get(startscene)], copy(startscene, scene[0].name); );
