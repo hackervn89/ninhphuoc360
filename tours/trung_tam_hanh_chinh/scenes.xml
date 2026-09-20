@@ -1,79 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_trung_tam_hanh_chinh" title="Trung tâm hành chính xã" thumburl="panos/trung_tam_hanh_chinh.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/trung_tam_hanh_chinh.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-			<hotspot name="hs_return_duong_vao_bau_truc_7374" style="muiten" ath="54.9990" atv="14.4393" linkedscene="scene_duong_vao_bau_truc" custom_title="Đường vào làng Bàu Trúc"/>
-			<hotspot name="hs_return_cong_lang_my_nghiep_2077" style="muiten" ath="131.2787" atv="8.4337" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
-	</scene>
-	<scene name="scene_quang_truong_2" title="Quảng trường" thumburl="panos/quang_truong_2.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/quang_truong_2.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/quang_truong_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/quang_truong_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/quang_truong_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/quang_truong_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_tru_so_xa" title="Trụ sở xã Ninh Phước" thumburl="panos/tru_so_xa.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/tru_so_xa.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/tru_so_xa.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/tru_so_xa.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/tru_so_xa.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/tru_so_xa.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-	<scene name="scene_quang_truong_1" title="Quảng trường 1" thumburl="panos/quang_truong_1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/quang_truong_1.tiles/preview.jpg" />
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/quang_truong_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/quang_truong_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/quang_truong_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/quang_truong_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
-			</level>
-		</image>
-	</scene>
-
 	<scene name="scene_cong_chao_ninh_phuoc" title="Cổng chào xã Ninh Phước" thumburl="panos/cong_chao_ninh_phuoc.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-129.3" vlookat="2.6" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/cong_chao_ninh_phuoc.tiles/preview.jpg"/>
@@ -92,5 +18,91 @@
 			</level>
 		</image>
 		<hotspot name="hs_return_cong_lang_bau_truc_0685" style="muiten" ath="-122.8613" atv="9.5221" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+	</scene>
+	<scene name="scene_trung_tam_hanh_chinh" title="Trung tâm hành chính xã" thumburl="panos/trung_tam_hanh_chinh.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-113.4" vlookat="5.5" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/trung_tam_hanh_chinh.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/trung_tam_hanh_chinh.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_duong_vao_bau_truc_7374" style="muiten" ath="54.9990" atv="14.4393" linkedscene="scene_duong_vao_bau_truc" custom_title="Làng Bàu Trúc"/>
+		<hotspot name="hs_return_cong_lang_my_nghiep_2077" style="muiten" ath="131.2695" atv="12.1714" linkedscene="scene_cong_lang_my_nghiep" custom_title="Làng Mỹ Nghiệp"/>
+		<hotspot name="hs_new_941563" style="muiten" ath="-111.7693" atv="10.3632" linkedscene="scene_tru_so_xa" custom_title="Trụ sở xã Ninh Phước"/>
+		<hotspot name="hs_return_quang_truong_1_6373" style="muiten" ath="-22.6703" atv="6.7713" linkedscene="scene_quang_truong_1" custom_title="Quảng trường 1"/>
+		<hotspot name="hs_return_duongdi2_1682" style="vitri" ath="171.3148" atv="-11.7980" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
+	</scene>
+	<scene name="scene_tru_so_xa" title="Trụ sở xã Ninh Phước" thumburl="panos/tru_so_xa.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="55.7" vlookat="2.4" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/tru_so_xa.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/tru_so_xa.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/tru_so_xa.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/tru_so_xa.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/tru_so_xa.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_trung_tam_hanh_chinh_2790" style="muiten" ath="3.8443" atv="18.8936" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
+		<hotspot name="hs_new_045640" style="muiten" ath="27.6687" atv="9.9490" linkedscene="scene_quang_truong_1" custom_title="Quảng trường"/>
+		<hotspot name="hs_new_105631" style="muiten" ath="61.4941" atv="3.9917" linkedscene="scene_quang_truong_2" custom_title="Quảng trường"/>
+		<hotspot name="hs_new_259221" style="vitri" scale="0.25" ath="-176.2648" atv="-2.7556" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
+	</scene>
+	<scene name="scene_quang_truong_2" title="Quảng trường" thumburl="panos/quang_truong_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-486.4" vlookat="8.9" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/quang_truong_2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/quang_truong_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/quang_truong_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/quang_truong_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/quang_truong_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_tru_so_xa_7321" style="muiten" scale="0.35" ath="-150.8808" atv="6.4454" linkedscene="scene_tru_so_xa" custom_title="Trụ sở xã Ninh Phước"/>
+		<hotspot name="hs_new_134393" style="muiten" ath="-129.7288" atv="10.2391" linkedscene="scene_quang_truong_1" custom_title="Quảng trường 1"/>
+	</scene>
+	<scene name="scene_quang_truong_1" title="Quảng trường 1" thumburl="panos/quang_truong_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-106.5" vlookat="0.9" fov="85.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/quang_truong_1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512" prealign="-1.7|0.0|0.0">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/quang_truong_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/quang_truong_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/quang_truong_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/quang_truong_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_tru_so_xa_1146" style="muiten" ath="25.4334" atv="13.9807" linkedscene="scene_tru_so_xa" custom_title="Trụ sở xã Ninh Phước"/>
+		<hotspot name="hs_return_quang_truong_2_7310" style="muiten" ath="-105.9992" atv="9.1091" linkedscene="scene_quang_truong_2" custom_title="Quảng trường"/>
+		<hotspot name="hs_new_213554" style="muiten" ath="157.3297" atv="6.7713" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
 	</scene>
 </krpano>

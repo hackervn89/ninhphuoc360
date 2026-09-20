@@ -86,7 +86,7 @@
 		<hotspot name="hs_return_trung_bay_phai_1_8081" style="muiten" ath="-150.0999" atv="33.2338" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
 	</scene>
 	<scene name="scene_trung_bay_giua1" title="Phòng Trưng bày" thumburl="panos/trung_bay_giua1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-110.1" vlookat="14.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-109.9" vlookat="12.7" fov="110.0" fovmin="60" fovmax="110" />
 		<preview url="panos/trung_bay_giua1.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512" prealign="0.5|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Soft Glow Filter -->
+    <filter id="radar-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Gradients -->
+    <linearGradient id="outer-glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd700" stop-opacity="0.85" />
+      <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.9" />
+    </linearGradient>
+
+    <radialGradient id="disc-fill" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="35%" stop-color="#ffd700" stop-opacity="0.8" />
+      <stop offset="70%" stop-color="#0f172a" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.3" />
+    </radialGradient>
+
+    <linearGradient id="arrow-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ffd700" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+  </defs>
+
+  <!-- Shadow Base -->
+  <ellipse cx="100" cy="100" rx="90" ry="90" fill="rgba(0,0,0,0.4)" />
+
+  <!-- Outer Pulsing Ring -->
+  <circle cx="100" cy="100" r="86" fill="none" stroke="url(#outer-glow-grad)" stroke-width="3" stroke-dasharray="14 8" filter="url(#radar-glow)" />
+
+  <!-- Mid Translucent Disc -->
+  <circle cx="100" cy="100" r="70" fill="url(#disc-fill)" stroke="#ffd700" stroke-width="2" />
+
+  <!-- Concentric Target Ring -->
+  <circle cx="100" cy="100" r="48" fill="rgba(15, 23, 42, 0.65)" stroke="rgba(255, 255, 255, 0.7)" stroke-width="2" />
+
+  <!-- Cardinal Navigation Ticks (N, S, E, W) -->
+  <line x1="100" y1="18" x2="100" y2="28" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+  <line x1="100" y1="172" x2="100" y2="182" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="18" y1="100" x2="28" y2="100" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" />
+  <line x1="172" y1="100" x2="182" y2="100" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Forward Moving Chevron Arrow -->
+  <g filter="url(#radar-glow)">
+    <polygon points="100,56 126,88 114,88 100,72 86,88 74,88" fill="url(#arrow-grad)" />
+    <polygon points="100,78 120,104 111,104 100,91 89,104 80,104" fill="rgba(255, 255, 255, 0.95)" />
+    <!-- Core Center Dot -->
+    <circle cx="100" cy="120" r="7" fill="#ffd700" stroke="#ffffff" stroke-width="2.5" />
+  </g>
+</svg>
