@@ -162,7 +162,7 @@
 		</image>
 	</scene>
 	<scene name="scene_cng_ty_nt" title="Công ty bảo tồn di sản văn hoá Chăm NT" thumburl="panos/cng_ty_nt.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-279.6" vlookat="2.7" fov="95.0" fovmin="60" fovmax="95" />
 		<preview url="panos/cng_ty_nt.tiles/preview.jpg" />
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">

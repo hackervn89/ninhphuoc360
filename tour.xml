@@ -537,6 +537,7 @@
 	<autorotate enabled="false" waittime="5.0" speed="2.0" horizon="0" />
 
 	<!-- Include ALL scenes from ALL locations -->
+		<include url="tours/trung_tam_hanh_chinh/scenes.xml" />
 
 		<include url="tours/lang_gom/scenes.xml" />
 
@@ -549,6 +550,10 @@
 		<include url="tours/nha_tuong_niem_tranthi/scenes.xml" />
 
 		<include url="tours/dinh_lang_van_phuoc/scenes.xml" />
+
+		<include url="tours/lang_my_nghiep/scenes.xml" />
+
+		<include url="tours/cong_ty_nt/scenes.xml" />
 
 	<!-- Hotspot Drag Action for Visual Tour Editor -->
 	<action name="draghotspot">
@@ -566,13 +571,7 @@
 		);
 	</action>
 
-		<include url="tours/lang_my_nghiep/scenes.xml" />
-
-		<include url="tours/trung_tam_hanh_chinh/scenes.xml" />
-
-		<include url="tours/gom_hai_au/scenes.xml" />
-
-		<include url="tours/cong_ty_nt/scenes.xml" />
+		
 
 	<!-- Startup: Load the first scene -->
 	<action name="startup" autorun="onstart">
