@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_duongdi2" title="Nhà sinh hoạt cộng đồng Chăm" thumburl="panos/duongdi2.tiles/thumb.jpg">
+	<scene name="scene_duongdi2" title="Nhà sinh hoạt cộng đồng Chăm" thumburl="panos/duongdi2.tiles/thumb.jpg" lat="11.529495627376582" lng="108.92538513099127">
 		<view fovtype="MFOV" hlookat="-140.3" vlookat="4.9" fov="101.4" fovmin="60" fovmax="110"/>
 		<preview url="panos/duongdi2.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">

@@ -41,9 +41,10 @@
 		<hotspot name="hs_return_cong_chao_ninh_phuoc_3681" style="muiten" ath="42.2037" atv="4.4496" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng chào Xã Ninh Phước"/>
 		<hotspot name="hs_new_510913" style="muiten" ath="-130.3342" atv="17.9943" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
 		<hotspot name="hs_return_duong_lang_1_9316" style="muiten" ath="-19.0955" atv="6.7256" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
+		<hotspot name="hs_return_duong_vao_co_so_7663" style="vitri" ath="-8.6777" atv="-4.9015" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
 	</scene>
 	<scene name="scene_duong_vao_co_so" title="Đường vào cơ sở Gốm" thumburl="panos/duong_vao_co_so.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-2.2" vlookat="11.5" fov="95.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-187.7" vlookat="1.9" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/duong_vao_co_so.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -59,27 +60,736 @@
 				<cube url="panos/duong_vao_co_so.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_return_cong_lang_bau_truc_5696" style="vitri" scale="0.20" ath="171.7992" atv="1.9617" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
+		<hotspot name="hs_return_cong_lang_bau_truc_5696" style="vitri" scale="0.20" ath="171.3223" atv="-4.9015" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
 		<hotspot name="hs_new_575924" style="muiten" ath="-4.9036" atv="11.1021" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
-		<hotspot name="hs_return_duong_lang_1_9317" style="muiten" ath="170.1900" atv="12.7144" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
+		<hotspot name="hs_return_duong_lang_1_9317" style="muiten" ath="171.3074" atv="7.6096" linkedscene="scene_cong_co_so" custom_title="Các cơ sở Gốm Chăm"/>
 	</scene>
-
 	<scene name="scene_cong_co_so" title="Cơ sở gốm Hải Âu" thumburl="panos/cong_co_so.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95" />
-		<preview url="panos/cong_co_so.tiles/preview.jpg" />
+		<view fovtype="MFOV" hlookat="-107.0" vlookat="5.5" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/cong_co_so.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/cong_co_so.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_co_so.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/cong_co_so.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_co_so.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/cong_co_so.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_co_so.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
 			</level>
 			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/cong_co_so.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg" />
+				<cube url="panos/cong_co_so.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_new_954628" style="muiten" ath="-87.4393" atv="12.8499" linkedscene="scene_haiau_1" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_duong_vao_co_so_7665" style="muiten" ath="-5.6260" atv="7.3267" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
+	</scene>
+	<scene name="scene_haiau_1" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-111.5" vlookat="37.5" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/haiau_1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cong_co_so_8374" style="muiten" ath="9.3020" atv="26.8252" linkedscene="scene_cong_co_so" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_991897" style="muiten" ath="-160.6135" atv="37.0312" linkedscene="scene_haiau_2" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_017080" style="muiten" ath="-128.5736" atv="23.9086" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_172450" style="muiten" ath="-102.2032" atv="14.8340" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_2" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-71.0" vlookat="17.1" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/haiau_2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_1_0079" style="muiten" ath="17.9113" atv="33.4675" linkedscene="scene_haiau_1" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_077880" style="muiten" ath="-78.8974" atv="31.2930" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_098399" style="muiten" ath="-78.5592" atv="18.9645" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_5_0822" style="muiten" ath="-85.3994" atv="14.3974" linkedscene="scene_haiau_5" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_3" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="21.5" vlookat="11.7" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/haiau_3.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_1_0902" style="muiten" ath="140.1545" atv="23.5423" linkedscene="scene_haiau_1" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_2_9990" style="muiten" ath="170.3207" atv="39.2602" linkedscene="scene_haiau_2" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_271879" style="muiten" ath="3.4113" atv="36.7004" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_335916" style="muiten" ath="-2.2840" atv="23.2133" linkedscene="scene_haiau_5" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_782644" style="muiten" ath="-17.5511" atv="15.4984" linkedscene="scene_haiau_7" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_805399" style="muiten" ath="4.2821" atv="14.8604" linkedscene="scene_haiau_6" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_8_7225" style="muiten" scale="0.40" ath="-37.3989" atv="22.6554" linkedscene="scene_haiau_8" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_4" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_4.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-8.3" vlookat="14.1" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/haiau_4.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_4.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_4.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_4.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_4.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_2_5763" style="muiten" ath="-176.7074" atv="25.7418" linkedscene="scene_haiau_2" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_3_3262" style="muiten" ath="-162.9634" atv="46.5015" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_365735" style="muiten" ath="-9.5180" atv="39.0616" linkedscene="scene_haiau_5" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_599961" style="muiten" ath="-27.6693" atv="22.5046" linkedscene="scene_haiau_7" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_621146" style="muiten" ath="6.9470" atv="22.7739" linkedscene="scene_haiau_6" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_645262" style="muiten" ath="-78.5983" atv="32.0268" linkedscene="scene_haiau_8" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_5" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_5.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-95.2" vlookat="16.4" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/haiau_5.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_5.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_5.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_5.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_5.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_3_8754" style="muiten" ath="100.4160" atv="24.9882" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_4_5696" style="muiten" ath="89.2781" atv="43.6758" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_509930" style="muiten" scale="0.30" ath="94.6006" atv="14.3974" linkedscene="scene_haiau_2" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_546048" style="muiten" ath="-71.5902" atv="30.2783" linkedscene="scene_haiau_6" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_562599" style="muiten" ath="-125.9654" atv="27.6569" linkedscene="scene_haiau_7" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_581826" style="muiten" ath="169.7316" atv="26.4124" linkedscene="scene_haiau_8" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_6" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_6.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="54.2" vlookat="24.9" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/haiau_6.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_6.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_6.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_6.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_6.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_5_9985" style="muiten" ath="18.5727" atv="28.2488" linkedscene="scene_haiau_5" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_4_1635" style="muiten" scale="0.35" ath="7.8275" atv="19.1180" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_701926" style="muiten" ath="84.2378" atv="24.4244" linkedscene="scene_haiau_7" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_3_4859" style="muiten" ath="10.9599" atv="12.6212" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_862664" style="muiten" scale="0.35" ath="32.9570" atv="22.3267" linkedscene="scene_haiau_8" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_7" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_7.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-56.8" vlookat="15.1" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/haiau_7.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_7.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_7.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_7.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_7.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_5_7673" style="muiten" ath="-20.8387" atv="24.9934" linkedscene="scene_haiau_5" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_4_5222" style="muiten" ath="-18.7068" atv="16.5153" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_6_7362" style="muiten" ath="-90.8802" atv="23.8020" linkedscene="scene_haiau_6" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_3_7056" style="muiten" ath="-10.8194" atv="10.3645" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_8_7350" style="muiten" ath="-87.7435" atv="23.1766" linkedscene="scene_haiau_8" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_8" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_8.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="276.7" vlookat="15.0" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/haiau_8.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_8.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_8.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_8.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_8.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_5_5322" style="muiten" ath="150.7548" atv="35.3155" linkedscene="scene_haiau_5" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_4_1148" style="muiten" ath="-173.2405" atv="28.4458" linkedscene="scene_haiau_4" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_6_0241" style="muiten" ath="136.8278" atv="20.4796" linkedscene="scene_haiau_6" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_891485" style="muiten" ath="92.2565" atv="23.1766" linkedscene="scene_haiau_7" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_920293" style="muiten" scale="0.40" ath="-139.4715" atv="23.4147" linkedscene="scene_haiau_3" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_995861" style="muiten" ath="-68.0106" atv="26.5079" linkedscene="scene_haiau_9" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_9" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_9.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="179.5" vlookat="8.4" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/haiau_9.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_9.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_9.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_9.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_9.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_8_7366" style="muiten" ath="-25.7311" atv="16.3041" linkedscene="scene_haiau_8" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_031794" style="muiten" ath="174.6556" atv="31.6333" linkedscene="scene_haiau_10" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_551985" style="muiten" ath="130.6873" atv="10.0299" linkedscene="scene_haiau_14" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_10" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_10.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-184.4" vlookat="11.1" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/haiau_10.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_10.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_10.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_10.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_10.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_9_6390" style="muiten" ath="4.0666" atv="27.5701" linkedscene="scene_haiau_9" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_11_0039" style="muiten" ath="-86.4076" atv="16.0691" linkedscene="scene_haiau_11" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_238670" style="muiten" ath="133.7000" atv="10.1531" linkedscene="scene_haiau_12" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_276066" style="muiten" ath="91.2241" atv="13.6177" linkedscene="scene_haiau_13" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_14_2013" style="muiten" ath="100.8666" atv="19.7239" linkedscene="scene_haiau_14" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_11" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_11.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-149.0" vlookat="21.0" fov="120.0" fovmin="60" fovmax="120"/>
+		<preview url="panos/haiau_11.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_11.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_11.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_11.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_11.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_085484" style="muiten" ath="88.6013" atv="38.2754" linkedscene="scene_haiau_10" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_12" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_12.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-95.2" vlookat="5.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/haiau_12.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_12.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_12.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_12.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_12.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_10_8327" style="muiten" ath="31.3728" atv="12.7780" linkedscene="scene_haiau_10" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_13_9212" style="muiten" ath="93.8354" atv="21.6894" linkedscene="scene_haiau_13" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_372834" style="muiten" ath="87.8657" atv="52.2755" linkedscene="scene_haiau_14" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_14" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_14.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-130.8" vlookat="14.4" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/haiau_14.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_14.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_14.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_14.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_14.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_12_8482" style="muiten" ath="168.5865" atv="39.6279" linkedscene="scene_haiau_12" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_456632" style="muiten" ath="10.2084" atv="34.2170" linkedscene="scene_haiau_13" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_498911" style="muiten" ath="-79.1334" atv="19.7239" linkedscene="scene_haiau_10" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_9_7811" style="muiten" ath="-49.1288" atv="13.7251" linkedscene="scene_haiau_9" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_haiau_13" title="Cơ sở gốm Hải Âu" thumburl="panos/haiau_13.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-104.1" vlookat="14.2" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/haiau_13.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/haiau_13.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/haiau_13.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/haiau_13.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/haiau_13.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_haiau_10_1609" style="muiten" ath="-55.3310" atv="16.0732" linkedscene="scene_haiau_10" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_new_330108" style="muiten" ath="-135.1208" atv="15.0775" linkedscene="scene_haiau_12" custom_title="Cơ sở gốm Hải Âu"/>
+		<hotspot name="hs_return_haiau_14_9409" style="muiten" ath="-143.1571" atv="28.3249" linkedscene="scene_haiau_14" custom_title="Cơ sở gốm Hải Âu"/>
+	</scene>
+	<scene name="scene_cng_ty_nt" title="Cơ sở Gốm Champa Phan" thumburl="panos/cng_ty_nt.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-281.1" vlookat="6.6" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cng_ty_nt.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cng_ty_nt.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cng_ty_nt.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cng_ty_nt.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cng_ty_nt.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_203177" style="muiten" ath="72.8605" atv="24.4976" linkedscene="scene_cty_nt_3" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_225259" style="muiten" ath="142.1730" atv="13.6070" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_162664" style="muiten" ath="172.0871" atv="18.1479" linkedscene="scene_ngoc_huynh_1" custom_title="Cơ sở Ngọc Huỳnh"/>
+	</scene>
+	<scene name="scene_cty_nt" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-21.2" vlookat="10.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cty_nt.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cng_ty_nt_8025" style="muiten" ath="117.5220" atv="19.2913" linkedscene="scene_cng_ty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_260651" style="muiten" ath="178.3509" atv="24.7229" linkedscene="scene_cty_nt_2" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_296632" style="muiten" scale="0.30" ath="178.0348" atv="11.2248" linkedscene="scene_cty_nt_3" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_4_0900" style="muiten" ath="-66.4335" atv="39.0437" linkedscene="scene_cty_nt_4" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_948381" style="muiten" ath="-10.6420" atv="29.0679" linkedscene="scene_cty_nt_11" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_966353" style="muiten" ath="-11.5329" atv="17.0543" linkedscene="scene_cty_nt_12" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_5_2036" style="muiten" ath="-77.8788" atv="21.0240" linkedscene="scene_cty_nt_5" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_197615" style="muiten" ath="75.9385" atv="19.0891" linkedscene="scene_ngoc_huynh_1" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_return_ngoc_huynh_2_6510" style="muiten" scale="0.35" ath="69.9037" atv="9.0136" linkedscene="scene_ngoc_huynh_2" custom_title="Cơ sở Ngọc Huỳnh"/>
+	</scene>
+	<scene name="scene_cty_nt_2" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-552.8" vlookat="10.6" fov="94.9" fovmin="60" fovmax="95"/>
+		<preview url="panos/cty_nt_2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_7967" style="muiten" ath="9.3127" atv="19.4124" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_4_2041" style="muiten" ath="-5.0598" atv="19.1242" linkedscene="scene_cty_nt_4" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_3_1714" style="muiten" ath="177.8996" atv="19.4987" linkedscene="scene_cty_nt_3" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_11_3417" style="muiten" scale="0.25" ath="-2.4895" atv="11.2716" linkedscene="scene_cty_nt_11" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_12_4689" style="muiten" ath="4.8616" atv="8.5344" linkedscene="scene_cty_nt_12" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_3" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-352.9" vlookat="14.6" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cty_nt_3.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cng_ty_nt_0284" style="muiten" ath="82.2107" atv="21.6666" linkedscene="scene_cng_ty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_508514" style="muiten" ath="-5.7597" atv="20.0828" linkedscene="scene_cty_nt_2" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_536370" style="muiten" scale="0.30" ath="-4.5504" atv="9.9545" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_4_2599" style="muiten" ath="88.8896" atv="7.3764" linkedscene="scene_cty_nt_4" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_4" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_4.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="85.1" vlookat="28.0" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/cty_nt_4.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_4.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_4.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_4.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_4.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_391598" style="muiten" ath="-162.4509" atv="33.4291" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_429092" style="muiten" scale="0.35" ath="-91.1104" atv="7.3764" linkedscene="scene_cty_nt_3" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_452889" style="muiten" ath="-109.7276" atv="26.1155" linkedscene="scene_cty_nt_2" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_697077" style="muiten" ath="12.2895" atv="25.7112" linkedscene="scene_cty_nt_5" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_188466" style="muiten" scale="0.35" ath="112.6335" atv="17.0232" linkedscene="scene_cty_nt_12" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_5" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_5.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="63.5" vlookat="14.0" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/cty_nt_5.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_5.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_5.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_5.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_5.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_4_0364" style="muiten" ath="174.2517" atv="31.4197" linkedscene="scene_cty_nt_4" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_227402" style="muiten" scale="0.40" ath="179.8642" atv="18.9764" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_294519" style="muiten" ath="77.3053" atv="31.4912" linkedscene="scene_cty_nt_6" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_7_6241" style="muiten" scale="0.40" ath="82.6545" atv="15.7459" linkedscene="scene_cty_nt_7" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_8_8529" style="muiten" ath="8.8058" atv="15.6542" linkedscene="scene_cty_nt_8" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_10_0905" style="muiten" ath="2.5300" atv="20.5253" linkedscene="scene_cty_nt_10" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_11" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_11.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-33.5" vlookat="8.5" fov="100.0" fovmin="60" fovmax="100"/>
+		<preview url="panos/cty_nt_11.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_11.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_11.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_11.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_11.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_3260" style="muiten" ath="164.9421" atv="22.3535" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_005972" style="muiten" ath="-2.3039" atv="40.7857" linkedscene="scene_cty_nt_12" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_023804" style="muiten" scale="0.40" ath="175.4423" atv="11.7562" linkedscene="scene_cty_nt_2" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_12" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_12.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-137.8" vlookat="19.6" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/cty_nt_12.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_12.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_12.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_12.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_12.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_7358" style="muiten" scale="0.35" ath="178.1735" atv="14.1046" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_11_7612" style="muiten" ath="-172.9970" atv="41.5278" linkedscene="scene_cty_nt_11" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_084431" style="muiten" scale="0.35" ath="-174.1263" atv="7.3035" linkedscene="scene_cty_nt_2" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_4_2449" style="muiten" ath="-67.3665" atv="17.0232" linkedscene="scene_cty_nt_4" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_6" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_6.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-374.9" vlookat="13.2" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cty_nt_6.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_6.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_6.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_6.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_6.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_5_1245" style="muiten" ath="178.0398" atv="32.0758" linkedscene="scene_cty_nt_5" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_337401" style="muiten" ath="-0.1095" atv="29.5196" linkedscene="scene_cty_nt_7" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_8_0750" style="muiten" scale="0.40" ath="-1.0898" atv="22.0130" linkedscene="scene_cty_nt_8" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_7" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_7.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-42.6" vlookat="27.4" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/cty_nt_7.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_7.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_7.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_7.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_7.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_6_7092" style="muiten" ath="-166.7944" atv="38.7395" linkedscene="scene_cty_nt_6" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_415367" style="muiten" ath="-168.2632" atv="19.1666" linkedscene="scene_cty_nt_5" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_540479" style="muiten" scale="0.60" ath="-8.2097" atv="37.6959" linkedscene="scene_cty_nt_8" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_8" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_8.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-122.7" vlookat="24.7" fov="107.0" fovmin="60" fovmax="107"/>
+		<preview url="panos/cty_nt_8.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_8.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_8.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_8.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_8.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_7_2619" style="muiten" ath="-174.3673" atv="47.8799" linkedscene="scene_cty_nt_7" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_567442" style="muiten" ath="-172.3193" atv="28.5485" linkedscene="scene_cty_nt_6" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_612837" style="muiten" ath="-84.7967" atv="23.3513" linkedscene="scene_cty_nt_9" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_634394" style="muiten" ath="-171.1942" atv="15.6542" linkedscene="scene_cty_nt_5" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_10_3690" style="muiten" ath="35.8964" atv="12.0936" linkedscene="scene_cty_nt_10" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_9" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_9.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-258.0" vlookat="15.0" fov="105.0" fovmin="60" fovmax="105"/>
+		<preview url="panos/cty_nt_9.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_9.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_9.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_9.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_9.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cty_nt_8_9326" style="muiten" ath="63.6728" atv="26.0998" linkedscene="scene_cty_nt_8" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_10_4753" style="muiten" ath="169.8213" atv="34.8685" linkedscene="scene_cty_nt_10" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_cty_nt_10" title="Cơ sở Gốm Champa Phan" thumburl="panos/cty_nt_10.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-101.0" vlookat="16.7" fov="115.0" fovmin="60" fovmax="115"/>
+		<preview url="panos/cty_nt_10.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/cty_nt_10.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/cty_nt_10.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/cty_nt_10.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/cty_nt_10.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_758243" style="muiten" ath="-157.8953" atv="16.9563" linkedscene="scene_cty_nt_9" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_792463" style="muiten" ath="-53.8150" atv="18.4010" linkedscene="scene_cty_nt_5" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_813823" style="muiten" scale="0.30" ath="-144.1036" atv="12.0936" linkedscene="scene_cty_nt_8" custom_title="Cơ sở Gốm Champa Phan"/>
+	</scene>
+	<scene name="scene_ngoc_huynh_1" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-314.4" vlookat="6.5" fov="85.0" fovmin="60" fovmax="95" />
+		<preview url="panos/ngoc_huynh_1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/ngoc_huynh_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/ngoc_huynh_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/ngoc_huynh_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/ngoc_huynh_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_cng_ty_nt_9379" style="muiten" ath="10.6967" atv="14.6346" linkedscene="scene_cng_ty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_return_cty_nt_8405" style="muiten" ath="55.6104" atv="12.9470" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_242382" style="muiten" ath="-68.5495" atv="27.9986" linkedscene="scene_ngoc_huynh_2" custom_title="Cơ sở Ngọc Huỳnh"/>
+	</scene>
+	<scene name="scene_ngoc_huynh_2" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-65.3" vlookat="14.5" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/ngoc_huynh_2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/ngoc_huynh_2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/ngoc_huynh_2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/ngoc_huynh_2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/ngoc_huynh_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_ngoc_huynh_1_4019" style="muiten" ath="72.9667" atv="23.2621" linkedscene="scene_ngoc_huynh_1" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_new_261056" style="muiten" scale="0.30" ath="70.6963" atv="4.4113" linkedscene="scene_cty_nt" custom_title="Cơ sở Gốm Champa Phan"/>
+		<hotspot name="hs_new_327009" style="muiten" ath="-80.1087" atv="33.8907" linkedscene="scene_ngoc_huynh_3" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_new_340383" style="muiten" scale="0.40" ath="-78.1562" atv="17.9071" linkedscene="scene_ngoc_huynh_4" custom_title="Cơ sở Ngọc Huỳnh"/>
+	</scene>
+	<scene name="scene_ngoc_huynh_3" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_3.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-132.3" vlookat="22.5" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/ngoc_huynh_3.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/ngoc_huynh_3.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/ngoc_huynh_3.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/ngoc_huynh_3.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/ngoc_huynh_3.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_ngoc_huynh_2_7061" style="muiten" ath="10.1421" atv="31.4124" linkedscene="scene_ngoc_huynh_2" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_new_365293" style="muiten" ath="-169.0876" atv="24.2710" linkedscene="scene_ngoc_huynh_4" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_return_ngoc_huynh_5_1205" style="muiten" scale="0.35" ath="-172.5435" atv="12.5750" linkedscene="scene_ngoc_huynh_5" custom_title="Cơ sở Ngọc Huỳnh"/>
+	</scene>
+	<scene name="scene_ngoc_huynh_4" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_4.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-174.7" vlookat="9.9" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/ngoc_huynh_4.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/ngoc_huynh_4.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/ngoc_huynh_4.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/ngoc_huynh_4.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/ngoc_huynh_4.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_ngoc_huynh_2_3134" style="muiten" ath="17.7608" atv="12.5032" linkedscene="scene_ngoc_huynh_2" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_return_ngoc_huynh_3_3315" style="muiten" ath="15.8175" atv="29.4184" linkedscene="scene_ngoc_huynh_3" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_new_397020" style="muiten" ath="-178.2513" atv="23.4776" linkedscene="scene_ngoc_huynh_5" custom_title="Cơ sở Ngọc Huỳnh"/>
+	</scene>
+	<scene name="scene_ngoc_huynh_5" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_5.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-31.4" vlookat="16.2" fov="95.0" fovmin="60" fovmax="95" />
+		<preview url="panos/ngoc_huynh_5.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/ngoc_huynh_5.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/ngoc_huynh_5.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/ngoc_huynh_5.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/ngoc_huynh_5.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_ngoc_huynh_4_3951" style="muiten" ath="-9.2835" atv="27.3872" linkedscene="scene_ngoc_huynh_4" custom_title="Cơ sở Ngọc Huỳnh"/>
+		<hotspot name="hs_new_428277" style="muiten" scale="0.40" ath="2.8185" atv="12.6747" linkedscene="scene_ngoc_huynh_3" custom_title="Cơ sở Ngọc Huỳnh"/>
 	</scene>
 </krpano>
