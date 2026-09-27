@@ -47,8 +47,8 @@
                 log('✅ KrPano sẵn sàng', 'ok');
 
                 setTimeout(() => {
-                    krpano.call("loadscene(scene_1, null, MERGE)");
-                    log('📷 Đang tải cảnh scene_1...', 'warn');
+                    krpano.call("loadscene(get(scene[0].name), null, MERGE)");
+                    log('📷 Đang tải cảnh ' + krpano.get('scene[0].name') + '...', 'warn');
 
                     setTimeout(() => {
                         log('✅ Cảnh đã tải xong!', 'ok');
@@ -86,23 +86,24 @@
                         krpano.set('hotspot[t_thongtin].atv', baseAtv);
                         log('ℹ️ 4. <b>thongtin</b> (thông tin) — ath=' + (baseAth+30).toFixed(0));
 
-                        // 5. vitri_raw (MANUAL — NO loadstyle, raw properties only)
-                        krpano.call('addhotspot(t_vitri_raw)');
-                        krpano.set('hotspot[t_vitri_raw].url', 'core/assets/iconlocation.png');
-                        krpano.set('hotspot[t_vitri_raw].scale', '0.5');
-                        krpano.set('hotspot[t_vitri_raw].edge', 'center');
-                        krpano.set('hotspot[t_vitri_raw].distorted', 'true');
-                        krpano.set('hotspot[t_vitri_raw].renderer', 'webgl');
-                        krpano.set('hotspot[t_vitri_raw].rx', '0');
-                        krpano.set('hotspot[t_vitri_raw].zoom', 'true');
-                        krpano.set('hotspot[t_vitri_raw].ath', baseAth + 50);
-                        krpano.set('hotspot[t_vitri_raw].atv', baseAtv);
-                        log('🔧 5. <b>vitri_raw</b> (thủ công, không loadstyle) — ath=' + (baseAth+50).toFixed(0));
+                        // 5. trenkhong
+                        krpano.call('addhotspot(t_trenkhong)');
+                        krpano.call('hotspot[t_trenkhong].loadstyle(trenkhong)');
+                        krpano.set('hotspot[t_trenkhong].ath', baseAth);
+                        krpano.set('hotspot[t_trenkhong].atv', baseAtv);
+                        log('🛸 5. <b>trenkhong</b> (trên không) — ath=' + baseAth.toFixed(0));
+
+                        // 2b. vitri_2 (second vitri hotspot to prove multi-hotspot bounce)
+                        krpano.call('addhotspot(t_vitri_2)');
+                        krpano.call('hotspot[t_vitri_2].loadstyle(vitri)');
+                        krpano.set('hotspot[t_vitri_2].ath', baseAth - 20);
+                        krpano.set('hotspot[t_vitri_2].atv', baseAtv);
+                        log('📍 2b. <b>vitri_2</b> (ghim vị trí thứ 2) — ath=' + (baseAth-20).toFixed(0));
 
                         // Dump all properties after 3 seconds
                         setTimeout(() => {
                             log('<br><b>═══ KIỂM TRA THUỘC TÍNH THỰC TẾ ═══</b>');
-                            ['t_muiten', 't_vitri', 't_tructhang', 't_thongtin', 't_vitri_raw'].forEach(name => {
+                            ['t_muiten', 't_vitri', 't_vitri_2', 't_tructhang', 't_thongtin', 't_trenkhong'].forEach(name => {
                                 const dist = krpano.get('hotspot[' + name + '].distorted');
                                 const rx = krpano.get('hotspot[' + name + '].rx');
                                 const url = krpano.get('hotspot[' + name + '].url');
@@ -110,23 +111,33 @@
                                 const visible = krpano.get('hotspot[' + name + '].visible');
                                 const alpha = krpano.get('hotspot[' + name + '].alpha');
                                 const scale = krpano.get('hotspot[' + name + '].scale');
-                                const rend = krpano.get('hotspot[' + name + '].renderer');
-                                const w = krpano.get('hotspot[' + name + '].imagewidth');
-                                const h = krpano.get('hotspot[' + name + '].imageheight');
+                                const oy = krpano.get('hotspot[' + name + '].oy');
 
                                 const isOk = loaded && visible && alpha > 0;
                                 const cls = isOk ? 'ok' : 'err';
                                 log('<br><b class="' + cls + '">' + name + (isOk ? ' ✅' : ' ❌') + '</b>');
-                                log('  distorted=<b>' + dist + '</b> | renderer=<b>' + rend + '</b> | rx=' + rx);
-                                log('  loaded=' + loaded + ' | visible=' + visible + ' | alpha=' + alpha + ' | scale=' + scale);
-                                log('  size=' + w + 'x' + h);
-                                log('  url=' + (url || '(trống)').substring(0, 50));
+                                log('  loaded=' + loaded + ' | oy=' + Number(oy).toFixed(1) + ' | scale=' + scale);
                             });
 
-                            log('<br><b class="warn">═══ XIN HÃY QUAY CAMERA 360 VÀ QUAN SÁT ═══</b>');
-                            log('Nếu hotspot nào bị nhấp nháy khi quay camera,');
-                            log('hãy ghi nhận lại hotspot nào OK, hotspot nào lỗi.');
-                        }, 3000);
+                            // Track oy movement for 1.5 seconds to confirm active bouncing
+                            log('<br><b>═══ THEO DÕI CHUYỂN ĐỘNG OY (BOUNCE CHECK) ═══</b>');
+                            const oySamples = { t_vitri: [], t_vitri_2: [], t_trenkhong: [] };
+                            const trackInterval = setInterval(() => {
+                                Object.keys(oySamples).forEach(k => {
+                                    oySamples[k].push(Number(krpano.get('hotspot[' + k + '].oy')).toFixed(1));
+                                });
+                            }, 200);
+
+                            setTimeout(() => {
+                                clearInterval(trackInterval);
+                                Object.keys(oySamples).forEach(k => {
+                                    const min = Math.min(...oySamples[k]);
+                                    const max = Math.max(...oySamples[k]);
+                                    const isMoving = (max - min) > 1;
+                                    log(k + ': samples=[' + oySamples[k].join(', ') + '] ' + (isMoving ? '🟢 ĐANG BAY NHẤP NHÔ OK' : '🔴 ĐỨNG YÊN'));
+                                });
+                            }, 1600);
+                        }, 2500);
 
                     }, 2500);
                 }, 1000);

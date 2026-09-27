@@ -22,6 +22,7 @@
 		<hotspot name="hs_new_341962" style="muiten" scale="0.40" ath="9.5287" atv="6.2098" linkedscene="scene_san_truoc" custom_title="Sân trước"/>
 		<hotspot name="hs_new_390198" style="vitri" scale="0.20" ath="108.2895" atv="4.8505" linkedscene="scene_1_congdinh" custom_title="Cổng đình Vạn Phước"/>
 			<hotspot name="hs_return_bia_tuong_niem_phai_4601" style="muiten" ath="-68.4152" atv="19.6650" linkedscene="scene_bia_tuong_niem_phai" custom_title="Bia tưởng niệm"/>
+			<hotspot name="hs_return_toancanh_300m_6219" style="vitri" ath="-120.1449" atv="-14.0290" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước (300m)"/>
 	</scene>
 	<scene name="scene_bia_tuong_niem" title="Bia tưởng niệm" thumburl="panos/bia_tuong_niem.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-90.4" vlookat="6.8" fov="120.0" fovmin="60" fovmax="120"/>

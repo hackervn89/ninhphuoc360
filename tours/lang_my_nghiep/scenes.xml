@@ -19,7 +19,9 @@
 		</image>
 		<hotspot name="hs_new_539818" style="muiten" ath="-145.1500" atv="8.9901" linkedscene="scene_mynghiep_cong_htx" custom_title="HTX Thổ cẩm Chăm"/>
 		<hotspot name="hs_new_485670" style="muiten" ath="-324.4440" atv="4.3890" linkedscene="scene_trung_tam_hanh_chinh" custom_title="Trung tâm hành chính xã"/>
-			<hotspot name="hs_return_cong_htx_1466" style="muiten" ath="-45.9330" atv="11.1401" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
+		<hotspot name="hs_return_cong_htx_1466" style="muiten" ath="-45.9330" atv="11.1401" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
+		<hotspot name="hs_return_toancanh_100m_3552" style="vitri" scale="0.40" ath="84.3476" atv="-20.3309" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước"/>
+			<hotspot name="hs_return_toancanh_300m_0196" style="vitri" ath="97.9529" atv="-27.2892" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
 	</scene>
 	<scene name="scene_mynghiep_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-130.8" vlookat="2.6" fov="90.7" fovmin="60" fovmax="95"/>
@@ -39,6 +41,7 @@
 			</level>
 		</image>
 		<hotspot name="hs_new_518552" style="muiten" ath="-117.7489" atv="14.0699" linkedscene="scene_san_nha_trung_bay" custom_title="Sân Nhà trưng bày"/>
+		<hotspot name="hs_return_cong_lang_my_nghiep_8449" style="muiten" ath="34.8500" atv="8.9901" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
 	</scene>
 	<scene name="scene_san_nha_trung_bay" title="Sân Nhà trưng bày" thumburl="panos/san_nha_trung_bay.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-129.7" vlookat="5.8" fov="95.0" fovmin="60" fovmax="95"/>
@@ -87,7 +90,7 @@
 		<hotspot name="hs_return_trung_bay_phai_1_8081" style="muiten" ath="-150.0999" atv="33.2338" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
 	</scene>
 	<scene name="scene_trung_bay_giua1" title="Phòng Trưng bày" thumburl="panos/trung_bay_giua1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-109.9" vlookat="12.7" fov="110.0" fovmin="60" fovmax="110" />
+		<view fovtype="MFOV" hlookat="-109.9" vlookat="12.7" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/trung_bay_giua1.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512" prealign="0.5|0.0|0.0">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -314,7 +317,7 @@
 		<hotspot name="hs_return_trung_bay_phai_1_5394" style="muiten" ath="-59.6954" atv="15.7659" linkedscene="scene_trung_bay_phai_1" custom_title="Phòng Trưng bày"/>
 	</scene>
 	<scene name="scene_sanh_giua" title="Sảnh giữa" thumburl="panos/sanh_giua.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="88.3" vlookat="0.8" fov="85.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="88.3" vlookat="0.8" fov="85.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/sanh_giua.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">

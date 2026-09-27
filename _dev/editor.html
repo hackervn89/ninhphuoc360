@@ -1536,6 +1536,7 @@
                                 <option value="muiten">Mũi tên (Di chuyển mặt đất)</option>
                                 <option value="vitri">Ghim vị trí (Hạ cánh từ trên cao)</option>
                                 <option value="tructhang">Trực thăng (Bay lên cao)</option>
+                                <option value="trenkhong">Trên không (Cảnh drone/trên cao)</option>
                                 <option value="thongtin">Thông tin (Mở thuyết minh)</option>
                                 <option value="poly_ground_nav">Đa giác sàn (Polygon)</option>
                             </select>
@@ -1968,7 +1969,7 @@
                 "  screentosphere(dx, dy, ath, atv); " +
                 "  js(onHotspotDrag(get(name), get(ath), get(atv))); " +
                 ", " +
-                "  if(style == 'vitri', vitri_bounce(get(name)); ); " +
+                "  if(style == 'vitri', vitri_bounce(get(name)); ); if(style == 'trenkhong', trenkhong_float(get(name)); ); " +
                 ");"
             );
 
@@ -2900,7 +2901,7 @@
                 const hsType = krpanoObj.get(`hotspot[${i}].type`);
                 
                 // Track only our target custom style hotspots
-                if (['muiten', 'vitri', 'tructhang', 'thongtin', 'poly_ground_nav'].includes(style)) {
+                if (['muiten', 'vitri', 'tructhang', 'trenkhong', 'thongtin', 'poly_ground_nav'].includes(style)) {
                     const ath = Number(krpanoObj.get(`hotspot[${i}].ath`) || 0).toFixed(4);
                     const atv = Number(krpanoObj.get(`hotspot[${i}].atv`) || 0).toFixed(4);
                     const rawScale = krpanoObj.get(`hotspot[${i}].base_scale`) || krpanoObj.get(`hotspot[${i}].scale`);
@@ -3396,7 +3397,11 @@
             if (previewStyle === 'vitri') {
                 krpanoObj.set('hotspot[hs_preview_return].rx', 0);
                 krpanoObj.set('hotspot[hs_preview_return].edge', 'bottom');
-                krpanoObj.call('delayedcall(0.1, vitri_bounce(hs_preview_return));');
+                krpanoObj.call('vitri_bounce(hs_preview_return);');
+            } else if (previewStyle === 'trenkhong') {
+                krpanoObj.set('hotspot[hs_preview_return].rx', 0);
+                krpanoObj.set('hotspot[hs_preview_return].edge', 'bottom');
+                krpanoObj.call('trenkhong_float(hs_preview_return);');
             }
 
             // 2. Create floating permanent tooltip/badge hotspot above it
@@ -3530,7 +3535,12 @@
                                 krpanoObj.set(`hotspot[${bh.name}].rx`, 0);
                                 krpanoObj.set(`hotspot[${bh.name}].edge`, 'bottom');
                                 krpanoObj.set(`hotspot[${bh.name}].distorted`, true);
-                                krpanoObj.call(`delayedcall(0.1, vitri_bounce(${bh.name}));`);
+                                krpanoObj.call(`vitri_bounce(${bh.name});`);
+                            } else if (bh.style === 'trenkhong') {
+                                krpanoObj.set(`hotspot[${bh.name}].rx`, 0);
+                                krpanoObj.set(`hotspot[${bh.name}].edge`, 'bottom');
+                                krpanoObj.set(`hotspot[${bh.name}].distorted`, true);
+                                krpanoObj.call(`trenkhong_float(${bh.name});`);
                             }
                         }
                     });
@@ -3586,7 +3596,12 @@
                                 krpanoObj.set(`hotspot[${bh.name}].rx`, 0);
                                 krpanoObj.set(`hotspot[${bh.name}].edge`, 'bottom');
                                 krpanoObj.set(`hotspot[${bh.name}].distorted`, true);
-                                krpanoObj.call(`delayedcall(0.1, vitri_bounce(${bh.name}));`);
+                                krpanoObj.call(`vitri_bounce(${bh.name});`);
+                            } else if (bh.style === 'trenkhong') {
+                                krpanoObj.set(`hotspot[${bh.name}].rx`, 0);
+                                krpanoObj.set(`hotspot[${bh.name}].edge`, 'bottom');
+                                krpanoObj.set(`hotspot[${bh.name}].distorted`, true);
+                                krpanoObj.call(`trenkhong_float(${bh.name});`);
                             }
                         }
                     });
@@ -4095,11 +4110,16 @@
                         krpanoObj.set(`hotspot[${name}].rx`, 0);
                         krpanoObj.set(`hotspot[${name}].edge`, 'bottom');
                         krpanoObj.set(`hotspot[${name}].oy`, 0);
-                        krpanoObj.call(`delayedcall(0.1, vitri_bounce(${name}));`);
+                        krpanoObj.call(`vitri_bounce(${name});`);
                     } else if (style === 'tructhang') {
                         krpanoObj.set(`hotspot[${name}].rx`, 0);
                         krpanoObj.set(`hotspot[${name}].edge`, 'bottom');
                         krpanoObj.set(`hotspot[${name}].oy`, -10);
+                    } else if (style === 'trenkhong') {
+                        krpanoObj.set(`hotspot[${name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${name}].edge`, 'bottom');
+                        krpanoObj.set(`hotspot[${name}].oy`, 0);
+                        krpanoObj.call(`trenkhong_float(${name});`);
                     } else if (style === 'thongtin') {
                         krpanoObj.set(`hotspot[${name}].rx`, 0);
                         krpanoObj.set(`hotspot[${name}].edge`, 'center');
