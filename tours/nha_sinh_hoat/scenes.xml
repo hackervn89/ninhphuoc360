@@ -21,8 +21,8 @@
 		<hotspot name="hs_new_738326" style="muiten" ath="139.1603" atv="17.3233" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
 		<hotspot name="hs_return_duong_vao_co_so_0900" style="muiten" ath="-44.8061" atv="9.4842" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
 		<hotspot name="hs_return_cong_lang_bau_truc_5562" style="muiten" ath="-44.7308" atv="1.3634" linkedscene="scene_cong_lang_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
-		<hotspot name="hs_return_toancanh_300m_1143" style="trenkhong" ath="-96.8308" atv="-20.8980" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước (300m)"/>
-		<hotspot name="hs_return_toancanh_100m_7667" style="trenkhong" ath="-44.8224" atv="-14.5648" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước (100m)"/>
+		<hotspot name="hs_return_toancanh_300m_1143" style="trenkhong" scale="0.40" ath="-96.8308" atv="-20.8980" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước (300m)"/>
+		<hotspot name="hs_return_toancanh_100m_7667" style="trenkhong" scale="0.10" ath="-44.8224" atv="-14.5648" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước (100m)"/>
 	</scene>
 	<scene name="scene_4" title="Sân trước" thumburl="panos/4.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-889.5" vlookat="-1.7" fov="95.0" fovmin="60" fovmax="95"/>

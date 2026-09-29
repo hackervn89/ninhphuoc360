@@ -144,6 +144,13 @@
 			,
 				set(caller.base_alpha, 1.0);
 			);
+		,
+			copy(base_scale, scale);
+			if(alpha !== null AND alpha !== undefined,
+				copy(base_alpha, alpha);
+			,
+				set(base_alpha, 1.0);
+			);
 		);
 	</action>
 
@@ -280,6 +287,286 @@
 			);
 		);
 	</action>
+
+	<!--
+	    =====================================================
+	    PULSE DOT HOTSPOT STYLE (Chấm Tròn Phập Phồng)
+	    =====================================================
+	    Hotspot kiểu chấm tròn tối giản với vòng pulse đỏ-trắng.
+	    Dùng từ cảnh trên cao nhìn xuống mặt đất để chuyển cảnh.
+	    
+	    Cấu trúc: 3 hotspot tự động tạo cho mỗi pulse_dot
+	      1. Chấm tâm (pulse_dot) — hotspot chính, nhận click
+	      2. Vòng pulse (tên_ring) — tự tạo bởi onloaded, animation phập phồng
+	      3. Label + Line (tên_label) — tự tạo bởi onloaded, distance-aware
+	    
+	    Animation: Tween Chain (Zero Memory Leak) — tự hủy khi chuyển scene.
+	    Distance-Aware: Label chỉ hiện khi góc camera < 55° so với hotspot.
+	-->
+	<!--
+	    =====================================================
+	    PULSE DOT HOTSPOT STYLE (Chấm Tròn Phập Phồng)
+	    =====================================================
+	    Hotspot kiểu chấm tròn với vòng pulse đỏ-trắng.
+	    Callout Label: Đường dẫn nghiêng + Hộp chữ đỏ viền trắng (theo video mẫu).
+	    Tự động Fade-In khi xoay tới đối diện (< 45°), Fade-Out khi xoay đi xa.
+	-->
+	<!-- Chấm trắng chính giữa: Pure white center dot (Gọn gàng, không bóng đổ, liền mạch với đường nối) -->
+	<style name="pulse_dot"
+	       is_pulse_dot="true"
+	       url="core/assets/icon_pulse_dot.svg"
+	       scale="0.15"
+	       edge="center"
+	       distorted="true"
+	       rx="0"
+	       zoom="true"
+	       renderer="webgl"
+	       alpha="1.0"
+	       zorder="105"
+	       tooltip=""
+	       linkedscene=""
+	       linkedscene_lookat=""
+	       custom_title=""
+	       show_title="true"
+	       show_thumb="true"
+	       onclick="pulse_dot_click();"
+	       onover="tween(scale, 0.30, 0.15);"
+	       onout="tween(scale, 0.15, 0.15);"
+	       onloaded="hotspot_init_scale(); pulse_dot_setup(get(name));"
+	       />
+
+	<!-- Pointer line: nối từ tâm chấm ra góc chéo lên phải (Độ nét cao 240x160, bắt đầu chuẩn tâm 0,160) -->
+	<style name="pulse_dot_line"
+	       url="core/assets/icon_pulse_line.svg"
+	       edge="leftbottom"
+	       distorted="false"
+	       scale="0.25"
+	       alpha="0.0"
+	       crop="0|0|0|160"
+	       zorder="104"
+	       enabled="false"
+	       capture="false"
+	       />
+
+	<!-- Hộp thông tin badge: nền đỏ viền trắng bóng đổ, chữ in hoa nét đậm, edge leftcenter -->
+	<style name="pulse_dot_label"
+	       type="text"
+	       edge="leftcenter"
+	       ox="58"
+	       oy="-32"
+	       distorted="false"
+	       scale="0.0"
+	       alpha="0.0"
+	       zorder="106"
+	       bg="true"
+	       bgcolor="0xdc2626"
+	       bgalpha="0.95"
+	       bgborder="1.5 0xffffff 0.95"
+	       bgroundedge="4"
+	       bgshadow="0 3 12 0x000000 0.65"
+	       padding="5 12"
+	       vcenter="true"
+	       wordwrap="false"
+	       css="color:#ffffff; font-family:'Roboto','Segoe UI',Arial,sans-serif; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; white-space:nowrap; text-align:center;"
+	       enabled="true"
+	       capture="true"
+	       handcursor="true"
+	       onclick="pulse_dot_click();"
+	       />
+
+	<!-- Click action: Chuyển cảnh với hiệu ứng bay xuống -->
+	<action name="pulse_dot_click" scope="local">
+		if(caller.linkedscene,
+			copy(hs_linkedscene, caller.linkedscene);
+			if(caller.linkedscene_lookat, txtsplit(caller.linkedscene_lookat, ',', hs_lookat_h, hs_lookat_v, hs_lookat_fov); );
+			set(caller.enabled, false);
+			skin_hidetooltips();
+			hide_custom_tooltip();
+			tween(caller.scale|caller.alpha, 0.15|0.0, 0.4, easeInQuad,
+				skin_loadscene(get(hs_linkedscene), ZOOMBLEND(2.0, 2.0, easeInOutSine));
+				if(hs_lookat_h !== null, skin_lookat(get(hs_lookat_h), get(hs_lookat_v), get(hs_lookat_fov)); );
+				skin_updatescroll();
+			);
+		);
+	</action>
+
+	<!-- Setup: Khởi tạo vòng pulse ring trắng (thu vào tâm) + đường nối + hộp chữ -->
+	<action name="pulse_dot_setup">
+		if(%1 !== '%1' AND %1 !== null,
+			copy(p_name, %1);
+		,
+			copy(p_name, name);
+		);
+		copy(p_ath, hotspot[get(p_name)].ath);
+		copy(p_atv, hotspot[get(p_name)].atv);
+		copy(p_linkedscene, hotspot[get(p_name)].linkedscene);
+		copy(p_linkedscene_lookat, hotspot[get(p_name)].linkedscene_lookat);
+		copy(p_title, hotspot[get(p_name)].custom_title);
+		
+		<!-- 1. VÒNG TRÒN TRẮNG DUY NHẤT: THU TỪ NGOÀI VÀO TÂM BIẾN MẤT HOÀN TOÀN RỒI MỚI LẶP -->
+		txtadd(ring_name, get(p_name), '_ring');
+		addhotspot(get(ring_name));
+		set(hotspot[get(ring_name)].url, core/assets/icon_pulse_ring.svg);
+		copy(hotspot[get(ring_name)].ath, p_ath);
+		copy(hotspot[get(ring_name)].atv, p_atv);
+		set(hotspot[get(ring_name)].edge, center);
+		set(hotspot[get(ring_name)].distorted, true);
+		set(hotspot[get(ring_name)].rx, 0);
+		set(hotspot[get(ring_name)].zoom, true);
+		set(hotspot[get(ring_name)].renderer, webgl);
+		set(hotspot[get(ring_name)].enabled, false);
+		set(hotspot[get(ring_name)].zorder, 98);
+		pulse_ring_contract(get(ring_name));
+		
+		<!-- 2. ĐƯỜNG NỐI POINTER LINE (Wipe crop, xuất phát chuẩn tâm) -->
+		txtadd(line_name, get(p_name), '_line');
+		addhotspot(get(line_name));
+		hotspot[get(line_name)].loadstyle(pulse_dot_line);
+		copy(hotspot[get(line_name)].ath, p_ath);
+		copy(hotspot[get(line_name)].atv, p_atv);
+		
+		<!-- 3. HỘP THÔNG TIN (CALLOUT BADGE) -->
+		txtadd(label_name, get(p_name), '_label');
+		addhotspot(get(label_name));
+		hotspot[get(label_name)].loadstyle(pulse_dot_label);
+		copy(hotspot[get(label_name)].ath, p_ath);
+		copy(hotspot[get(label_name)].atv, p_atv);
+		copy(hotspot[get(label_name)].linkedscene, p_linkedscene);
+		copy(hotspot[get(label_name)].linkedscene_lookat, p_linkedscene_lookat);
+		
+		<!-- Lấy tiêu đề -->
+		set(badge_title, '');
+		if(p_title, copy(badge_title, p_title); );
+		if(badge_title == '' OR badge_title == 'Ghim vị trí mới',
+			if(p_linkedscene,
+				copy(badge_title, scene[get(p_linkedscene)].title);
+			);
+		);
+		if(badge_title == '', set(badge_title, 'Ghim vị trí'); );
+		copy(hotspot[get(label_name)].html, badge_title);
+		
+		<!-- Kiểm tra hiển thị theo góc camera ngay lập tức -->
+		pulse_check_all_labels();
+	</action>
+
+	<!-- Animation vòng tròn trắng: THU VÀO TÂM rồi BIẾN MẤT HOÀN TOÀN, vòng ngoài nhỏ gọn thanh thoát -->
+	<action name="pulse_ring_contract">
+		if(hotspot[%1] !== null,
+			set(hotspot[%1].scale, 0.13);
+			set(hotspot[%1].alpha, 0.90);
+			tween(hotspot[%1].scale|hotspot[%1].alpha, 
+			      0.05|0.0, 1.6, easeInQuad,
+			      delayedcall(0.35, pulse_ring_contract(%1) );
+			);
+		);
+	</action>
+
+	<!-- Distance-Aware: Tự động kiểm tra góc camera và fade in/out label + line -->
+	<events name="pulse_dot_events" keep="true"
+	        onviewchange="pulse_check_all_labels();"
+	        onloadcomplete="pulse_check_all_labels();"
+	        onnewscene="pulse_check_all_labels();"
+	        />
+
+	<!-- Thuật toán kiểm tra góc nhìn giống video mẫu:
+	     - CHẤM TRẮNG: Giữ tâm cố định, sắc nét 100%
+	     - VÒNG TRẮNG: Nhỏ gọn, thu từ ngoài vào tâm rồi biến mất (loop)
+	     - WIPE IN: Đường nối WIPE vẽ từ tâm chấm ra ngoài (crop 0→240) → Hộp chữ bung mở từ đầu line sang phải
+	     - WIPE OUT: Hộp chữ thu nhỏ lại → Đường nối WIPE rút từ ngoài về lại tâm chấm -->
+	<action name="pulse_check_all_labels" type="Javascript"><![CDATA[
+		// Quản lý animation RAF cho từng line để chống giật lag khi xoay liên tục
+		if (!window._pulseWipeRafs) window._pulseWipeRafs = {};
+		
+		function wipeLine(lineHotspotName, startW, endW, duration, onComplete) {
+			if (window._pulseWipeRafs[lineHotspotName]) {
+				cancelAnimationFrame(window._pulseWipeRafs[lineHotspotName]);
+				delete window._pulseWipeRafs[lineHotspotName];
+			}
+			
+			var hs = krpano.get('hotspot[' + lineHotspotName + ']');
+			if (!hs) return;
+			
+			krpano.set('hotspot[' + lineHotspotName + '].alpha', 1.0);
+			var startTime = performance.now();
+			
+			function step(now) {
+				var elapsed = now - startTime;
+				var p = Math.min(elapsed / duration, 1.0);
+				// Easing: easeOutCubic khi vẽ ra (nhanh rồi hãm), easeInQuad khi rút về
+				var ease = (endW > startW)
+					? (1.0 - Math.pow(1.0 - p, 3))
+					: Math.pow(p, 2);
+				var curW = Math.round(startW + (endW - startW) * ease);
+				krpano.set('hotspot[' + lineHotspotName + '].crop', '0|0|' + curW + '|160');
+				
+				if (p < 1.0) {
+					window._pulseWipeRafs[lineHotspotName] = requestAnimationFrame(step);
+				} else {
+					delete window._pulseWipeRafs[lineHotspotName];
+					if (endW === 0) {
+						krpano.set('hotspot[' + lineHotspotName + '].alpha', 0.0);
+					}
+					if (onComplete) onComplete();
+				}
+			}
+			window._pulseWipeRafs[lineHotspotName] = requestAnimationFrame(step);
+		}
+
+		var h = Number(krpano.get('view.hlookat') || 0);
+		var v = Number(krpano.get('view.vlookat') || 0);
+		h = ((h % 360) + 540) % 360 - 180;
+		
+		var count = krpano.get('hotspot.count');
+		for (var i = 0; i < count; i++) {
+			var hsName = krpano.get('hotspot[' + i + '].name');
+			var hsStyle = krpano.get('hotspot[' + i + '].style');
+			var isPulse = krpano.get('hotspot[' + i + '].is_pulse_dot');
+			
+			if (hsStyle === 'pulse_dot' || isPulse === 'true' || isPulse === true) {
+				var hsAth = Number(krpano.get('hotspot[' + i + '].ath') || 0);
+				var hsAtv = Number(krpano.get('hotspot[' + i + '].atv') || 0);
+				hsAth = ((hsAth % 360) + 540) % 360 - 180;
+				
+				var dh = h - hsAth;
+				if (dh > 180) dh -= 360;
+				if (dh < -180) dh += 360;
+				var dv = v - hsAtv;
+				var dist = Math.sqrt(dh * dh + dv * dv);
+				
+				var isFacing = (dist < 20);
+				
+				var hsLabel = krpano.get('hotspot[' + hsName + '_label]');
+				var hsLine = krpano.get('hotspot[' + hsName + '_line]');
+				
+				if (hsLabel) {
+					var wasFacing = hsLabel._is_facing;
+					
+					if (isFacing && wasFacing !== true) {
+						// ═══ WIPE IN (Xuất hiện như video mẫu) ═══
+						hsLabel._is_facing = true;
+						
+						// 1. Line Wipe: Vẽ từ tâm chấm ra ngoài (crop width: 0 -> 240)
+						wipeLine(hsName + '_line', 0, 240, 500);
+						
+						// 2. Badge Wipe In: Khi line gần chạm badge (sau 0.18s), badge bung mở từ mút line sang phải
+						krpano.set('hotspot[' + hsName + '_label].scale', 0.0);
+						krpano.set('hotspot[' + hsName + '_label].alpha', 0.0);
+						krpano.call('delayedcall(0.25, tween(hotspot[' + hsName + '_label].scale|hotspot[' + hsName + '_label].alpha, 1.0|1.0, 0.5, easeOutBack); );');
+						
+					} else if (!isFacing && wasFacing !== false) {
+						// ═══ WIPE OUT (Biến mất ngược lại) ═══
+						hsLabel._is_facing = false;
+						
+						// 1. Hộp chữ thu nhỏ biến mất về mút line trước
+						krpano.call('tween(hotspot[' + hsName + '_label].scale|hotspot[' + hsName + '_label].alpha, 0.0|0.0, 0.2, easeInQuad);');
+						
+						// 2. Line Wipe: Rút từ ngoài về lại tâm chấm (crop width: 240 -> 0)
+						wipeLine(hsName + '_line', 240, 0, 240);
+					}
+				}
+			}
+		}
+	]]></action>
 
 
 
@@ -613,6 +900,24 @@
 		,
 			if(style == 'vitri', vitri_bounce(get(name)); );
 			if(style == 'trenkhong', trenkhong_float(get(name)); );
+			if(style == 'pulse_dot', 
+				txtadd(pd_ring, get(name), '_ring');
+				if(hotspot[get(pd_ring)] !== null,
+					copy(hotspot[get(pd_ring)].ath, ath);
+					copy(hotspot[get(pd_ring)].atv, atv);
+					pulse_ring_breathe(get(pd_ring));
+				);
+				txtadd(pd_line, get(name), '_line');
+				if(hotspot[get(pd_line)] !== null,
+					copy(hotspot[get(pd_line)].ath, ath);
+					copy(hotspot[get(pd_line)].atv, atv);
+				);
+				txtadd(pd_label, get(name), '_label');
+				if(hotspot[get(pd_label)] !== null,
+					copy(hotspot[get(pd_label)].ath, ath);
+					copy(hotspot[get(pd_label)].atv, atv);
+				);
+			);
 		);
 	</action>
 

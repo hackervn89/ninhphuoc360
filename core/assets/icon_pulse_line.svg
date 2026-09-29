@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  <defs>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+  <!-- Diagonal pointer line connecting exactly from center (0,160) to callout badge -->
+  <polyline points="0,160 136,32 232,32" 
+            fill="none" 
+            stroke="#ffffff" 
+            stroke-width="8.8" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" 
+            filter="url(#shadow)"/>
+</svg>

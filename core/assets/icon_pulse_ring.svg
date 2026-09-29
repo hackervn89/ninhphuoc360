@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <filter id="ring_glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
+  </defs>
+  <!-- Deep red circular ring (Màu đỏ đậm #b91c1c, stroke-width 12) -->
+  <circle cx="128" cy="128" r="100" fill="none" 
+          stroke="#b91c1c" stroke-width="12" opacity="0.95" filter="url(#ring_glow)"/>
+</svg>

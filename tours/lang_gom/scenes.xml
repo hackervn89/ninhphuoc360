@@ -42,6 +42,7 @@
 		<hotspot name="hs_new_510913" style="muiten" ath="-130.3342" atv="17.9943" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
 		<hotspot name="hs_return_duong_lang_1_9316" style="muiten" ath="-19.0955" atv="6.7256" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
 		<hotspot name="hs_return_duong_vao_co_so_7663" style="vitri" ath="-8.6777" atv="-4.9015" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
+		<hotspot name="hs_info_cong_lang_bau_truc" style="thongtin" scale="0.30" ath="-135.7915" atv="-14.0473" infoid="info_cong_lang_bau_truc" custom_title="Giới thiệu Làng gốm Bàu Trúc"/>
 	</scene>
 	<scene name="scene_duong_vao_co_so" title="Đường vào cơ sở Gốm" thumburl="panos/duong_vao_co_so.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-187.7" vlookat="1.9" fov="95.0" fovmin="60" fovmax="95"/>
@@ -688,7 +689,7 @@
 		<hotspot name="hs_new_813823" style="muiten" scale="0.30" ath="-144.1036" atv="12.0936" linkedscene="scene_cty_nt_8" custom_title="Cơ sở Gốm Champa Phan"/>
 	</scene>
 	<scene name="scene_ngoc_huynh_1" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-314.4" vlookat="6.5" fov="85.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-314.4" vlookat="6.5" fov="85.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/ngoc_huynh_1.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -773,7 +774,7 @@
 		<hotspot name="hs_new_397020" style="muiten" ath="-178.2513" atv="23.4776" linkedscene="scene_ngoc_huynh_5" custom_title="Cơ sở Ngọc Huỳnh"/>
 	</scene>
 	<scene name="scene_ngoc_huynh_5" title="Cơ sở Ngọc Huỳnh" thumburl="panos/ngoc_huynh_5.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-31.4" vlookat="16.2" fov="95.0" fovmin="60" fovmax="95" />
+		<view fovtype="MFOV" hlookat="-31.4" vlookat="16.2" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/ngoc_huynh_5.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -792,5 +793,4 @@
 		<hotspot name="hs_return_ngoc_huynh_4_3951" style="muiten" ath="-9.2835" atv="27.3872" linkedscene="scene_ngoc_huynh_4" custom_title="Cơ sở Ngọc Huỳnh"/>
 		<hotspot name="hs_new_428277" style="muiten" scale="0.40" ath="2.8185" atv="12.6747" linkedscene="scene_ngoc_huynh_3" custom_title="Cơ sở Ngọc Huỳnh"/>
 	</scene>
-	
 </krpano>

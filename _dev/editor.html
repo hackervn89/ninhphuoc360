@@ -1537,6 +1537,7 @@
                                 <option value="vitri">Ghim vị trí (Hạ cánh từ trên cao)</option>
                                 <option value="tructhang">Trực thăng (Bay lên cao)</option>
                                 <option value="trenkhong">Trên không (Cảnh drone/trên cao)</option>
+                                <option value="pulse_dot">Chấm tròn phập phồng (Từ trên cao xuống)</option>
                                 <option value="thongtin">Thông tin (Mở thuyết minh)</option>
                                 <option value="poly_ground_nav">Đa giác sàn (Polygon)</option>
                             </select>
@@ -1970,11 +1971,17 @@
                 "  js(onHotspotDrag(get(name), get(ath), get(atv))); " +
                 ", " +
                 "  if(style == 'vitri', vitri_bounce(get(name)); ); if(style == 'trenkhong', trenkhong_float(get(name)); ); " +
+                "  if(style == 'pulse_dot', " +
+                "    txtadd(pdr, name, '_ring'); if(hotspot[get(pdr)] !== null, copy(hotspot[get(pdr)].ath, ath); copy(hotspot[get(pdr)].atv, atv); pulse_ring_contract(get(pdr)); ); " +
+                "    txtadd(pdl, name, '_line'); if(hotspot[get(pdl)] !== null, copy(hotspot[get(pdl)].ath, ath); copy(hotspot[get(pdl)].atv, atv); ); " +
+                "    txtadd(pdb, name, '_label'); if(hotspot[get(pdb)] !== null, copy(hotspot[get(pdb)].ath, ath); copy(hotspot[get(pdb)].atv, atv); ); " +
+                "  ); " +
                 ");"
             );
 
             // Listen for scene load completes
             krpanoObj.set("events.onnewscene", "js(onSceneChange());");
+            krpanoObj.set("events.onviewchange", "pulse_check_all_labels();");
 
             // Delay scene detection briefly for KrPano parsing
             setTimeout(detectScenesAndData, 300);
@@ -2901,7 +2908,7 @@
                 const hsType = krpanoObj.get(`hotspot[${i}].type`);
                 
                 // Track only our target custom style hotspots
-                if (['muiten', 'vitri', 'tructhang', 'trenkhong', 'thongtin', 'poly_ground_nav'].includes(style)) {
+                if (['muiten', 'vitri', 'tructhang', 'trenkhong', 'thongtin', 'poly_ground_nav', 'pulse_dot'].includes(style)) {
                     const ath = Number(krpanoObj.get(`hotspot[${i}].ath`) || 0).toFixed(4);
                     const atv = Number(krpanoObj.get(`hotspot[${i}].atv`) || 0).toFixed(4);
                     const rawScale = krpanoObj.get(`hotspot[${i}].base_scale`) || krpanoObj.get(`hotspot[${i}].scale`);
@@ -3073,6 +3080,11 @@
                 krpanoObj.set(`hotspot[${h.name}].alpha`, h.name === name ? 1.0 : 0.6);
             });
 
+            if (hs.style === 'pulse_dot') {
+                krpanoObj.set(`hotspot[${hs.name}_label].alpha`, 1.0);
+                krpanoObj.set(`hotspot[${hs.name}_line].alpha`, 0.9);
+            }
+
             // Show mini quick-toolbar (Vấn đề 3)
             showQuickToolbar(hs);
         };
@@ -3087,6 +3099,7 @@
                 sceneHotspots.forEach(h => {
                     krpanoObj.set(`hotspot[${h.name}].alpha`, 0.9);
                 });
+                krpanoObj.call('pulse_check_all_labels();');
             }
 
             hideQuickToolbar();
@@ -3635,6 +3648,16 @@
                 hs.ath = Number(ath).toFixed(4);
                 hs.atv = Number(atv).toFixed(4);
                 
+                if (hs.style === 'pulse_dot' && krpanoObj) {
+                    ['ring', 'line', 'label'].forEach(suffix => {
+                        const subName = `${name}_${suffix}`;
+                        if (krpanoObj.get(`hotspot[${subName}]`)) {
+                            krpanoObj.set(`hotspot[${subName}].ath`, hs.ath);
+                            krpanoObj.set(`hotspot[${subName}].atv`, hs.atv);
+                        }
+                    });
+                }
+
                 // If it is the currently selected hotspot in the form, update inputs
                 if (selectedHotspotName === name) {
                     inputHsAth.value = hs.ath;
@@ -4086,7 +4109,7 @@
                     krpanoObj.call(`stoptween(hotspot[${name}].myframe_timer); stoptween(hotspot[${name}].oy); stoptween(hotspot[${name}].scale);`);
 
                     // 2. Destroy and recreate cleanly in KrPano to clear all previous textures, crops & sprite animations
-                    krpanoObj.call(`removehotspot(${name});`);
+                    krpanoObj.call(`removehotspot(${name}); removehotspot(${name}_ring); removehotspot(${name}_callout); removehotspot(${name}_label); removehotspot(${name}_line);`);
                     krpanoObj.call(`addhotspot(${name});`);
                     krpanoObj.call(`hotspot[${name}].loadstyle(${style});`);
 
@@ -4123,6 +4146,10 @@
                     } else if (style === 'thongtin') {
                         krpanoObj.set(`hotspot[${name}].rx`, 0);
                         krpanoObj.set(`hotspot[${name}].edge`, 'center');
+                    } else if (style === 'pulse_dot') {
+                        krpanoObj.set(`hotspot[${name}].rx`, 0);
+                        krpanoObj.set(`hotspot[${name}].edge`, 'center');
+                        krpanoObj.call(`callwith(hotspot[${name}], pulse_dot_setup() );`);
                     }
 
                     toggleConditionalFields(style);
@@ -4137,6 +4164,13 @@
                 if (hs) {
                     hs.custom_title = title;
                     krpanoObj.set(`hotspot[${hs.name}].custom_title`, title);
+                    if (hs.style === 'pulse_dot') {
+                        krpanoObj.set(`hotspot[${hs.name}_label].html`, title);
+                        krpanoObj.set(`hotspot[${hs.name}_label].alpha`, 1.0);
+                        krpanoObj.set(`hotspot[${hs.name}_label].scale`, 1.0);
+                        krpanoObj.set(`hotspot[${hs.name}_line].alpha`, 1.0);
+                        krpanoObj.set(`hotspot[${hs.name}_line].crop`, '0|0|240|160');
+                    }
                     renderHotspotList();
                     markDirty();
                 }
@@ -4205,7 +4239,7 @@
                 const targetHsName = selectedHotspotName;
 
                 // Delete inside KrPano canvas
-                krpanoObj.call(`removehotspot(${targetHsName})`);
+                krpanoObj.call(`removehotspot(${targetHsName}); removehotspot(${targetHsName}_ring); removehotspot(${targetHsName}_callout); removehotspot(${targetHsName}_label); removehotspot(${targetHsName}_line);`);
 
                 // Remove from local tracker
                 sceneHotspots = sceneHotspots.filter(h => h.name !== targetHsName);

@@ -93,6 +93,15 @@
                         krpano.set('hotspot[t_trenkhong].atv', baseAtv);
                         log('🛸 5. <b>trenkhong</b> (trên không) — ath=' + baseAth.toFixed(0));
 
+                        // 6. pulse_dot
+                        krpano.call('addhotspot(t_pulse_dot)');
+                        krpano.call('hotspot[t_pulse_dot].loadstyle(pulse_dot)');
+                        krpano.set('hotspot[t_pulse_dot].ath', baseAth + 20);
+                        krpano.set('hotspot[t_pulse_dot].atv', baseAtv + 10);
+                        krpano.set('hotspot[t_pulse_dot].custom_title', 'Chấm tròn phập phồng (pulse_dot)');
+                        krpano.call('callwith(hotspot[t_pulse_dot], pulse_dot_setup() );');
+                        log('🔴 6. <b>pulse_dot</b> (chấm tròn phập phồng) — ath=' + (baseAth+20).toFixed(0));
+
                         // 2b. vitri_2 (second vitri hotspot to prove multi-hotspot bounce)
                         krpano.call('addhotspot(t_vitri_2)');
                         krpano.call('hotspot[t_vitri_2].loadstyle(vitri)');
@@ -103,7 +112,7 @@
                         // Dump all properties after 3 seconds
                         setTimeout(() => {
                             log('<br><b>═══ KIỂM TRA THUỘC TÍNH THỰC TẾ ═══</b>');
-                            ['t_muiten', 't_vitri', 't_vitri_2', 't_tructhang', 't_thongtin', 't_trenkhong'].forEach(name => {
+                            ['t_muiten', 't_vitri', 't_vitri_2', 't_tructhang', 't_thongtin', 't_trenkhong', 't_pulse_dot'].forEach(name => {
                                 const dist = krpano.get('hotspot[' + name + '].distorted');
                                 const rx = krpano.get('hotspot[' + name + '].rx');
                                 const url = krpano.get('hotspot[' + name + '].url');
