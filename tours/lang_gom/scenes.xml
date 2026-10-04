@@ -40,9 +40,8 @@
 		</image>
 		<hotspot name="hs_return_cong_chao_ninh_phuoc_3681" style="muiten" ath="42.2037" atv="4.4496" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng chào Xã Ninh Phước"/>
 		<hotspot name="hs_new_510913" style="muiten" ath="-130.3342" atv="17.9943" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
-		<hotspot name="hs_return_duong_lang_1_9316" style="muiten" ath="-19.0955" atv="6.7256" linkedscene="scene_duong_lang_1" custom_title="Đường làng Bàu trúc"/>
-		<hotspot name="hs_return_duong_vao_co_so_7663" style="vitri" ath="-8.6777" atv="-4.9015" linkedscene="scene_duong_vao_co_so" custom_title="Đường vào cơ sở Gốm"/>
 		<hotspot name="hs_info_cong_lang_bau_truc" style="thongtin" scale="0.30" ath="-135.7915" atv="-14.0473" infoid="info_cong_lang_bau_truc" custom_title="Giới thiệu Làng gốm Bàu Trúc"/>
+		<hotspot name="hs_new_613792" style="trenkhong" ath="-30.0101" atv="-22.9294" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước (300m)"/>
 	</scene>
 	<scene name="scene_duong_vao_co_so" title="Đường vào cơ sở Gốm" thumburl="panos/duong_vao_co_so.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-187.7" vlookat="1.9" fov="95.0" fovmin="60" fovmax="95"/>

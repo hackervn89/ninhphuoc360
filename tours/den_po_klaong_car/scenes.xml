@@ -18,27 +18,7 @@
 			</level>
 		</image>
 		<hotspot name="hs_return_duong_703_8803" style="muiten" ath="166.1380" atv="7.6881" linkedscene="scene_duong_703" custom_title="Đường 703"/>
-		<hotspot name="hs_new_233375" style="muiten" ath="-93.3077" atv="7.2145" linkedscene="scene_den_1" custom_title="Đền Po Klaong Car"/>
-	</scene>
-	<scene name="scene_den_1" title="Đền Po Klaong Car" thumburl="panos/den_1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-83.9" vlookat="12.9" fov="100.0" fovmin="60" fovmax="100"/>
-		<preview url="panos/den_1.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/den_1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/den_1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/den_1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/den_1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
-			</level>
-		</image>
-		<hotspot name="hs_return_duong_703_den_5746" style="muiten" ath="-173.4524" atv="9.9657" linkedscene="scene_duong_703_den" custom_title="Đường vào Đền Po Klaong Car"/>
-		<hotspot name="hs_new_259516" style="muiten" ath="-83.5219" atv="16.8381" linkedscene="scene_den_2" custom_title="Đền Po Klaong Car"/>
+		<hotspot name="hs_new_233375" style="muiten" ath="-93.3077" atv="7.2145" linkedscene="scene_den_2" custom_title="Đền Po Klaong Car"/>
 	</scene>
 	<scene name="scene_den_2" title="Đền Po Klaong Car" thumburl="panos/den_2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-98.7" vlookat="3.8" fov="85.0" fovmin="60" fovmax="95"/>
@@ -57,7 +37,7 @@
 				<cube url="panos/den_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_return_den_1_0578" style="muiten" ath="2.8093" atv="9.4086" linkedscene="scene_den_1" custom_title="Đền Po Klaong Car"/>
+		<hotspot name="hs_return_den_1_0578" style="muiten" ath="2.8093" atv="9.4086" linkedscene="scene_duong_703_den" custom_title="Đền Po Klaong Car"/>
 		<hotspot name="hs_new_279350" style="muiten" ath="-98.8006" atv="14.0374" linkedscene="scene_den_3" custom_title="Đền Po Klaong Car"/>
 		<hotspot name="hs_new_298828" style="muiten" scale="0.35" ath="-98.2108" atv="4.3908" linkedscene="scene_den_4" custom_title="Đền Po Klaong Car"/>
 	</scene>

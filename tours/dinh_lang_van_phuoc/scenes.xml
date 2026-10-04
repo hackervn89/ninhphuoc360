@@ -20,7 +20,7 @@
 		<hotspot name="hs_new_610933" style="muiten" ath="156.1287" atv="6.3854" linkedscene="scene_bia_tuong_niem_tham_sat_van_phuoc" custom_title="Bia tưởng niệm"/>
 		<hotspot name="hs_new_861862" style="muiten" ath="-188.7680" atv="5.3405" linkedscene="scene_nha_tuong_niem_tranthi" custom_title="Cổng nhà tưởng niệm"/>
 		<hotspot name="hs_new_039830" style="muiten" ath="-92.7562" atv="17.6397" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
-			<hotspot name="hs_return_bia_tuong_niem_phai_4604" style="vitri" ath="-67.9037" atv="7.2330" linkedscene="scene_bia_tuong_niem_phai" custom_title="Bia tưởng niệm"/>
+		<hotspot name="hs_return_bia_tuong_niem_phai_4604" style="vitri" ath="-67.9037" atv="7.2330" linkedscene="scene_bia_tuong_niem_phai" custom_title="Bia tưởng niệm"/>
 	</scene>
 	<scene name="scene_2_san_dinh" title="Sân đình" thumburl="panos/2_san_dinh.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-635.2" vlookat="3.2" fov="100.0" fovmin="60" fovmax="100"/>
@@ -68,6 +68,7 @@
 		<hotspot name="hs_new_770542" style="muiten" ath="-41.2885" atv="12.0870" linkedscene="scene_thanhminh_san" custom_title="Gian Thanh Minh"/>
 		<hotspot name="hs_return_nghia_tu_duong_san_1996" style="muiten" ath="32.5466" atv="17.5293" linkedscene="scene_nghia_tu_duong_san" custom_title="Sân Nghĩa Tử Đường"/>
 		<hotspot name="hs_new_809378" style="muiten" ath="4.1264" atv="11.3478" linkedscene="scene_nghia_tu_duong_sanh" custom_title="Nghĩa Tử đường"/>
+		<hotspot name="hs_return_2_san_dinh_4541" style="muiten" ath="-132.4868" atv="5.3920" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
 	</scene>
 	<scene name="scene_nghia_tu_duong_san" title="Sân Nghĩa Tử Đường" thumburl="panos/nghia_tu_duong_san.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-88.6" vlookat="6.3" fov="100.0" fovmin="60" fovmax="100"/>
@@ -160,6 +161,7 @@
 		<hotspot name="hs_new_432281" style="muiten" ath="52.8456" atv="9.1181" linkedscene="scene_luoc_su_dinh" custom_title="Lược sử Đình Vạn Phước"/>
 		<hotspot name="hs_new_486498" style="muiten" ath="-84.0879" atv="16.0365" linkedscene="scene_chinh_dien_truocgiua" custom_title="Chính điện"/>
 		<hotspot name="hs_return_nghia_tu_duong_san_3401" style="muiten" ath="174.3484" atv="7.7587" linkedscene="scene_nghia_tu_duong_san" custom_title="Sân Nghĩa Tử Đường"/>
+		<hotspot name="hs_return_2_san_dinh_4538" style="muiten" ath="-86.5430" atv="9.5598" linkedscene="scene_2_san_dinh" custom_title="Sân đình"/>
 	</scene>
 	<scene name="scene_chinh_dien_truocgiua" title="Chính điện" thumburl="panos/chinh_dien_truocgiua.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-87.2" vlookat="6.4" fov="104.2" fovmin="60" fovmax="110"/>

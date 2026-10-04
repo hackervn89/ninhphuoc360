@@ -17,7 +17,7 @@
 				<cube url="panos/toancanh_300m.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_292905" style="trenkhong" scale="0.25" ath="-39.6091" atv="20.2840" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước"/>
+		<hotspot name="hs_new_292905" style="trenkhong" scale="0.25" ath="-39.6091" atv="20.2840" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước 100m"/>
 		<hotspot name="hs_new_495923" style="vitri" scale="0.25" ath="92.2043" atv="4.3639" linkedscene="scene_bia_tuong_niem_tham_sat_van_phuoc" custom_title="Bia tưởng niệm"/>
 		<hotspot name="hs_new_448346" style="pulse_dot" scale="0.25" ath="-102.8212" atv="15.1297" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
 		<hotspot name="hs_new_497104" style="pulse_dot" scale="0.15" ath="-43.3376" atv="14.2650" linkedscene="scene_cong_chao_ninh_phuoc" custom_title="Cổng chào"/>
@@ -65,8 +65,7 @@
 			</level>
 		</image>
 		<hotspot name="hs_return_cong_lang_bau_truc_0685" style="muiten" ath="-122.8613" atv="9.5221" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
-		<hotspot name="hs_return_toancanh_300m_4510" style="vitri" ath="26.0032" atv="-43.2795" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
-		<hotspot name="hs_return_toancanh_100m_5059" style="vitri" ath="-106.5594" atv="14.2041" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước"/>
+		<hotspot name="hs_return_toancanh_300m_4510" style="trenkhong" ath="26.0032" atv="-43.2795" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
 	</scene>
 	<scene name="scene_trung_tam_hanh_chinh" title="Trung tâm hành chính xã" thumburl="panos/trung_tam_hanh_chinh.tiles/thumb.jpg" lat="11.524983937711859" lng="108.92793699643062">
 		<view fovtype="MFOV" hlookat="-113.4" vlookat="5.5" fov="105.0" fovmin="60" fovmax="105"/>

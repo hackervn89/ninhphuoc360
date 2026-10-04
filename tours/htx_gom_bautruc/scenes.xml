@@ -19,49 +19,7 @@
 		</image>
 		<hotspot name="hs_new_144533" style="muiten" ath="-90.1146" atv="15.1086" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
 		<hotspot name="hs_new_169815" style="muiten" ath="9.2934" atv="11.3026" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
-		<hotspot name="hs_return_cong_lang_my_nghiep_5895" style="muiten" ath="134.0670" atv="11.1401" linkedscene="scene_cong_lang_my_nghiep" custom_title="Cổng làng Mỹ Nghiệp"/>
 		<hotspot name="hs_new_166304" style="muiten" ath="-167.0681" atv="7.3333" linkedscene="scene_duong_703" custom_title="Đường 703"/>
-	</scene>
-	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-103.6" vlookat="17.3" fov="110.0" fovmin="60" fovmax="110"/>
-		<preview url="panos/san_trai1.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/san_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
-			</level>
-		</image>
-		<hotspot name="hs_new_853742" style="muiten" ath="18.3812" atv="26.5358" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
-		<hotspot name="hs_new_877217" style="muiten" ath="-176.7076" atv="37.7714" linkedscene="scene_san_trai2" custom_title="Sân trước"/>
-		<hotspot name="hs_new_890936" style="muiten" ath="-141.2464" atv="24.8180" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái"/>
-	</scene>
-	<scene name="scene_san_trai2" title="Sân trước" thumburl="panos/san_trai2.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="2.9" vlookat="18.8" fov="110.0" fovmin="60" fovmax="110"/>
-		<preview url="panos/san_trai2.tiles/preview.jpg"/>
-		<image type="CUBE" multires="true" tilesize="512">
-			<level tiledimagewidth="4864" tiledimageheight="4864">
-				<cube url="panos/san_trai2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="2560" tiledimageheight="2560">
-				<cube url="panos/san_trai2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="1280" tiledimageheight="1280">
-				<cube url="panos/san_trai2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
-			</level>
-			<level tiledimagewidth="640" tiledimageheight="640">
-				<cube url="panos/san_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
-			</level>
-		</image>
-		<hotspot name="hs_new_934263" style="muiten" ath="-19.4356" atv="28.3122" linkedscene="scene_sanh_trai_2" custom_title="Sảnh Trái"/>
-		<hotspot name="hs_new_945496" style="muiten" ath="62.4120" atv="32.7551" linkedscene="scene_san_trai1" custom_title="Sân trước"/>
 	</scene>
 	<scene name="scene_san_truoc_htx" title="Sân trước" thumburl="panos/san_truoc_htx.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-90.8" vlookat="16.7" fov="114.9" fovmin="60" fovmax="120"/>
@@ -83,11 +41,79 @@
 		<hotspot name="hs_new_278712" style="muiten" ath="74.0739" atv="30.8631" linkedscene="scene_cong_htx" custom_title="Cổng HTX"/>
 		<hotspot name="hs_new_356687" style="muiten" ath="20.2170" atv="29.7677" linkedscene="scene_san_phai" custom_title="Sân trước"/>
 		<hotspot name="hs_new_367298" style="muiten" ath="174.1762" atv="39.7336" linkedscene="scene_san_trai1" custom_title="Sân trước"/>
-		<hotspot name="hs_new_682673" style="muiten" show_title="false" show_thumb="false" ath="-89.8448" atv="24.0892" linkedscene="scene_sanh_giua" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_682673" style="muiten" show_title="false" show_thumb="false" ath="-89.8448" atv="24.0892" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh trước"/>
 		<hotspot name="hs_new_385373" style="muiten" ath="-172.6863" atv="17.2151" linkedscene="scene_san_trai2" custom_title="Sân trước"/>
 	</scene>
+	<scene name="scene_sanh_giua_htx_gom" title="Sảnh giữa" thumburl="panos/sanh_giua_htx_gom.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-98.4" vlookat="11.8" fov="95.0" fovmin="60" fovmax="95"/>
+		<preview url="panos/sanh_giua_htx_gom.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/sanh_giua_htx_gom.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/sanh_giua_htx_gom.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/sanh_giua_htx_gom.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/sanh_giua_htx_gom.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_return_san_truoc_htx_1768" style="muiten" ath="80.8136" atv="27.7070" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
+		<hotspot name="hs_new_422576" style="muiten" ath="-98.4771" atv="22.2554" linkedscene="scene_phongchinh_phai1" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_495597" style="muiten" ath="-13.2518" atv="30.7501" linkedscene="scene_sanh_phai" custom_title="Sảnh phải"/>
+		<hotspot name="hs_new_512299" style="muiten" ath="172.3409" atv="43.4361" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái"/>
+		<hotspot name="hs_new_684787" style="muiten" ath="175.1101" atv="26.2309" linkedscene="scene_sanh_trai_2" custom_title="Sân trước"/>
+		<hotspot name="hs_return_phongchinh_trai1_8221" style="muiten" ath="-75.9611" atv="11.7245" linkedscene="scene_phongchinh_trai1" custom_title="Phòng chính"/>
+	</scene>
+	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="-103.6" vlookat="17.3" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/san_trai1.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/san_trai1.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_trai1.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_trai1.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_853742" style="muiten" ath="18.3812" atv="26.5358" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
+		<hotspot name="hs_new_877217" style="muiten" ath="-176.7076" atv="37.7714" linkedscene="scene_san_trai2" custom_title="Sân trước"/>
+		<hotspot name="hs_new_890936" style="muiten" ath="-141.2464" atv="24.8180" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái"/>
+		<hotspot name="hs_return_sanh_trai_2_7638" style="muiten" ath="134.2729" atv="31.2348" linkedscene="scene_sanh_trai_2" custom_title="Sảnh Trái"/>
+	</scene>
+	<scene name="scene_san_trai2" title="Sân trước" thumburl="panos/san_trai2.tiles/thumb.jpg">
+		<view fovtype="MFOV" hlookat="2.9" vlookat="18.8" fov="110.0" fovmin="60" fovmax="110"/>
+		<preview url="panos/san_trai2.tiles/preview.jpg"/>
+		<image type="CUBE" multires="true" tilesize="512">
+			<level tiledimagewidth="4864" tiledimageheight="4864">
+				<cube url="panos/san_trai2.tiles/%s/l4/%0v/l4_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="2560" tiledimageheight="2560">
+				<cube url="panos/san_trai2.tiles/%s/l3/%0v/l3_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="1280" tiledimageheight="1280">
+				<cube url="panos/san_trai2.tiles/%s/l2/%0v/l2_%s_%0v_%0h.jpg"/>
+			</level>
+			<level tiledimagewidth="640" tiledimageheight="640">
+				<cube url="panos/san_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
+			</level>
+		</image>
+		<hotspot name="hs_new_934263" style="muiten" ath="-19.4356" atv="28.3122" linkedscene="scene_sanh_trai_2" custom_title="Sảnh Trái"/>
+		<hotspot name="hs_new_945496" style="muiten" ath="62.4120" atv="32.7551" linkedscene="scene_san_trai1" custom_title="Sân trước"/>
+		<hotspot name="hs_return_san_truoc_htx_2803" style="muiten" ath="7.3137" atv="17.2151" linkedscene="scene_san_truoc_htx" custom_title="Sân trước"/>
+		<hotspot name="hs_return_sanh_giua_htx_gom_8359" style="muiten" ath="-4.8899" atv="26.2309" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
+	</scene>
 	<scene name="scene_sanh_phai" title="Sảnh phải" thumburl="panos/sanh_phai.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="75.5" vlookat="-7.6" fov="111.6" fovmin="60" fovmax="120"/>
+		<view fovtype="MFOV" hlookat="60.3" vlookat="24.1" fov="111.6" fovmin="60" fovmax="120"/>
 		<preview url="panos/sanh_phai.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -103,9 +129,8 @@
 				<cube url="panos/sanh_phai.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_708249" style="muiten" ath="-24.8684" atv="28.5566" linkedscene="scene_sanh_truoc" custom_title="Sảnh trước"/>
-		<hotspot name="hs_new_726619" style="muiten" ath="3.2835" atv="14.2761" linkedscene="scene_sanh_trai" custom_title="Sảnh trước"/>
-		<hotspot name="hs_new_742383" style="muiten" ath="142.6802" atv="28.9903" linkedscene="scene_phong_tho_liet_si" custom_title="Phòng thờ Liệt sĩ"/>
+		<hotspot name="hs_return_sanh_giua_htx_gom_7606" style="muiten" ath="-152.6039" atv="34.9581" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
+		<hotspot name="hs_new_563087" style="muiten" ath="39.2597" atv="27.1243" linkedscene="scene_san_phai2" custom_title="Sân trước"/>
 	</scene>
 	<scene name="scene_sanh_trai_1" title="Sảnh Trái" thumburl="panos/sanh_trai_1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="342.1" vlookat="26.3" fov="110.0" fovmin="60" fovmax="110"/>
@@ -125,7 +150,7 @@
 			</level>
 		</image>
 		<hotspot name="hs_new_041062" style="muiten" ath="157.2601" atv="36.6591" linkedscene="scene_sanh_trai_2" custom_title="Sảnh Trái"/>
-		<hotspot name="hs_new_059025" style="muiten" ath="0.0560" atv="34.6996" linkedscene="scene_sanh_giua" custom_title="Sảnh trước"/>
+		<hotspot name="hs_new_672143" style="muiten" ath="359.6368" atv="34.1619" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
 	</scene>
 	<scene name="scene_sanh_trai_2" title="Sảnh Trái" thumburl="panos/sanh_trai_2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="214.2" vlookat="20.5" fov="98.5" fovmin="60" fovmax="110"/>
@@ -144,10 +169,10 @@
 				<cube url="panos/sanh_trai_2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_981156" style="muiten" ath="-144.7088" atv="47.6353" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái"/>
+		<hotspot name="hs_new_981156" style="muiten" ath="-144.9083" atv="31.2080" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái"/>
 		<hotspot name="hs_new_006205" style="muiten" ath="-4.9159" atv="35.1011" linkedscene="scene_san_trai2" custom_title="Sân trước"/>
 		<hotspot name="hs_new_024882" style="muiten" ath="-45.7271" atv="31.2348" linkedscene="scene_san_trai1" custom_title="Sân trước"/>
-		<hotspot name="hs_new_918163" style="muiten" scale="0.40" ath="-140.2293" atv="18.0303" linkedscene="scene_sanh_giua" custom_title="Sảnh giữa"/>
+		<hotspot name="hs_new_918163" style="muiten" scale="0.40" ath="-139.4754" atv="15.4678" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
 	</scene>
 	<scene name="scene_phongchinh_giua" title="Phòng chính" thumburl="panos/phongchinh_giua.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-84.2" vlookat="14.8" fov="100.0" fovmin="60" fovmax="100"/>
@@ -172,6 +197,7 @@
 		<hotspot name="hs_new_716062" style="muiten" ath="47.5958" atv="28.9157" linkedscene="scene_phongchinh_phai1" custom_title="Phòng chính"/>
 		<hotspot name="hs_new_727910" style="muiten" ath="-21.2207" atv="28.7303" linkedscene="scene_phongchinh_phai2" custom_title="Phòng chính"/>
 		<hotspot name="hs_new_744842" style="thongtin" scale="0.25" ath="93.7248" atv="45.4482" infoid="info_vi_du_bai_viet" custom_title="Trống Paranưng"/>
+		<hotspot name="hs_new_957093" style="muiten" scale="0.40" ath="47.2131" atv="14.3949" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
 	</scene>
 	<scene name="scene_phongchinh_phai1" title="Phòng chính" thumburl="panos/phongchinh_phai1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="25.6" vlookat="-1.6" fov="104.0" fovmin="60" fovmax="104"/>
@@ -190,10 +216,11 @@
 				<cube url="panos/phongchinh_phai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
-		<hotspot name="hs_new_502902" style="muiten" ath="205.1141" atv="27.3680" linkedscene="scene_sanh_giua" custom_title="Sảnh giữa"/>
+		<hotspot name="hs_new_502902" style="muiten" ath="-154.8859" atv="27.3680" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
 		<hotspot name="hs_new_527072" style="muiten" ath="46.4972" atv="22.5381" linkedscene="scene_phongchinh_giua" custom_title="Phòng chính"/>
 		<hotspot name="hs_new_538164" style="muiten" ath="86.1202" atv="18.2989" linkedscene="scene_phongchinh_phai2" custom_title="Phòng chính"/>
 		<hotspot name="hs_new_547406" style="muiten" ath="-4.8576" atv="19.9321" linkedscene="scene_phongchinh_trai1" custom_title="Phòng chính"/>
+		<hotspot name="hs_return_phongchinh_trai2_1431" style="muiten" ath="-50.5498" atv="13.2128" linkedscene="scene_phongchinh_trai2" custom_title="Phòng chính"/>
 	</scene>
 	<scene name="scene_phongchinh_phai2" title="Phòng chính" thumburl="panos/phongchinh_phai2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-17.6" vlookat="-1.2" fov="95.0" fovmin="60" fovmax="95"/>
@@ -220,7 +247,7 @@
 		<hotspot name="hs_new_913961" style="thongtin" scale="0.30" ath="-122.2283" atv="24.0365" infoid="info_vi_du_bai_viet" custom_title="Trống Paranưng"/>
 	</scene>
 	<scene name="scene_phongchinh_trai1" title="Phòng chính" thumburl="panos/phongchinh_trai1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="-23.3" vlookat="15.4" fov="89.7" fovmin="60" fovmax="110"/>
 		<preview url="panos/phongchinh_trai1.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -236,9 +263,14 @@
 				<cube url="panos/phongchinh_trai1.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_new_048927" style="muiten" ath="104.0389" atv="11.7245" linkedscene="scene_sanh_giua_htx_gom" custom_title="Sảnh giữa"/>
+		<hotspot name="hs_new_111269" style="muiten" ath="2.0337" atv="21.9615" linkedscene="scene_phongchinh_trai2" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_145139" style="muiten" ath="35.5321" atv="20.8706" linkedscene="scene_phongchinh_giua" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_168569" style="muiten" scale="0.35" ath="23.0183" atv="11.0498" linkedscene="scene_phongchinh_giua1" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_185813" style="muiten" ath="78.5379" atv="16.7763" linkedscene="scene_phongchinh_phai1" custom_title="Phòng chính"/>
 	</scene>
 	<scene name="scene_phongchinh_trai2" title="Phòng chính" thumburl="panos/phongchinh_trai2.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="0.0" vlookat="0.0" fov="85.0" fovmin="60" fovmax="95"/>
+		<view fovtype="MFOV" hlookat="24.0" vlookat="6.1" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/phongchinh_trai2.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -254,9 +286,14 @@
 				<cube url="panos/phongchinh_trai2.tiles/%s/l1/%0v/l1_%s_%0v_%0h.jpg"/>
 			</level>
 		</image>
+		<hotspot name="hs_return_phongchinh_trai1_1384" style="muiten" ath="-179.3557" atv="26.4765" linkedscene="scene_phongchinh_trai1" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_203847" style="muiten" scale="0.40" ath="129.4502" atv="13.2128" linkedscene="scene_phongchinh_phai1" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_226338" style="muiten" ath="33.1135" atv="22.4221" linkedscene="scene_phongchinh_giua1" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_241695" style="muiten" ath="109.5616" atv="36.8230" linkedscene="scene_phongchinh_giua" custom_title="Phòng chính"/>
+		<hotspot name="hs_new_279346" style="muiten" ath="83.1112" atv="17.4512" linkedscene="scene_phongchinh_phai2" custom_title="Phòng chính"/>
 	</scene>
 	<scene name="scene_phongchinh_giua1" title="Phòng chính" thumburl="panos/phongchinh_giua1.tiles/thumb.jpg">
-		<view fovtype="MFOV" hlookat="-94.8" vlookat="33.6" fov="115.0" fovmin="60" fovmax="120"/>
+		<view fovtype="MFOV" hlookat="-56.0" vlookat="19.5" fov="120.0" fovmin="60" fovmax="120"/>
 		<preview url="panos/phongchinh_giua1.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
 			<level tiledimagewidth="4864" tiledimageheight="4864">
@@ -277,6 +314,7 @@
 		<hotspot name="hs_new_043457" style="muiten" ath="95.6259" atv="28.7638" linkedscene="scene_phongchinh_giua" custom_title="Phòng chính"/>
 		<hotspot name="hs_new_052251" style="muiten" ath="28.6081" atv="31.0027" linkedscene="scene_phongchinh_phai2" custom_title="Phòng chính"/>
 		<hotspot name="hs_new_065163" style="muiten" scale="0.30" ath="64.7903" atv="16.8553" linkedscene="scene_phongchinh_phai1" custom_title="Phòng chính"/>
+		<hotspot name="hs_return_phongchinh_trai1_3692" style="muiten" ath="-156.9817" atv="11.0498" linkedscene="scene_phongchinh_trai1" custom_title="Phòng chính"/>
 	</scene>
 	<scene name="scene_san_phai" title="Sân trước" thumburl="panos/san_phai.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-13.6" vlookat="0.1" fov="95.0" fovmin="60" fovmax="95"/>
