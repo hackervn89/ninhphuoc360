@@ -56,15 +56,15 @@
 
     <!-- Preload Strategy: prioritize first-screen UI -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="preload" href="core/css/style.css" as="style">
+    <link rel="preload" href="core/css/style.css?v=2.6.0" as="style">
     <link rel="preload" href="engine/tour.js" as="script">
-    <link rel="preload" href="core/js/app.js" as="script">
+    <link rel="preload" href="core/js/app.js?v=2.8.0" as="script">
 
     <!-- Preload: FontAwesome solid icons used in the intro card -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2"
         as="font" type="font/woff2" crossorigin="anonymous">
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="core/css/style.css">
+    <link rel="stylesheet" href="core/css/style.css?v=2.6.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -195,18 +195,9 @@
             </div>
         </div>
 
-        <!-- Navigation Control Bar (Bottom Center) -->
+        <!-- Navigation Control Bar (Bottom Center - Always Visible) -->
         <div class="nav-bar glass-panel" id="nav-bar">
-            <button id="btn-toggle-nav" class="icon-btn" title="Ẩn/Hiện thanh công cụ">
-                <svg viewBox="0 0 24 24">
-                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-                </svg>
-            </button>
-
-            <div class="nav-controls hidden" id="nav-controls">
-
-                <div class="separator"></div>
-
+            <div class="nav-controls" id="nav-controls">
                 <!-- Back Button -->
                 <button id="btn-back" class="icon-btn" style="display: none;" title="Quay lại scene trước">
                     <svg viewBox="0 0 24 24">
@@ -220,6 +211,23 @@
                         <path
                             d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z" />
                     </svg>
+                </button>
+
+                <!-- Audio Button (BGM & Thuyết minh) -->
+                <button id="btn-audio" class="icon-btn" title="Âm thanh & Thuyết minh">
+                    <div class="audio-btn-content">
+                        <svg class="icon-speaker" viewBox="0 0 24 24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                        <svg class="icon-speaker-muted hidden" viewBox="0 0 24 24">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                        </svg>
+                        <div class="audio-eq-bars" id="audio-eq-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
                 </button>
 
                 <button id="btn-share" class="icon-btn" title="Chia sẻ">
@@ -279,6 +287,65 @@
             <div id="map-container"></div>
         </div>
 
+        <!-- Audio Control Panel (Glassmorphism Popover) -->
+        <div id="audio-panel" class="glass-panel hidden">
+            <div class="audio-panel-header">
+                <div class="audio-panel-title">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+                    </svg>
+                    <span>Âm thanh &amp; Thuyết minh</span>
+                </div>
+                <button id="btn-close-audio-panel" class="audio-close-btn" title="Đóng">&times;</button>
+            </div>
+
+            <!-- BGM Section -->
+            <div class="audio-section">
+                <div class="audio-section-top">
+                    <div class="audio-label-group">
+                        <span class="audio-label">Nhạc nền không gian</span>
+                        <span class="audio-sublabel" id="bgm-track-title">Giai điệu Ninh Phước</span>
+                    </div>
+                    <label class="audio-switch" title="Bật/Tắt nhạc nền">
+                        <input type="checkbox" id="toggle-bgm" checked>
+                        <span class="audio-slider round"></span>
+                    </label>
+                </div>
+                <div class="audio-volume-row">
+                    <svg viewBox="0 0 24 24" class="vol-icon" fill="currentColor"><path d="M7 9v6h4l5 5V4L11 9H7z"/></svg>
+                    <input type="range" id="slider-bgm-volume" min="0" max="100" value="35" class="audio-range" title="Âm lượng nhạc nền">
+                    <span class="vol-val" id="val-bgm-volume">35%</span>
+                </div>
+            </div>
+
+            <div class="audio-divider"></div>
+
+            <!-- Voiceover Section -->
+            <div class="audio-section">
+                <div class="audio-section-top">
+                    <div class="audio-label-group">
+                        <span class="audio-label">Thuyết minh tự động</span>
+                        <span class="audio-sublabel" id="voice-track-title">Đang xác định điểm...</span>
+                    </div>
+                    <label class="audio-switch" title="Bật/Tắt tự động thuyết minh khi đổi cảnh">
+                        <input type="checkbox" id="toggle-voice" checked>
+                        <span class="audio-slider round"></span>
+                    </label>
+                </div>
+                <div class="audio-voice-controls">
+                    <button id="btn-play-voice" class="voice-action-btn" title="Phát / Tạm dừng thuyết minh">
+                        <i class="fa-solid fa-play" id="icon-voice-play"></i>
+                        <span id="text-voice-play">Phát thuyết minh</span>
+                    </button>
+                    <div class="audio-volume-row">
+                        <svg viewBox="0 0 24 24" class="vol-icon" fill="currentColor"><path d="M7 9v6h4l5 5V4L11 9H7z"/></svg>
+                        <input type="range" id="slider-voice-volume" min="0" max="100" value="85" class="audio-range" title="Âm lượng thuyết minh">
+                        <span class="vol-val" id="val-voice-volume">85%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Info Modal -->
         <div id="info-modal-overlay" class="hidden">
             <div id="info-modal" class="glass-panel">
@@ -293,7 +360,7 @@
     </div>
 
     <script src="engine/tour.js"></script>
-    <script src="core/js/app.js?v=2.3.0"></script>
+    <script src="core/js/app.js?v=2.8.0"></script>
 </body>
 
 </html>

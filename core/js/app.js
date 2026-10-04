@@ -64,10 +64,9 @@ function krpanoReady(krpano) {
     // Hook: when scene changes, update Web UI
     krpanoObj.set("events.onnewscene", "js(onSceneChange());");
 
-    // Hide loading screen: use onnewscene (fires when first scene is ready)
-    // plus a safety timeout in case something goes wrong
-    krpanoObj.set("events.onloadcomplete", "js(hideLoadingScreen());");
-    setTimeout(hideLoadingScreen, 5000); // Safety fallback
+    // Hide loading screen & notify TourAudio when scene tiles are 100% loaded
+    krpanoObj.set("events.onloadcomplete", "js(onSceneLoadComplete());");
+    setTimeout(onSceneLoadComplete, 5000); // Safety fallback
 
     // Realtime Sync: Radar Rotation with KrPano camera hlookat
     setInterval(() => {
@@ -104,7 +103,16 @@ async function buildDynamicTourData() {
         // Fallback for static fetch error
     }
 
-    // 2. Fallback to API if static fetch returned empty (e.g. local dev server)
+    // 2. Fetch static scene-locations.json mapping
+    let sceneLocMap = {};
+    try {
+        const scRes = await fetch('core/data/scene-locations.json?v=' + Date.now(), { cache: 'no-store' });
+        if (scRes.ok) {
+            sceneLocMap = await scRes.json();
+        }
+    } catch (e) {}
+
+    // 3. Fallback to API if static fetch returned empty (e.g. local dev server)
     if (Object.keys(locationsMap).length === 0) {
         try {
             const locRes = await fetch('/api/locations');
@@ -136,10 +144,12 @@ async function buildDynamicTourData() {
         let locLat = null;
         let locLng = null;
 
-        // Extract location folder from thumburl (e.g. "tours/lang_gom/panos/...")
+        // Extract location folder from thumburl or static mapping
         let folderMatch = thumb.match(/(?:^|\/)tours\/([^\/]+)\//);
         if (folderMatch) {
             locId = folderMatch[1];
+        } else if (sceneLocMap[name]) {
+            locId = sceneLocMap[name];
         } else {
             // Fallback: match scene name or thumb with locationsMap keys
             for (const k of Object.keys(locationsMap)) {
@@ -235,15 +245,22 @@ async function onSceneChange() {
     // Determine current location group & active scene
     let activeLocation = null;
     let currentScene = null;
+    let activeKey = null;
     for (const [key, data] of Object.entries(tourData)) {
         const found = data.scenes.find(s => s.id === sceneId);
         if (found) {
             activeLocation = data;
             currentScene = found;
+            activeKey = key;
             const titleEl = document.getElementById('current-scene-title');
             if (titleEl) titleEl.textContent = `${data.label} - ${found.title}`;
             break;
         }
+    }
+
+    // Sync Tour Audio (BGM & Voiceover for current location)
+    if (typeof TourAudio !== 'undefined') {
+        TourAudio.handleSceneChange(activeKey, sceneId, activeLocation);
     }
 
     // Sync Map Position & Radar to active scene / location (Hierarchy GPS)
@@ -271,6 +288,13 @@ async function onSceneChange() {
 }
 
 // ── Loading → Intro → Tour Flow ─────────────────────────────
+function onSceneLoadComplete() {
+    hideLoadingScreen();
+    if (typeof TourAudio !== 'undefined') {
+        TourAudio.onSceneLoaded();
+    }
+}
+
 function hideLoadingScreen() {
     const loadingScreen = document.getElementById('loading-screen');
     const loaderPhase = document.getElementById('loader-phase');
@@ -284,6 +308,9 @@ function hideLoadingScreen() {
 function startTour() {
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) loadingScreen.classList.add('fade-out');
+    if (typeof TourAudio !== 'undefined') {
+        TourAudio.onUserStartTour();
+    }
 }
 
 // ── Init UI ──────────────────────────────────────────────────
@@ -291,6 +318,9 @@ function initUI() {
     renderSidebar();
     initInfoModal();
     initMapControls();
+    if (typeof TourAudio !== 'undefined') {
+        TourAudio.init();
+    }
 
     // Intro Screen: "Bắt đầu khám phá" button
     const btnStart = document.getElementById('btn-start-tour');
@@ -323,14 +353,7 @@ function initUI() {
         document.addEventListener('touchstart', closeSidebarIfOutside, { passive: true });
     }
 
-    // Toggle nav bar
-    const btnToggleNav = document.getElementById('btn-toggle-nav');
-    if (btnToggleNav) {
-        btnToggleNav.addEventListener('click', function () {
-            this.classList.toggle('active');
-            document.getElementById('nav-controls').classList.toggle('hidden');
-        });
-    }
+    // Nav bar is always visible (no toggle collapse needed)
 
     // QR Code for Desktop
     const qrEl = document.getElementById('desktop-qr');
@@ -819,3 +842,520 @@ function closeInfoModal() {
         overlay.classList.add('hidden');
     }
 }
+
+// ============================================================
+// ── Tour Audio Manager (BGM & Voiceover) ─────────────────────
+// ============================================================
+const TourAudio = {
+    config: null,
+    bgmAudio: null,
+    voiceAudio: null,
+    isInitialized: false,
+    hasUserInteracted: false,
+
+    // States
+    bgmEnabled: true,
+    voiceEnabled: true,
+    bgmVolume: 0.30,
+    voiceVolume: 0.50,
+    currentLocationId: null,
+    isVoicePlaying: false,
+    duckingTween: null,
+
+    // Cờ trạng thái tải cảnh & đếm ngược phát thuyết minh
+    isSceneLoaded: false,
+    hasUserStartedTour: false,
+    voiceDelayTimer: null,
+    lastSpokenLocationId: null,
+
+    async init() {
+        if (this.isInitialized) return;
+
+        // 1. Load config
+        try {
+            const res = await fetch('core/data/audio-config.json?v=' + Date.now(), { cache: 'no-store' });
+            if (res.ok) {
+                this.config = await res.json();
+            }
+        } catch (e) {
+            console.warn('[TourAudio] Could not load audio-config.json:', e);
+        }
+
+        if (!this.config) {
+            this.config = {
+                bgm: {
+                    enabled: true,
+                    defaultVolume: 0.30,
+                    tracks: [{
+                        id: 'default',
+                        title: 'Giai điệu truyền thống Ninh Phước',
+                        src: 'core/assets/audio/bgm/nhac_nen_cham.mp3',
+                        fallbackSrc: 'core/assets/audio/bgm/nhac_nen_mac_dinh.wav'
+                    }]
+                },
+                voiceover: {
+                    enabled: true,
+                    defaultVolume: 0.50,
+                    autoPlay: true,
+                    ducking: { enabled: true, bgmVolumeWhenSpeaking: 0.20, fadeTime: 0.5 },
+                    locations: {}
+                }
+            };
+        }
+
+        // 2. Load stored preferences from localStorage
+        this.loadPreferences();
+
+        // 3. Setup Audio Elements
+        this.setupAudioElements();
+
+        // 4. Setup UI Listeners (button, sliders, switches, close)
+        this.setupUI();
+
+        // 5. Global user interaction listener to unlock audio on mobile/browser
+        const unlock = () => {
+            if (!this.hasUserInteracted) {
+                this.hasUserInteracted = true;
+                if (this.bgmEnabled) {
+                    this.playBgm();
+                }
+            }
+            ['click', 'touchstart', 'keydown'].forEach(evt => document.removeEventListener(evt, unlock));
+        };
+        ['click', 'touchstart', 'keydown'].forEach(evt => document.addEventListener(evt, unlock, { once: true, passive: true }));
+
+        this.isInitialized = true;
+        console.log('🎵 TourAudio system initialized.');
+    },
+
+    loadPreferences() {
+        try {
+            const saved = localStorage.getItem('np360_audio_prefs');
+            if (saved) {
+                const prefs = JSON.parse(saved);
+                if (prefs.version === 2) {
+                    if (prefs.bgmEnabled !== undefined) this.bgmEnabled = prefs.bgmEnabled;
+                    if (prefs.voiceEnabled !== undefined) this.voiceEnabled = prefs.voiceEnabled;
+                    if (prefs.bgmVolume !== undefined) this.bgmVolume = prefs.bgmVolume;
+                    if (prefs.voiceVolume !== undefined) this.voiceVolume = prefs.voiceVolume;
+                } else {
+                    // Tự động nâng cấp lên mặc định mới: BGM 30%, Thuyết minh 50%
+                    this.bgmVolume = this.config.bgm?.defaultVolume ?? 0.30;
+                    this.voiceVolume = this.config.voiceover?.defaultVolume ?? 0.50;
+                    this.savePreferences();
+                }
+            } else {
+                this.bgmVolume = this.config.bgm?.defaultVolume ?? 0.30;
+                this.voiceVolume = this.config.voiceover?.defaultVolume ?? 0.50;
+            }
+        } catch (e) {}
+    },
+
+    savePreferences() {
+        try {
+            localStorage.setItem('np360_audio_prefs', JSON.stringify({
+                version: 2,
+                bgmEnabled: this.bgmEnabled,
+                voiceEnabled: this.voiceEnabled,
+                bgmVolume: this.bgmVolume,
+                voiceVolume: this.voiceVolume
+            }));
+        } catch (e) {}
+    },
+
+    setupAudioElements() {
+        // BGM element
+        this.bgmAudio = new Audio();
+        this.bgmAudio.loop = true;
+        this.bgmAudio.volume = this.bgmEnabled ? this.bgmVolume : 0;
+
+        const track = (this.config.bgm.tracks && this.config.bgm.tracks[0]) || {
+            src: 'core/assets/audio/bgm/nhac_nen_cham.mp3',
+            fallbackSrc: 'core/assets/audio/bgm/nhac_nen_mac_dinh.wav'
+        };
+        this.bgmAudio.src = track.src;
+
+        const bgmTitleEl = document.getElementById('bgm-track-title');
+        if (bgmTitleEl && track.title) {
+            bgmTitleEl.textContent = track.title;
+        }
+
+        this.bgmAudio.addEventListener('error', () => {
+            if (track.fallbackSrc && this.bgmAudio.src !== track.fallbackSrc) {
+                console.log('[TourAudio] Falling back to default ambient audio:', track.fallbackSrc);
+                this.bgmAudio.src = track.fallbackSrc;
+                if (this.hasUserInteracted && this.bgmEnabled) {
+                    this.bgmAudio.play().catch(() => {});
+                }
+            }
+        });
+
+        // Voiceover element
+        this.voiceAudio = new Audio();
+        this.voiceAudio.loop = false;
+        this.voiceAudio.volume = this.voiceEnabled ? this.voiceVolume : 0;
+
+        this.voiceAudio.addEventListener('play', () => {
+            this.isVoicePlaying = true;
+            this.updateVoiceUI();
+            this.applyDucking(true);
+        });
+
+        this.voiceAudio.addEventListener('pause', () => {
+            this.isVoicePlaying = false;
+            this.updateVoiceUI();
+            this.applyDucking(false);
+        });
+
+        this.voiceAudio.addEventListener('ended', () => {
+            this.isVoicePlaying = false;
+            this.updateVoiceUI();
+            this.applyDucking(false);
+        });
+    },
+
+    playBgm() {
+        if (!this.bgmAudio) return;
+        this.bgmAudio.volume = this.isVoicePlaying ? (this.config.voiceover.ducking?.bgmVolumeWhenSpeaking || 0.20) : this.bgmVolume;
+        this.bgmAudio.play().then(() => {
+            this.updateButtonState();
+        }).catch(err => {
+            console.warn('[TourAudio] Autoplay blocked, waiting for interaction:', err);
+            this.updateButtonState();
+        });
+    },
+
+    pauseBgm() {
+        if (!this.bgmAudio) return;
+        this.bgmAudio.pause();
+        this.updateButtonState();
+    },
+
+    setBgmVolume(val) {
+        this.bgmVolume = Math.max(0, Math.min(1, val));
+        if (this.bgmAudio && !this.isVoicePlaying) {
+            this.bgmAudio.volume = this.bgmEnabled ? this.bgmVolume : 0;
+        }
+        this.savePreferences();
+        this.updateSliders();
+    },
+
+    toggleBgm(enabled) {
+        this.bgmEnabled = (enabled !== undefined) ? enabled : !this.bgmEnabled;
+        if (this.bgmAudio) {
+            if (this.bgmEnabled) {
+                this.playBgm();
+            } else {
+                this.pauseBgm();
+            }
+        }
+        this.savePreferences();
+        this.updateButtonState();
+    },
+
+    applyDucking(isSpeaking) {
+        if (!this.config?.voiceover?.ducking?.enabled) return;
+        if (!this.bgmAudio || !this.bgmEnabled) return;
+
+        clearInterval(this.duckingTween);
+        const startVol = this.bgmAudio.volume;
+        const targetVol = isSpeaking ? (this.config.voiceover.ducking.bgmVolumeWhenSpeaking || 0.20) : this.bgmVolume;
+        const steps = 15;
+        const duration = (this.config.voiceover.ducking.fadeTime || 0.5) * 1000;
+        const stepTime = duration / steps;
+        let step = 0;
+
+        this.duckingTween = setInterval(() => {
+            step++;
+            const t = step / steps;
+            this.bgmAudio.volume = startVol + (targetVol - startVol) * t;
+            if (step >= steps) {
+                clearInterval(this.duckingTween);
+                this.bgmAudio.volume = targetVol;
+            }
+        }, stepTime);
+    },
+
+    onSceneLoaded() {
+        this.isSceneLoaded = true;
+        // Nếu người xem đã qua màn hình bắt đầu thì lên lịch phát thuyết minh
+        if (this.hasUserStartedTour) {
+            this.scheduleVoiceover();
+        }
+    },
+
+    scheduleVoiceover() {
+        // Hủy lịch đếm ngược cũ nếu có
+        if (this.voiceDelayTimer) {
+            clearTimeout(this.voiceDelayTimer);
+            this.voiceDelayTimer = null;
+        }
+
+        if (!this.voiceEnabled || !this.config?.voiceover?.autoPlay) return;
+        if (!this.voiceAudio || !this.voiceAudio.src) return;
+        // Không tự động phát lặp lại nếu đang trong cùng 1 địa điểm đã nói
+        if (this.lastSpokenLocationId === this.currentLocationId) return;
+
+        const delaySec = this.config?.voiceover?.delayAfterSceneLoadSeconds ?? 2.0;
+        const delayMs = Math.round(delaySec * 1000);
+
+        console.log(`[TourAudio] Cảnh đã tải xong 100%. Đang chờ ${delaySec}s để phát thuyết minh (${this.currentLocationId})...`);
+
+        this.voiceDelayTimer = setTimeout(() => {
+            this.voiceDelayTimer = null;
+            if (!this.voiceEnabled || !this.voiceAudio || !this.voiceAudio.src) return;
+            if (this.isVoicePlaying) return;
+
+            this.lastSpokenLocationId = this.currentLocationId;
+            this.voiceAudio.volume = this.voiceEnabled ? this.voiceVolume : 0;
+            this.voiceAudio.play().then(() => {
+                this.isVoicePlaying = true;
+                this.updateVoiceUI();
+                console.log(`[TourAudio] Đang phát thuyết minh điểm: ${this.currentLocationId}`);
+            }).catch(err => {
+                console.warn('[TourAudio] Voice auto-play prevented:', err);
+            });
+        }, delayMs);
+    },
+
+    handleSceneChange(locId, sceneId, locData) {
+        if (!this.isInitialized) return;
+
+        // Đánh dấu cảnh mới đang bắt đầu tải
+        this.isSceneLoaded = false;
+        if (this.voiceDelayTimer) {
+            clearTimeout(this.voiceDelayTimer);
+            this.voiceDelayTimer = null;
+        }
+
+        // If location changed
+        if (locId && locId !== this.currentLocationId) {
+            this.currentLocationId = locId;
+
+            // Dừng thuyết minh của điểm trước
+            if (this.voiceAudio) {
+                this.voiceAudio.pause();
+                this.voiceAudio.currentTime = 0;
+                this.isVoicePlaying = false;
+                this.updateVoiceUI();
+                this.applyDucking(false);
+            }
+
+            // Find voice info for this location
+            const locVoice = this.config?.voiceover?.locations?.[locId] || (locData && locData.audio ? { title: locData.label, src: locData.audio } : null);
+
+            const voiceTitleEl = document.getElementById('voice-track-title');
+            const btnPlayVoice = document.getElementById('btn-play-voice');
+
+            if (locVoice && (locVoice.src || locVoice.fallbackSrc)) {
+                if (voiceTitleEl) voiceTitleEl.textContent = locVoice.title || `Thuyết minh: ${locData?.label || locId}`;
+                if (btnPlayVoice) btnPlayVoice.disabled = false;
+
+                const primarySrc = locVoice.src;
+                const fallbackSrc = locVoice.fallbackSrc;
+
+                this.voiceAudio.src = primarySrc;
+                this.voiceAudio.onerror = () => {
+                    if (fallbackSrc && this.voiceAudio.src !== fallbackSrc) {
+                        this.voiceAudio.src = fallbackSrc;
+                    }
+                };
+            } else {
+                if (voiceTitleEl) voiceTitleEl.textContent = 'Chưa có thuyết minh cho điểm này';
+                if (btnPlayVoice) btnPlayVoice.disabled = true;
+                if (this.voiceAudio) this.voiceAudio.removeAttribute('src');
+            }
+            this.updateVoiceUI();
+        }
+    },
+
+    toggleVoicePlayback() {
+        if (!this.voiceAudio || !this.voiceAudio.src) return;
+        if (this.voiceDelayTimer) {
+            clearTimeout(this.voiceDelayTimer);
+            this.voiceDelayTimer = null;
+        }
+        if (this.isVoicePlaying) {
+            this.voiceAudio.pause();
+        } else {
+            this.hasUserInteracted = true;
+            this.lastSpokenLocationId = this.currentLocationId;
+            this.voiceAudio.volume = this.voiceEnabled ? this.voiceVolume : 0;
+            this.voiceAudio.play().catch(e => console.warn('[TourAudio] Could not play voiceover:', e));
+        }
+    },
+
+    setVoiceVolume(val) {
+        this.voiceVolume = Math.max(0, Math.min(1, val));
+        if (this.voiceAudio) {
+            this.voiceAudio.volume = this.voiceEnabled ? this.voiceVolume : 0;
+        }
+        this.savePreferences();
+        this.updateSliders();
+    },
+
+    toggleVoice(enabled) {
+        this.voiceEnabled = (enabled !== undefined) ? enabled : !this.voiceEnabled;
+        if (this.voiceAudio) {
+            if (!this.voiceEnabled) {
+                if (this.voiceDelayTimer) {
+                    clearTimeout(this.voiceDelayTimer);
+                    this.voiceDelayTimer = null;
+                }
+                this.voiceAudio.pause();
+                this.isVoicePlaying = false;
+                this.updateVoiceUI();
+                this.applyDucking(false);
+            } else {
+                this.voiceAudio.volume = this.voiceVolume;
+            }
+        }
+        this.savePreferences();
+        this.updateVoiceUI();
+    },
+
+    updateButtonState() {
+        const btn = document.getElementById('btn-audio');
+        const iconSpeaker = document.querySelector('.icon-speaker');
+        const iconMuted = document.querySelector('.icon-speaker-muted');
+        if (!btn) return;
+
+        const isPlaying = (this.bgmAudio && !this.bgmAudio.paused) || this.isVoicePlaying;
+        const isMuted = !this.bgmEnabled && !this.voiceEnabled;
+
+        btn.classList.toggle('playing', isPlaying);
+        btn.classList.toggle('muted', isMuted);
+
+        if (iconSpeaker && iconMuted) {
+            iconSpeaker.classList.toggle('hidden', isMuted);
+            iconMuted.classList.toggle('hidden', !isMuted);
+        }
+    },
+
+    updateVoiceUI() {
+        const icon = document.getElementById('icon-voice-play');
+        const text = document.getElementById('text-voice-play');
+        const btn = document.getElementById('btn-play-voice');
+        if (icon && text) {
+            if (this.isVoicePlaying) {
+                icon.className = 'fa-solid fa-pause';
+                text.textContent = 'Tạm dừng thuyết minh';
+                if (btn) btn.classList.add('playing');
+            } else {
+                icon.className = 'fa-solid fa-play';
+                text.textContent = 'Phát thuyết minh';
+                if (btn) btn.classList.remove('playing');
+            }
+        }
+        this.updateButtonState();
+    },
+
+    updateSliders() {
+        const sliderBgm = document.getElementById('slider-bgm-volume');
+        const valBgm = document.getElementById('val-bgm-volume');
+        if (sliderBgm && valBgm) {
+            sliderBgm.value = Math.round(this.bgmVolume * 100);
+            valBgm.textContent = Math.round(this.bgmVolume * 100) + '%';
+        }
+
+        const sliderVoice = document.getElementById('slider-voice-volume');
+        const valVoice = document.getElementById('val-voice-volume');
+        if (sliderVoice && valVoice) {
+            sliderVoice.value = Math.round(this.voiceVolume * 100);
+            valVoice.textContent = Math.round(this.voiceVolume * 100) + '%';
+        }
+    },
+
+    setupUI() {
+        const btnAudio = document.getElementById('btn-audio');
+        const panel = document.getElementById('audio-panel');
+        const btnClose = document.getElementById('btn-close-audio-panel');
+        const toggleBgm = document.getElementById('toggle-bgm');
+        const sliderBgm = document.getElementById('slider-bgm-volume');
+        const toggleVoice = document.getElementById('toggle-voice');
+        const sliderVoice = document.getElementById('slider-voice-volume');
+        const btnPlayVoice = document.getElementById('btn-play-voice');
+
+        // Toggle panel on button click
+        if (btnAudio && panel) {
+            btnAudio.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('hidden');
+                btnAudio.classList.toggle('active', !panel.classList.contains('hidden'));
+            });
+
+            // Close on click outside
+            document.addEventListener('mousedown', (e) => {
+                if (!panel.classList.contains('hidden')) {
+                    if (!panel.contains(e.target) && !btnAudio.contains(e.target)) {
+                        panel.classList.add('hidden');
+                        btnAudio.classList.remove('active');
+                    }
+                }
+            });
+            document.addEventListener('touchstart', (e) => {
+                if (!panel.classList.contains('hidden')) {
+                    if (!panel.contains(e.target) && !btnAudio.contains(e.target)) {
+                        panel.classList.add('hidden');
+                        btnAudio.classList.remove('active');
+                    }
+                }
+            }, { passive: true });
+        }
+
+        if (btnClose && panel) {
+            btnClose.addEventListener('click', () => {
+                panel.classList.add('hidden');
+                if (btnAudio) btnAudio.classList.remove('active');
+            });
+        }
+
+        // BGM controls
+        if (toggleBgm) {
+            toggleBgm.checked = this.bgmEnabled;
+            toggleBgm.addEventListener('change', (e) => {
+                this.toggleBgm(e.target.checked);
+            });
+        }
+        if (sliderBgm) {
+            sliderBgm.value = Math.round(this.bgmVolume * 100);
+            sliderBgm.addEventListener('input', (e) => {
+                this.setBgmVolume(Number(e.target.value) / 100);
+            });
+        }
+
+        // Voiceover controls
+        if (toggleVoice) {
+            toggleVoice.checked = this.voiceEnabled;
+            toggleVoice.addEventListener('change', (e) => {
+                this.toggleVoice(e.target.checked);
+            });
+        }
+        if (sliderVoice) {
+            sliderVoice.value = Math.round(this.voiceVolume * 100);
+            sliderVoice.addEventListener('input', (e) => {
+                this.setVoiceVolume(Number(e.target.value) / 100);
+            });
+        }
+        if (btnPlayVoice) {
+            btnPlayVoice.addEventListener('click', () => {
+                this.toggleVoicePlayback();
+            });
+        }
+
+        this.updateSliders();
+        this.updateButtonState();
+    },
+
+    onUserStartTour() {
+        this.hasUserInteracted = true;
+        this.hasUserStartedTour = true;
+        if (this.bgmEnabled) {
+            this.playBgm();
+        }
+        // Nếu cảnh ban đầu đã load xong trước khi nhấn nút "Bắt đầu khám phá"
+        if (this.isSceneLoaded && this.currentLocationId) {
+            this.scheduleVoiceover();
+        }
+    }
+};

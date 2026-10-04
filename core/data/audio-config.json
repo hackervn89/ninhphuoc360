@@ -1,0 +1,73 @@
+{
+  "bgm": {
+    "enabled": true,
+    "defaultVolume": 0.30,
+    "currentTrack": "nhac_nen_cham",
+    "tracks": [
+      {
+        "id": "nhac_nen_cham",
+        "title": "Giai điệu truyền thống Ninh Phước",
+        "src": "core/assets/audio/bgm/nhac_nen_cham.mp3",
+        "fallbackSrc": "core/assets/audio/bgm/nhac_nen_mac_dinh.wav"
+      }
+    ]
+  },
+  "voiceover": {
+    "enabled": true,
+    "defaultVolume": 0.50,
+    "autoPlay": true,
+    "delayAfterSceneLoadSeconds": 2.0,
+    "ducking": {
+      "enabled": true,
+      "bgmVolumeWhenSpeaking": 0.20,
+      "fadeTime": 0.5
+    },
+    "locations": {
+      "den_po_klaong_car": {
+        "title": "Thuyết minh: Đền Po Klaong Car",
+        "src": "tours/den_po_klaong_car/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/den_po_klaong_car/audio/thuyet_minh.wav"
+      },
+      "htx_gom_bautruc": {
+        "title": "Thuyết minh: HTX Gốm Chăm Bàu Trúc",
+        "src": "tours/htx_gom_bautruc/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/htx_gom_bautruc/audio/thuyet_minh.wav"
+      },
+      "lang_gom": {
+        "title": "Thuyết minh: Làng Gốm Bàu Trúc",
+        "src": "tours/lang_gom/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/lang_gom/audio/thuyet_minh.wav"
+      },
+      "lang_my_nghiep": {
+        "title": "Thuyết minh: Làng dệt Thổ cẩm Mỹ Nghiệp",
+        "src": "tours/lang_my_nghiep/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/lang_my_nghiep/audio/thuyet_minh.wav"
+      },
+      "nha_sinh_hoat": {
+        "title": "Thuyết minh: Nhà sinh hoạt cộng đồng Chăm",
+        "src": "tours/nha_sinh_hoat/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/nha_sinh_hoat/audio/thuyet_minh.wav"
+      },
+      "bia_tuong_niem_van_phuoc": {
+        "title": "Thuyết minh: Bia tưởng niệm thảm sát Vạn Phước",
+        "src": "tours/bia_tuong_niem_van_phuoc/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/bia_tuong_niem_van_phuoc/audio/thuyet_minh.wav"
+      },
+      "nha_tuong_niem_tranthi": {
+        "title": "Thuyết minh: Nhà tưởng niệm đồng chí Trần Thi",
+        "src": "tours/nha_tuong_niem_tranthi/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/nha_tuong_niem_tranthi/audio/thuyet_minh.wav"
+      },
+      "dinh_lang_van_phuoc": {
+        "title": "Thuyết minh: Đình Làng Vạn Phước",
+        "src": "tours/dinh_lang_van_phuoc/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/dinh_lang_van_phuoc/audio/thuyet_minh.wav"
+      },
+      "trung_tam_hanh_chinh": {
+        "title": "Thuyết minh: Toàn cảnh xã Ninh Phước",
+        "src": "tours/trung_tam_hanh_chinh/audio/thuyet_minh.mp3",
+        "fallbackSrc": "tours/trung_tam_hanh_chinh/audio/thuyet_minh.wav"
+      }
+    }
+  }
+}

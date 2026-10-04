@@ -42,7 +42,7 @@
 		<hotspot name="hs_new_065451" style="muiten" ath="-116.4986" atv="22.8936" linkedscene="scene_1_congdinh" custom_title="Cổng đình Vạn Phước"/>
 		<hotspot name="hs_new_253702" style="muiten" ath="150.5687" atv="21.6346" linkedscene="scene_luoc_su_dinh" custom_title="Lược sử Đình Vạn Phước"/>
 		<hotspot name="hs_new_725540" style="muiten" ath="93.4570" atv="9.5598" linkedscene="scene_chinh_dien_san" custom_title="Sân Chính điện"/>
-		<hotspot name="hs_new_028876" style="muiten" ath="47.5132" atv="5.3920" linkedscene="scene_3_san_thanhminh" custom_title="Sân đình"/>
+		<hotspot name="hs_new_028876" style="muiten" ath="47.5132" atv="5.3920" linkedscene="scene_3_san_thanhminh" custom_title="Sân Thanh Minh"/>
 		<hotspot name="hs_return_tien_hien_san_4899" style="muiten" ath="-73.6465" atv="5.1887" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
 		<hotspot name="hs_new_144711" style="muiten" ath="126.6823" atv="7.6538" linkedscene="scene_tien_hien_san" custom_title="Sân Tiền Hiền"/>
 	</scene>
