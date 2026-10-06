@@ -1,9 +1,7 @@
 /**
  * WebXR Bridge for Ninh Phước 360
- * Cung cấp trải nghiệm Thực tế ảo Immersive 360 độ (Full 360°) 
- * chuẩn W3C WebXR Device API dành riêng cho kính VR độc lập (Meta Quest 3, Quest 2, Quest Pro, Pico 4).
- *
- * Tương thích 100% với KrPano 1.19 mà không cần nâng cấp license hay can thiệp vào core engine.
+ * Trải nghiệm Thực tế ảo Immersive 360 độ (Full 360°) chuẩn W3C WebXR
+ * Tối ưu hoá đặc biệt cho Meta Quest 3, Quest 2, Quest Pro và Pico 4.
  */
 
 window.WebXRBridge = (function () {
@@ -15,17 +13,16 @@ window.WebXRBridge = (function () {
     let scene = null;
     let camera = null;
     let xrSession = null;
-    let xrRefSpace = null;
 
-    // VR Scene Objects
-    let currentCubeTexture = null;
+    // 3D Scene Components
     let hotspotsGroup = null;
-    let hudGroup = null;
+    let toastGroup = null;
+    let fadeMesh = null;
     let raycaster = null;
     let controllers = [];
-    let hoveredObject = null;
+    let hoveredHotspot = null;
 
-    // Gaze Cursor (Head Tracking Reticle Fallback)
+    // Gaze Cursor (Khi người dùng không cầm tay cầm)
     let gazeReticle = null;
     let gazeTarget = null;
     let gazeStartTime = 0;
@@ -35,9 +32,10 @@ window.WebXRBridge = (function () {
     let activeSceneId = '';
     let isTransitioning = false;
     let lastThumbstickTime = 0;
+    let toastHideTimeout = null;
 
     /**
-     * Khởi tạo và nạp dữ liệu manifest các scene 360
+     * Nạp dữ liệu manifest đã tính toán sẵn 133 cảnh và 556 hotspots
      */
     async function init() {
         if (isInitialized) return;
@@ -46,15 +44,15 @@ window.WebXRBridge = (function () {
             if (res.ok) {
                 manifest = await res.json();
                 isInitialized = true;
-                console.log('[WebXRBridge] Đã nạp manifest cho', Object.keys(manifest).length, 'cảnh.');
+                console.log('[WebXRBridge] Đã nạp manifest cho', Object.keys(manifest).length, 'cảnh với đầy đủ Hotspots.');
             }
         } catch (e) {
-            console.warn('[WebXRBridge] Không thể tải vr-scenes-manifest.json:', e);
+            console.warn('[WebXRBridge] Không thể nạp vr-scenes-manifest.json:', e);
         }
     }
 
     /**
-     * Kiểm tra thiết bị và trình duyệt có hỗ trợ WebXR Immersive-VR không
+     * Kiểm tra trình duyệt và kính có hỗ trợ WebXR Immersive-VR không
      */
     async function isSupported() {
         if (!navigator.xr) return false;
@@ -66,25 +64,14 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Kích hoạt phiên WebXR Immersive-VR khi người dùng bấm nút VR
+     * Bắt đầu phiên thực tế ảo Immersive VR
      */
     async function enterVR() {
-        if (!navigator.xr) {
-            console.warn('[WebXRBridge] WebXR không được hỗ trợ.');
-            return false;
-        }
-
-        if (!isInitialized) {
-            await init();
-        }
-
-        if (typeof THREE === 'undefined') {
-            console.error('[WebXRBridge] Không tìm thấy thư viện Three.js.');
-            return false;
-        }
+        if (!navigator.xr) return false;
+        if (!isInitialized) await init();
+        if (typeof THREE === 'undefined') return false;
 
         try {
-            // Yêu cầu phiên Immersive-VR với Meta Quest
             const session = await navigator.xr.requestSession('immersive-vr', {
                 optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking']
             });
@@ -103,25 +90,22 @@ window.WebXRBridge = (function () {
                 sceneName = Object.keys(manifest)[0] || '';
             }
 
-            // Tải và hiển thị cảnh 360 đầu tiên
-            await loadScene(sceneName);
-
-            console.log('[WebXRBridge] Đã vào không gian thực tế ảo WebXR Full 360° thành công!');
+            await loadScene(sceneName, false);
+            console.log('[WebXRBridge] Đã vào không gian thực tế ảo WebXR Full 360°!');
             return true;
         } catch (err) {
-            console.error('[WebXRBridge] Lỗi khi khởi tạo WebXR Session:', err);
+            console.error('[WebXRBridge] Lỗi khởi tạo WebXR Session:', err);
             return false;
         }
     }
 
     /**
-     * Thiết lập Renderer, Camera, Raycaster và Controllers trong Three.js
+     * Cấu hình Three.js cho WebXR
      */
     function setupThreeJS(session) {
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-        // Tạo container WebGL Renderer ẩn để cấp Framebuffer cho WebXR
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
         renderer.setPixelRatio(window.devicePixelRatio || 1);
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -131,23 +115,36 @@ window.WebXRBridge = (function () {
 
         raycaster = new THREE.Raycaster();
 
-        // Nhóm chứa các Hotspot và HUD 3D
+        // Nhóm chứa toàn bộ Hotspots trong cảnh
         hotspotsGroup = new THREE.Group();
         scene.add(hotspotsGroup);
 
-        hudGroup = new THREE.Group();
-        scene.add(hudGroup);
+        // Nhóm chứa nhãn thông báo tên cảnh (tự ẩn sau 3.5 giây)
+        toastGroup = new THREE.Group();
+        scene.add(toastGroup);
+
+        // Màn che chuyển cảnh mượt mà (Fade mesh)
+        const fadeGeo = new THREE.SphereGeometry(0.3, 16, 16);
+        const fadeMat = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            side: THREE.BackSide,
+            transparent: true,
+            opacity: 0,
+            depthTest: false
+        });
+        fadeMesh = new THREE.Mesh(fadeGeo, fadeMat);
+        fadeMesh.renderOrder = 9999;
+        camera.add(fadeMesh);
+        scene.add(camera);
 
         setupControllers();
         setupGazeReticle();
-        buildVRHUD();
 
-        // Vòng lặp render chính cho WebXR
         renderer.setAnimationLoop(renderLoop);
     }
 
     /**
-     * Thiết lập tia laser và điểm trỏ cho Meta Quest Touch Controllers
+     * Cấu hình tia laser định vị cho tay cầm Meta Quest Touch
      */
     function setupControllers() {
         controllers = [];
@@ -155,19 +152,17 @@ window.WebXRBridge = (function () {
         for (let i = 0; i < 2; i++) {
             const controller = renderer.xr.getController(i);
 
-            // Sự kiện bóp cò (Trigger)
             controller.addEventListener('selectstart', onSelectStart);
-            controller.addEventListener('selectend', onSelectEnd);
 
-            // Tạo tia laser hiển thị hướng ngắm
+            // Tia laser mỏng phát sáng
             const laserGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, 0, 0),
-                new THREE.Vector3(0, 0, -5)
+                new THREE.Vector3(0, 0, -8)
             ]);
             const laserMat = new THREE.LineBasicMaterial({
                 color: 0x00f0ff,
                 transparent: true,
-                opacity: 0.6,
+                opacity: 0.5,
                 linewidth: 2
             });
             const laser = new THREE.Line(laserGeo, laserMat);
@@ -178,7 +173,7 @@ window.WebXRBridge = (function () {
             const dotGeo = new THREE.SphereGeometry(0.015, 12, 12);
             const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
             const dot = new THREE.Mesh(dotGeo, dotMat);
-            dot.position.z = -5;
+            dot.position.z = -8;
             dot.name = 'dot';
             controller.add(dot);
 
@@ -188,7 +183,7 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Thiết lập tâm ngắm Reticle (phục vụ người dùng khi không cầm tay cầm)
+     * Tâm ngắm Reticle (hỗ trợ khi không cầm tay cầm)
      */
     function setupGazeReticle() {
         const ringGeo = new THREE.RingGeometry(0.015, 0.025, 32);
@@ -196,150 +191,19 @@ window.WebXRBridge = (function () {
             color: 0xffffff,
             side: THREE.DoubleSide,
             transparent: true,
-            opacity: 0.75,
+            opacity: 0.8,
             depthTest: false
         });
         gazeReticle = new THREE.Mesh(ringGeo, ringMat);
-        gazeReticle.position.z = -2; // Cách mắt 2 mét
+        gazeReticle.position.z = -2;
         gazeReticle.renderOrder = 999;
         camera.add(gazeReticle);
-        scene.add(camera);
     }
 
     /**
-     * Xây dựng thanh điều khiển Menu nổi 3D (VR Control HUD)
+     * Nạp cảnh 360 độ và tạo các Hotspot tương ứng
      */
-    function buildVRHUD() {
-        hudGroup.clear();
-
-        // Tạo bảng HUD nổi ở vị trí thuận tầm mắt
-        hudGroup.position.set(0, 1.1, -2.2);
-        hudGroup.rotation.x = -0.15; // Hơi nghiêng lên phía mặt
-
-        // Nút Cảnh Trước
-        const btnPrev = createVRButton('⬅ Cảnh trước', -0.5, 0, () => navigateRelativeScene(-1));
-        hudGroup.add(btnPrev);
-
-        // Bảng tên cảnh hiện tại
-        const titleBadge = createVRTextBadge('Ninh Phước 360', 0, 0.12, 0.9, 0.16);
-        titleBadge.name = 'hudTitleBadge';
-        hudGroup.add(titleBadge);
-
-        // Nút Cảnh Kế
-        const btnNext = createVRButton('Cảnh kế ➡', 0.5, 0, () => navigateRelativeScene(1));
-        hudGroup.add(btnNext);
-
-        // Nút Thoát VR
-        const btnExit = createVRButton('✕ Thoát VR', 0, -0.18, () => exitVR(), 0xff3b30);
-        hudGroup.add(btnExit);
-    }
-
-    /**
-     * Tạo một nút bấm 3D tương tác trong VR
-     */
-    function createVRButton(text, x, y, onClickCallback, bgColor = 0x0a192f) {
-        const width = 0.38;
-        const height = 0.12;
-
-        const canvas = document.createElement('canvas');
-        canvas.width = 380;
-        canvas.height = 120;
-        const ctx = canvas.getContext('2d');
-
-        // Vẽ nền bo góc
-        ctx.fillStyle = bgColor === 0xff3b30 ? 'rgba(230, 40, 40, 0.85)' : 'rgba(15, 32, 67, 0.85)';
-        ctx.strokeStyle = '#00f0ff';
-        ctx.lineWidth = 6;
-        roundRect(ctx, 4, 4, 372, 112, 24);
-        ctx.fill();
-        ctx.stroke();
-
-        // Chữ
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 36px "Segoe UI", Arial, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(text, 190, 60);
-
-        const texture = new THREE.CanvasTexture(canvas);
-        const geo = new THREE.PlaneGeometry(width, height);
-        const mat = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            side: THREE.DoubleSide,
-            depthTest: false
-        });
-
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(x, y, 0);
-        mesh.userData = { isButton: true, onClick: onClickCallback, text: text, baseScale: 1 };
-        return mesh;
-    }
-
-    /**
-     * Tạo nhãn hiển thị tên cảnh hiện tại trên thanh HUD
-     */
-    function createVRTextBadge(text, x, y, width, height) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 900;
-        canvas.height = 160;
-        const ctx = canvas.getContext('2d');
-
-        ctx.fillStyle = 'rgba(5, 12, 28, 0.9)';
-        ctx.strokeStyle = '#ffb300';
-        ctx.lineWidth = 6;
-        roundRect(ctx, 4, 4, 892, 152, 20);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#ffb300';
-        ctx.font = 'bold 42px "Segoe UI", Arial, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(text, 450, 80);
-
-        const texture = new THREE.CanvasTexture(canvas);
-        const geo = new THREE.PlaneGeometry(width, height);
-        const mat = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            side: THREE.DoubleSide,
-            depthTest: false
-        });
-
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(x, y, 0);
-        mesh.userData = { canvas: canvas, ctx: ctx, texture: texture };
-        return mesh;
-    }
-
-    function updateVRHUDTitle(title) {
-        const badge = hudGroup.getObjectByName('hudTitleBadge');
-        if (!badge || !badge.userData.canvas) return;
-
-        const { canvas, ctx, texture } = badge.userData;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = 'rgba(5, 12, 28, 0.9)';
-        ctx.strokeStyle = '#ffb300';
-        ctx.lineWidth = 6;
-        roundRect(ctx, 4, 4, 892, 152, 20);
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = '#ffb300';
-        ctx.font = 'bold 40px "Segoe UI", Arial, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(title, 450, 80);
-
-        texture.needsUpdate = true;
-    }
-
-    /**
-     * Tải và áp dụng cảnh 360 độ mới
-     */
-    async function loadScene(sceneId) {
+    async function loadScene(sceneId, useFade = true) {
         if (!manifest || !manifest[sceneId]) {
             console.warn('[WebXRBridge] Không tìm thấy dữ liệu scene:', sceneId);
             return;
@@ -348,31 +212,37 @@ window.WebXRBridge = (function () {
         activeSceneId = sceneId;
         const sceneData = manifest[sceneId];
 
-        // Lấy tiêu đề cảnh
-        let sceneTitle = sceneId;
-        if (window.krpanoObj) {
-            sceneTitle = window.krpanoObj.get(`scene[${sceneId}].title`) || sceneId;
+        // Hiệu ứng mờ dần (Fade out) nếu chuyển cảnh
+        if (useFade && fadeMesh) {
+            await tweenFade(0, 1, 150);
         }
-        updateVRHUDTitle(sceneTitle);
 
-        // 1. Tải ảnh preview (Cubestrip LFRBUD) siêu nhanh (< 50ms)
+        // 1. Nạp ảnh Cubemap 360 độ (chuẩn LFRBUD)
         try {
             await loadPreviewCubemap(sceneData.preview);
         } catch (e) {
-            console.error('[WebXRBridge] Lỗi khi nạp preview:', e);
+            console.error('[WebXRBridge] Lỗi khi nạp preview cubemap:', e);
         }
 
-        // 2. Cập nhật các Hotspot 3D cho cảnh mới
-        updateVRHotspots(sceneId);
+        // 2. Hiển thị nhãn thông báo tên cảnh tinh tế (tự biến mất sau 3.5s)
+        showSceneToast(sceneData.title || sceneId);
 
-        // 3. Nâng cấp chất lượng lên Level 1 Tiles sắc nét trong nền
+        // 3. Tạo các Hotspot 3D sống động
+        createSceneHotspots(sceneData.hotspots || []);
+
+        // Mở sáng trở lại (Fade in)
+        if (useFade && fadeMesh) {
+            await tweenFade(1, 0, 200);
+        }
+
+        // 4. Nâng cấp chất lượng ảnh gạch L1 sắc nét trong nền
         if (sceneData.tilesDir) {
             loadHighResTiles(sceneData.tilesDir);
         }
     }
 
     /**
-     * Cắt ảnh preview.jpg (LFRBUD cubestrip) thành 6 mặt CubeTexture cho Three.js
+     * Cắt ảnh preview.jpg thành 6 mặt CubeTexture theo đúng tọa độ quang học
      */
     function loadPreviewCubemap(previewUrl) {
         return new Promise((resolve, reject) => {
@@ -392,11 +262,11 @@ window.WebXRBridge = (function () {
                     faceCanvases[stripOrder[i]] = c;
                 }
 
-                // Three.js CubeTexture thứ tự: [px, nx, py, ny, pz, nz]
-                // px=r, nx=l, py=u, ny=d, pz=b, nz=f
+                // Three.js background shader áp dụng flipEnvMap = -1.0 trên trục X:
+                // [px=l (bên Trái), nx=r (bên Phải), py=u (Trên), ny=d (Dưới), pz=b (Sau), nz=f (Trước)]
                 const cubeTex = new THREE.CubeTexture([
-                    faceCanvases.r,
                     faceCanvases.l,
+                    faceCanvases.r,
                     faceCanvases.u,
                     faceCanvases.d,
                     faceCanvases.b,
@@ -404,7 +274,6 @@ window.WebXRBridge = (function () {
                 ]);
                 cubeTex.needsUpdate = true;
                 scene.background = cubeTex;
-                currentCubeTexture = cubeTex;
                 resolve();
             };
             img.onerror = reject;
@@ -413,10 +282,10 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Ghép và nâng cấp các mảnh ảnh gạch (Level 1 multires tiles: 640x640)
+     * Nạp và ghép các mảnh gạch đa phân giải Level 1 sắc nét (640x640)
      */
     async function loadHighResTiles(tilesDir) {
-        const faces = ['r', 'l', 'u', 'd', 'b', 'f'];
+        const faces = ['l', 'r', 'u', 'd', 'b', 'f'];
         const faceCanvases = [];
 
         try {
@@ -426,7 +295,6 @@ window.WebXRBridge = (function () {
                 c.height = 640;
                 const ctx = c.getContext('2d');
 
-                // Nạp 4 mảnh tile của mặt: 01_01, 01_02, 02_01, 02_02
                 const p1 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_01.jpg`);
                 const p2 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_02.jpg`);
                 const p3 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_01.jpg`);
@@ -442,14 +310,11 @@ window.WebXRBridge = (function () {
                 faceCanvases.push(c);
             }
 
-            // Cập nhật lại CubeTexture với độ nét cao 640x640
             const hiResCubeTex = new THREE.CubeTexture(faceCanvases);
             hiResCubeTex.needsUpdate = true;
             scene.background = hiResCubeTex;
-            currentCubeTexture = hiResCubeTex;
         } catch (e) {
-            // Nếu có lỗi nạp tile, vẫn giữ nguyên ảnh preview hoàn chỉnh
-            console.warn('[WebXRBridge] Giữ nguyên ảnh preview do lỗi nạp tile sắc nét:', e);
+            console.warn('[WebXRBridge] Giữ nguyên ảnh preview do lỗi nạp gạch:', e);
         }
     }
 
@@ -464,109 +329,184 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Cập nhật các Hotspot 3D trong không gian VR từ KrPano
+     * Tạo các Hotspot 3D sống động từ danh sách đã trích xuất của cảnh
      */
-    function updateVRHotspots(sceneId) {
+    function createSceneHotspots(hotspotsList) {
         hotspotsGroup.clear();
-        if (!window.krpanoObj) return;
 
-        const count = Number(window.krpanoObj.get('hotspot.count')) || 0;
-        for (let i = 0; i < count; i++) {
-            const linkedscene = window.krpanoObj.get(`hotspot[${i}].linkedscene`);
-            if (!linkedscene) continue;
+        hotspotsList.forEach(hs => {
+            const mesh = createHotspotBillboard(hs.ath, hs.atv, hs.linkedscene, hs.title);
+            hotspotsGroup.add(mesh);
+        });
+    }
 
-            const ath = Number(window.krpanoObj.get(`hotspot[${i}].ath`)) || 0;
-            const atv = Number(window.krpanoObj.get(`hotspot[${i}].atv`)) || 0;
-            const title = window.krpanoObj.get(`hotspot[${i}].custom_title`) ||
-                window.krpanoObj.get(`hotspot[${i}].title`) || 'Xem tiếp';
+    /**
+     * Tạo một Hotspot 3D Billboard luôn hướng mặt về phía người dùng
+     */
+    function createHotspotBillboard(ath, atv, linkedscene, title) {
+        // Đặt ở bán kính 8 mét (khoảng cách tối ưu để nhìn rõ và bấm dễ dàng trong VR)
+        const R = 8.0;
+        const radAth = ath * (Math.PI / 180);
+        const radAtv = atv * (Math.PI / 180);
 
-            const hotspotMesh = create3DHotspot(ath, atv, linkedscene, title);
-            hotspotsGroup.add(hotspotMesh);
+        const r_h = R * Math.cos(radAtv);
+        const x = r_h * Math.sin(radAth);
+        const z = -r_h * Math.cos(radAth);
+        const y = 1.6 - R * Math.sin(radAtv);
+
+        // Vẽ biểu tượng Hotspot phát sáng trên Canvas 512x512
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 512;
+        const ctx = canvas.getContext('2d');
+
+        drawHotspotCanvas(ctx, title);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const geo = new THREE.PlaneGeometry(1.5, 1.5);
+        const mat = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            side: THREE.DoubleSide,
+            depthTest: false
+        });
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z);
+        mesh.renderOrder = 100;
+
+        mesh.userData = {
+            isHotspot: true,
+            linkedscene: linkedscene,
+            title: title,
+            baseScale: 1.0,
+            pulseOffset: Math.random() * Math.PI * 2
+        };
+
+        return mesh;
+    }
+
+    /**
+     * Vẽ biểu tượng Hotspot mũi tên phát sáng và biển tên điểm đến
+     */
+    function drawHotspotCanvas(ctx, title) {
+        ctx.clearRect(0, 0, 512, 512);
+
+        const cx = 256;
+        const cy = 200;
+
+        // Vòng hào quang phát sáng ngoài
+        const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 90);
+        gradGlow.addColorStop(0, 'rgba(0, 240, 255, 0.6)');
+        gradGlow.addColorStop(0.5, 'rgba(0, 240, 255, 0.2)');
+        gradGlow.addColorStop(1, 'rgba(0, 240, 255, 0)');
+        ctx.fillStyle = gradGlow;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 90, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Vòng tròn trung tâm
+        ctx.fillStyle = 'rgba(10, 25, 47, 0.9)';
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 55, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Mũi tên chỉ hướng tiến về phía trước (Chevron Arrow)
+        ctx.fillStyle = '#00f0ff';
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - 25);
+        ctx.lineTo(cx + 25, cy + 5);
+        ctx.lineTo(cx + 14, cy + 18);
+        ctx.lineTo(cx, cy + 4);
+        ctx.lineTo(cx - 14, cy + 18);
+        ctx.lineTo(cx - 25, cy + 5);
+        ctx.closePath();
+        ctx.fill();
+
+        // Biển tên điểm đến bên dưới (Pill badge)
+        if (title) {
+            ctx.font = 'bold 32px "Segoe UI", Arial, sans-serif';
+            const textMetrics = ctx.measureText(title);
+            const badgeW = Math.min(480, Math.max(160, textMetrics.width + 48));
+            const badgeH = 64;
+            const badgeX = cx - badgeW / 2;
+            const badgeY = cy + 75;
+
+            // Nền bóng kính
+            ctx.fillStyle = 'rgba(5, 12, 28, 0.9)';
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 4;
+            roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 18);
+            ctx.fill();
+            ctx.stroke();
+
+            // Chữ
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(title, cx, badgeY + badgeH / 2);
         }
     }
 
     /**
-     * Tạo một Hotspot 3D nổi dạng vòng tròn phát sáng và biển tên
+     * Hiển thị bảng tên cảnh thanh lịch nổi phía trên tầm mắt, tự ẩn sau 3.5 giây
      */
-    function create3DHotspot(ath, atv, linkedscene, title) {
-        const group = new THREE.Group();
+    function showSceneToast(title) {
+        toastGroup.clear();
+        if (toastHideTimeout) clearTimeout(toastHideTimeout);
 
-        // Chuyển đổi tọa độ cầu sang tọa độ 3D Descarte
-        const radius = 22; // Khoảng cách 22 mét
-        const radAth = ath * (Math.PI / 180);
-        const radAtv = atv * (Math.PI / 180);
-
-        const r_h = radius * Math.cos(radAtv);
-        const x = r_h * Math.sin(radAth);
-        const y = -radius * Math.sin(radAtv);
-        const z = -r_h * Math.cos(radAth);
-
-        group.position.set(x, y, z);
-
-        // Vòng tròn định hướng
-        const ringGeo = new THREE.RingGeometry(0.8, 1.2, 32);
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: 0x00f0ff,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.85
-        });
-        const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-        ringMesh.rotation.x = Math.PI / 2; // Nằm ngang song song mặt đất
-        group.add(ringMesh);
-
-        // Biển tên điểm đến
-        const labelMesh = createHotspotLabel(title);
-        labelMesh.position.y = 1.6;
-        group.add(labelMesh);
-
-        // Dữ liệu phục vụ tương tác Raycasting
-        group.userData = {
-            isHotspot: true,
-            linkedscene: linkedscene,
-            title: title,
-            ringMesh: ringMesh,
-            labelMesh: labelMesh,
-            baseScale: 1
-        };
-
-        return group;
-    }
-
-    /**
-     * Tạo nhãn chữ nổi cho Hotspot
-     */
-    function createHotspotLabel(text) {
         const canvas = document.createElement('canvas');
-        canvas.width = 512;
+        canvas.width = 800;
         canvas.height = 160;
         const ctx = canvas.getContext('2d');
 
-        // Nền bóng kính bo góc
-        ctx.fillStyle = 'rgba(10, 25, 47, 0.85)';
-        ctx.strokeStyle = '#00f0ff';
+        // Nền bóng kính bo tròn góc
+        ctx.fillStyle = 'rgba(5, 12, 28, 0.85)';
+        ctx.strokeStyle = 'rgba(255, 179, 0, 0.8)';
         ctx.lineWidth = 6;
-        roundRect(ctx, 4, 4, 504, 152, 24);
+        roundRect(ctx, 8, 8, 784, 144, 30);
         ctx.fill();
         ctx.stroke();
 
-        // Chữ
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 38px "Segoe UI", Arial, sans-serif';
+        // Chữ tên địa danh
+        ctx.fillStyle = '#ffb300';
+        ctx.font = 'bold 46px "Segoe UI", Arial, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(text, 256, 80);
+        ctx.fillText('📍 ' + title, 400, 80);
 
         const texture = new THREE.CanvasTexture(canvas);
-        const geo = new THREE.PlaneGeometry(3.2, 1.0);
+        const geo = new THREE.PlaneGeometry(2.0, 0.4);
         const mat = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
-            side: THREE.DoubleSide
+            opacity: 1.0,
+            depthTest: false
         });
 
         const mesh = new THREE.Mesh(geo, mat);
-        return mesh;
+        // Đặt ở vị trí cao phía trên tầm nhìn 15 độ, cách 3.5 mét
+        mesh.position.set(0, 2.2, -3.5);
+        mesh.rotation.x = 0.15;
+        mesh.renderOrder = 200;
+        toastGroup.add(mesh);
+
+        // Mờ dần và ẩn sau 3.5 giây để trả lại không gian 360° thoáng đãng
+        toastHideTimeout = setTimeout(() => {
+            let op = 1.0;
+            const fadeInterval = setInterval(() => {
+                op -= 0.05;
+                if (op <= 0) {
+                    clearInterval(fadeInterval);
+                    toastGroup.clear();
+                } else {
+                    mat.opacity = op;
+                }
+            }, 30);
+        }, 3500);
     }
 
     /**
@@ -576,18 +516,17 @@ window.WebXRBridge = (function () {
         if (isTransitioning || sceneId === activeSceneId) return;
         isTransitioning = true;
 
-        // Báo KrPano nạp cảnh để kích hoạt thuyết minh âm thanh
+        // Báo KrPano cập nhật cảnh để kích hoạt giọng thuyết minh âm thanh
         if (window.krpanoObj) {
             window.krpanoObj.call(`loadscene(${sceneId}, null, MERGE, BLEND(0.5));`);
         }
 
-        // Tải cảnh 360 trong WebXR
-        await loadScene(sceneId);
+        await loadScene(sceneId, true);
         isTransitioning = false;
     }
 
     /**
-     * Chuyển sang cảnh tiếp theo hoặc cảnh trước
+     * Chuyển sang cảnh tiếp theo / cảnh trước bằng cần gạt Thumbstick
      */
     function navigateRelativeScene(delta) {
         if (!manifest) return;
@@ -600,69 +539,56 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Sự kiện bóp cò (Trigger Click) trên tay cầm Meta Quest
+     * Xử lý bóp cò (Trigger) trên tay cầm Quest
      */
     function onSelectStart(event) {
         const controller = event.target;
         raycaster.set(controller.position, controller.getWorldDirection(new THREE.Vector3()).negate());
 
-        // Kiểm tra tương tác với các nút trên HUD hoặc Hotspots
-        const interactiveObjects = [];
-        hudGroup.traverse(child => {
-            if (child.userData && (child.userData.isButton || child.userData.onClick)) {
-                interactiveObjects.push(child);
-            }
-        });
-        hotspotsGroup.traverse(child => {
-            if (child.userData && child.userData.isHotspot) {
-                interactiveObjects.push(child);
-            }
-        });
+        const targets = hotspotsGroup.children;
+        const intersects = raycaster.intersectObjects(targets, true);
 
-        const intersects = raycaster.intersectObjects(interactiveObjects, true);
         if (intersects.length > 0) {
             let hit = intersects[0].object;
-            while (hit && !hit.userData.isButton && !hit.userData.isHotspot && hit.parent) {
+            while (hit && !hit.userData.isHotspot && hit.parent) {
                 hit = hit.parent;
             }
 
-            if (hit && hit.userData) {
-                // Rung phản hồi cảm ứng nhẹ trên tay cầm Quest (Haptic Pulse)
+            if (hit && hit.userData && hit.userData.linkedscene) {
+                // Rung phản hồi nhẹ (Haptic pulse) trên tay cầm
                 if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                    controller.gamepad.hapticActuators[0].pulse(0.6, 60);
+                    controller.gamepad.hapticActuators[0].pulse(0.7, 50);
                 }
-
-                if (hit.userData.onClick) {
-                    hit.userData.onClick();
-                } else if (hit.userData.linkedscene) {
-                    switchScene(hit.userData.linkedscene);
-                }
+                switchScene(hit.userData.linkedscene);
             }
         }
     }
-
-    function onSelectEnd() { }
 
     /**
      * Vòng lặp Render chính của WebXR
      */
     function renderLoop(time, frame) {
-        // Luôn xoay các Hotspot quay mặt về phía người dùng (Billboard)
+        // 1. Luôn xoay các Hotspot hướng mặt về phía camera (Billboard hoàn hảo, không bao giờ bị dẹp)
         hotspotsGroup.children.forEach(hs => {
             hs.lookAt(camera.position);
+
+            // Hiệu ứng phập phồng nhẹ tạo cảm giác sống động (Pulse animation)
+            const pulse = 1 + 0.05 * Math.sin(time * 0.004 + (hs.userData.pulseOffset || 0));
+            const targetScale = hs === hoveredHotspot ? 1.25 : pulse;
+            hs.scale.set(targetScale, targetScale, 1);
         });
 
-        // Kiểm tra tương tác con trỏ và cần gạt Thumbstick trên tay cầm
+        // 2. Xử lý tương tác tay cầm Quest Touch
         handleControllerInteractions();
 
-        // Kiểm tra cơ chế ngắm Gaze Reticle nếu không dùng tay cầm
+        // 3. Xử lý tâm ngắm tự động nếu không dùng tay cầm
         handleGazeInteraction(time);
 
         renderer.render(scene, camera);
     }
 
     /**
-     * Xử lý tương tác tia laser và lướt cần gạt (Thumbstick) trên tay cầm Quest
+     * Xử lý tia laser ngắm và cần gạt Thumbstick
      */
     function handleControllerInteractions() {
         let anyControllerActive = false;
@@ -677,11 +603,7 @@ window.WebXRBridge = (function () {
             const rayDir = new THREE.Vector3(0, 0, -1).applyMatrix4(tempMatrix);
             raycaster.set(controller.position, rayDir);
 
-            // Kiểm tra tương tác Raycast
-            const targets = [];
-            hudGroup.traverse(c => { if (c.userData && (c.userData.isButton || c.userData.onClick)) targets.push(c); });
-            hotspotsGroup.traverse(c => { if (c.userData && c.userData.isHotspot) targets.push(c); });
-
+            const targets = hotspotsGroup.children;
             const hits = raycaster.intersectObjects(targets, true);
             const dot = controller.getObjectByName('dot');
 
@@ -689,28 +611,30 @@ window.WebXRBridge = (function () {
                 const dist = hits[0].distance;
                 if (dot) dot.position.z = -dist;
 
-                // Hiệu ứng rê chuột (Hover)
                 let hitObj = hits[0].object;
-                while (hitObj && !hitObj.userData.isButton && !hitObj.userData.isHotspot && hitObj.parent) {
+                while (hitObj && !hitObj.userData.isHotspot && hitObj.parent) {
                     hitObj = hitObj.parent;
                 }
-                if (hitObj) {
-                    hitObj.scale.set(1.15, 1.15, 1.15);
-                    hoveredObject = hitObj;
+
+                if (hitObj && hitObj !== hoveredHotspot) {
+                    hoveredHotspot = hitObj;
+                    // Rung nhẹ 15ms khi tia laser chạm vào Hotspot
+                    if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
+                        controller.gamepad.hapticActuators[0].pulse(0.3, 15);
+                    }
                 }
             } else {
-                if (dot) dot.position.z = -5;
-                if (hoveredObject) {
-                    hoveredObject.scale.set(1, 1, 1);
-                    hoveredObject = null;
+                if (dot) dot.position.z = -8;
+                if (hoveredHotspot) {
+                    hoveredHotspot = null;
                 }
             }
 
-            // Xử lý cần gạt Thumbstick: Gạt sang phải -> Cảnh kế, Gạt sang trái -> Cảnh trước
+            // Gạt cần Thumbstick trên tay cầm: Gạt phải -> Cảnh kế, Gạt trái -> Cảnh trước
             if (controller.gamepad && controller.gamepad.axes && controller.gamepad.axes.length >= 4) {
-                const stickX = controller.gamepad.axes[2]; // Trục ngang Thumbstick
+                const stickX = controller.gamepad.axes[2];
                 const now = Date.now();
-                if (now - lastThumbstickTime > 600) {
+                if (now - lastThumbstickTime > 500) {
                     if (stickX > 0.6) {
                         navigateRelativeScene(1);
                         lastThumbstickTime = now;
@@ -722,27 +646,24 @@ window.WebXRBridge = (function () {
             }
         });
 
-        // Nếu có tay cầm hoạt động thì ẩn tâm ngắm Gaze Reticle
         if (gazeReticle) {
             gazeReticle.visible = !anyControllerActive;
         }
     }
 
     /**
-     * Xử lý cơ chế ngắm tự động (Gaze Dwell) khi không cầm tay cầm
+     * Xử lý cơ chế ngắm tự động (Gaze Dwell)
      */
     function handleGazeInteraction(time) {
         if (!gazeReticle || !gazeReticle.visible) return;
 
         raycaster.set(camera.position, camera.getWorldDirection(new THREE.Vector3()));
-        const targets = [];
-        hudGroup.traverse(c => { if (c.userData && (c.userData.isButton || c.userData.onClick)) targets.push(c); });
-        hotspotsGroup.traverse(c => { if (c.userData && c.userData.isHotspot) targets.push(c); });
-
+        const targets = hotspotsGroup.children;
         const hits = raycaster.intersectObjects(targets, true);
+
         if (hits.length > 0) {
             let hit = hits[0].object;
-            while (hit && !hit.userData.isButton && !hit.userData.isHotspot && hit.parent) {
+            while (hit && !hit.userData.isHotspot && hit.parent) {
                 hit = hit.parent;
             }
 
@@ -755,10 +676,7 @@ window.WebXRBridge = (function () {
                 gazeReticle.scale.set(1 + progress * 0.5, 1 + progress * 0.5, 1);
 
                 if (elapsed >= GAZE_DWELL_TIME) {
-                    // Tự động kích hoạt khi ngắm đủ thời gian
-                    if (gazeTarget.userData.onClick) {
-                        gazeTarget.userData.onClick();
-                    } else if (gazeTarget.userData.linkedscene) {
+                    if (gazeTarget.userData && gazeTarget.userData.linkedscene) {
                         switchScene(gazeTarget.userData.linkedscene);
                     }
                     gazeTarget = null;
@@ -772,23 +690,31 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Thoát khỏi chế độ VR
+     * Hiệu ứng chuyển cảnh mịn màng (Fade transition)
      */
-    function exitVR() {
-        if (xrSession) {
-            xrSession.end();
-        }
+    function tweenFade(fromAlpha, toAlpha, duration) {
+        return new Promise(resolve => {
+            const startTime = Date.now();
+            const step = () => {
+                const elapsed = Date.now() - startTime;
+                const t = Math.min(1.0, elapsed / duration);
+                fadeMesh.material.opacity = fromAlpha + (toAlpha - fromAlpha) * t;
+                if (t < 1.0) {
+                    requestAnimationFrame(step);
+                } else {
+                    resolve();
+                }
+            };
+            step();
+        });
     }
 
-    /**
-     * Xử lý khi phiên WebXR kết thúc
-     */
     function onSessionEnded() {
         xrSession = null;
         if (renderer) {
             renderer.setAnimationLoop(null);
         }
-        console.log('[WebXRBridge] Đã thoát chế độ VR. Trở về giao diện tour 2D.');
+        console.log('[WebXRBridge] Đã thoát VR. Trở về giao diện tour 2D.');
     }
 
     function roundRect(ctx, x, y, width, height, radius) {
@@ -809,12 +735,11 @@ window.WebXRBridge = (function () {
         init: init,
         isSupported: isSupported,
         enterVR: enterVR,
-        exitVR: exitVR,
         loadScene: switchScene
     };
 })();
 
-// Tự động nạp manifest khi script khởi động
+// Tự động nạp manifest khi trang tải xong
 document.addEventListener('DOMContentLoaded', () => {
     if (window.WebXRBridge) {
         window.WebXRBridge.init();
