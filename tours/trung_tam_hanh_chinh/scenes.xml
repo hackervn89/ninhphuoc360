@@ -66,7 +66,6 @@
 		</image>
 		<hotspot name="hs_return_cong_lang_bau_truc_0685" style="muiten" ath="-122.8613" atv="9.5221" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
 		<hotspot name="hs_return_toancanh_300m_4510" style="trenkhong" ath="26.0032" atv="-43.2795" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
-		<hotspot name="hs_return_toancanh_100m_3361" style="pulse_dot" ath="-106.5594" atv="14.2041" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước (100m)"/>
 	</scene>
 	<scene name="scene_trung_tam_hanh_chinh" title="Trung tâm hành chính xã" thumburl="panos/trung_tam_hanh_chinh.tiles/thumb.jpg" lat="11.524983937711859" lng="108.92793699643062">
 		<view fovtype="MFOV" hlookat="-113.4" vlookat="5.5" fov="105.0" fovmin="60" fovmax="105"/>

@@ -376,8 +376,16 @@ function initUI() {
         });
     }
 
-    // VR
-    document.getElementById('btn-vr')?.addEventListener('click', () => {
+    // VR Mode (Native WebXR for Meta Quest 3, fallback to KrPano Cardboard for phones)
+    document.getElementById('btn-vr')?.addEventListener('click', async () => {
+        try {
+            if (window.WebXRBridge && await window.WebXRBridge.isSupported()) {
+                const entered = await window.WebXRBridge.enterVR();
+                if (entered) return;
+            }
+        } catch (e) {
+            console.warn('WebXR check error, falling back to KrPano WebVR:', e);
+        }
         if (krpanoObj) krpanoObj.call("webvr.enterVR();");
     });
 

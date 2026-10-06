@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2880 250" width="2880" height="250">
+  <defs>
+    <linearGradient id="id0" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ED2F5A" />
+      <stop offset="50%" stop-color="#F47D93" />
+      <stop offset="100%" stop-color="#FACBCC" />
+    </linearGradient>
+    <filter id="ds">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset in="blur" dx="0" dy="2" result="offsetBlur"/>
+      <feMerge><feMergeNode in="offsetBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(60, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="1" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(180, 123.88888888888889) scale(0.7525000000000001, 2.7950000000000004) translate(-50, 0)" opacity="1" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(300, 117.77777777777777) scale(0.735, 2.7300000000000004) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(420, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(420, 111.66666666666667) scale(0.7175, 2.6650000000000005) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(540, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(540, 105.55555555555556) scale(0.7, 2.6) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(660, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(660, 99.44444444444444) scale(0.6825, 2.535) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(780, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(780, 93.33333333333334) scale(0.665, 2.47) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(900, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(900, 87.22222222222223) scale(0.6475, 2.4050000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1020, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1020, 81.11111111111111) scale(0.63, 2.3400000000000003) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1140, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1140, 75) scale(0.6124999999999999, 2.275) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1260, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1260, 68.88888888888889) scale(0.595, 2.2100000000000004) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1380, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.8" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1380, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1380, 62.77777777777777) scale(0.5774999999999999, 2.145) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1500, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.80" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1500, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1500, 56.66666666666667) scale(0.5599999999999999, 2.08) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1620, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.72" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1620, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1620, 50.55555555555556) scale(0.5425, 2.015) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1740, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.64" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1740, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1740, 44.44444444444444) scale(0.5249999999999999, 1.9500000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1860, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.56" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1860, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1860, 38.33333333333333) scale(0.5075000000000001, 1.8850000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1980, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.48" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(1980, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(1980, 32.22222222222223) scale(0.49, 1.8200000000000003) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2100, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.40" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2100, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(2100, 26.111111111111114) scale(0.4725, 1.7550000000000001) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2220, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.32" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2220, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.65" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(2220, 20) scale(0.45499999999999996, 1.6900000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2340, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.24" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2340, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.49" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(2340, 20) scale(0.45499999999999996, 1.6900000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2460, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.16" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2460, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.33" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(2460, 20) scale(0.45499999999999996, 1.6900000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2580, 130) scale(0.77, 2.8600000000000003) translate(-50, 0)" opacity="0.08" />
+  
+        <polyline points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="none" stroke="#ED2F5A" stroke-width="3" 
+                  filter="url(#ds)" transform="translate(2580, 65) scale(0.581, 2.1580000000000004) translate(-50, 0)" opacity="0.16" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(2580, 20) scale(0.45499999999999996, 1.6900000000000002) translate(-50, 0)" opacity="1" />
+  
+        <polygon points="50,0 100,25 85,35 50,15 15,35 0,25 50,0" fill="url(#id0)" filter="url(#ds)" 
+                 transform="translate(2700, 20) scale(0.45499999999999996, 1.6900000000000002) translate(-50, 0)" opacity="1" />
+  
+</svg>
