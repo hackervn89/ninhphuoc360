@@ -376,7 +376,7 @@ function initUI() {
         });
     }
 
-    // VR Mode (Native WebXR for Meta Quest 3, fallback to KrPano Cardboard for phones)
+    // VR Mode (Native WebXR cho Meta Quest 3, tự động kích hoạt VR Simulator trên PC)
     document.getElementById('btn-vr')?.addEventListener('click', async () => {
         try {
             if (window.WebXRBridge && await window.WebXRBridge.isSupported()) {
@@ -384,9 +384,28 @@ function initUI() {
                 if (entered) return;
             }
         } catch (e) {
-            console.warn('WebXR check error, falling back to KrPano WebVR:', e);
+            console.warn('WebXR check error, falling back:', e);
+        }
+        // Nếu không có kính VR thực tế (đang dùng PC/Laptop): Mở ngay Bộ giả lập VR trên Desktop!
+        if (window.WebXRBridge) {
+            window.WebXRBridge.enterSimulator();
+            return;
         }
         if (krpanoObj) krpanoObj.call("webvr.enterVR();");
+    });
+
+    // Phím tắt nhanh 'V' trên bàn phím máy tính để bật/tắt Bộ giả lập VR (Simulator)
+    window.addEventListener('keydown', (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        if ((e.key === 'v' || e.key === 'V') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            if (window.WebXRBridge) {
+                if (window.WebXRBridge.isSimulatorRunning && window.WebXRBridge.isSimulatorRunning()) {
+                    window.WebXRBridge.exitSimulator();
+                } else {
+                    window.WebXRBridge.enterSimulator();
+                }
+            }
+        }
     });
 
     // Fullscreen

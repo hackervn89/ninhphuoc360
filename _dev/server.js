@@ -17,6 +17,15 @@ const path = require('path');
 const fs = require('fs');
 const { execFile } = require('child_process');
 const xml2js = require('xml2js');
+const { extractManifest } = require('./extract-manifest');
+
+function safeUpdateManifest() {
+    try {
+        extractManifest();
+    } catch (e) {
+        console.error('[VR Manifest Error]', e);
+    }
+}
 
 const app = express();
 const PORT = 3600;
@@ -196,6 +205,7 @@ function getCustomLocationNames() {
 
 function saveCustomLocationNames(namesMap) {
     fs.writeFileSync(LOCATIONS_JSON, JSON.stringify(namesMap, null, 2), 'utf-8');
+    safeUpdateManifest();
 }
 
 // ============================================================
@@ -547,6 +557,7 @@ app.post('/api/scenes/rename', async (req, res) => {
         content = content.replace(sceneTitleRegex, `$1${newTitle.trim()}$2`);
 
         fs.writeFileSync(targetFile, content, 'utf-8');
+        safeUpdateManifest();
         res.json({ success: true, message: `Đã đổi tên cảnh thành "${newTitle.trim()}"` });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
@@ -613,6 +624,7 @@ app.post('/api/scenes/reorder', async (req, res) => {
         const newContent = `${header}\n\t${reorderedBlocks.join('\n\n\t')}\n</krpano>\n`;
 
         fs.writeFileSync(scenesXmlPath, newContent, 'utf-8');
+        safeUpdateManifest();
         res.json({ success: true, message: `Đã cập nhật thứ tự ${reorderedBlocks.length} cảnh cho "${locationId}"` });
     } catch (err) {
         console.error('Reorder error:', err);
@@ -724,6 +736,8 @@ app.post('/api/scenes/move-location', async (req, res) => {
             console.log(`   🗑️ Đã xóa include "${sourceIncludeUrl}" khỏi tour.xml`);
         }
 
+        safeUpdateManifest();
+
         res.json({
             success: true,
             message: `Đã di chuyển cảnh thành công sang địa điểm mới!`
@@ -808,6 +822,7 @@ app.post('/api/scenes/delete', async (req, res) => {
             } catch (cleanErr) {}
         }
 
+        safeUpdateManifest();
         res.json({ success: true, message: `Đã xóa cảnh "${sceneId}" và dọn dẹp toàn bộ dữ liệu liên quan` });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
@@ -1061,6 +1076,7 @@ ${levelsXml}
     }
 
     fs.writeFileSync(scenesXmlPath, content, 'utf-8');
+    safeUpdateManifest();
     
     // Clean up temp XML file if generated
     if (fs.existsSync(tempSceneXmlPath)) {
@@ -1253,6 +1269,8 @@ app.post('/api/scenes/save', async (req, res) => {
             });
         }
 
+        safeUpdateManifest();
+
         res.json({ 
             success: true, 
             message: `Đã lưu ${hotspots ? hotspots.length : 0} hotspot(s) vào ${path.basename(targetFile)}`,
@@ -1387,6 +1405,7 @@ function ensureReturnHotspot(fromSceneId, toSceneId, ath, atv, style, isExplicit
     const returnHsXml = `\t\t<hotspot name="${newHsName}" style="${hsStyle}" ath="${returnAthStr}" atv="${returnAtvStr}" linkedscene="${fromSceneId}" custom_title="${fromSceneTitle}"/>\n\t`;
     const newContent = content.replace(sceneRegex, (m, p1, p2) => `${p1}${returnHsXml}${p2}`);
     fs.writeFileSync(targetFile, newContent, 'utf-8');
+    safeUpdateManifest();
     console.log(`🔄 Created return hotspot in "${toSceneId}" -> "${fromSceneId}" (${path.basename(targetFile)}) at ath=${returnAthStr}, atv=${returnAtvStr}`);
     return { success: true, created: true, updated: false, ath: returnAthStr, atv: returnAtvStr, file: targetFile };
 }
@@ -1507,6 +1526,7 @@ app.post('/api/scenes/view', async (req, res) => {
         content = content.replace(sceneRegex, newSceneContent);
 
         fs.writeFileSync(targetFile, content, 'utf-8');
+        safeUpdateManifest();
 
         console.log(`🎥 Đã lưu view cho scene "${sceneId}": h=${h}°, v=${v}°, fov=${f}°, fovmin=${fmin}°, fovmax=${fmax}°, pixelzoom=${mpz}x → ${path.basename(targetFile)}`);
 
@@ -1593,6 +1613,7 @@ app.post('/api/scenes/prealign', async (req, res) => {
         content = content.replace(sceneRegex, newSceneContent);
 
         fs.writeFileSync(targetFile, content, 'utf-8');
+        safeUpdateManifest();
 
         res.json({
             success: true,
@@ -1633,6 +1654,7 @@ app.delete('/api/scenes/:sceneId', async (req, res) => {
                         );
                         content = content.replace(sceneRegex, '');
                         fs.writeFileSync(filePath, content, 'utf-8');
+                        safeUpdateManifest();
                         removedFrom = includeUrl;
                         break;
                     }
