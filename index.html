@@ -168,10 +168,19 @@
     <!-- UI Overlay Layer -->
     <div id="ui-layer">
 
-        <!-- Logo / Brand -->
+        <!-- Logo / Brand & Visitor Counter -->
         <div class="logo-compact glass-panel" id="logo-area">
             <h1>Ninh Phước 360°</h1>
             <span class="subtitle" id="current-scene-title">Đang tải...</span>
+            <div class="visitor-badge" id="visitor-badge" title="Thống kê khách tham quan thời gian thực (Bấm để xem chi tiết)">
+                <div class="live-dot-wrapper">
+                    <span class="live-pulse"></span>
+                    <span class="live-dot"></span>
+                </div>
+                <span class="stat-item"><strong id="online-count">1</strong> đang tham quan</span>
+                <span class="stat-divider">•</span>
+                <span class="stat-item"><i class="fa-solid fa-eye stat-icon"></i><strong id="total-count">...</strong> tổng lượt</span>
+            </div>
         </div>
 
         <!-- Desktop QR Code -->
@@ -360,9 +369,10 @@
     </div>
 
     <script src="core/libs/three.min.js"></script>
-    <script src="core/js/webxr-bridge.js?v=1.4.0"></script>
+    <script src="core/js/webxr-bridge.js?v=1.4.2"></script>
     <script src="engine/tour.js"></script>
     <script src="core/js/app.js?v=2.9.0"></script>
+    <script type="module" src="core/js/visitor-counter.js?v=1.0.6"></script>
 </body>
 
 </html>

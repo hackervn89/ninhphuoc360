@@ -140,6 +140,14 @@ function extractManifest() {
                 }
             }
 
+            // Levels
+            const levels = {};
+            const lvlRegex = /<level\s+tiledimagewidth="(\d+)"\s+tiledimageheight="(\d+)">\s*<cube\s+url="[^"]*\/l(\d+)\//g;
+            let lm;
+            while ((lm = lvlRegex.exec(body)) !== null) {
+                levels['l' + lm[3]] = parseInt(lm[1], 10);
+            }
+
             manifest[sName] = {
                 tour: t,
                 title: sTitle,
@@ -149,6 +157,7 @@ function extractManifest() {
                 hlookat: hlookat,
                 vlookat: vlookat,
                 fov: fov,
+                levels: levels,
                 hotspots: hsList
             };
 

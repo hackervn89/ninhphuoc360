@@ -492,9 +492,10 @@ html {
 }
 
 .logo-compact h1,
-.logo-compact .subtitle {
+.logo-compact .subtitle,
+.logo-compact .visitor-badge {
     pointer-events: auto;
-    /* Text remains interactive if needed (e.g. for selection or future links) */
+    /* Text and badge remain interactive */
 }
 
 .logo-compact h1 {
@@ -1833,3 +1834,221 @@ html {
     background: var(--primary);
     color: #fff;
 }
+
+/* ============================================
+   Realtime Visitor Counter Badge & Popover
+   ============================================ */
+
+.visitor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 6px;
+    padding: 3px 11px;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(211, 86, 86, 0.22);
+    border-radius: 20px;
+    font-size: 11px;
+    color: #374151;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    user-select: none;
+    cursor: pointer;
+}
+
+.visitor-badge:hover {
+    background: rgba(255, 255, 255, 0.96);
+    border-color: rgba(211, 86, 86, 0.45);
+    box-shadow: 0 4px 14px rgba(211, 86, 86, 0.16);
+    transform: translateY(-1px);
+}
+
+.visitor-badge:active {
+    transform: translateY(0);
+}
+
+/* Green Live Indicator Pulse Animation */
+.live-dot-wrapper {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #10b981;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.live-pulse {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: rgba(16, 185, 129, 0.45);
+    border-radius: 50%;
+    animation: livePulseAnim 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    z-index: 1;
+}
+
+@keyframes livePulseAnim {
+    0% { transform: scale(0.5); opacity: 0.95; }
+    70% { transform: scale(2.2); opacity: 0; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+
+.visitor-badge .stat-item {
+    font-weight: 500;
+    color: #4b5563;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.visitor-badge .stat-item strong {
+    color: var(--primary);
+    font-weight: 700;
+    margin-right: 2px;
+    font-variant-numeric: tabular-nums;
+}
+
+.visitor-badge .stat-icon {
+    font-size: 10px;
+    margin-right: 3px;
+    opacity: 0.75;
+    color: #4b5563;
+}
+
+.visitor-badge .stat-divider {
+    color: #d1d5db;
+    font-size: 10px;
+    margin: 0 1px;
+}
+
+/* Visitor Detail Popover Card */
+.visitor-popover {
+    position: fixed;
+    z-index: 9999;
+    width: 250px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(211, 86, 86, 0.08);
+    padding: 14px;
+    color: #1f2937;
+    animation: fadeInDown 0.25s ease-out;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.visitor-popover.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+}
+
+.popover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.popover-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.popover-status {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.status-live {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+}
+
+.status-demo {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+}
+
+.popover-body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 10px;
+}
+
+.popover-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+}
+
+.row-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #4b5563;
+}
+
+.row-value {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.text-green {
+    color: #10b981;
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.popover-footer {
+    font-size: 10px;
+    color: #9ca3af;
+    text-align: center;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .visitor-badge {
+        padding: 2px 8px;
+        font-size: 10px;
+        margin-top: 4px;
+        gap: 5px;
+    }
+
+    .visitor-badge .stat-icon {
+        font-size: 9px;
+    }
+
+    .visitor-popover {
+        width: 230px;
+        padding: 12px;
+    }
+}

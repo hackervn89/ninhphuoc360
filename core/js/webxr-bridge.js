@@ -277,13 +277,13 @@ window.WebXRBridge = (function () {
             const controller = renderer.xr.getController(i);
             controller.addEventListener('selectstart', onSelectStart);
 
-            // Tia laser mỏng phát sáng
+            // Tia laser mỏng phát sáng đỏ gốm Ninh Phước
             const laserGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, 0, 0),
                 new THREE.Vector3(0, 0, -8)
             ]);
             const laserMat = new THREE.LineBasicMaterial({
-                color: 0x00f0ff,
+                color: 0xd35656,
                 transparent: true,
                 opacity: 0.6,
                 linewidth: 2
@@ -294,7 +294,7 @@ window.WebXRBridge = (function () {
 
             // Điểm sáng ở đầu tia laser
             const dotGeo = new THREE.SphereGeometry(0.015, 12, 12);
-            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+            const dotMat = new THREE.MeshBasicMaterial({ color: 0xd35656 });
             const dot = new THREE.Mesh(dotGeo, dotMat);
             dot.position.z = -8;
             dot.name = 'dot';
@@ -379,7 +379,7 @@ window.WebXRBridge = (function () {
         `;
         simOverlay.appendChild(renderer.domElement);
 
-        // Header bar phong cách cao cấp
+        // Header bar phong cách Glassmorphism đồng bộ Web
         const header = document.createElement('div');
         header.style.cssText = `
             position: absolute;
@@ -390,37 +390,37 @@ window.WebXRBridge = (function () {
             align-items: center;
             justify-content: space-between;
             padding: 12px 24px;
-            background: linear-gradient(180deg, rgba(5,12,28,0.95) 0%, rgba(5,12,28,0.6) 70%, transparent 100%);
+            background: linear-gradient(180deg, rgba(16,20,30,0.82) 0%, rgba(16,20,30,0.4) 70%, transparent 100%);
             color: #fff;
             z-index: 10;
             pointer-events: none;
         `;
         header.innerHTML = `
             <div style="display: flex; align-items: center; gap: 14px; pointer-events: auto;">
-                <span style="font-size: 26px; filter: drop-shadow(0 0 10px #00f0ff);">🥽</span>
+                <span style="font-size: 26px; filter: drop-shadow(0 0 10px rgba(211,86,86,0.6));">🥽</span>
                 <div>
-                    <div style="font-weight: 800; font-size: 14px; letter-spacing: 0.5px; color: #00f0ff;">
+                    <div style="font-weight: 800; font-size: 14px; letter-spacing: 0.5px; color: #ff7e7e;">
                         CHẾ ĐỘ MÔ PHỎNG KÍNH VR (QUEST 3 SIMULATOR)
                     </div>
-                    <div id="sim-scene-name" style="font-size: 12px; color: #ffb300; font-weight: 600; margin-top: 2px;">
+                    <div id="sim-scene-name" style="font-size: 12px; color: #ffffff; opacity: 0.9; font-weight: 600; margin-top: 2px;">
                         Đang nạp cảnh...
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: #e0e6ed; background: rgba(10,25,47,0.75); backdrop-filter: blur(10px); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(0,240,255,0.3); pointer-events: auto;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: #f1f5f9; background: rgba(255,255,255,0.12); backdrop-filter: blur(14px); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.22); pointer-events: auto;">
                 <span>🖱️ <b>Kéo chuột:</b> Quay đầu 360°</span>
-                <span style="color: rgba(255,255,255,0.2);">|</span>
+                <span style="color: rgba(255,255,255,0.25);">|</span>
                 <span>🎯 <b>Click:</b> Bấm Hotspot</span>
-                <span style="color: rgba(255,255,255,0.2);">|</span>
-                <button id="sim-btn-menu-toggle" style="background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; border: none; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 11px; cursor: pointer; box-shadow: 0 0 10px rgba(0,198,255,0.4);">
+                <span style="color: rgba(255,255,255,0.25);">|</span>
+                <button id="sim-btn-menu-toggle" style="background: linear-gradient(135deg, #d35656, #e07650); color: #fff; border: none; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 11px; cursor: pointer; box-shadow: 0 4px 14px rgba(211,86,86,0.35);">
                     📍 Danh sách địa điểm (M)
                 </button>
-                <span style="color: rgba(255,255,255,0.2);">|</span>
-                <span id="sim-angle-display" style="color: #00f0ff; font-family: monospace; font-size: 11px;">ath: 0° | atv: 0°</span>
+                <span style="color: rgba(255,255,255,0.25);">|</span>
+                <span id="sim-angle-display" style="color: #ffb300; font-family: monospace; font-size: 11px;">ath: 0° | atv: 0°</span>
             </div>
 
-            <button id="sim-btn-close" style="pointer-events: auto; background: rgba(220, 38, 38, 0.9); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(220,38,38,0.4);">
+            <button id="sim-btn-close" style="pointer-events: auto; background: rgba(211, 86, 86, 0.9); color: #fff; border: 1px solid rgba(255,255,255,0.25); padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(211,86,86,0.4);">
                 ✕ Thoát giả lập (ESC)
             </button>
         `;
@@ -778,9 +778,9 @@ window.WebXRBridge = (function () {
             renderMenuCanvas();
         }
 
-        // 5. Tầng 2 & 3: Tự động nâng cấp lên Level 2 (5K) rồi lên Level 3 (10K Retina siêu nét nguyên gốc)
+        // 5. Tầng 2 & 3: Tự động nâng cấp lên Level 2 rồi lên Level 3 (Độ nét cao Retina nguyên gốc)
         if (sceneData.tilesDir) {
-            loadHighResTiles(sceneData.tilesDir, sceneId);
+            loadHighResTiles(sceneData.tilesDir, sceneId, sceneData.levels);
         }
     }
 
@@ -823,7 +823,7 @@ window.WebXRBridge = (function () {
                 const uCanvas = rotateCanvas180(faceCanvases.u);
                 const dCanvas = rotateCanvas180(faceCanvases.d);
 
-                const cubeTex = new THREE.CubeTexture([
+                const cubeTex = createCubeTextureFromCanvases([
                     faceCanvases.l,
                     faceCanvases.r,
                     uCanvas,
@@ -831,7 +831,6 @@ window.WebXRBridge = (function () {
                     faceCanvases.b,
                     faceCanvases.f
                 ]);
-                cubeTex.needsUpdate = true;
                 applyCubeTextureToSky(cubeTex);
                 resolve();
             };
@@ -841,32 +840,47 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Nạp và ghép ảnh Cubemap đa phân giải: Level 2 (5K) tức thì -> Level 3 (10K siêu nét nguyên gốc)
+     * Nạp và ghép ảnh Cubemap đa phân giải: Level 2 tức thì -> Level 3 (siêu nét nguyên gốc Retina)
      */
-    async function loadHighResTiles(tilesDir, sceneId) {
+    async function loadHighResTiles(tilesDir, sceneId, sceneLevels) {
         const token = ++currentLoadingSceneToken;
 
-        // BƯỚC 1: Nạp nhanh Level 2 (1280x1280) để nâng độ nét lên 5K trong chớp mắt
+        const isAerial = tilesDir.includes('toancanh');
+        const l1Size = (sceneLevels && sceneLevels.l1) || (isAerial ? 768 : 640);
+        const l2Size = (sceneLevels && sceneLevels.l2) || (isAerial ? 1536 : 1280);
+        const l3Size = (sceneLevels && sceneLevels.l3) || (isAerial ? 3072 : 2560);
+
+        // BƯỚC 1: Nạp nhanh Level 2 để nâng độ nét tức thì trong chớp mắt
         try {
-            const l2Canvases = await loadLevelTiles(tilesDir, 2);
+            const l2Canvases = await loadLevelTiles(tilesDir, 2, l2Size);
             if (token !== currentLoadingSceneToken) return;
 
             if (l2Canvases) {
                 applyCubeTextureToSky(createCubeTextureFromCanvases(l2Canvases));
-                console.log('[WebXRBridge] Đã áp dụng Level 2 (1280x1280) cho:', sceneId);
+                console.log(`[WebXRBridge] Đã áp dụng Level 2 (${l2Size}x${l2Size}) cho:`, sceneId);
             }
         } catch (e2) {
-            console.warn('[WebXRBridge] Bỏ qua L2:', e2);
+            console.warn('[WebXRBridge] L2 lỗi, thử fallback Level 1:', e2);
+            try {
+                const l1Canvases = await loadLevelTiles(tilesDir, 1, l1Size);
+                if (token !== currentLoadingSceneToken) return;
+                if (l1Canvases) {
+                    applyCubeTextureToSky(createCubeTextureFromCanvases(l1Canvases));
+                    console.log(`[WebXRBridge] Đã áp dụng Fallback Level 1 (${l1Size}x${l1Size}) cho:`, sceneId);
+                }
+            } catch (e1) {
+                console.warn('[WebXRBridge] Bỏ qua L1 & L2:', e1);
+            }
         }
 
-        // BƯỚC 2: Tự động nâng cấp tiếp lên Level 3 (2560x2560 - Chuẩn 10K sắc nét nguyên bản)
+        // BƯỚC 2: Tự động nâng cấp tiếp lên Level 3 (Chuẩn Retina sắc nét tối đa)
         try {
-            const l3Canvases = await loadLevelTiles(tilesDir, 3);
+            const l3Canvases = await loadLevelTiles(tilesDir, 3, l3Size);
             if (token !== currentLoadingSceneToken) return;
 
             if (l3Canvases) {
                 applyCubeTextureToSky(createCubeTextureFromCanvases(l3Canvases));
-                console.log('[WebXRBridge] ĐÃ NÂNG CẤP ĐẠT ĐỈNH LEVEL 3 (2560x2560, 10K Retina) cho:', sceneId);
+                console.log(`[WebXRBridge] ĐÃ NÂNG CẤP ĐẠT ĐỈNH LEVEL 3 (${l3Size}x${l3Size}, Retina) cho:`, sceneId);
             }
         } catch (e3) {
             console.log('[WebXRBridge] Giữ nguyên Level 2 cho:', sceneId);
@@ -874,102 +888,47 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Nạp các mảnh tile cho từng Level (Level 2: 1280x1280 hoặc Level 3: 2560x2560)
+     * Nạp các mảnh tile cho từng Level (Level 1, Level 2 hoặc Level 3) linh hoạt theo kích thước gốc
      */
-    async function loadLevelTiles(tilesDir, level) {
+    async function loadLevelTiles(tilesDir, level, faceSize) {
         const faces = ['l', 'r', 'u', 'd', 'b', 'f'];
+        const tileSize = 512;
+        const colsCount = Math.ceil(faceSize / tileSize);
+        const rowsCount = Math.ceil(faceSize / tileSize);
 
-        if (level === 3) {
-            // Level 3: 2560x2560 (5 hàng x 5 cột = 25 mảnh gạch 512x512)
-            const rows = ['01', '02', '03', '04', '05'];
-            const cols = ['01', '02', '03', '04', '05'];
-
-            const facePromises = faces.map(async (face) => {
-                const canvas = document.createElement('canvas');
-                canvas.width = 2560;
-                canvas.height = 2560;
-                const ctx = canvas.getContext('2d');
-
-                const tilePositions = [];
-                for (let rIdx = 0; rIdx < 5; rIdx++) {
-                    for (let cIdx = 0; cIdx < 5; cIdx++) {
-                        tilePositions.push({
-                            r: rows[rIdx],
-                            c: cols[cIdx],
-                            x: cIdx * 512,
-                            y: rIdx * 512
-                        });
-                    }
-                }
-
-                const tileImgs = await Promise.all(
-                    tilePositions.map(pos => loadImage(`${tilesDir}/${face}/l3/${pos.r}/l3_${face}_${pos.r}_${pos.c}.jpg`))
-                );
-
-                tilePositions.forEach((pos, idx) => {
-                    ctx.drawImage(tileImgs[idx], pos.x, pos.y);
-                });
-
-                if (face === 'u' || face === 'd') {
-                    return rotateCanvas180(canvas);
-                }
-                return canvas;
-            });
-
-            return await Promise.all(facePromises);
-        }
-
-        // Level 2: 1280x1280 (3 hàng x 3 cột = 9 mảnh gạch)
         const facePromises = faces.map(async (face) => {
             const canvas = document.createElement('canvas');
-            canvas.width = 1280;
-            canvas.height = 1280;
+            canvas.width = faceSize;
+            canvas.height = faceSize;
             const ctx = canvas.getContext('2d');
 
-            try {
-                const tilePositions = [
-                    { r: '01', c: '01', x: 0, y: 0 },
-                    { r: '01', c: '02', x: 512, y: 0 },
-                    { r: '01', c: '03', x: 1024, y: 0 },
-                    { r: '02', c: '01', x: 0, y: 512 },
-                    { r: '02', c: '02', x: 512, y: 512 },
-                    { r: '02', c: '03', x: 1024, y: 512 },
-                    { r: '03', c: '01', x: 0, y: 1024 },
-                    { r: '03', c: '02', x: 512, y: 1024 },
-                    { r: '03', c: '03', x: 1024, y: 1024 }
-                ];
-
-                const tileImgs = await Promise.all(
-                    tilePositions.map(pos => loadImage(`${tilesDir}/${face}/l2/${pos.r}/l2_${face}_${pos.r}_${pos.c}.jpg`))
-                );
-
-                tilePositions.forEach((pos, idx) => {
-                    ctx.drawImage(tileImgs[idx], pos.x, pos.y);
-                });
-
-                if (face === 'u' || face === 'd') {
-                    return rotateCanvas180(canvas);
+            const tilePositions = [];
+            for (let r = 0; r < rowsCount; r++) {
+                const rowStr = String(r + 1).padStart(2, '0');
+                for (let c = 0; c < colsCount; c++) {
+                    const colStr = String(c + 1).padStart(2, '0');
+                    tilePositions.push({
+                        r: rowStr,
+                        c: colStr,
+                        x: c * tileSize,
+                        y: r * tileSize,
+                        url: `${tilesDir}/${face}/l${level}/${rowStr}/l${level}_${face}_${rowStr}_${colStr}.jpg`
+                    });
                 }
-                return canvas;
-            } catch (errL2) {
-                // Fallback Level 1 (640x640)
-                canvas.width = 640;
-                canvas.height = 640;
-                const p1 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_01.jpg`);
-                const p2 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_02.jpg`);
-                const p3 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_01.jpg`);
-                const p4 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_02.jpg`);
-                const [img1, img2, img3, img4] = await Promise.all([p1, p2, p3, p4]);
-                ctx.drawImage(img1, 0, 0);
-                ctx.drawImage(img2, 512, 0);
-                ctx.drawImage(img3, 0, 512);
-                ctx.drawImage(img4, 512, 512);
-
-                if (face === 'u' || face === 'd') {
-                    return rotateCanvas180(canvas);
-                }
-                return canvas;
             }
+
+            const tileImgs = await Promise.all(
+                tilePositions.map(pos => loadImage(pos.url))
+            );
+
+            tilePositions.forEach((pos, idx) => {
+                ctx.drawImage(tileImgs[idx], pos.x, pos.y);
+            });
+
+            if (face === 'u' || face === 'd') {
+                return rotateCanvas180(canvas);
+            }
+            return canvas;
         });
 
         return await Promise.all(facePromises);
@@ -1079,7 +1038,8 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Vẽ biểu tượng Hotspot theo phong cách Web (muiten, vitri, pulse_dot)
+     * Vẽ biểu tượng Hotspot theo phong cách Web (muiten, vitri, pulse_dot, trenkhong)
+     * Tông màu nhận diện: Đỏ gốm Ninh Phước (#d35656 / #ed2f5a), Vàng cam Bàu Trúc (#e07650 / #ffb300), Trắng ngọc (#ffffff)
      */
     function drawHotspotCanvas(ctx, title, style) {
         ctx.clearRect(0, 0, 512, 512);
@@ -1089,13 +1049,12 @@ window.WebXRBridge = (function () {
 
         if (style === 'vitri') {
             // ============================================
-            // STYLE: vitri (Ghim định vị vàng cam hoàng hôn)
+            // STYLE: vitri (Ghim định vị vàng cam đất gốm Bàu Trúc)
             // ============================================
-            // Vòng hào quang phát sáng vàng cam
             const gradGlow = ctx.createRadialGradient(cx, cy - 10, 20, cx, cy - 10, 100);
-            gradGlow.addColorStop(0, 'rgba(255, 179, 0, 0.7)');
-            gradGlow.addColorStop(0.5, 'rgba(255, 140, 0, 0.25)');
-            gradGlow.addColorStop(1, 'rgba(255, 140, 0, 0)');
+            gradGlow.addColorStop(0, 'rgba(224, 118, 80, 0.65)');
+            gradGlow.addColorStop(0.5, 'rgba(211, 86, 86, 0.25)');
+            gradGlow.addColorStop(1, 'rgba(211, 86, 86, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
             ctx.arc(cx, cy - 10, 100, 0, Math.PI * 2);
@@ -1103,9 +1062,9 @@ window.WebXRBridge = (function () {
 
             // Thân ghim Location Pin (hình giọt nước chúc xuống)
             ctx.save();
-            ctx.fillStyle = 'rgba(10, 25, 47, 0.95)';
-            ctx.strokeStyle = '#ffb300';
-            ctx.lineWidth = 8;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+            ctx.strokeStyle = '#d35656';
+            ctx.lineWidth = 7;
 
             ctx.beginPath();
             ctx.arc(cx, cy - 25, 45, Math.PI, 0, false);
@@ -1116,7 +1075,7 @@ window.WebXRBridge = (function () {
             ctx.stroke();
 
             // Điểm tròn phát sáng ở giữa ghim
-            ctx.fillStyle = '#ffb300';
+            ctx.fillStyle = '#d35656';
             ctx.beginPath();
             ctx.arc(cx, cy - 25, 18, 0, Math.PI * 2);
             ctx.fill();
@@ -1127,28 +1086,62 @@ window.WebXRBridge = (function () {
             ctx.fill();
             ctx.restore();
 
+        } else if (style === 'trenkhong' || style === 'tructhang') {
+            // ============================================
+            // STYLE: trenkhong (Góc nhìn toàn cảnh trên cao)
+            // ============================================
+            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 90);
+            gradGlow.addColorStop(0, 'rgba(224, 118, 80, 0.65)');
+            gradGlow.addColorStop(0.5, 'rgba(211, 86, 86, 0.2)');
+            gradGlow.addColorStop(1, 'rgba(211, 86, 86, 0)');
+            ctx.fillStyle = gradGlow;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 90, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Vòng tròn trung tâm
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+            ctx.strokeStyle = '#e07650';
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 55, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Biểu tượng góc nhìn trên không
+            ctx.fillStyle = '#d35656';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - 28);
+            ctx.lineTo(cx + 26, cy + 10);
+            ctx.lineTo(cx + 10, cy + 16);
+            ctx.lineTo(cx, cy + 4);
+            ctx.lineTo(cx - 10, cy + 16);
+            ctx.lineTo(cx - 26, cy + 10);
+            ctx.closePath();
+            ctx.fill();
+
         } else if (style === 'pulse_dot') {
             // ============================================
-            // STYLE: pulse_dot (Sóng radar nhấp nháy)
+            // STYLE: pulse_dot (Sóng radar nhấp nháy đỏ gốm Ninh Phước)
             // ============================================
             // Vòng sóng radar ngoài
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+            ctx.strokeStyle = 'rgba(211, 86, 86, 0.4)';
             ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.arc(cx, cy, 70, 0, Math.PI * 2);
             ctx.stroke();
 
             // Vòng sóng giữa
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.8)';
+            ctx.strokeStyle = 'rgba(211, 86, 86, 0.75)';
             ctx.lineWidth = 6;
             ctx.beginPath();
             ctx.arc(cx, cy, 45, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Chấm tròn lõi phát sáng
+            // Chấm tròn lõi phát sáng trắng ngọc viền gốm đỏ
             ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#d35656';
+            ctx.shadowBlur = 18;
             ctx.beginPath();
             ctx.arc(cx, cy, 22, 0, Math.PI * 2);
             ctx.fill();
@@ -1156,28 +1149,28 @@ window.WebXRBridge = (function () {
 
         } else {
             // ============================================
-            // STYLE: muiten hoặc mặc định (Chevron Arrow Neon Cyan)
+            // STYLE: muiten hoặc mặc định (Chevron Arrow Đỏ gốm Ninh Phước - chuẩn hotspot_pro.svg)
             // ============================================
             const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 90);
-            gradGlow.addColorStop(0, 'rgba(0, 240, 255, 0.65)');
-            gradGlow.addColorStop(0.5, 'rgba(0, 240, 255, 0.2)');
-            gradGlow.addColorStop(1, 'rgba(0, 240, 255, 0)');
+            gradGlow.addColorStop(0, 'rgba(211, 86, 86, 0.65)');
+            gradGlow.addColorStop(0.5, 'rgba(237, 47, 90, 0.2)');
+            gradGlow.addColorStop(1, 'rgba(211, 86, 86, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
             ctx.arc(cx, cy, 90, 0, Math.PI * 2);
             ctx.fill();
 
             // Vòng tròn trung tâm
-            ctx.fillStyle = 'rgba(10, 25, 47, 0.92)';
-            ctx.strokeStyle = '#00f0ff';
-            ctx.lineWidth = 8;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+            ctx.strokeStyle = '#d35656';
+            ctx.lineWidth = 7;
             ctx.beginPath();
             ctx.arc(cx, cy, 55, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
 
-            // Mũi tên tiến Chevron
-            ctx.fillStyle = '#00f0ff';
+            // Mũi tên tiến Chevron màu đỏ gốm Ninh Phước
+            ctx.fillStyle = '#d35656';
             ctx.beginPath();
             ctx.moveTo(cx, cy - 25);
             ctx.lineTo(cx + 25, cy + 5);
@@ -1189,62 +1182,85 @@ window.WebXRBridge = (function () {
             ctx.fill();
         }
 
-        // Biển tên điểm đến bên dưới (Pill badge)
+        // Biển tên điểm đến bên dưới (Pill badge chuẩn Glassmorphism Web)
         if (title) {
-            ctx.font = 'bold 30px "Segoe UI", Arial, sans-serif';
+            ctx.font = 'bold 28px "Segoe UI", Arial, sans-serif';
             const textMetrics = ctx.measureText(title);
             const badgeW = Math.min(480, Math.max(160, textMetrics.width + 50));
-            const badgeH = 64;
+            const badgeH = 58;
             const badgeX = cx - badgeW / 2;
-            const badgeY = cy + 75;
+            const badgeY = cy + 78;
 
-            // Nền bóng kính
-            ctx.fillStyle = 'rgba(5, 12, 28, 0.9)';
-            ctx.strokeStyle = (style === 'vitri') ? '#ffb300' : '#00f0ff';
-            ctx.lineWidth = 4;
+            // Nền bóng kính trong suốt thanh thoát
+            ctx.fillStyle = 'rgba(20, 22, 34, 0.65)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+            ctx.lineWidth = 3;
             roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 18);
             ctx.fill();
             ctx.stroke();
 
-            // Chữ
+            // Chấm chỉ thị đỏ gốm ở đầu nhãn
+            ctx.fillStyle = '#d35656';
+            ctx.beginPath();
+            ctx.arc(badgeX + 22, badgeY + badgeH / 2, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Chữ trắng tinh
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(title, cx, badgeY + badgeH / 2);
+            ctx.fillText(title, cx + 8, badgeY + badgeH / 2);
         }
     }
 
     /**
-     * Bảng tên cảnh nổi trên cao, tự ẩn sau 3.5s
+     * Bảng tên cảnh nổi trên cao hẳn phía trên đầu, thu gọn và trong suốt tinh tế (tự ẩn sau 3.5s)
      */
     function showSceneToast(title) {
         toastGroup.clear();
         if (toastHideTimeout) clearTimeout(toastHideTimeout);
 
         const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 160;
+        canvas.width = 640;
+        canvas.height = 110;
         const ctx = canvas.getContext('2d');
 
-        ctx.fillStyle = 'rgba(5, 12, 28, 0.88)';
-        ctx.strokeStyle = 'rgba(255, 179, 0, 0.85)';
-        ctx.lineWidth = 6;
-        roundRect(ctx, 8, 8, 784, 144, 30);
+        // Nền kính mờ trong suốt thanh thoát (Glassmorphism), không bị đen kịt
+        ctx.fillStyle = 'rgba(20, 22, 34, 0.45)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.lineWidth = 3;
+        roundRect(ctx, 4, 4, 632, 102, 24);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#ffb300';
-        ctx.font = 'bold 44px "Segoe UI", Arial, sans-serif';
-        ctx.textAlign = 'center';
+        // Chấm đỏ gốm Ninh Phước nổi bật
+        ctx.fillStyle = '#d35656';
+        ctx.beginPath();
+        ctx.arc(42, 55, 9, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Chữ tên cảnh sắc nét, màu trắng tinh khôi
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 34px "Segoe UI", Arial, sans-serif';
+        ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText('📍 ' + title, 400, 80);
+
+        let displayTitle = title;
+        if (ctx.measureText(displayTitle).width > 530) {
+            while (displayTitle.length > 5 && ctx.measureText(displayTitle + '...').width > 530) {
+                displayTitle = displayTitle.slice(0, -1);
+            }
+            displayTitle += '...';
+        }
+        ctx.fillText(displayTitle, 66, 55);
 
         const texture = new THREE.CanvasTexture(canvas);
-        const geo = new THREE.PlaneGeometry(2.0, 0.4);
+        // Thu gọn kích thước (1.2m x 0.22m)
+        const geo = new THREE.PlaneGeometry(1.2, 0.22);
         const mat = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
-            opacity: 1.0,
+            opacity: 0.9,
             depthTest: false
         });
 
@@ -1256,14 +1272,15 @@ window.WebXRBridge = (function () {
         if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
         camDir.normalize();
 
-        mesh.position.copy(camera.position).add(camDir.multiplyScalar(3.5));
-        mesh.position.y += 0.6;
+        // ĐƯA LÊN CAO HẲN PHÍA TRÊN ĐẦU (cao hơn tầm mắt 1.65m, cách 3.2m -> góc ngẩng ~ 27 độ)
+        mesh.position.copy(camera.position).add(camDir.multiplyScalar(3.2));
+        mesh.position.y += 1.65;
         mesh.lookAt(camera.position);
         mesh.renderOrder = 200;
         toastGroup.add(mesh);
 
         toastHideTimeout = setTimeout(() => {
-            let op = 1.0;
+            let op = 0.9;
             const fadeInterval = setInterval(() => {
                 op -= 0.05;
                 if (op <= 0) {
@@ -1273,7 +1290,7 @@ window.WebXRBridge = (function () {
                     mat.opacity = op;
                 }
             }, 30);
-        }, 3500);
+        }, 3200);
     }
 
     // ============================================================
@@ -1287,32 +1304,37 @@ window.WebXRBridge = (function () {
     function buildVRMenu3DComponents() {
         vrMenuGroup.clear();
 
-        // 1. Nút 3D mở Menu nhỏ nổi dưới tầm mắt
+        // 1. Nút 3D mở Menu nhỏ gọn, chúc xuống dưới sàn, trong suốt tinh tế
         const btnCanvas = document.createElement('canvas');
-        btnCanvas.width = 512;
-        btnCanvas.height = 180;
+        btnCanvas.width = 440;
+        btnCanvas.height = 140;
         const bCtx = btnCanvas.getContext('2d');
 
-        bCtx.fillStyle = 'rgba(5, 12, 28, 0.9)';
-        bCtx.strokeStyle = '#00f0ff';
-        bCtx.lineWidth = 8;
-        roundRect(bCtx, 10, 10, 492, 160, 40);
+        bCtx.fillStyle = 'rgba(20, 22, 34, 0.52)';
+        bCtx.strokeStyle = 'rgba(211, 86, 86, 0.75)';
+        bCtx.lineWidth = 6;
+        roundRect(bCtx, 6, 6, 428, 128, 36);
         bCtx.fill();
         bCtx.stroke();
 
-        bCtx.fillStyle = '#ffb300';
-        bCtx.font = 'bold 50px "Segoe UI", Arial, sans-serif';
+        bCtx.fillStyle = '#d35656';
+        bCtx.font = 'bold 44px "Segoe UI", Arial, sans-serif';
         bCtx.textAlign = 'center';
         bCtx.textBaseline = 'middle';
-        bCtx.fillText('📍 ĐỊA ĐIỂM', 256, 90);
+        bCtx.fillText('📍', 75, 70);
+
+        bCtx.fillStyle = '#ffffff';
+        bCtx.font = 'bold 36px "Segoe UI", Arial, sans-serif';
+        bCtx.fillText('ĐỊA ĐIỂM', 250, 70);
 
         const btnTex = new THREE.CanvasTexture(btnCanvas);
         const btnMat = new THREE.MeshBasicMaterial({
             map: btnTex,
             transparent: true,
+            opacity: 0.85,
             depthTest: false
         });
-        vrMenuBtnMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.22), btnMat);
+        vrMenuBtnMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.44, 0.14), btnMat);
         vrMenuBtnMesh.name = 'vrMenuBtnMesh';
         vrMenuBtnMesh.renderOrder = 300;
         vrMenuGroup.add(vrMenuBtnMesh);
@@ -1377,20 +1399,20 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Cập nhật vị trí của Nút mở Menu lơ lửng dưới tầm nhìn
+     * Cập nhật vị trí của Nút mở Menu chúc xuống phía dưới sàn
      */
     function updateVRMenuFloatingPositions() {
         if (!camera || isMenuOpen || !vrMenuBtnMesh) return;
 
-        // Đặt nút nhỏ ở phía dưới góc nhìn: cách 2.0m, thấp xuống 0.75m
+        // Đặt nút nhỏ chúc hẳn xuống phía dưới sàn: cách 1.8m, thấp xuống 1.25m (góc chúc ~ -35°)
         const camDir = new THREE.Vector3();
         camera.getWorldDirection(camDir);
         camDir.y = 0;
         if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
         camDir.normalize();
 
-        vrMenuBtnMesh.position.copy(camera.position).add(camDir.multiplyScalar(2.0));
-        vrMenuBtnMesh.position.y = camera.position.y - 0.75;
+        vrMenuBtnMesh.position.copy(camera.position).add(camDir.multiplyScalar(1.8));
+        vrMenuBtnMesh.position.y = camera.position.y - 1.25;
         vrMenuBtnMesh.lookAt(camera.position);
     }
 
@@ -1405,41 +1427,47 @@ window.WebXRBridge = (function () {
         menuClickTargets = [];
         menuCtx.clearRect(0, 0, 1600, 1100);
 
-        // 1. Khung nền chính (Dark Glassmorphism)
-        menuCtx.fillStyle = 'rgba(5, 12, 28, 0.94)';
-        menuCtx.strokeStyle = 'rgba(0, 240, 255, 0.7)';
+        // 1. Khung nền chính (Dark Glassmorphism trong suốt, đồng bộ tông màu Web)
+        menuCtx.fillStyle = 'rgba(16, 18, 28, 0.82)';
+        menuCtx.strokeStyle = 'rgba(211, 86, 86, 0.6)';
         menuCtx.lineWidth = 6;
         roundRect(menuCtx, 10, 10, 1580, 1080, 36);
         menuCtx.fill();
         menuCtx.stroke();
 
+        // Viền phụ mờ tinh tế
+        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        menuCtx.lineWidth = 2;
+        roundRect(menuCtx, 18, 18, 1564, 1064, 30);
+        menuCtx.stroke();
+
         // 2. Header Bar
-        menuCtx.fillStyle = 'rgba(10, 25, 47, 0.9)';
-        roundRect(menuCtx, 16, 16, 1568, 110, 26);
+        menuCtx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+        roundRect(menuCtx, 24, 24, 1552, 104, 24);
         menuCtx.fill();
 
         // Tiêu đề
-        menuCtx.fillStyle = '#00f0ff';
-        menuCtx.font = 'bold 40px "Segoe UI", Arial, sans-serif';
+        menuCtx.fillStyle = '#ff7e7e';
+        menuCtx.font = 'bold 38px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.textBaseline = 'middle';
-        menuCtx.fillText('📍 DANH SÁCH ĐỊA ĐIỂM — NINH PHƯỚC 360', 50, 70);
+        menuCtx.fillText('📍 DANH SÁCH ĐỊA ĐIỂM — NINH PHƯỚC 360', 55, 76);
 
-        menuCtx.fillStyle = '#94a3b8';
-        menuCtx.font = '500 22px "Segoe UI", Arial, sans-serif';
-        menuCtx.fillText('Trỏ laser hoặc nhấp vào ảnh để chuyển cảnh', 900, 70);
+        menuCtx.fillStyle = '#cbd5e1';
+        menuCtx.font = '500 21px "Segoe UI", Arial, sans-serif';
+        menuCtx.fillText('Trỏ laser hoặc chạm vào ảnh để chuyển cảnh', 930, 76);
 
         // Nút Đóng [✕]
-        const closeBtn = { x: 1440, y: 35, w: 120, h: 70 };
-        menuCtx.fillStyle = 'rgba(220, 38, 38, 0.9)';
-        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        const closeBtn = { x: 1435, y: 40, w: 125, h: 72 };
+        menuCtx.fillStyle = 'rgba(211, 86, 86, 0.88)';
+        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
         menuCtx.lineWidth = 2;
-        roundRect(menuCtx, closeBtn.x, closeBtn.y, closeBtn.w, closeBtn.h, 14);
+        roundRect(menuCtx, closeBtn.x, closeBtn.y, closeBtn.w, closeBtn.h, 16);
         menuCtx.fill();
         menuCtx.stroke();
 
         menuCtx.fillStyle = '#ffffff';
-        menuCtx.font = 'bold 26px "Segoe UI", Arial, sans-serif';
+        menuCtx.font = 'bold 24px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'center';
         menuCtx.fillText('✕ Đóng', closeBtn.x + closeBtn.w / 2, closeBtn.y + closeBtn.h / 2);
 
@@ -1456,7 +1484,7 @@ window.WebXRBridge = (function () {
         const colLeftW = 460;
         let groupY = 150;
 
-        menuCtx.fillStyle = '#64748b';
+        menuCtx.fillStyle = '#94a3b8';
         menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.fillText('KHU VỰC & ĐỊA DANH', colLeftX + 10, groupY);
@@ -1467,16 +1495,16 @@ window.WebXRBridge = (function () {
             const itemH = 74;
 
             if (isSelected) {
-                // Gradient rực rỡ như .tour-group:not(.collapsed) .tour-title trong style.css
+                // Gradient gốm Ninh Phước rực rỡ như trên Web (--primary to --primary-hover)
                 const grad = menuCtx.createLinearGradient(colLeftX, groupY, colLeftX + colLeftW, groupY);
-                grad.addColorStop(0, '#00c6ff');
-                grad.addColorStop(1, '#0072ff');
+                grad.addColorStop(0, '#d35656');
+                grad.addColorStop(1, '#e07650');
                 menuCtx.fillStyle = grad;
                 menuCtx.strokeStyle = '#ffffff';
                 menuCtx.lineWidth = 3;
             } else {
-                menuCtx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-                menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+                menuCtx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+                menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
                 menuCtx.lineWidth = 2;
             }
 
@@ -1485,7 +1513,7 @@ window.WebXRBridge = (function () {
             menuCtx.stroke();
 
             // Icon + Tên nhóm
-            menuCtx.fillStyle = isSelected ? '#ffffff' : '#e2e8f0';
+            menuCtx.fillStyle = '#ffffff';
             menuCtx.font = `bold ${isSelected ? '22px' : '20px'} "Segoe UI", Arial, sans-serif`;
             menuCtx.textAlign = 'left';
             menuCtx.textBaseline = 'middle';
@@ -1498,11 +1526,11 @@ window.WebXRBridge = (function () {
             const badgeX = colLeftX + colLeftW - badgeW - 16;
             const badgeY = groupY + (itemH - badgeH) / 2;
 
-            menuCtx.fillStyle = isSelected ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 179, 0, 0.2)';
+            menuCtx.fillStyle = isSelected ? 'rgba(255, 255, 255, 0.25)' : 'rgba(211, 86, 86, 0.22)';
             roundRect(menuCtx, badgeX, badgeY, badgeW, badgeH, 12);
             menuCtx.fill();
 
-            menuCtx.fillStyle = isSelected ? '#ffffff' : '#ffb300';
+            menuCtx.fillStyle = isSelected ? '#ffffff' : '#ff9f7e';
             menuCtx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
             menuCtx.textAlign = 'center';
             menuCtx.fillText(`${grp.scenes.length} cảnh`, badgeX + badgeW / 2, badgeY + badgeH / 2);
@@ -1526,7 +1554,7 @@ window.WebXRBridge = (function () {
         const allScenes = currentGroup ? currentGroup.scenes : [];
 
         // Tiêu đề cột phải
-        menuCtx.fillStyle = '#64748b';
+        menuCtx.fillStyle = '#94a3b8';
         menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.fillText(`DANH SÁCH CẢNH (${allScenes.length} CẢNH) — ${currentGroup ? currentGroup.label : ''}`, colRightX + 10, 150);
@@ -1551,9 +1579,9 @@ window.WebXRBridge = (function () {
             const isActiveScene = sc.id === activeSceneId;
 
             // Khung card
-            menuCtx.fillStyle = isActiveScene ? 'rgba(10, 35, 60, 0.95)' : 'rgba(15, 23, 42, 0.85)';
-            menuCtx.strokeStyle = isActiveScene ? '#ffb300' : 'rgba(0, 240, 255, 0.35)';
-            menuCtx.lineWidth = isActiveScene ? 4 : 2;
+            menuCtx.fillStyle = isActiveScene ? 'rgba(211, 86, 86, 0.24)' : 'rgba(255, 255, 255, 0.07)';
+            menuCtx.strokeStyle = isActiveScene ? '#d35656' : 'rgba(255, 255, 255, 0.16)';
+            menuCtx.lineWidth = isActiveScene ? 3.5 : 2;
             roundRect(menuCtx, cardX, cardY, cardW, cardH, 16);
             menuCtx.fill();
             menuCtx.stroke();
@@ -1590,7 +1618,7 @@ window.WebXRBridge = (function () {
             }
 
             // Tên cảnh
-            menuCtx.fillStyle = isActiveScene ? '#ffb300' : '#ffffff';
+            menuCtx.fillStyle = '#ffffff';
             menuCtx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
             menuCtx.textAlign = 'left';
             menuCtx.textBaseline = 'top';
@@ -1607,9 +1635,9 @@ window.WebXRBridge = (function () {
             menuCtx.fillText(displayTitle, textX, cardY + 22);
 
             // Phụ đề nhỏ
-            menuCtx.fillStyle = isActiveScene ? '#ffb300' : '#00f0ff';
+            menuCtx.fillStyle = isActiveScene ? '#ff9f7e' : '#cbd5e1';
             menuCtx.font = '600 15px "Segoe UI", Arial, sans-serif';
-            menuCtx.fillText(isActiveScene ? '★ Đang đứng ở cảnh này' : 'Chạm để dịch chuyển ➔', textX, cardY + 54);
+            menuCtx.fillText(isActiveScene ? '★ Đang ở cảnh này' : 'Chạm để dịch chuyển ➔', textX, cardY + 54);
 
             menuClickTargets.push({
                 type: 'scene',
@@ -1628,7 +1656,7 @@ window.WebXRBridge = (function () {
             const nextBtn = { x: colRightX + colRightW - 220, y: navY, w: 200, h: 56 };
 
             // Trang trước
-            menuCtx.fillStyle = menuPageIndex > 0 ? 'rgba(0, 198, 255, 0.85)' : 'rgba(50, 65, 85, 0.4)';
+            menuCtx.fillStyle = menuPageIndex > 0 ? 'rgba(211, 86, 86, 0.85)' : 'rgba(60, 65, 80, 0.35)';
             roundRect(menuCtx, prevBtn.x, prevBtn.y, prevBtn.w, prevBtn.h, 14);
             menuCtx.fill();
             menuCtx.fillStyle = '#fff';
@@ -1637,7 +1665,7 @@ window.WebXRBridge = (function () {
             menuCtx.fillText('◀ Trang trước', prevBtn.x + prevBtn.w / 2, prevBtn.y + prevBtn.h / 2);
 
             // Trang sau
-            menuCtx.fillStyle = menuPageIndex < totalPages - 1 ? 'rgba(0, 198, 255, 0.85)' : 'rgba(50, 65, 85, 0.4)';
+            menuCtx.fillStyle = menuPageIndex < totalPages - 1 ? 'rgba(211, 86, 86, 0.85)' : 'rgba(60, 65, 80, 0.35)';
             roundRect(menuCtx, nextBtn.x, nextBtn.y, nextBtn.w, nextBtn.h, 14);
             menuCtx.fill();
             menuCtx.fillStyle = '#fff';
