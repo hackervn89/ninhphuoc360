@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_toancanh_300m" title="Toàn cảnh xã Ninh Phước (300m)" thumburl="panos/toancanh_300m.tiles/thumb.jpg">
+	<scene name="scene_toancanh_300m" title="Toàn cảnh xã Ninh Phước (300m)" thumburl="panos/toancanh_300m.tiles/thumb.jpg" lat="11.53281718324084" lng="108.93948133628618">
 		<view fovtype="MFOV" hlookat="-400.1" vlookat="18.2" fov="84.7" fovmin="60" fovmax="95"/>
 		<preview url="panos/toancanh_300m.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
@@ -24,7 +24,7 @@
 		<hotspot name="hs_new_720196" style="pulse_dot" scale="0.15" ath="-40.0988" atv="10.3894" linkedscene="scene_quang_truong_2" custom_title="Quảng trường"/>
 		<hotspot name="hs_new_810099" style="pulse_dot" scale="0.15" ath="-26.5865" atv="10.7731" linkedscene="scene_duongdi2" custom_title="Nhà sinh hoạt cộng đồng Chăm"/>
 	</scene>
-	<scene name="scene_toancanh_100m" title="Toàn cảnh xã Ninh Phước (100m)" thumburl="panos/toancanh_100m.tiles/thumb.jpg">
+	<scene name="scene_toancanh_100m" title="Toàn cảnh xã Ninh Phước (100m)" thumburl="panos/toancanh_100m.tiles/thumb.jpg" lat="11.529617607380585" lng="108.93347977080107">
 		<view fovtype="MFOV" hlookat="-288.4" vlookat="15.8" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/toancanh_100m.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">
@@ -65,7 +65,7 @@
 			</level>
 		</image>
 		<hotspot name="hs_return_cong_lang_bau_truc_0685" style="muiten" ath="-122.8613" atv="9.5221" linkedscene="scene_duong_vao_bau_truc" custom_title="Cổng làng gốm Bàu Trúc"/>
-		<hotspot name="hs_return_toancanh_300m_4510" style="trenkhong" ath="26.0032" atv="-43.2795" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
+		<hotspot name="hs_return_toancanh_300m_4510" style="trenkhong" scale="0.45" ath="26.0032" atv="-43.2795" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
 	</scene>
 	<scene name="scene_trung_tam_hanh_chinh" title="Trung tâm hành chính xã" thumburl="panos/trung_tam_hanh_chinh.tiles/thumb.jpg" lat="11.524983937711859" lng="108.92793699643062">
 		<view fovtype="MFOV" hlookat="-113.4" vlookat="5.5" fov="105.0" fovmin="60" fovmax="105"/>

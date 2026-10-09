@@ -66,7 +66,6 @@
 		<hotspot name="hs_new_495597" style="muiten" ath="-13.2518" atv="30.7501" linkedscene="scene_sanh_phai" custom_title="Sảnh phải"/>
 		<hotspot name="hs_new_512299" style="muiten" ath="172.3409" atv="43.4361" linkedscene="scene_sanh_trai_1" custom_title="Sảnh Trái"/>
 		<hotspot name="hs_new_684787" style="muiten" ath="175.1101" atv="26.2309" linkedscene="scene_sanh_trai_2" custom_title="Sân trước"/>
-		<hotspot name="hs_return_phongchinh_trai1_8221" style="muiten" ath="-75.9611" atv="11.7245" linkedscene="scene_phongchinh_trai1" custom_title="Phòng chính"/>
 	</scene>
 	<scene name="scene_san_trai1" title="Sân trước" thumburl="panos/san_trai1.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-103.6" vlookat="17.3" fov="110.0" fovmin="60" fovmax="110"/>

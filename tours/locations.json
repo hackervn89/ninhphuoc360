@@ -1,8 +1,8 @@
 {
   "lang_gom": {
     "name": "Làng Gốm Bàu Trúc",
-    "lat": 11.529495627376582,
-    "lng": 108.92538513099127
+    "lat": 11.525639764345573,
+    "lng": 108.9290426393154
   },
   "nha_sinh_hoat": {
     "name": "Nhà Sinh hoạt cộng đồng Chăm",
@@ -33,5 +33,9 @@
   "trung_tam_hanh_chinh": "Toàn cảnh xã Ninh Phước",
   "gom_hai_au": "Cơ sở gốm Hải Âu",
   "cong_ty_nt": "Công ty bảo tồn di sản văn hoá Chăm NT",
-  "den_po_klaong_car": "Đền Po Klaong Car"
+  "den_po_klaong_car": {
+    "name": "Đền Po Klaong Car",
+    "lat": 11.539125880848113,
+    "lng": 108.92422336621456
+  }
 }

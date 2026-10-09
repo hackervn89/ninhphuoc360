@@ -889,7 +889,7 @@
         "atv": -43.2795,
         "linkedscene": "scene_toancanh_300m",
         "style": "trenkhong",
-        "scale": 1,
+        "scale": 0.45,
         "title": "Toàn cảnh xã Ninh Phước"
       }
     ]
@@ -3177,15 +3177,6 @@
         "style": "muiten",
         "scale": 0.4,
         "title": "Khu sinh hoạt"
-      },
-      {
-        "name": "hs_return_14_7910",
-        "ath": -89.1999,
-        "atv": 15.6629,
-        "linkedscene": "scene_14",
-        "style": "muiten",
-        "scale": 1,
-        "title": "Khu làm gốm"
       }
     ]
   },
@@ -3312,6 +3303,15 @@
         "style": "muiten",
         "scale": 1,
         "title": "Mũi tên di chuyển mới"
+      },
+      {
+        "name": "hs_return_4_6768",
+        "ath": 85.4156,
+        "atv": 15.4076,
+        "linkedscene": "scene_4",
+        "style": "muiten",
+        "scale": 1,
+        "title": "Sân trước"
       }
     ]
   },
@@ -3600,6 +3600,15 @@
         "style": "muiten",
         "scale": 1,
         "title": "Mũi tên di chuyển mới"
+      },
+      {
+        "name": "hs_return_4_6777",
+        "ath": 53.1039,
+        "atv": 10.0989,
+        "linkedscene": "scene_4",
+        "style": "muiten",
+        "scale": 1,
+        "title": "Sân trước"
       }
     ]
   },
@@ -3870,15 +3879,6 @@
         "style": "muiten",
         "scale": 1,
         "title": "Sân trước"
-      },
-      {
-        "name": "hs_return_phongchinh_trai1_8221",
-        "ath": -75.9611,
-        "atv": 11.7245,
-        "linkedscene": "scene_phongchinh_trai1",
-        "style": "muiten",
-        "scale": 1,
-        "title": "Phòng chính"
       }
     ]
   },

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_cong_lang_my_nghiep" title="Cổng làng Mỹ Nghiệp" thumburl="panos/cong_lang_my_nghiep.tiles/thumb.jpg">
+	<scene name="scene_cong_lang_my_nghiep" title="Cổng làng Mỹ Nghiệp" thumburl="panos/cong_lang_my_nghiep.tiles/thumb.jpg" lat="11.522518597945657" lng="108.93583945300988">
 		<view fovtype="MFOV" hlookat="-140.5" vlookat="-1.5" fov="110.0" fovmin="60" fovmax="110"/>
 		<preview url="panos/cong_lang_my_nghiep.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512" prealign="0.6|0.0|0.0">
@@ -22,7 +22,7 @@
 		<hotspot name="hs_return_toancanh_100m_3552" style="trenkhong" scale="0.40" ath="85.5344" atv="-10.2319" linkedscene="scene_toancanh_100m" custom_title="Toàn cảnh xã Ninh Phước"/>
 		<hotspot name="hs_return_toancanh_300m_0196" style="trenkhong" ath="113.8227" atv="-35.5848" linkedscene="scene_toancanh_300m" custom_title="Toàn cảnh xã Ninh Phước"/>
 	</scene>
-	<scene name="scene_mynghiep_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg">
+	<scene name="scene_mynghiep_cong_htx" title="HTX Thổ cẩm Chăm" thumburl="panos/cong_htx.tiles/thumb.jpg" lat="11.521379875535438" lng="108.9424623595332">
 		<view fovtype="MFOV" hlookat="-130.8" vlookat="2.6" fov="90.7" fovmin="60" fovmax="95"/>
 		<preview url="panos/cong_htx.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">

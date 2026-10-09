@@ -46,7 +46,6 @@
 		<hotspot name="hs_new_347299" style="muiten" ath="-169.4909" atv="21.4589" linkedscene="scene_5" custom_title="Sân trước"/>
 		<hotspot name="hs_new_359386" style="muiten" ath="164.6029" atv="22.3032" linkedscene="scene_12" custom_title="Khu làm gốm"/>
 		<hotspot name="hs_new_415761" style="muiten" scale="0.40" ath="-126.8961" atv="10.0989" linkedscene="scene_nha_lam_viec1" custom_title="Khu sinh hoạt"/>
-		<hotspot name="hs_return_14_7910" style="muiten" ath="-89.1999" atv="15.6629" linkedscene="scene_14" custom_title="Khu làm gốm"/>
 	</scene>
 	<scene name="scene_5" title="Sân trước" thumburl="panos/5.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="22.5" vlookat="5.2" fov="95.0" fovmin="60" fovmax="95"/>
@@ -93,6 +92,7 @@
 		<hotspot name="hs_new_135010" style="muiten" ath="12.6198" atv="40.8867" linkedscene="scene_8" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_171182" style="muiten" ath="-55.5263" atv="20.2418" linkedscene="scene_8" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_691769" style="muiten" ath="-104.8603" atv="14.8076" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
+		<hotspot name="hs_return_4_6768" style="muiten" ath="85.4156" atv="15.4076" linkedscene="scene_4" custom_title="Sân trước"/>
 	</scene>
 	<scene name="scene_7" title="Khu trưng bày" thumburl="panos/7.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="-110.2" vlookat="11.8" fov="110.0" fovmin="60" fovmax="110"/>
@@ -221,6 +221,7 @@
 		</image>
 		<hotspot name="hs_new_776473" style="muiten" ath="55.0452" atv="24.8911" linkedscene="scene_nha_lam_viec2" custom_title="Mũi tên di chuyển mới"/>
 		<hotspot name="hs_new_789475" style="muiten" ath="65.8470" atv="6.3884" linkedscene="scene_6" custom_title="Mũi tên di chuyển mới"/>
+		<hotspot name="hs_return_4_6777" style="muiten" ath="53.1039" atv="10.0989" linkedscene="scene_4" custom_title="Sân trước"/>
 	</scene>
 	<scene name="scene_nha_lam_viec2" title="Khu sinh hoạt" thumburl="panos/nha_lam_viec2.tiles/thumb.jpg">
 		<view fovtype="MFOV" hlookat="1.8" vlookat="-3.4" fov="85.0" fovmin="60" fovmax="95"/>

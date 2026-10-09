@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <krpano>
-	<scene name="scene_duong_703_den" title="Đường vào Đền Po Klaong Car" thumburl="panos/duong_703_den.tiles/thumb.jpg">
+	<scene name="scene_duong_703_den" title="Đường vào Đền Po Klaong Car" thumburl="panos/duong_703_den.tiles/thumb.jpg" lat="11.53822249373931" lng="108.92841898311809">
 		<view fovtype="MFOV" hlookat="-95.4" vlookat="-3.4" fov="95.0" fovmin="60" fovmax="95"/>
 		<preview url="panos/duong_703_den.tiles/preview.jpg"/>
 		<image type="CUBE" multires="true" tilesize="512">

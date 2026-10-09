@@ -572,6 +572,7 @@ window.WebXRBridge = (function () {
 
     function checkSimHover() {
         if (!camera || !raycaster) return;
+        camera.updateMatrixWorld();
         raycaster.setFromCamera(simMouseNDC, camera);
 
         // 1. Kiểm tra Bảng Menu 3D nếu đang mở
@@ -617,6 +618,7 @@ window.WebXRBridge = (function () {
     function triggerSimClick(e) {
         simMouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
         simMouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        if (camera) camera.updateMatrixWorld();
         raycaster.setFromCamera(simMouseNDC, camera);
 
         // 1. Nếu Menu đang mở: xử lý tương tác trên Bảng Menu 3D
@@ -881,31 +883,32 @@ window.WebXRBridge = (function () {
 
     /**
      * Nạp và ghép ảnh Cubemap đa phân giải: Level 2 (5K) tức thì -> Level 3 (10K siêu nét nguyên gốc)
+     * Tự động nhận diện cấu trúc ảnh gạch: 1280/2560 (cảnh mặt đất) và 1536/3072 (cảnh trên cao 300m & 100m)
      */
     async function loadHighResTiles(tilesDir, sceneId) {
         const token = ++currentLoadingSceneToken;
 
-        // BƯỚC 1: Nạp nhanh Level 2 (1280x1280) để nâng độ nét lên 5K trong chớp mắt
+        // BƯỚC 1: Nạp nhanh Level 2 để nâng độ nét lên tức thì
         try {
-            const l2Canvases = await loadLevelTiles(tilesDir, 2);
+            const l2Canvases = await loadLevelTiles(tilesDir, 2, sceneId);
             if (token !== currentLoadingSceneToken) return;
 
             if (l2Canvases) {
                 applyCubeTextureToSky(createCubeTextureFromCanvases(l2Canvases));
-                console.log('[WebXRBridge] Đã áp dụng Level 2 (1280x1280) cho:', sceneId);
+                console.log('[WebXRBridge] Đã áp dụng Level 2 cho cảnh:', sceneId);
             }
         } catch (e2) {
             console.warn('[WebXRBridge] Bỏ qua L2:', e2);
         }
 
-        // BƯỚC 2: Tự động nâng cấp tiếp lên Level 3 (2560x2560 - Chuẩn 10K sắc nét nguyên bản)
+        // BƯỚC 2: Tự động nâng cấp tiếp lên Level 3 (Chuẩn Retina 10K sắc nét nguyên bản)
         try {
-            const l3Canvases = await loadLevelTiles(tilesDir, 3);
+            const l3Canvases = await loadLevelTiles(tilesDir, 3, sceneId);
             if (token !== currentLoadingSceneToken) return;
 
             if (l3Canvases) {
                 applyCubeTextureToSky(createCubeTextureFromCanvases(l3Canvases));
-                console.log('[WebXRBridge] ĐÃ NÂNG CẤP ĐẠT ĐỈNH LEVEL 3 (2560x2560, 10K Retina) cho:', sceneId);
+                console.log('[WebXRBridge] ĐÃ NÂNG CẤP ĐẠT ĐỈNH LEVEL 3 (Retina 10K) cho cảnh:', sceneId);
             }
         } catch (e3) {
             console.log('[WebXRBridge] Giữ nguyên Level 2 cho:', sceneId);
@@ -913,101 +916,60 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Nạp các mảnh tile cho từng Level (Level 2: 1280x1280 hoặc Level 3: 2560x2560)
+     * Nạp các mảnh tile cho từng Level dựa trên kích thước thật của cảnh:
+     * - Cảnh thông thường: Level 2 = 1280x1280 (3x3), Level 3 = 2560x2560 (5x5)
+     * - Cảnh toàn cảnh 300m/100m: Level 2 = 1536x1536 (3x3), Level 3 = 3072x3072 (6x6)
      */
-    async function loadLevelTiles(tilesDir, level) {
+    async function loadLevelTiles(tilesDir, level, sceneId) {
         const faces = ['l', 'r', 'u', 'd', 'b', 'f'];
+        const sceneData = (manifest && sceneId && manifest[sceneId]) ? manifest[sceneId] : null;
+        const levels = sceneData && sceneData.levels ? sceneData.levels : null;
 
-        if (level === 3) {
-            const rows = ['01', '02', '03', '04', '05'];
-            const cols = ['01', '02', '03', '04', '05'];
-
-            const facePromises = faces.map(async (face) => {
-                const canvas = document.createElement('canvas');
-                canvas.width = 2560;
-                canvas.height = 2560;
-                const ctx = canvas.getContext('2d');
-
-                const tilePositions = [];
-                for (let rIdx = 0; rIdx < 5; rIdx++) {
-                    for (let cIdx = 0; cIdx < 5; cIdx++) {
-                        tilePositions.push({
-                            r: rows[rIdx],
-                            c: cols[cIdx],
-                            x: cIdx * 512,
-                            y: rIdx * 512
-                        });
-                    }
-                }
-
-                const tileImgs = await Promise.all(
-                    tilePositions.map(pos => loadImage(`${tilesDir}/${face}/l3/${pos.r}/l3_${face}_${pos.r}_${pos.c}.jpg`))
-                );
-
-                tilePositions.forEach((pos, idx) => {
-                    ctx.drawImage(tileImgs[idx], pos.x, pos.y);
-                });
-
-                if (face === 'u' || face === 'd') {
-                    return rotateCanvas180(canvas);
-                }
-                return canvas;
-            });
-
-            return await Promise.all(facePromises);
+        // Xác định kích thước chuẩn xác của từng mặt (px)
+        let targetDim = 0;
+        if (levels && levels['l' + level]) {
+            targetDim = levels['l' + level];
+        } else if (tilesDir && (tilesDir.includes('toancanh_300m') || tilesDir.includes('toancanh_100m'))) {
+            targetDim = level === 3 ? 3072 : (level === 2 ? 1536 : 768);
+        } else {
+            targetDim = level === 3 ? 2560 : (level === 2 ? 1280 : 640);
         }
 
-        // Level 2: 1280x1280 (3 hàng x 3 cột = 9 mảnh gạch)
+        const numTiles = Math.ceil(targetDim / 512);
+
         const facePromises = faces.map(async (face) => {
             const canvas = document.createElement('canvas');
-            canvas.width = 1280;
-            canvas.height = 1280;
+            canvas.width = targetDim;
+            canvas.height = targetDim;
             const ctx = canvas.getContext('2d');
 
-            try {
-                const tilePositions = [
-                    { r: '01', c: '01', x: 0, y: 0 },
-                    { r: '01', c: '02', x: 512, y: 0 },
-                    { r: '01', c: '03', x: 1024, y: 0 },
-                    { r: '02', c: '01', x: 0, y: 512 },
-                    { r: '02', c: '02', x: 512, y: 512 },
-                    { r: '02', c: '03', x: 1024, y: 512 },
-                    { r: '03', c: '01', x: 0, y: 1024 },
-                    { r: '03', c: '02', x: 512, y: 1024 },
-                    { r: '03', c: '03', x: 1024, y: 1024 }
-                ];
-
-                const tileImgs = await Promise.all(
-                    tilePositions.map(pos => loadImage(`${tilesDir}/${face}/l2/${pos.r}/l2_${face}_${pos.r}_${pos.c}.jpg`))
-                );
-
-                tilePositions.forEach((pos, idx) => {
-                    ctx.drawImage(tileImgs[idx], pos.x, pos.y);
-                });
-
-                if (face === 'u' || face === 'd') {
-                    return rotateCanvas180(canvas);
+            const tilePositions = [];
+            for (let r = 1; r <= numTiles; r++) {
+                for (let c = 1; c <= numTiles; c++) {
+                    const rStr = String(r).padStart(2, '0');
+                    const cStr = String(c).padStart(2, '0');
+                    tilePositions.push({
+                        r: rStr,
+                        c: cStr,
+                        x: (c - 1) * 512,
+                        y: (r - 1) * 512,
+                        url: `${tilesDir}/${face}/l${level}/${rStr}/l${level}_${face}_${rStr}_${cStr}.jpg`
+                    });
                 }
-                return canvas;
-            } catch (errL2) {
-                // Fallback Level 1 (640x640)
-                canvas.width = 640;
-                canvas.height = 640;
-                const p1 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_01.jpg`);
-                const p2 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_02.jpg`);
-                const p3 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_01.jpg`);
-                const p4 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_02.jpg`);
-                const [img1, img2, img3, img4] = await Promise.all([p1, p2, p3, p4]);
-                ctx.drawImage(img1, 0, 0);
-                ctx.drawImage(img2, 512, 0);
-                ctx.drawImage(img3, 0, 512);
-                ctx.drawImage(img4, 512, 512);
-
-                if (face === 'u' || face === 'd') {
-                    return rotateCanvas180(canvas);
-                }
-                return canvas;
             }
+
+            const tileImgs = await Promise.all(
+                tilePositions.map(pos => loadImage(pos.url))
+            );
+
+            tilePositions.forEach((pos, idx) => {
+                ctx.drawImage(tileImgs[idx], pos.x, pos.y);
+            });
+
+            if (face === 'u' || face === 'd') {
+                return rotateCanvas180(canvas);
+            }
+            return canvas;
         });
 
         return await Promise.all(facePromises);
@@ -1018,6 +980,8 @@ window.WebXRBridge = (function () {
         cubeTex.generateMipmaps = true;
         cubeTex.minFilter = THREE.LinearMipmapLinearFilter;
         cubeTex.magFilter = THREE.LinearFilter;
+        cubeTex.wrapS = THREE.ClampToEdgeWrapping;
+        cubeTex.wrapT = THREE.ClampToEdgeWrapping;
         if (renderer && renderer.capabilities) {
             cubeTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
         }
@@ -1569,24 +1533,26 @@ window.WebXRBridge = (function () {
     function buildVRMenu3DComponents() {
         vrMenuGroup.clear();
 
-        // Nút 3D mở Menu nhỏ nổi dưới tầm mắt
+        // Nút 3D mở Menu nhỏ gọn: Nền trắng glass, viền đỏ sang trọng
         const btnCanvas = document.createElement('canvas');
-        btnCanvas.width = 512;
-        btnCanvas.height = 180;
+        btnCanvas.width = 380;
+        btnCanvas.height = 120;
         const bCtx = btnCanvas.getContext('2d');
 
-        bCtx.fillStyle = 'rgba(5, 12, 28, 0.9)';
-        bCtx.strokeStyle = '#00f0ff';
-        bCtx.lineWidth = 8;
-        roundRect(bCtx, 10, 10, 492, 160, 40);
+        // Nền trắng glass mờ cao cấp
+        bCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        bCtx.strokeStyle = '#ef4444'; // Viền đỏ nổi bật
+        bCtx.lineWidth = 6;
+        roundRect(bCtx, 6, 6, 368, 108, 28);
         bCtx.fill();
         bCtx.stroke();
 
-        bCtx.fillStyle = '#ffb300';
-        bCtx.font = 'bold 50px "Segoe UI", Arial, sans-serif';
+        // Chữ ĐỊA ĐIỂM màu đỏ đậm sắc nét trên nền trắng
+        bCtx.fillStyle = '#dc2626';
+        bCtx.font = 'bold 36px "Segoe UI", Arial, sans-serif';
         bCtx.textAlign = 'center';
         bCtx.textBaseline = 'middle';
-        bCtx.fillText('📍 ĐỊA ĐIỂM', 256, 90);
+        bCtx.fillText('📍 ĐỊA ĐIỂM', 190, 60);
 
         const btnTex = new THREE.CanvasTexture(btnCanvas);
         const btnMat = new THREE.MeshBasicMaterial({
@@ -1594,9 +1560,9 @@ window.WebXRBridge = (function () {
             transparent: true,
             depthTest: false
         });
-        vrMenuBtnMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.22), btnMat);
+        vrMenuBtnMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.108), btnMat);
         vrMenuBtnMesh.name = 'vrMenuBtnMesh';
-        vrMenuBtnMesh.renderOrder = 300;
+        vrMenuBtnMesh.renderOrder = 999;
         vrMenuGroup.add(vrMenuBtnMesh);
 
         // Bảng Menu 3D lớn hiển thị Danh sách địa điểm (Glassmorphism Web Style)
@@ -1636,7 +1602,7 @@ window.WebXRBridge = (function () {
             if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
             camDir.normalize();
 
-            vrMenuPanelMesh.position.copy(camera.position).add(camDir.clone().multiplyScalar(2.4));
+            vrMenuPanelMesh.position.copy(camera.position).add(camDir.clone().multiplyScalar(2.2));
             vrMenuPanelMesh.position.y = camera.position.y;
             vrMenuPanelMesh.lookAt(camera.position);
 
@@ -1647,30 +1613,24 @@ window.WebXRBridge = (function () {
             console.log('[WebXRBridge] Đã mở Bảng Menu Danh Sách Địa Điểm 3D.');
         } else {
             if (vrMenuPanelMesh) vrMenuPanelMesh.visible = false;
-            if (vrMenuBtnMesh) vrMenuBtnMesh.visible = !isSimulator;
+            if (vrMenuBtnMesh) vrMenuBtnMesh.visible = true;
             console.log('[WebXRBridge] Đã đóng Bảng Menu Danh Sách Địa Điểm 3D.');
         }
     }
 
     function updateVRMenuFloatingPositions() {
-        if (!camera || isMenuOpen || !vrMenuBtnMesh) return;
+        if (!camera || !vrMenuBtnMesh) return;
 
-        // Trong Simulator: Không hiện nút 3D lơ lửng chắn ngang màn hình (đã có nút Header & phím M)
-        if (isSimulator) {
-            vrMenuBtnMesh.visible = false;
-            return;
+        // Cố định nút ở góc trên bên trái tầm nhìn của người xem (HUD)
+        // Luôn tự động xoay và di chuyển theo góc quay của đầu/camera 100% thời gian thực
+        if (vrMenuBtnMesh.parent !== camera) {
+            camera.add(vrMenuBtnMesh);
         }
 
-        const camDir = new THREE.Vector3();
-        camera.getWorldDirection(camDir);
-        camDir.y = 0;
-        if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
-        camDir.normalize();
-
-        // Trong VR thật: Đặt nút ở thấp dưới chân (cao độ -1.25m) để không chắn tầm nhìn cảnh quan
-        vrMenuBtnMesh.position.copy(camera.position).add(camDir.multiplyScalar(2.2));
-        vrMenuBtnMesh.position.y = camera.position.y - 1.25;
-        vrMenuBtnMesh.lookAt(camera.position);
+        // Tọa độ góc trên bên trái: x = -0.54 (trái), y = 0.34 (trên), z = -1.6 (cách mắt 1.6m)
+        vrMenuBtnMesh.position.set(-0.54, 0.34, -1.6);
+        vrMenuBtnMesh.rotation.set(0, 0, 0);
+        vrMenuBtnMesh.visible = !isMenuOpen;
     }
 
     function renderMenuCanvas() {
