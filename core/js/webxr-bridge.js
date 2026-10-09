@@ -1397,7 +1397,7 @@ window.WebXRBridge = (function () {
             ctx.fill();
 
             // Vòng tròn trắng glass mờ viền đỏ nổi bật
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
             ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 6;
             ctx.beginPath();
@@ -1929,7 +1929,7 @@ window.WebXRBridge = (function () {
             const menuHits = raycaster.intersectObject(vrMenuPanelMesh, false);
             if (menuHits.length > 0) {
                 if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                    try { controller.gamepad.hapticActuators[0].pulse(0.6, 40); } catch (e) {}
+                    try { controller.gamepad.hapticActuators[0].pulse(0.6, 40); } catch (e) { }
                 }
                 handleMenuPanelClick(menuHits[0].uv);
                 return;
@@ -1940,7 +1940,7 @@ window.WebXRBridge = (function () {
             const btnHits = raycaster.intersectObject(vrMenuBtnMesh, true);
             if (btnHits.length > 0) {
                 if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                    try { controller.gamepad.hapticActuators[0].pulse(0.8, 50); } catch (e) {}
+                    try { controller.gamepad.hapticActuators[0].pulse(0.8, 50); } catch (e) { }
                 }
                 toggleVRMenu();
                 return;
@@ -1959,7 +1959,7 @@ window.WebXRBridge = (function () {
 
                 if (hit && hit.userData && hit.userData.linkedscene) {
                     if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                        try { controller.gamepad.hapticActuators[0].pulse(0.8, 60); } catch (e) {}
+                        try { controller.gamepad.hapticActuators[0].pulse(0.8, 60); } catch (e) { }
                     }
                     switchScene(hit.userData.linkedscene);
                 }
@@ -2050,7 +2050,7 @@ window.WebXRBridge = (function () {
                     if (hitObj && hitObj !== hoveredHotspot) {
                         hoveredHotspot = hitObj;
                         if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                            try { controller.gamepad.hapticActuators[0].pulse(0.3, 15); } catch (e) {}
+                            try { controller.gamepad.hapticActuators[0].pulse(0.3, 15); } catch (e) { }
                         }
                     }
                 } else {
