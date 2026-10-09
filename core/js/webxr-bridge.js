@@ -307,6 +307,30 @@ window.WebXRBridge = (function () {
     }
 
     /**
+     * Đồng bộ tia raycast chính xác 100% từ toạ độ và hướng thế giới (World Space) của tay cầm
+     */
+    function setRaycasterFromController(controller) {
+        if (!controller || !raycaster) return;
+        if (scene) scene.updateMatrixWorld(true);
+        controller.updateMatrixWorld(true);
+        const rayOrigin = new THREE.Vector3();
+        controller.getWorldPosition(rayOrigin);
+        const rayDir = new THREE.Vector3(0, 0, -1);
+        const controllerQuat = new THREE.Quaternion();
+        controller.getWorldQuaternion(controllerQuat);
+        rayDir.applyQuaternion(controllerQuat).normalize();
+        raycaster.set(rayOrigin, rayDir);
+    }
+
+    let lastControllerSelectTime = 0;
+    function handleControllerSelect(event) {
+        const now = Date.now();
+        if (now - lastControllerSelectTime < 200) return; // Debounce 200ms
+        lastControllerSelectTime = now;
+        onSelectStart(event);
+    }
+
+    /**
      * Cấu hình tia laser định vị cho tay cầm Meta Quest Touch
      */
     function setupControllers() {
@@ -314,7 +338,8 @@ window.WebXRBridge = (function () {
 
         for (let i = 0; i < 2; i++) {
             const controller = renderer.xr.getController(i);
-            controller.addEventListener('selectstart', onSelectStart);
+            controller.addEventListener('selectstart', handleControllerSelect);
+            controller.addEventListener('select', handleControllerSelect);
 
             const laserGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, 0, 0),
@@ -681,6 +706,7 @@ window.WebXRBridge = (function () {
     function simRenderLoop(timestamp) {
         if (!isSimulator) return;
         simAnimId = requestAnimationFrame(simRenderLoop);
+        updateFade();
 
         const time = timestamp || performance.now();
 
@@ -844,39 +870,57 @@ window.WebXRBridge = (function () {
      * Cắt ảnh preview.jpg thành 6 mặt CubeTexture theo đúng toạ độ quang học (có sửa xoay u và d)
      */
     function loadPreviewCubemap(previewUrl) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
+            let isResolved = false;
+            const finish = () => {
+                if (!isResolved) {
+                    isResolved = true;
+                    resolve();
+                }
+            };
+            const timer = setTimeout(finish, 3500); // Tối đa 3.5s để không bao giờ nghẽn
+
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = () => {
-                const faceSize = img.width; // 256
-                const stripOrder = ['l', 'f', 'r', 'b', 'u', 'd'];
-                const faceCanvases = {};
+                clearTimeout(timer);
+                try {
+                    const faceSize = img.width; // 256
+                    const stripOrder = ['l', 'f', 'r', 'b', 'u', 'd'];
+                    const faceCanvases = {};
 
-                for (let i = 0; i < 6; i++) {
-                    const c = document.createElement('canvas');
-                    c.width = faceSize;
-                    c.height = faceSize;
-                    const ctx = c.getContext('2d');
-                    ctx.drawImage(img, 0, i * faceSize, faceSize, faceSize, 0, 0, faceSize, faceSize);
-                    faceCanvases[stripOrder[i]] = c;
+                    for (let i = 0; i < 6; i++) {
+                        const c = document.createElement('canvas');
+                        c.width = faceSize;
+                        c.height = faceSize;
+                        const ctx = c.getContext('2d');
+                        ctx.drawImage(img, 0, i * faceSize, faceSize, faceSize, 0, 0, faceSize, faceSize);
+                        faceCanvases[stripOrder[i]] = c;
+                    }
+
+                    const uCanvas = rotateCanvas180(faceCanvases.u);
+                    const dCanvas = rotateCanvas180(faceCanvases.d);
+
+                    const cubeTex = new THREE.CubeTexture([
+                        faceCanvases.l,
+                        faceCanvases.r,
+                        uCanvas,
+                        dCanvas,
+                        faceCanvases.b,
+                        faceCanvases.f
+                    ]);
+                    cubeTex.needsUpdate = true;
+                    applyCubeTextureToSky(cubeTex);
+                } catch (e) {
+                    console.warn('[WebXRBridge] Lỗi parse preview:', e);
                 }
-
-                const uCanvas = rotateCanvas180(faceCanvases.u);
-                const dCanvas = rotateCanvas180(faceCanvases.d);
-
-                const cubeTex = new THREE.CubeTexture([
-                    faceCanvases.l,
-                    faceCanvases.r,
-                    uCanvas,
-                    dCanvas,
-                    faceCanvases.b,
-                    faceCanvases.f
-                ]);
-                cubeTex.needsUpdate = true;
-                applyCubeTextureToSky(cubeTex);
-                resolve();
+                finish();
             };
-            img.onerror = reject;
+            img.onerror = () => {
+                clearTimeout(timer);
+                console.warn('[WebXRBridge] Không tải được preview:', previewUrl);
+                finish();
+            };
             img.src = previewUrl;
         });
     }
@@ -1762,14 +1806,14 @@ window.WebXRBridge = (function () {
                 menuCtx.fillText('Khám phá ➔', badgeX + badgeW / 2, badgeY + badgeH / 2);
             }
 
-            // Ghi nhận vùng bấm vào thanh điểm chính
+            // Ghi nhận vùng bấm vào thanh điểm chính (Bao quát toàn bộ bề ngang để bấm cực nhạy)
             menuClickTargets.push({
                 type: 'group',
                 firstSceneId: firstSceneId,
-                x: itemX,
-                y: currentY,
-                w: itemW,
-                h: itemH
+                x: 15,
+                y: currentY - 4,
+                w: 870,
+                h: itemH + itemGap
             });
 
             currentY += itemH + itemGap;
@@ -1790,8 +1834,8 @@ window.WebXRBridge = (function () {
                 if (target.type === 'close') {
                     toggleVRMenu(false);
                 } else if (target.type === 'group' && target.firstSceneId) {
-                    switchScene(target.firstSceneId);
                     toggleVRMenu(false);
+                    switchScene(target.firstSceneId);
                 }
                 break;
             }
@@ -1799,15 +1843,33 @@ window.WebXRBridge = (function () {
     }
 
     async function switchScene(sceneId) {
-        if (isTransitioning || sceneId === activeSceneId) return;
-        isTransitioning = true;
-
-        if (window.krpanoObj) {
-            window.krpanoObj.call(`loadscene(${sceneId}, null, MERGE, BLEND(0.5));`);
+        if (!sceneId) return;
+        if (isTransitioning) {
+            console.warn('[WebXRBridge] Đang trong quá trình chuyển cảnh, bỏ qua:', sceneId);
+            return;
+        }
+        if (sceneId === activeSceneId) {
+            console.log('[WebXRBridge] Đã ở đúng cảnh này:', sceneId);
+            return;
         }
 
-        await loadScene(sceneId, true);
-        isTransitioning = false;
+        isTransitioning = true;
+        try {
+            const kp = window.krpanoObj || (document.getElementById ? document.getElementById('krpanoSWFObject') : null);
+            if (kp && typeof kp.call === 'function') {
+                try {
+                    kp.call(`loadscene(${sceneId}, null, MERGE, BLEND(0.5));`);
+                } catch (eKrpano) {
+                    console.warn('[WebXRBridge] krpano sync warning:', eKrpano);
+                }
+            }
+
+            await loadScene(sceneId, true);
+        } catch (err) {
+            console.error('[WebXRBridge] Lỗi trong switchScene:', sceneId, err);
+        } finally {
+            isTransitioning = false;
+        }
     }
 
     function navigateRelativeScene(delta) {
@@ -1822,17 +1884,15 @@ window.WebXRBridge = (function () {
 
     function onSelectStart(event) {
         const controller = event.target;
-        const tempMatrix = new THREE.Matrix4();
-        tempMatrix.identity().extractRotation(controller.matrixWorld);
+        if (!controller) return;
 
-        const rayDir = new THREE.Vector3(0, 0, -1).applyMatrix4(tempMatrix);
-        raycaster.set(controller.position, rayDir);
+        setRaycasterFromController(controller);
 
         if (isMenuOpen && vrMenuPanelMesh && vrMenuPanelMesh.visible) {
             const menuHits = raycaster.intersectObject(vrMenuPanelMesh, false);
             if (menuHits.length > 0) {
                 if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                    controller.gamepad.hapticActuators[0].pulse(0.6, 40);
+                    try { controller.gamepad.hapticActuators[0].pulse(0.6, 40); } catch (e) {}
                 }
                 handleMenuPanelClick(menuHits[0].uv);
                 return;
@@ -1843,7 +1903,7 @@ window.WebXRBridge = (function () {
             const btnHits = raycaster.intersectObject(vrMenuBtnMesh, true);
             if (btnHits.length > 0) {
                 if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                    controller.gamepad.hapticActuators[0].pulse(0.8, 50);
+                    try { controller.gamepad.hapticActuators[0].pulse(0.8, 50); } catch (e) {}
                 }
                 toggleVRMenu();
                 return;
@@ -1862,7 +1922,7 @@ window.WebXRBridge = (function () {
 
                 if (hit && hit.userData && hit.userData.linkedscene) {
                     if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                        controller.gamepad.hapticActuators[0].pulse(0.8, 60);
+                        try { controller.gamepad.hapticActuators[0].pulse(0.8, 60); } catch (e) {}
                     }
                     switchScene(hit.userData.linkedscene);
                 }
@@ -1871,6 +1931,8 @@ window.WebXRBridge = (function () {
     }
 
     function renderLoop(time, frame) {
+        updateFade();
+
         if (skyMesh && camera) {
             skyMesh.position.copy(camera.position);
         }
@@ -1906,11 +1968,7 @@ window.WebXRBridge = (function () {
             if (!controller.visible) return;
             anyControllerActive = true;
 
-            const tempMatrix = new THREE.Matrix4();
-            tempMatrix.identity().extractRotation(controller.matrixWorld);
-
-            const rayDir = new THREE.Vector3(0, 0, -1).applyMatrix4(tempMatrix);
-            raycaster.set(controller.position, rayDir);
+            setRaycasterFromController(controller);
 
             const dot = controller.getObjectByName('dot');
 
@@ -2040,22 +2098,64 @@ window.WebXRBridge = (function () {
         gazeReticle.scale.set(1, 1, 1);
     }
 
-    function tweenFade(fromAlpha, toAlpha, duration) {
+    let fadeAnim = {
+        active: false,
+        from: 0,
+        to: 0,
+        startTime: 0,
+        duration: 0,
+        resolve: null
+    };
+
+    /**
+     * Cập nhật chuyển sắc (Fade In/Out) đồng bộ 100% với Frame vòng lặp render của WebXR
+     */
+    function updateFade() {
+        if (!fadeAnim.active || !fadeMesh) return;
+        const now = performance.now();
+        const elapsed = now - fadeAnim.startTime;
+        const t = Math.min(1.0, elapsed / Math.max(1, fadeAnim.duration));
+
+        if (fadeMesh.material) {
+            fadeMesh.material.opacity = fadeAnim.from + (fadeAnim.to - fadeAnim.from) * t;
+        }
+
+        if (t >= 1.0) {
+            fadeAnim.active = false;
+            if (fadeAnim.resolve) {
+                const res = fadeAnim.resolve;
+                fadeAnim.resolve = null;
+                res();
+            }
+        }
+    }
+
+    /**
+     * Chuyển sắc mượt mà không dùng window.requestAnimationFrame (tránh bị treo/đơ trên Oculus Browser)
+     */
+    function tweenFade(fromAlpha, toAlpha, duration = 150) {
+        if (!fadeMesh) return Promise.resolve();
         return new Promise(resolve => {
-            const startTime = Date.now();
-            const step = () => {
-                const elapsed = Date.now() - startTime;
-                const t = Math.min(1.0, elapsed / duration);
-                if (fadeMesh && fadeMesh.material) {
-                    fadeMesh.material.opacity = fromAlpha + (toAlpha - fromAlpha) * t;
-                }
-                if (t < 1.0) {
-                    requestAnimationFrame(step);
-                } else {
+            fadeAnim.active = true;
+            fadeAnim.from = fromAlpha;
+            fadeAnim.to = toAlpha;
+            fadeAnim.startTime = performance.now();
+            fadeAnim.duration = duration;
+            fadeAnim.resolve = resolve;
+
+            if (fadeMesh.material) {
+                fadeMesh.material.opacity = fromAlpha;
+            }
+
+            // Fallback timeout sau (duration + 100ms) để triệt để không bao giờ bị nghẽn lệnh
+            setTimeout(() => {
+                if (fadeAnim.active && fadeAnim.resolve === resolve) {
+                    fadeAnim.active = false;
+                    if (fadeMesh.material) fadeMesh.material.opacity = toAlpha;
+                    fadeAnim.resolve = null;
                     resolve();
                 }
-            };
-            step();
+            }, duration + 100);
         });
     }
 
