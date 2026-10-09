@@ -1565,10 +1565,10 @@ window.WebXRBridge = (function () {
         vrMenuBtnMesh.renderOrder = 999;
         vrMenuGroup.add(vrMenuBtnMesh);
 
-        // Bảng Menu 3D lớn hiển thị Danh sách địa điểm (Glassmorphism Web Style)
+        // Bảng Menu 3D tối giản: Nền trắng glass, viền đỏ, hiển thị thanh danh sách các điểm chính
         menuCanvas = document.createElement('canvas');
-        menuCanvas.width = 1600;
-        menuCanvas.height = 1100;
+        menuCanvas.width = 900;
+        menuCanvas.height = 1000;
         menuCtx = menuCanvas.getContext('2d');
 
         menuTexture = new THREE.CanvasTexture(menuCanvas);
@@ -1581,7 +1581,7 @@ window.WebXRBridge = (function () {
             depthTest: false,
             side: THREE.DoubleSide
         });
-        vrMenuPanelMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.65), panelMat);
+        vrMenuPanelMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.33), panelMat);
         vrMenuPanelMesh.name = 'vrMenuPanelMesh';
         vrMenuPanelMesh.visible = false;
         vrMenuPanelMesh.renderOrder = 350;
@@ -1602,7 +1602,7 @@ window.WebXRBridge = (function () {
             if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
             camDir.normalize();
 
-            vrMenuPanelMesh.position.copy(camera.position).add(camDir.clone().multiplyScalar(2.2));
+            vrMenuPanelMesh.position.copy(camera.position).add(camDir.clone().multiplyScalar(2.0));
             vrMenuPanelMesh.position.y = camera.position.y;
             vrMenuPanelMesh.lookAt(camera.position);
 
@@ -1610,7 +1610,7 @@ window.WebXRBridge = (function () {
             if (vrMenuBtnMesh) vrMenuBtnMesh.visible = false;
 
             renderMenuCanvas();
-            console.log('[WebXRBridge] Đã mở Bảng Menu Danh Sách Địa Điểm 3D.');
+            console.log('[WebXRBridge] Đã mở Bảng Menu Danh Sách Địa Điểm 3D (Tối giản White Glass).');
         } else {
             if (vrMenuPanelMesh) vrMenuPanelMesh.visible = false;
             if (vrMenuBtnMesh) vrMenuBtnMesh.visible = true;
@@ -1639,44 +1639,41 @@ window.WebXRBridge = (function () {
         if (groups.length === 0) return;
 
         menuClickTargets = [];
-        menuCtx.clearRect(0, 0, 1600, 1100);
+        menuCtx.clearRect(0, 0, 900, 1000);
 
-        // Khung nền chính (Dark Glassmorphism)
-        menuCtx.fillStyle = 'rgba(5, 12, 28, 0.94)';
-        menuCtx.strokeStyle = 'rgba(0, 240, 255, 0.7)';
+        // 1. Khung nền chính (Trắng Glass, Viền đỏ đồng bộ với nút Địa điểm)
+        menuCtx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+        menuCtx.strokeStyle = '#ef4444';
         menuCtx.lineWidth = 6;
-        roundRect(menuCtx, 10, 10, 1580, 1080, 36);
+        roundRect(menuCtx, 10, 10, 880, 980, 32);
         menuCtx.fill();
         menuCtx.stroke();
 
-        // Header Bar
-        menuCtx.fillStyle = 'rgba(10, 25, 47, 0.9)';
-        roundRect(menuCtx, 16, 16, 1568, 110, 26);
+        // 2. Thanh tiêu đề Header
+        menuCtx.fillStyle = 'rgba(254, 242, 242, 0.95)';
+        menuCtx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
+        menuCtx.lineWidth = 2;
+        roundRect(menuCtx, 22, 22, 856, 80, 22);
         menuCtx.fill();
+        menuCtx.stroke();
 
-        menuCtx.fillStyle = '#00f0ff';
-        menuCtx.font = 'bold 40px "Segoe UI", Arial, sans-serif';
+        menuCtx.fillStyle = '#dc2626';
+        menuCtx.font = 'bold 32px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.textBaseline = 'middle';
-        menuCtx.fillText('📍 DANH SÁCH ĐỊA ĐIỂM — NINH PHƯỚC 360', 50, 70);
-
-        menuCtx.fillStyle = '#94a3b8';
-        menuCtx.font = '500 22px "Segoe UI", Arial, sans-serif';
-        menuCtx.fillText('Trỏ laser hoặc nhấp vào ảnh để chuyển cảnh', 900, 70);
+        menuCtx.fillText('📍 DANH SÁCH ĐỊA ĐIỂM', 45, 58);
 
         // Nút Đóng [✕]
-        const closeBtn = { x: 1440, y: 35, w: 120, h: 70 };
-        menuCtx.fillStyle = 'rgba(220, 38, 38, 0.9)';
-        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        menuCtx.lineWidth = 2;
+        const closeBtn = { x: 790, y: 34, w: 72, h: 56 };
+        menuCtx.fillStyle = '#ef4444';
         roundRect(menuCtx, closeBtn.x, closeBtn.y, closeBtn.w, closeBtn.h, 14);
         menuCtx.fill();
-        menuCtx.stroke();
 
         menuCtx.fillStyle = '#ffffff';
         menuCtx.font = 'bold 26px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'center';
-        menuCtx.fillText('✕ Đóng', closeBtn.x + closeBtn.w / 2, closeBtn.y + closeBtn.h / 2);
+        menuCtx.textBaseline = 'middle';
+        menuCtx.fillText('✕', closeBtn.x + closeBtn.w / 2, closeBtn.y + closeBtn.h / 2);
 
         menuClickTargets.push({
             type: 'close',
@@ -1686,218 +1683,105 @@ window.WebXRBridge = (function () {
             h: closeBtn.h
         });
 
-        // Cột Trái: Danh mục Nhóm địa điểm
-        const colLeftX = 40;
-        const colLeftW = 460;
-        let groupY = 150;
+        // 3. Danh sách các điểm chính (Thanh ngang từng điểm, tối giản, thanh lịch)
+        const itemX = 30;
+        const itemW = 840;
+        const itemH = 80;
+        const itemGap = 12;
+        let currentY = 120;
 
-        menuCtx.fillStyle = '#64748b';
-        menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-        menuCtx.textAlign = 'left';
-        menuCtx.fillText('KHU VỰC & ĐỊA DANH', colLeftX + 10, groupY);
-        groupY += 30;
+        // Xác định tour đang đứng hiện tại
+        const activeSceneData = manifest[activeSceneId];
+        const activeTourId = activeSceneData ? activeSceneData.tour : '';
 
-        groups.forEach((grp, idx) => {
-            const isSelected = idx === selectedGroupIndex;
-            const itemH = 74;
+        groups.forEach((grp) => {
+            const isCurrentLoc = grp.id === activeTourId || grp.scenes.some(s => s.id === activeSceneId);
+            const firstSceneId = grp.scenes && grp.scenes.length > 0 ? grp.scenes[0].id : '';
 
-            if (isSelected) {
-                const grad = menuCtx.createLinearGradient(colLeftX, groupY, colLeftX + colLeftW, groupY);
-                grad.addColorStop(0, '#00c6ff');
-                grad.addColorStop(1, '#0072ff');
-                menuCtx.fillStyle = grad;
-                menuCtx.strokeStyle = '#ffffff';
-                menuCtx.lineWidth = 3;
+            // Nền từng thanh điểm chính
+            if (isCurrentLoc) {
+                menuCtx.fillStyle = 'rgba(254, 226, 226, 0.96)'; // Nền hồng trắng nhẹ nổi bật điểm đang đứng
+                menuCtx.strokeStyle = '#ef4444'; // Viền đỏ đậm
+                menuCtx.lineWidth = 4;
             } else {
-                menuCtx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-                menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+                menuCtx.fillStyle = 'rgba(255, 255, 255, 0.85)'; // Nền trắng glass
+                menuCtx.strokeStyle = 'rgba(239, 68, 68, 0.35)'; // Viền đỏ thanh mảnh
                 menuCtx.lineWidth = 2;
             }
 
-            roundRect(menuCtx, colLeftX, groupY, colLeftW, itemH, 16);
+            roundRect(menuCtx, itemX, currentY, itemW, itemH, 18);
             menuCtx.fill();
             menuCtx.stroke();
 
-            menuCtx.fillStyle = isSelected ? '#ffffff' : '#e2e8f0';
-            menuCtx.font = `bold ${isSelected ? '22px' : '20px'} "Segoe UI", Arial, sans-serif`;
+            // Icon ghim đỏ & Tên điểm chính
+            menuCtx.fillStyle = '#dc2626';
+            menuCtx.font = 'bold 24px "Segoe UI", Arial, sans-serif';
             menuCtx.textAlign = 'left';
             menuCtx.textBaseline = 'middle';
-            const grpLabel = grp.label.length > 22 ? grp.label.slice(0, 20) + '...' : grp.label;
-            menuCtx.fillText('📍 ' + grpLabel, colLeftX + 20, groupY + itemH / 2);
+            menuCtx.fillText('📍', itemX + 20, currentY + itemH / 2);
 
-            const badgeW = 90;
-            const badgeH = 34;
-            const badgeX = colLeftX + colLeftW - badgeW - 16;
-            const badgeY = groupY + (itemH - badgeH) / 2;
+            menuCtx.fillStyle = isCurrentLoc ? '#b91c1c' : '#1e293b';
+            menuCtx.font = 'bold 24px "Segoe UI", Arial, sans-serif';
+            let labelText = grp.label || grp.id;
+            if (menuCtx.measureText(labelText).width > 530) {
+                while (labelText.length > 5 && menuCtx.measureText(labelText + '...').width > 530) {
+                    labelText = labelText.slice(0, -1);
+                }
+                labelText += '...';
+            }
+            menuCtx.fillText(labelText, itemX + 58, currentY + itemH / 2);
 
-            menuCtx.fillStyle = isSelected ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 179, 0, 0.2)';
-            roundRect(menuCtx, badgeX, badgeY, badgeW, badgeH, 12);
-            menuCtx.fill();
+            // Nút Badge bên phải: "Đang ở đây" hoặc "Khám phá ➔"
+            const badgeW = isCurrentLoc ? 150 : 130;
+            const badgeH = 44;
+            const badgeX = itemX + itemW - badgeW - 18;
+            const badgeY = currentY + (itemH - badgeH) / 2;
 
-            menuCtx.fillStyle = isSelected ? '#ffffff' : '#ffb300';
-            menuCtx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
-            menuCtx.textAlign = 'center';
-            menuCtx.fillText(`${grp.scenes.length} cảnh`, badgeX + badgeW / 2, badgeY + badgeH / 2);
+            if (isCurrentLoc) {
+                menuCtx.fillStyle = '#ef4444';
+                roundRect(menuCtx, badgeX, badgeY, badgeW, badgeH, 14);
+                menuCtx.fill();
 
+                menuCtx.fillStyle = '#ffffff';
+                menuCtx.font = 'bold 17px "Segoe UI", Arial, sans-serif';
+                menuCtx.textAlign = 'center';
+                menuCtx.textBaseline = 'middle';
+                menuCtx.fillText('★ Đang ở đây', badgeX + badgeW / 2, badgeY + badgeH / 2);
+            } else {
+                menuCtx.fillStyle = 'rgba(254, 242, 242, 0.9)';
+                menuCtx.strokeStyle = '#ef4444';
+                menuCtx.lineWidth = 2;
+                roundRect(menuCtx, badgeX, badgeY, badgeW, badgeH, 14);
+                menuCtx.fill();
+                menuCtx.stroke();
+
+                menuCtx.fillStyle = '#dc2626';
+                menuCtx.font = 'bold 17px "Segoe UI", Arial, sans-serif';
+                menuCtx.textAlign = 'center';
+                menuCtx.textBaseline = 'middle';
+                menuCtx.fillText('Khám phá ➔', badgeX + badgeW / 2, badgeY + badgeH / 2);
+            }
+
+            // Ghi nhận vùng bấm vào thanh điểm chính
             menuClickTargets.push({
                 type: 'group',
-                index: idx,
-                x: colLeftX,
-                y: groupY,
-                w: colLeftW,
+                firstSceneId: firstSceneId,
+                x: itemX,
+                y: currentY,
+                w: itemW,
                 h: itemH
             });
 
-            groupY += itemH + 12;
+            currentY += itemH + itemGap;
         });
-
-        // Cột Phải: Lưới ảnh các Cảnh trong nhóm đang chọn (2 cột x 4 dòng)
-        const colRightX = 530;
-        const colRightW = 1030;
-        const currentGroup = groups[selectedGroupIndex] || groups[0];
-        const allScenes = currentGroup ? currentGroup.scenes : [];
-
-        menuCtx.fillStyle = '#64748b';
-        menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-        menuCtx.textAlign = 'left';
-        menuCtx.fillText(`DANH SÁCH CẢNH (${allScenes.length} CẢNH) — ${currentGroup ? currentGroup.label : ''}`, colRightX + 10, 150);
-
-        const totalPages = Math.ceil(allScenes.length / SCENES_PER_PAGE);
-        if (menuPageIndex >= totalPages) menuPageIndex = Math.max(0, totalPages - 1);
-
-        const pageScenes = allScenes.slice(menuPageIndex * SCENES_PER_PAGE, (menuPageIndex + 1) * SCENES_PER_PAGE);
-
-        const cardW = 495;
-        const cardH = 96;
-        const gapX = 24;
-        const gapY = 16;
-        const startGridY = 180;
-
-        pageScenes.forEach((sc, i) => {
-            const col = i % 2;
-            const row = Math.floor(i / 2);
-            const cardX = colRightX + col * (cardW + gapX);
-            const cardY = startGridY + row * (cardH + gapY);
-
-            const isActiveScene = sc.id === activeSceneId;
-
-            menuCtx.fillStyle = isActiveScene ? 'rgba(10, 35, 60, 0.95)' : 'rgba(15, 23, 42, 0.85)';
-            menuCtx.strokeStyle = isActiveScene ? '#ffb300' : 'rgba(0, 240, 255, 0.35)';
-            menuCtx.lineWidth = isActiveScene ? 4 : 2;
-            roundRect(menuCtx, cardX, cardY, cardW, cardH, 16);
-            menuCtx.fill();
-            menuCtx.stroke();
-
-            const thumbX = cardX + 10;
-            const thumbY = cardY + 10;
-            const thumbW = 114;
-            const thumbH = 76;
-
-            if (menuThumbCache.has(sc.thumb)) {
-                const cachedImg = menuThumbCache.get(sc.thumb);
-                if (cachedImg.complete && cachedImg.naturalWidth > 0) {
-                    menuCtx.save();
-                    roundRect(menuCtx, thumbX, thumbY, thumbW, thumbH, 10);
-                    menuCtx.clip();
-                    menuCtx.drawImage(cachedImg, thumbX, thumbY, thumbW, thumbH);
-                    menuCtx.restore();
-                }
-            } else if (sc.thumb) {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    menuThumbCache.set(sc.thumb, img);
-                    renderMenuCanvas();
-                };
-                img.src = sc.thumb;
-                menuThumbCache.set(sc.thumb, img);
-
-                menuCtx.fillStyle = '#1e293b';
-                roundRect(menuCtx, thumbX, thumbY, thumbW, thumbH, 10);
-                menuCtx.fill();
-            }
-
-            menuCtx.fillStyle = isActiveScene ? '#ffb300' : '#ffffff';
-            menuCtx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
-            menuCtx.textAlign = 'left';
-            menuCtx.textBaseline = 'top';
-
-            const textX = thumbX + thumbW + 18;
-            const maxTextW = cardW - thumbW - 38;
-            let displayTitle = sc.title || sc.id;
-            if (menuCtx.measureText(displayTitle).width > maxTextW) {
-                while (displayTitle.length > 5 && menuCtx.measureText(displayTitle + '...').width > maxTextW) {
-                    displayTitle = displayTitle.slice(0, -1);
-                }
-                displayTitle += '...';
-            }
-            menuCtx.fillText(displayTitle, textX, cardY + 22);
-
-            menuCtx.fillStyle = isActiveScene ? '#ffb300' : '#00f0ff';
-            menuCtx.font = '600 15px "Segoe UI", Arial, sans-serif';
-            menuCtx.fillText(isActiveScene ? '★ Đang đứng ở cảnh này' : 'Chạm để dịch chuyển ➔', textX, cardY + 54);
-
-            menuClickTargets.push({
-                type: 'scene',
-                sceneId: sc.id,
-                x: cardX,
-                y: cardY,
-                w: cardW,
-                h: cardH
-            });
-        });
-
-        // Thanh điều hướng phân trang
-        if (totalPages > 1) {
-            const navY = 660;
-            const prevBtn = { x: colRightX + 20, y: navY, w: 200, h: 56 };
-            const nextBtn = { x: colRightX + colRightW - 220, y: navY, w: 200, h: 56 };
-
-            menuCtx.fillStyle = menuPageIndex > 0 ? 'rgba(0, 198, 255, 0.85)' : 'rgba(50, 65, 85, 0.4)';
-            roundRect(menuCtx, prevBtn.x, prevBtn.y, prevBtn.w, prevBtn.h, 14);
-            menuCtx.fill();
-            menuCtx.fillStyle = '#fff';
-            menuCtx.font = 'bold 18px "Segoe UI", Arial, sans-serif';
-            menuCtx.textAlign = 'center';
-            menuCtx.fillText('◀ Trang trước', prevBtn.x + prevBtn.w / 2, prevBtn.y + prevBtn.h / 2);
-
-            menuCtx.fillStyle = menuPageIndex < totalPages - 1 ? 'rgba(0, 198, 255, 0.85)' : 'rgba(50, 65, 85, 0.4)';
-            roundRect(menuCtx, nextBtn.x, nextBtn.y, nextBtn.w, nextBtn.h, 14);
-            menuCtx.fill();
-            menuCtx.fillStyle = '#fff';
-            menuCtx.fillText('Trang sau ▶', nextBtn.x + nextBtn.w / 2, nextBtn.y + nextBtn.h / 2);
-
-            menuCtx.fillStyle = '#94a3b8';
-            menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
-            menuCtx.fillText(`Trang ${menuPageIndex + 1} / ${totalPages}`, colRightX + colRightW / 2, navY + 28);
-
-            if (menuPageIndex > 0) {
-                menuClickTargets.push({
-                    type: 'page_prev',
-                    x: prevBtn.x,
-                    y: prevBtn.y,
-                    w: prevBtn.w,
-                    h: prevBtn.h
-                });
-            }
-            if (menuPageIndex < totalPages - 1) {
-                menuClickTargets.push({
-                    type: 'page_next',
-                    x: nextBtn.x,
-                    y: nextBtn.y,
-                    w: nextBtn.w,
-                    h: nextBtn.h
-                });
-            }
-        }
 
         menuTexture.needsUpdate = true;
     }
 
     function handleMenuPanelClick(uv) {
         if (!uv || !menuClickTargets) return;
-        const canvasX = uv.x * 1600;
-        const canvasY = (1.0 - uv.y) * 1100;
+        const canvasX = uv.x * 900;
+        const canvasY = (1.0 - uv.y) * 1000;
 
         for (const target of menuClickTargets) {
             if (canvasX >= target.x && canvasX <= target.x + target.w &&
@@ -1905,20 +1789,8 @@ window.WebXRBridge = (function () {
 
                 if (target.type === 'close') {
                     toggleVRMenu(false);
-                } else if (target.type === 'group') {
-                    selectedGroupIndex = target.index;
-                    menuPageIndex = 0;
-                    renderMenuCanvas();
-                } else if (target.type === 'page_prev') {
-                    if (menuPageIndex > 0) {
-                        menuPageIndex--;
-                        renderMenuCanvas();
-                    }
-                } else if (target.type === 'page_next') {
-                    menuPageIndex++;
-                    renderMenuCanvas();
-                } else if (target.type === 'scene') {
-                    switchScene(target.sceneId);
+                } else if (target.type === 'group' && target.firstSceneId) {
+                    switchScene(target.firstSceneId);
                     toggleVRMenu(false);
                 }
                 break;
