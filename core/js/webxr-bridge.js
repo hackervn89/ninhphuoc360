@@ -341,26 +341,51 @@ window.WebXRBridge = (function () {
             controller.addEventListener('selectstart', handleControllerSelect);
             controller.addEventListener('select', handleControllerSelect);
 
-            const laserGeo = new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(0, 0, 0),
-                new THREE.Vector3(0, 0, -8)
-            ]);
-            const laserMat = new THREE.LineBasicMaterial({
-                color: 0x00f0ff,
+            // 1. Thân tia laser 3D hình trụ màu đỏ nổi bật (không bị mờ, luôn hiển thị đè lên trên bảng menu)
+            const laserGeo = new THREE.CylinderGeometry(0.003, 0.003, 1, 8);
+            laserGeo.rotateX(-Math.PI / 2);
+            laserGeo.translate(0, 0, -0.5); // Gốc tại tay cầm, kéo dài theo hướng -Z
+            const laserMat = new THREE.MeshBasicMaterial({
+                color: 0xef4444, // Màu đỏ tươi đồng bộ với nút Địa điểm
                 transparent: true,
-                opacity: 0.6,
-                linewidth: 2
+                opacity: 0.9,
+                depthTest: false
             });
-            const laser = new THREE.Line(laserGeo, laserMat);
+            const laser = new THREE.Mesh(laserGeo, laserMat);
             laser.name = 'laser';
+            laser.renderOrder = 9998;
+            laser.scale.set(1, 1, 6);
             controller.add(laser);
 
-            const dotGeo = new THREE.SphereGeometry(0.015, 12, 12);
-            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
-            const dot = new THREE.Mesh(dotGeo, dotMat);
-            dot.position.z = -8;
-            dot.name = 'dot';
-            controller.add(dot);
+            // 2. Chấm con trỏ (Pointer Cursor) 2 tầng: Vòng ngoài đỏ + Tâm trong trắng sáng rực rỡ
+            const dotGroup = new THREE.Group();
+            dotGroup.name = 'dot';
+            dotGroup.renderOrder = 9999;
+
+            const dotOuterGeo = new THREE.SphereGeometry(0.02, 16, 16);
+            const dotOuterMat = new THREE.MeshBasicMaterial({
+                color: 0xef4444,
+                transparent: true,
+                opacity: 0.95,
+                depthTest: false
+            });
+            const dotOuter = new THREE.Mesh(dotOuterGeo, dotOuterMat);
+            dotOuter.renderOrder = 9999;
+            dotGroup.add(dotOuter);
+
+            const dotInnerGeo = new THREE.SphereGeometry(0.012, 16, 16);
+            const dotInnerMat = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 1.0,
+                depthTest: false
+            });
+            const dotInner = new THREE.Mesh(dotInnerGeo, dotInnerMat);
+            dotInner.renderOrder = 10000;
+            dotGroup.add(dotInner);
+
+            dotGroup.position.z = -6;
+            controller.add(dotGroup);
 
             scene.add(controller);
             controllers.push(controller);
@@ -1971,30 +1996,39 @@ window.WebXRBridge = (function () {
             setRaycasterFromController(controller);
 
             const dot = controller.getObjectByName('dot');
+            const laser = controller.getObjectByName('laser');
 
+            // 1. Kiểm tra Bảng Menu 3D (Đảm bảo tia laser và con trỏ dừng chính xác trên mặt bảng Menu)
             if (isMenuOpen && vrMenuPanelMesh && vrMenuPanelMesh.visible) {
                 const menuHits = raycaster.intersectObject(vrMenuPanelMesh, false);
                 if (menuHits.length > 0) {
-                    if (dot) dot.position.z = -menuHits[0].distance;
+                    const hitDist = menuHits[0].distance;
+                    if (laser) laser.scale.z = hitDist;
+                    if (dot) dot.position.z = -hitDist;
                     return;
                 }
             }
 
+            // 2. Kiểm tra Nút mở Menu 3D (HUD Button)
             if (vrMenuBtnMesh && vrMenuBtnMesh.visible) {
                 const btnHits = raycaster.intersectObject(vrMenuBtnMesh, true);
                 if (btnHits.length > 0) {
-                    if (dot) dot.position.z = -btnHits[0].distance;
+                    const hitDist = btnHits[0].distance;
+                    if (laser) laser.scale.z = hitDist;
+                    if (dot) dot.position.z = -hitDist;
                     return;
                 }
             }
 
+            // 3. Kiểm tra các Hotspot 360°
             if (hotspotsGroup) {
                 const targets = hotspotsGroup.children;
                 const hits = raycaster.intersectObjects(targets, true);
 
                 if (hits.length > 0) {
-                    const dist = hits[0].distance;
-                    if (dot) dot.position.z = -dist;
+                    const hitDist = hits[0].distance;
+                    if (laser) laser.scale.z = hitDist;
+                    if (dot) dot.position.z = -hitDist;
 
                     let hitObj = hits[0].object;
                     while (hitObj && !hitObj.userData.isHotspot && hitObj.parent) {
@@ -2004,15 +2038,19 @@ window.WebXRBridge = (function () {
                     if (hitObj && hitObj !== hoveredHotspot) {
                         hoveredHotspot = hitObj;
                         if (controller.gamepad && controller.gamepad.hapticActuators && controller.gamepad.hapticActuators[0]) {
-                            controller.gamepad.hapticActuators[0].pulse(0.3, 15);
+                            try { controller.gamepad.hapticActuators[0].pulse(0.3, 15); } catch (e) {}
                         }
                     }
                 } else {
-                    if (dot) dot.position.z = -8;
+                    if (laser) laser.scale.z = 6.0;
+                    if (dot) dot.position.z = -6.0;
                     if (hoveredHotspot) {
                         hoveredHotspot = null;
                     }
                 }
+            } else {
+                if (laser) laser.scale.z = 6.0;
+                if (dot) dot.position.z = -6.0;
             }
 
             if (controller.gamepad && controller.gamepad.axes && controller.gamepad.axes.length >= 4) {
