@@ -5,12 +5,18 @@
  * Tối ưu hoá độ nét tối đa (Retina Crisp 10K Resolution) cho Meta Quest 3, Quest 2, Quest Pro và Pico 4.
  * Đồng bộ 100% với Web: Cảnh ban đầu, góc nhìn mặc định (hlookat/vlookat), Hotspot styles & scale.
  * Tích hợp Bảng Menu 3D Danh Sách Địa Điểm (Glassmorphism Web Style) tương tác trực tiếp trong VR & Simulator.
+ * Dùng trực tiếp toàn bộ Icon Assets gốc của Tour Web: airport.png, iconlocation.png, icontructhang.png,
+ * icon_pulse_dot.svg, icon_pulse_ring.svg, icon_pulse_line.svg, hotspot_pro.svg.
  * ============================================================================
  */
 
 window.WebXRBridge = (function () {
     let manifest = null;
     let isInitialized = false;
+
+    // Bộ nhớ cache cho các asset icon gốc của KrPano
+    const HOTSPOT_ASSETS = {};
+    let areAssetsLoaded = false;
 
     // Three.js Core Objects
     let renderer = null;
@@ -73,11 +79,47 @@ window.WebXRBridge = (function () {
     let simSceneTitleDisplay = null;
 
     /**
+     * Tải trước toàn bộ Asset Icon thực tế của bản Web
+     */
+    function preloadHotspotAssets() {
+        if (areAssetsLoaded) return Promise.resolve();
+        const assetList = [
+            { key: 'airport', url: 'core/assets/airport.png' },
+            { key: 'location', url: 'core/assets/iconlocation.png' },
+            { key: 'helicopter', url: 'core/assets/icontructhang.png' },
+            { key: 'pulse_dot', url: 'core/assets/icon_pulse_dot.svg' },
+            { key: 'pulse_ring', url: 'core/assets/icon_pulse_ring.svg' },
+            { key: 'pulse_line', url: 'core/assets/icon_pulse_line.svg' },
+            { key: 'arrow_pro', url: 'engine/skin/hotspot_pro.svg' }
+        ];
+
+        return Promise.all(assetList.map(item => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    HOTSPOT_ASSETS[item.key] = img;
+                    resolve();
+                };
+                img.onerror = () => {
+                    console.warn('[WebXRBridge] Không thể nạp asset:', item.url);
+                    resolve();
+                };
+                img.src = item.url;
+            });
+        })).then(() => {
+            areAssetsLoaded = true;
+            console.log('[WebXRBridge] Đã nạp đầy đủ các Hotspot Icon Assets gốc của Web.');
+        });
+    }
+
+    /**
      * Nạp dữ liệu manifest đã trích xuất sẵn (Cảnh, Hotspot, Góc nhìn, Nhóm địa danh)
      */
     async function init() {
         if (isInitialized) return;
         try {
+            await preloadHotspotAssets();
             const res = await fetch('core/data/vr-scenes-manifest.json?v=' + Date.now());
             if (res.ok) {
                 manifest = await res.json();
@@ -195,7 +237,6 @@ window.WebXRBridge = (function () {
 
             session.addEventListener('end', onSessionEnded);
 
-            // Xác định cảnh bắt đầu: ưu tiên KrPano hiện tại -> manifest._meta.startScene (Toàn cảnh 300m)
             let sceneName = getInitialSceneName();
 
             await loadScene(sceneName, false);
@@ -245,7 +286,6 @@ window.WebXRBridge = (function () {
         renderer.xr.enabled = true;
         renderer.xr.setReferenceSpaceType('local-floor');
 
-        // KÍCH HOẠT ĐỘ PHÂN GIẢI NATIVE GỐC CỦA MÀN HÌNH META QUEST 3
         if (renderer.xr.setFramebufferScaleFactor) {
             const nativeScale = (typeof XRWebGLLayer !== 'undefined' && XRWebGLLayer.getNativeFramebufferScaleFactor)
                 ? XRWebGLLayer.getNativeFramebufferScaleFactor(session)
@@ -256,7 +296,6 @@ window.WebXRBridge = (function () {
 
         renderer.xr.setSession(session);
 
-        // TẮT LÀM MỜ RÌA MẮT (FIXED FOVEATION = 0 ĐỂ TOÀN BỘ 360 ĐỀU SẮC NÉT)
         if (session.renderState && session.renderState.baseLayer) {
             session.renderState.baseLayer.fixedFoveation = 0;
         }
@@ -277,13 +316,12 @@ window.WebXRBridge = (function () {
             const controller = renderer.xr.getController(i);
             controller.addEventListener('selectstart', onSelectStart);
 
-            // Tia laser mỏng phát sáng đỏ gốm Ninh Phước
             const laserGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, 0, 0),
                 new THREE.Vector3(0, 0, -8)
             ]);
             const laserMat = new THREE.LineBasicMaterial({
-                color: 0xd35656,
+                color: 0x00f0ff,
                 transparent: true,
                 opacity: 0.6,
                 linewidth: 2
@@ -292,9 +330,8 @@ window.WebXRBridge = (function () {
             laser.name = 'laser';
             controller.add(laser);
 
-            // Điểm sáng ở đầu tia laser
             const dotGeo = new THREE.SphereGeometry(0.015, 12, 12);
-            const dotMat = new THREE.MeshBasicMaterial({ color: 0xd35656 });
+            const dotMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
             const dot = new THREE.Mesh(dotGeo, dotMat);
             dot.position.z = -8;
             dot.name = 'dot';
@@ -338,7 +375,6 @@ window.WebXRBridge = (function () {
         isSimulator = true;
         initSceneCommon();
 
-        // Độ cao mắt người chuẩn VR đứng: 1.6m
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(0, 1.6, 0);
         camera.add(fadeMesh);
@@ -353,7 +389,6 @@ window.WebXRBridge = (function () {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.xr.enabled = false;
 
-        // Container overlay full màn hình
         simOverlay = document.createElement('div');
         simOverlay.id = 'vr-simulator-overlay';
         simOverlay.style.cssText = `
@@ -379,7 +414,6 @@ window.WebXRBridge = (function () {
         `;
         simOverlay.appendChild(renderer.domElement);
 
-        // Header bar phong cách Glassmorphism đồng bộ Web
         const header = document.createElement('div');
         header.style.cssText = `
             position: absolute;
@@ -390,37 +424,37 @@ window.WebXRBridge = (function () {
             align-items: center;
             justify-content: space-between;
             padding: 12px 24px;
-            background: linear-gradient(180deg, rgba(16,20,30,0.82) 0%, rgba(16,20,30,0.4) 70%, transparent 100%);
+            background: linear-gradient(180deg, rgba(5,12,28,0.95) 0%, rgba(5,12,28,0.6) 70%, transparent 100%);
             color: #fff;
             z-index: 10;
             pointer-events: none;
         `;
         header.innerHTML = `
             <div style="display: flex; align-items: center; gap: 14px; pointer-events: auto;">
-                <span style="font-size: 26px; filter: drop-shadow(0 0 10px rgba(211,86,86,0.6));">🥽</span>
+                <span style="font-size: 26px; filter: drop-shadow(0 0 10px #00f0ff);">🥽</span>
                 <div>
-                    <div style="font-weight: 800; font-size: 14px; letter-spacing: 0.5px; color: #ff7e7e;">
+                    <div style="font-weight: 800; font-size: 14px; letter-spacing: 0.5px; color: #00f0ff;">
                         CHẾ ĐỘ MÔ PHỎNG KÍNH VR (QUEST 3 SIMULATOR)
                     </div>
-                    <div id="sim-scene-name" style="font-size: 12px; color: #ffffff; opacity: 0.9; font-weight: 600; margin-top: 2px;">
+                    <div id="sim-scene-name" style="font-size: 12px; color: #ffb300; font-weight: 600; margin-top: 2px;">
                         Đang nạp cảnh...
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: #f1f5f9; background: rgba(255,255,255,0.12); backdrop-filter: blur(14px); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.22); pointer-events: auto;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: #e0e6ed; background: rgba(10,25,47,0.75); backdrop-filter: blur(10px); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(0,240,255,0.3); pointer-events: auto;">
                 <span>🖱️ <b>Kéo chuột:</b> Quay đầu 360°</span>
-                <span style="color: rgba(255,255,255,0.25);">|</span>
+                <span style="color: rgba(255,255,255,0.2);">|</span>
                 <span>🎯 <b>Click:</b> Bấm Hotspot</span>
-                <span style="color: rgba(255,255,255,0.25);">|</span>
-                <button id="sim-btn-menu-toggle" style="background: linear-gradient(135deg, #d35656, #e07650); color: #fff; border: none; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: 11px; cursor: pointer; box-shadow: 0 4px 14px rgba(211,86,86,0.35);">
+                <span style="color: rgba(255,255,255,0.2);">|</span>
+                <button id="sim-btn-menu-toggle" style="background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; border: none; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 11px; cursor: pointer; box-shadow: 0 0 10px rgba(0,198,255,0.4);">
                     📍 Danh sách địa điểm (M)
                 </button>
-                <span style="color: rgba(255,255,255,0.25);">|</span>
-                <span id="sim-angle-display" style="color: #ffb300; font-family: monospace; font-size: 11px;">ath: 0° | atv: 0°</span>
+                <span style="color: rgba(255,255,255,0.2);">|</span>
+                <span id="sim-angle-display" style="color: #00f0ff; font-family: monospace; font-size: 11px;">ath: 0° | atv: 0°</span>
             </div>
 
-            <button id="sim-btn-close" style="pointer-events: auto; background: rgba(211, 86, 86, 0.9); color: #fff; border: 1px solid rgba(255,255,255,0.25); padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(211,86,86,0.4);">
+            <button id="sim-btn-close" style="pointer-events: auto; background: rgba(220, 38, 38, 0.9); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(220,38,38,0.4);">
                 ✕ Thoát giả lập (ESC)
             </button>
         `;
@@ -468,9 +502,6 @@ window.WebXRBridge = (function () {
         }
     }
 
-    /**
-     * Gắn sự kiện cho Simulator
-     */
     function bindSimEvents() {
         const dom = renderer.domElement;
         dom.addEventListener('mousedown', onSimMouseDown);
@@ -651,21 +682,25 @@ window.WebXRBridge = (function () {
 
         const time = timestamp || performance.now();
 
-        // 1. Cập nhật vị trí khối cầu skyMesh luôn đồng tâm với camera
         if (skyMesh && camera) {
             skyMesh.position.copy(camera.position);
         }
 
-        // 2. Cập nhật vị trí nút mở menu 3D bám theo góc nhìn thoải mái
         updateVRMenuFloatingPositions();
 
-        // 3. Xoay Hotspots hướng về camera (Billboard)
+        // Xoay Hotspots hướng về camera (Billboard) và nhấp nhô lơ lửng
         if (hotspotsGroup) {
             hotspotsGroup.children.forEach(hs => {
                 hs.lookAt(camera.position);
 
-                const pulse = 1 + 0.05 * Math.sin(time * 0.004 + (hs.userData.pulseOffset || 0));
-                const targetScale = (hs.userData.baseScale || 1.0) * (hs === hoveredHotspot ? 1.25 : pulse);
+                if (hs.userData && hs.userData.baseY !== undefined) {
+                    if (hs.userData.style === 'trenkhong' || hs.userData.style === 'vitri') {
+                        hs.position.y = hs.userData.baseY + 0.08 * Math.sin(time * 0.003 + (hs.userData.pulseOffset || 0));
+                    }
+                }
+
+                const pulse = 1 + 0.025 * Math.sin(time * 0.004 + (hs.userData.pulseOffset || 0));
+                const targetScale = (hs === hoveredHotspot ? 1.15 : pulse);
                 hs.scale.set(targetScale, targetScale, 1);
             });
         }
@@ -673,9 +708,6 @@ window.WebXRBridge = (function () {
         renderer.render(scene, camera);
     }
 
-    /**
-     * Thoát khỏi chế độ Giả lập VR
-     */
     function exitSimulator() {
         if (!isSimulator) return;
         isSimulator = false;
@@ -735,52 +767,60 @@ window.WebXRBridge = (function () {
             simSceneTitleDisplay.textContent = '📍 ' + (sceneData.title || sceneId);
         }
 
-        // 1. Đồng bộ góc nhìn mặc định: Xoay worldGroup quanh trục Y theo -hlookat
-        const normHlookat = sceneData.hlookat !== undefined ? sceneData.hlookat : 0;
-        const normVlookat = sceneData.vlookat !== undefined ? sceneData.vlookat : 0;
+        // 1. Đồng bộ góc nhìn mặc định: Chuẩn hóa hlookat và vlookat
+        let rawH = sceneData.hlookat !== undefined ? parseFloat(sceneData.hlookat) : 0;
+        let rawV = sceneData.vlookat !== undefined ? parseFloat(sceneData.vlookat) : 0;
+
+        let normH = ((rawH % 360) + 360) % 360;
+        if (normH > 180) normH -= 360; // Chuẩn hóa về [-180, 180]
 
         if (worldGroup) {
-            worldGroup.rotation.y = THREE.MathUtils.degToRad(-normHlookat);
+            worldGroup.rotation.y = THREE.MathUtils.degToRad(normH);
         }
 
-        // Trong simulator: camera nhìn thẳng (0, -vlookat) để mắt hướng vào điểm xuất phát tuyệt đẹp
+        // Trong simulator: camera nhìn thẳng vào hướng mặc định
         if (isSimulator) {
             simCamLon = 0;
-            simCamLat = -normVlookat;
+            simCamLat = -Math.max(-85, Math.min(85, rawV));
             updateSimCameraLook();
         }
 
-        // Hiệu ứng mờ dần (Fade out) nếu chuyển cảnh
+        if (!areAssetsLoaded) {
+            try {
+                await preloadHotspotAssets();
+            } catch (eAsset) {
+                console.warn('[WebXRBridge] Lỗi nạp asset icon:', eAsset);
+            }
+        }
+
         if (useFade && fadeMesh) {
             await tweenFade(0, 1, 150);
         }
 
-        // 2. Tầng 1: Nạp ngay ảnh Preview (256x256) cực nhanh để không bao giờ bị đen hình
+        // 2. Tầng 1: Nạp ảnh Preview cực nhanh
         try {
             await loadPreviewCubemap(sceneData.preview);
         } catch (e) {
             console.error('[WebXRBridge] Lỗi khi nạp preview cubemap:', e);
         }
 
-        // 3. Hiển thị nhãn thông báo tên cảnh tinh tế (tự biến mất sau 3.5s)
+        // 3. Hiển thị nhãn thông báo tên cảnh
         showSceneToast(sceneData.title || sceneId);
 
-        // 4. Tạo các Hotspot 3D sống động theo đúng style và scale
+        // 4. Tạo các Hotspot 3D sống động theo đúng style bản Web và kích thước chuẩn
         createSceneHotspots(sceneData.hotspots || []);
 
-        // Mở sáng trở lại (Fade in)
         if (useFade && fadeMesh) {
             await tweenFade(1, 0, 200);
         }
 
-        // Vẽ lại menu nếu đang mở để highlight cảnh active mới
         if (isMenuOpen) {
             renderMenuCanvas();
         }
 
-        // 5. Tầng 2 & 3: Tự động nâng cấp lên Level 2 rồi lên Level 3 (Độ nét cao Retina nguyên gốc)
+        // 5. Tầng 2 & 3: Tự động nâng cấp lên Level 2 (5K) rồi lên Level 3 (10K Retina siêu nét nguyên gốc)
         if (sceneData.tilesDir) {
-            loadHighResTiles(sceneData.tilesDir, sceneId, sceneData.levels);
+            loadHighResTiles(sceneData.tilesDir, sceneId);
         }
     }
 
@@ -819,11 +859,10 @@ window.WebXRBridge = (function () {
                     faceCanvases[stripOrder[i]] = c;
                 }
 
-                // Khắc phục triệt để lệch mảng: Xoay 180 độ cho mặt u (Trời) và d (Đất)
                 const uCanvas = rotateCanvas180(faceCanvases.u);
                 const dCanvas = rotateCanvas180(faceCanvases.d);
 
-                const cubeTex = createCubeTextureFromCanvases([
+                const cubeTex = new THREE.CubeTexture([
                     faceCanvases.l,
                     faceCanvases.r,
                     uCanvas,
@@ -831,6 +870,7 @@ window.WebXRBridge = (function () {
                     faceCanvases.b,
                     faceCanvases.f
                 ]);
+                cubeTex.needsUpdate = true;
                 applyCubeTextureToSky(cubeTex);
                 resolve();
             };
@@ -840,47 +880,32 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Nạp và ghép ảnh Cubemap đa phân giải: Level 2 tức thì -> Level 3 (siêu nét nguyên gốc Retina)
+     * Nạp và ghép ảnh Cubemap đa phân giải: Level 2 (5K) tức thì -> Level 3 (10K siêu nét nguyên gốc)
      */
-    async function loadHighResTiles(tilesDir, sceneId, sceneLevels) {
+    async function loadHighResTiles(tilesDir, sceneId) {
         const token = ++currentLoadingSceneToken;
 
-        const isAerial = tilesDir.includes('toancanh');
-        const l1Size = (sceneLevels && sceneLevels.l1) || (isAerial ? 768 : 640);
-        const l2Size = (sceneLevels && sceneLevels.l2) || (isAerial ? 1536 : 1280);
-        const l3Size = (sceneLevels && sceneLevels.l3) || (isAerial ? 3072 : 2560);
-
-        // BƯỚC 1: Nạp nhanh Level 2 để nâng độ nét tức thì trong chớp mắt
+        // BƯỚC 1: Nạp nhanh Level 2 (1280x1280) để nâng độ nét lên 5K trong chớp mắt
         try {
-            const l2Canvases = await loadLevelTiles(tilesDir, 2, l2Size);
+            const l2Canvases = await loadLevelTiles(tilesDir, 2);
             if (token !== currentLoadingSceneToken) return;
 
             if (l2Canvases) {
                 applyCubeTextureToSky(createCubeTextureFromCanvases(l2Canvases));
-                console.log(`[WebXRBridge] Đã áp dụng Level 2 (${l2Size}x${l2Size}) cho:`, sceneId);
+                console.log('[WebXRBridge] Đã áp dụng Level 2 (1280x1280) cho:', sceneId);
             }
         } catch (e2) {
-            console.warn('[WebXRBridge] L2 lỗi, thử fallback Level 1:', e2);
-            try {
-                const l1Canvases = await loadLevelTiles(tilesDir, 1, l1Size);
-                if (token !== currentLoadingSceneToken) return;
-                if (l1Canvases) {
-                    applyCubeTextureToSky(createCubeTextureFromCanvases(l1Canvases));
-                    console.log(`[WebXRBridge] Đã áp dụng Fallback Level 1 (${l1Size}x${l1Size}) cho:`, sceneId);
-                }
-            } catch (e1) {
-                console.warn('[WebXRBridge] Bỏ qua L1 & L2:', e1);
-            }
+            console.warn('[WebXRBridge] Bỏ qua L2:', e2);
         }
 
-        // BƯỚC 2: Tự động nâng cấp tiếp lên Level 3 (Chuẩn Retina sắc nét tối đa)
+        // BƯỚC 2: Tự động nâng cấp tiếp lên Level 3 (2560x2560 - Chuẩn 10K sắc nét nguyên bản)
         try {
-            const l3Canvases = await loadLevelTiles(tilesDir, 3, l3Size);
+            const l3Canvases = await loadLevelTiles(tilesDir, 3);
             if (token !== currentLoadingSceneToken) return;
 
             if (l3Canvases) {
                 applyCubeTextureToSky(createCubeTextureFromCanvases(l3Canvases));
-                console.log(`[WebXRBridge] ĐÃ NÂNG CẤP ĐẠT ĐỈNH LEVEL 3 (${l3Size}x${l3Size}, Retina) cho:`, sceneId);
+                console.log('[WebXRBridge] ĐÃ NÂNG CẤP ĐẠT ĐỈNH LEVEL 3 (2560x2560, 10K Retina) cho:', sceneId);
             }
         } catch (e3) {
             console.log('[WebXRBridge] Giữ nguyên Level 2 cho:', sceneId);
@@ -888,47 +913,101 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Nạp các mảnh tile cho từng Level (Level 1, Level 2 hoặc Level 3) linh hoạt theo kích thước gốc
+     * Nạp các mảnh tile cho từng Level (Level 2: 1280x1280 hoặc Level 3: 2560x2560)
      */
-    async function loadLevelTiles(tilesDir, level, faceSize) {
+    async function loadLevelTiles(tilesDir, level) {
         const faces = ['l', 'r', 'u', 'd', 'b', 'f'];
-        const tileSize = 512;
-        const colsCount = Math.ceil(faceSize / tileSize);
-        const rowsCount = Math.ceil(faceSize / tileSize);
 
-        const facePromises = faces.map(async (face) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = faceSize;
-            canvas.height = faceSize;
-            const ctx = canvas.getContext('2d');
+        if (level === 3) {
+            const rows = ['01', '02', '03', '04', '05'];
+            const cols = ['01', '02', '03', '04', '05'];
 
-            const tilePositions = [];
-            for (let r = 0; r < rowsCount; r++) {
-                const rowStr = String(r + 1).padStart(2, '0');
-                for (let c = 0; c < colsCount; c++) {
-                    const colStr = String(c + 1).padStart(2, '0');
-                    tilePositions.push({
-                        r: rowStr,
-                        c: colStr,
-                        x: c * tileSize,
-                        y: r * tileSize,
-                        url: `${tilesDir}/${face}/l${level}/${rowStr}/l${level}_${face}_${rowStr}_${colStr}.jpg`
-                    });
+            const facePromises = faces.map(async (face) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 2560;
+                canvas.height = 2560;
+                const ctx = canvas.getContext('2d');
+
+                const tilePositions = [];
+                for (let rIdx = 0; rIdx < 5; rIdx++) {
+                    for (let cIdx = 0; cIdx < 5; cIdx++) {
+                        tilePositions.push({
+                            r: rows[rIdx],
+                            c: cols[cIdx],
+                            x: cIdx * 512,
+                            y: rIdx * 512
+                        });
+                    }
                 }
-            }
 
-            const tileImgs = await Promise.all(
-                tilePositions.map(pos => loadImage(pos.url))
-            );
+                const tileImgs = await Promise.all(
+                    tilePositions.map(pos => loadImage(`${tilesDir}/${face}/l3/${pos.r}/l3_${face}_${pos.r}_${pos.c}.jpg`))
+                );
 
-            tilePositions.forEach((pos, idx) => {
-                ctx.drawImage(tileImgs[idx], pos.x, pos.y);
+                tilePositions.forEach((pos, idx) => {
+                    ctx.drawImage(tileImgs[idx], pos.x, pos.y);
+                });
+
+                if (face === 'u' || face === 'd') {
+                    return rotateCanvas180(canvas);
+                }
+                return canvas;
             });
 
-            if (face === 'u' || face === 'd') {
-                return rotateCanvas180(canvas);
+            return await Promise.all(facePromises);
+        }
+
+        // Level 2: 1280x1280 (3 hàng x 3 cột = 9 mảnh gạch)
+        const facePromises = faces.map(async (face) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1280;
+            canvas.height = 1280;
+            const ctx = canvas.getContext('2d');
+
+            try {
+                const tilePositions = [
+                    { r: '01', c: '01', x: 0, y: 0 },
+                    { r: '01', c: '02', x: 512, y: 0 },
+                    { r: '01', c: '03', x: 1024, y: 0 },
+                    { r: '02', c: '01', x: 0, y: 512 },
+                    { r: '02', c: '02', x: 512, y: 512 },
+                    { r: '02', c: '03', x: 1024, y: 512 },
+                    { r: '03', c: '01', x: 0, y: 1024 },
+                    { r: '03', c: '02', x: 512, y: 1024 },
+                    { r: '03', c: '03', x: 1024, y: 1024 }
+                ];
+
+                const tileImgs = await Promise.all(
+                    tilePositions.map(pos => loadImage(`${tilesDir}/${face}/l2/${pos.r}/l2_${face}_${pos.r}_${pos.c}.jpg`))
+                );
+
+                tilePositions.forEach((pos, idx) => {
+                    ctx.drawImage(tileImgs[idx], pos.x, pos.y);
+                });
+
+                if (face === 'u' || face === 'd') {
+                    return rotateCanvas180(canvas);
+                }
+                return canvas;
+            } catch (errL2) {
+                // Fallback Level 1 (640x640)
+                canvas.width = 640;
+                canvas.height = 640;
+                const p1 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_01.jpg`);
+                const p2 = loadImage(`${tilesDir}/${face}/l1/01/l1_${face}_01_02.jpg`);
+                const p3 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_01.jpg`);
+                const p4 = loadImage(`${tilesDir}/${face}/l1/02/l1_${face}_02_02.jpg`);
+                const [img1, img2, img3, img4] = await Promise.all([p1, p2, p3, p4]);
+                ctx.drawImage(img1, 0, 0);
+                ctx.drawImage(img2, 512, 0);
+                ctx.drawImage(img3, 0, 512);
+                ctx.drawImage(img4, 512, 512);
+
+                if (face === 'u' || face === 'd') {
+                    return rotateCanvas180(canvas);
+                }
+                return canvas;
             }
-            return canvas;
         });
 
         return await Promise.all(facePromises);
@@ -963,7 +1042,7 @@ window.WebXRBridge = (function () {
     }
 
     // ============================================================
-    // HỆ THỐNG HOTSPOTS 3D ĐỒNG BỘ STYLE VÀ SCALE TỪ XML
+    // HỆ THỐNG HOTSPOTS 3D ĐỒNG BỘ 100% STYLE VÀ ASSETS TỪ BẢN WEB
     // ============================================================
 
     /**
@@ -981,12 +1060,15 @@ window.WebXRBridge = (function () {
                 hs.style,
                 hs.scale
             );
-            hotspotsGroup.add(mesh);
+            if (mesh) {
+                hotspotsGroup.add(mesh);
+            }
         });
     }
 
     /**
      * Tạo một Hotspot 3D Billboard luôn hướng mặt về phía người dùng
+     * Sử dụng đúng Asset Icon và kích thước chuẩn nhìn rõ (không bị co nhỏ)
      */
     function createHotspotBillboard(ath, atv, linkedscene, title, style, scale) {
         const R = 8.0;
@@ -998,179 +1080,382 @@ window.WebXRBridge = (function () {
         const z = -r_h * Math.cos(radAth);
         const y = 1.6 - R * Math.sin(radAtv);
 
-        const baseScale = (scale && scale > 0) ? scale : 1.0;
+        let mesh = null;
+        const isPulseDot = (style === 'pulse_dot');
 
-        // Vẽ biểu tượng Hotspot phát sáng trên Canvas 512x512
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext('2d');
+        if (isPulseDot) {
+            // ========================================================
+            // 1. STYLE: pulse_dot (Chấm tròn Callout chuyên dụng cảnh trên cao 300m và 100m)
+            // Chuẩn 100% bản Web: Chấm trắng + Vòng đỏ + Line chéo + Hộp đỏ viền trắng in hoa
+            // ========================================================
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 420;
+            const ctx = canvas.getContext('2d');
 
-        drawHotspotCanvas(ctx, title, style);
+            drawPulseDotHotspotCanvas(ctx, title);
 
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.generateMipmaps = true;
-        texture.minFilter = THREE.LinearMipmapLinearFilter;
-        texture.magFilter = THREE.LinearFilter;
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.generateMipmaps = true;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
 
-        const geo = new THREE.PlaneGeometry(1.6 * baseScale, 1.6 * baseScale);
-        const mat = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            side: THREE.DoubleSide,
-            depthTest: false
-        });
+            // Kích thước chuẩn trong 3D: rộng 3.2m, cao 1.3125m ở cự ly 8m (nhìn rõ tuyệt đối)
+            const geo = new THREE.PlaneGeometry(3.2, 1.3125);
+            // Dịch chuyển tâm để Chân chấm tròn (180, 320) cắm CHÍNH XÁC tại toạ độ thực địa (x, y, z)
+            geo.translate(1.0375, 0.34375, 0);
 
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(x, y, z);
-        mesh.renderOrder = 100;
+            const mat = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthTest: false
+            });
 
-        mesh.userData = {
-            isHotspot: true,
-            linkedscene: linkedscene,
-            title: title,
-            style: style,
-            baseScale: baseScale,
-            pulseOffset: Math.random() * Math.PI * 2
-        };
+            mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            mesh.renderOrder = 100;
+
+            mesh.userData = {
+                isHotspot: true,
+                linkedscene: linkedscene,
+                title: title,
+                style: style,
+                baseY: y,
+                baseScale: 1.0,
+                pulseOffset: Math.random() * Math.PI * 2
+            };
+
+        } else if (style === 'trenkhong') {
+            // ========================================================
+            // 2. STYLE: trenkhong (Góc nhìn toàn cảnh trên cao - dùng icon máy bay airport.png)
+            // ========================================================
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            drawStandardHotspotCanvas(ctx, title, style);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.generateMipmaps = true;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+
+            const geo = new THREE.PlaneGeometry(2.2, 2.2);
+            geo.translate(0, 0.2, 0);
+
+            const mat = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthTest: false
+            });
+
+            mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            mesh.renderOrder = 100;
+
+            mesh.userData = {
+                isHotspot: true,
+                linkedscene: linkedscene,
+                title: title,
+                style: style,
+                baseY: y,
+                baseScale: 1.0,
+                pulseOffset: Math.random() * Math.PI * 2
+            };
+
+        } else if (style === 'vitri') {
+            // ========================================================
+            // 3. STYLE: vitri (Ghim đỏ chuẩn bản Web - dùng iconlocation.png)
+            // ========================================================
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            drawStandardHotspotCanvas(ctx, title, style);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.generateMipmaps = true;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+
+            const geo = new THREE.PlaneGeometry(2.0, 2.0);
+            geo.translate(0, 0.3, 0);
+
+            const mat = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthTest: false
+            });
+
+            mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            mesh.renderOrder = 100;
+
+            mesh.userData = {
+                isHotspot: true,
+                linkedscene: linkedscene,
+                title: title,
+                style: style,
+                baseY: y,
+                baseScale: 1.0,
+                pulseOffset: Math.random() * Math.PI * 2
+            };
+
+        } else {
+            // ========================================================
+            // 4. CÁC STYLE KHÁC: tructhang, muiten
+            // ========================================================
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            drawStandardHotspotCanvas(ctx, title, style);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.generateMipmaps = true;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+
+            const geo = new THREE.PlaneGeometry(1.9, 1.9);
+            const mat = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthTest: false
+            });
+
+            mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, y, z);
+            mesh.renderOrder = 100;
+
+            mesh.userData = {
+                isHotspot: true,
+                linkedscene: linkedscene,
+                title: title,
+                style: style,
+                baseY: y,
+                baseScale: 1.0,
+                pulseOffset: Math.random() * Math.PI * 2
+            };
+        }
 
         return mesh;
     }
 
     /**
-     * Vẽ biểu tượng Hotspot theo phong cách Web (muiten, vitri, pulse_dot, trenkhong)
-     * Tông màu nhận diện: Đỏ gốm Ninh Phước (#d35656 / #ed2f5a), Vàng cam Bàu Trúc (#e07650 / #ffb300), Trắng ngọc (#ffffff)
+     * Vẽ Hotspot kiểu pulse_dot (Chấm tròn + Vòng đỏ + Đường nối Callout + Hộp chữ đỏ viền trắng)
+     * Đồng bộ chuẩn 100% với tour.xml (pulse_dot_setup / pulse_dot_label)
      */
-    function drawHotspotCanvas(ctx, title, style) {
+    function drawPulseDotHotspotCanvas(ctx, title) {
+        ctx.clearRect(0, 0, 1024, 420);
+
+        const cx = 180;
+        const cy = 320;
+
+        // 1. Vòng tròn xung nhịp đỏ ngoài (Chuẩn như vòng pulse trên Web)
+        if (HOTSPOT_ASSETS.pulse_ring && HOTSPOT_ASSETS.pulse_ring.complete && HOTSPOT_ASSETS.pulse_ring.naturalWidth > 0) {
+            ctx.drawImage(HOTSPOT_ASSETS.pulse_ring, cx - 48, cy - 48, 96, 96);
+        } else {
+            ctx.save();
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 6;
+            ctx.shadowColor = 'rgba(220, 38, 38, 0.8)';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // 2. Chấm tròn trắng tinh khôi ở tâm (Chuẩn icon_pulse_dot.svg trên Web)
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // 3. Đường dẫn chéo Callout Line (Màu trắng nét đậm 6.5px, chuẩn icon_pulse_line.svg)
+        const p1x = cx;
+        const p1y = cy;
+        const p2x = cx + 85;
+        const p2y = cy - 130;
+        const p3x = cx + 150;
+        const p3y = cy - 130;
+
+        ctx.save();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 6.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetY = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(p1x, p1y);
+        ctx.lineTo(p2x, p2y);
+        ctx.lineTo(p3x, p3y);
+        ctx.stroke();
+        ctx.restore();
+
+        // 4. Hộp thông tin Callout Badge: Đỏ tươi #dc2626 viền trắng #ffffff bóng đổ đen
+        // Chuẩn 100% style pulse_dot_label trong tour.xml
+        const displayTitle = (title || 'Địa điểm').toUpperCase();
+        ctx.font = 'bold 23px "Roboto", "Segoe UI", Arial, sans-serif';
+        const textMetrics = ctx.measureText(displayTitle);
+        const boxPaddingX = 22;
+        const boxW = Math.max(160, textMetrics.width + boxPaddingX * 2);
+        const boxH = 54;
+        const boxX = p3x;
+        const boxY = p3y - boxH / 2;
+
+        ctx.save();
+        // Bóng đổ hộp sang trọng
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+
+        // Nền đỏ #dc2626 viền trắng 2.5px
+        ctx.fillStyle = '#dc2626';
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2.5;
+        roundRect(ctx, boxX, boxY, boxW, boxH, 6);
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
+        ctx.stroke();
+
+        // Chữ in hoa màu trắng sáng
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(displayTitle, boxX + boxW / 2, boxY + boxH / 2 + 1);
+        ctx.restore();
+    }
+
+    /**
+     * Vẽ Hotspot tiêu chuẩn (trenkhong, tructhang, vitri, muiten) dùng icon asset thật của Web
+     */
+    function drawStandardHotspotCanvas(ctx, title, style) {
         ctx.clearRect(0, 0, 512, 512);
 
         const cx = 256;
-        const cy = 200;
+        const cy = 180;
 
-        if (style === 'vitri') {
+        if (style === 'trenkhong') {
             // ============================================
-            // STYLE: vitri (Ghim định vị vàng cam đất gốm Bàu Trúc)
+            // STYLE: trenkhong (Góc nhìn toàn cảnh trên cao - dùng icon máy bay airport.png)
             // ============================================
-            const gradGlow = ctx.createRadialGradient(cx, cy - 10, 20, cx, cy - 10, 100);
-            gradGlow.addColorStop(0, 'rgba(224, 118, 80, 0.65)');
-            gradGlow.addColorStop(0.5, 'rgba(211, 86, 86, 0.25)');
-            gradGlow.addColorStop(1, 'rgba(211, 86, 86, 0)');
+            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 95);
+            gradGlow.addColorStop(0, 'rgba(255, 179, 0, 0.6)');
+            gradGlow.addColorStop(0.5, 'rgba(255, 179, 0, 0.2)');
+            gradGlow.addColorStop(1, 'rgba(255, 179, 0, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
-            ctx.arc(cx, cy - 10, 100, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 95, 0, Math.PI * 2);
             ctx.fill();
 
-            // Thân ghim Location Pin (hình giọt nước chúc xuống)
-            ctx.save();
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
-            ctx.strokeStyle = '#d35656';
-            ctx.lineWidth = 7;
-
-            ctx.beginPath();
-            ctx.arc(cx, cy - 25, 45, Math.PI, 0, false);
-            ctx.bezierCurveTo(cx + 45, cy + 10, cx + 18, cy + 38, cx, cy + 62);
-            ctx.bezierCurveTo(cx - 18, cy + 38, cx - 45, cy + 10, cx - 45, cy - 25);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-
-            // Điểm tròn phát sáng ở giữa ghim
-            ctx.fillStyle = '#d35656';
-            ctx.beginPath();
-            ctx.arc(cx, cy - 25, 18, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(cx, cy - 25, 8, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-
-        } else if (style === 'trenkhong' || style === 'tructhang') {
-            // ============================================
-            // STYLE: trenkhong (Góc nhìn toàn cảnh trên cao)
-            // ============================================
-            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 90);
-            gradGlow.addColorStop(0, 'rgba(224, 118, 80, 0.65)');
-            gradGlow.addColorStop(0.5, 'rgba(211, 86, 86, 0.2)');
-            gradGlow.addColorStop(1, 'rgba(211, 86, 86, 0)');
-            ctx.fillStyle = gradGlow;
-            ctx.beginPath();
-            ctx.arc(cx, cy, 90, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Vòng tròn trung tâm
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
-            ctx.strokeStyle = '#e07650';
-            ctx.lineWidth = 7;
-            ctx.beginPath();
-            ctx.arc(cx, cy, 55, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-
-            // Biểu tượng góc nhìn trên không
-            ctx.fillStyle = '#d35656';
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - 28);
-            ctx.lineTo(cx + 26, cy + 10);
-            ctx.lineTo(cx + 10, cy + 16);
-            ctx.lineTo(cx, cy + 4);
-            ctx.lineTo(cx - 10, cy + 16);
-            ctx.lineTo(cx - 26, cy + 10);
-            ctx.closePath();
-            ctx.fill();
-
-        } else if (style === 'pulse_dot') {
-            // ============================================
-            // STYLE: pulse_dot (Sóng radar nhấp nháy đỏ gốm Ninh Phước)
-            // ============================================
-            // Vòng sóng radar ngoài
-            ctx.strokeStyle = 'rgba(211, 86, 86, 0.4)';
-            ctx.lineWidth = 5;
-            ctx.beginPath();
-            ctx.arc(cx, cy, 70, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // Vòng sóng giữa
-            ctx.strokeStyle = 'rgba(211, 86, 86, 0.75)';
+            ctx.fillStyle = 'rgba(10, 25, 47, 0.9)';
+            ctx.strokeStyle = '#ffb300';
             ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.arc(cx, cy, 45, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 64, 0, Math.PI * 2);
+            ctx.fill();
             ctx.stroke();
 
-            // Chấm tròn lõi phát sáng trắng ngọc viền gốm đỏ
-            ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = '#d35656';
-            ctx.shadowBlur = 18;
+            if (HOTSPOT_ASSETS.airport && HOTSPOT_ASSETS.airport.complete && HOTSPOT_ASSETS.airport.naturalWidth > 0) {
+                ctx.drawImage(HOTSPOT_ASSETS.airport, cx - 44, cy - 44, 88, 88);
+            } else {
+                ctx.fillStyle = '#ffb300';
+                ctx.font = 'bold 44px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('✈', cx, cy);
+            }
+
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ffb300');
+
+        } else if (style === 'tructhang') {
+            // ============================================
+            // STYLE: tructhang (Trực thăng bay lên - dùng icontructhang.png)
+            // ============================================
+            ctx.fillStyle = 'rgba(10, 25, 47, 0.9)';
+            ctx.strokeStyle = '#ffb300';
+            ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.arc(cx, cy, 22, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 64, 0, Math.PI * 2);
             ctx.fill();
-            ctx.shadowBlur = 0;
+            ctx.stroke();
+
+            if (HOTSPOT_ASSETS.helicopter && HOTSPOT_ASSETS.helicopter.complete && HOTSPOT_ASSETS.helicopter.naturalWidth > 0) {
+                ctx.drawImage(HOTSPOT_ASSETS.helicopter, cx - 48, cy - 35, 96, 70);
+            } else {
+                ctx.fillStyle = '#ffb300';
+                ctx.font = 'bold 40px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('🚁', cx, cy);
+            }
+
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ffb300');
+
+        } else if (style === 'vitri') {
+            // ============================================
+            // STYLE: vitri (Ghim đỏ chuẩn bản Web - dùng iconlocation.png)
+            // ============================================
+            const gradGlow = ctx.createRadialGradient(cx, cy - 10, 20, cx, cy - 10, 95);
+            gradGlow.addColorStop(0, 'rgba(220, 38, 38, 0.65)');
+            gradGlow.addColorStop(0.5, 'rgba(220, 38, 38, 0.2)');
+            gradGlow.addColorStop(1, 'rgba(220, 38, 38, 0)');
+            ctx.fillStyle = gradGlow;
+            ctx.beginPath();
+            ctx.arc(cx, cy - 10, 95, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (HOTSPOT_ASSETS.location && HOTSPOT_ASSETS.location.complete && HOTSPOT_ASSETS.location.naturalWidth > 0) {
+                ctx.drawImage(HOTSPOT_ASSETS.location, cx - 40, cy - 65, 80, 105);
+            } else {
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 50px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('📍', cx, cy - 15);
+            }
+
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#dc2626');
 
         } else {
             // ============================================
-            // STYLE: muiten hoặc mặc định (Chevron Arrow Đỏ gốm Ninh Phước - chuẩn hotspot_pro.svg)
+            // STYLE: muiten hoặc mặc định (Mũi tên đỏ gradient chuẩn hotspot_pro.svg)
             // ============================================
             const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 90);
-            gradGlow.addColorStop(0, 'rgba(211, 86, 86, 0.65)');
+            gradGlow.addColorStop(0, 'rgba(237, 47, 90, 0.65)');
             gradGlow.addColorStop(0.5, 'rgba(237, 47, 90, 0.2)');
-            gradGlow.addColorStop(1, 'rgba(211, 86, 86, 0)');
+            gradGlow.addColorStop(1, 'rgba(237, 47, 90, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
             ctx.arc(cx, cy, 90, 0, Math.PI * 2);
             ctx.fill();
 
             // Vòng tròn trung tâm
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
-            ctx.strokeStyle = '#d35656';
-            ctx.lineWidth = 7;
+            ctx.fillStyle = 'rgba(10, 25, 47, 0.92)';
+            ctx.strokeStyle = '#ed2f5a';
+            ctx.lineWidth = 8;
             ctx.beginPath();
             ctx.arc(cx, cy, 55, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
 
-            // Mũi tên tiến Chevron màu đỏ gốm Ninh Phước
-            ctx.fillStyle = '#d35656';
+            // Mũi tên Chevron đỏ Panoee
+            ctx.fillStyle = '#ed2f5a';
             ctx.beginPath();
             ctx.moveTo(cx, cy - 25);
             ctx.lineTo(cx + 25, cy + 5);
@@ -1180,87 +1465,72 @@ window.WebXRBridge = (function () {
             ctx.lineTo(cx - 25, cy + 5);
             ctx.closePath();
             ctx.fill();
-        }
 
-        // Biển tên điểm đến bên dưới (Pill badge chuẩn Glassmorphism Web)
-        if (title) {
-            ctx.font = 'bold 28px "Segoe UI", Arial, sans-serif';
-            const textMetrics = ctx.measureText(title);
-            const badgeW = Math.min(480, Math.max(160, textMetrics.width + 50));
-            const badgeH = 58;
-            const badgeX = cx - badgeW / 2;
-            const badgeY = cy + 78;
-
-            // Nền bóng kính trong suốt thanh thoát
-            ctx.fillStyle = 'rgba(20, 22, 34, 0.65)';
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-            ctx.lineWidth = 3;
-            roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 18);
-            ctx.fill();
-            ctx.stroke();
-
-            // Chấm chỉ thị đỏ gốm ở đầu nhãn
-            ctx.fillStyle = '#d35656';
-            ctx.beginPath();
-            ctx.arc(badgeX + 22, badgeY + badgeH / 2, 6, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Chữ trắng tinh
-            ctx.fillStyle = '#ffffff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(title, cx + 8, badgeY + badgeH / 2);
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ed2f5a');
         }
     }
 
+    function drawHotspotTitleBadge(ctx, cx, cy, title, borderColor) {
+        if (!title) return;
+        const displayTitle = title.toUpperCase();
+        ctx.font = 'bold 23px "Roboto", "Segoe UI", Arial, sans-serif';
+        const textMetrics = ctx.measureText(displayTitle);
+        const badgeW = Math.min(480, Math.max(160, textMetrics.width + 48));
+        const badgeH = 56;
+        const badgeX = cx - badgeW / 2;
+        const badgeY = cy + 76;
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 3;
+
+        ctx.fillStyle = 'rgba(10, 25, 47, 0.95)';
+        ctx.strokeStyle = borderColor || '#00f0ff';
+        ctx.lineWidth = 3;
+        roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 10);
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(displayTitle, cx, badgeY + badgeH / 2 + 1);
+        ctx.restore();
+    }
+
     /**
-     * Bảng tên cảnh nổi trên cao hẳn phía trên đầu, thu gọn và trong suốt tinh tế (tự ẩn sau 3.5s)
+     * Bảng tên cảnh nổi trên cao, tự ẩn sau 3.5s
      */
     function showSceneToast(title) {
         toastGroup.clear();
         if (toastHideTimeout) clearTimeout(toastHideTimeout);
 
         const canvas = document.createElement('canvas');
-        canvas.width = 640;
-        canvas.height = 110;
+        canvas.width = 800;
+        canvas.height = 160;
         const ctx = canvas.getContext('2d');
 
-        // Nền kính mờ trong suốt thanh thoát (Glassmorphism), không bị đen kịt
-        ctx.fillStyle = 'rgba(20, 22, 34, 0.45)';
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-        ctx.lineWidth = 3;
-        roundRect(ctx, 4, 4, 632, 102, 24);
+        ctx.fillStyle = 'rgba(5, 12, 28, 0.88)';
+        ctx.strokeStyle = 'rgba(255, 179, 0, 0.85)';
+        ctx.lineWidth = 6;
+        roundRect(ctx, 8, 8, 784, 144, 30);
         ctx.fill();
         ctx.stroke();
 
-        // Chấm đỏ gốm Ninh Phước nổi bật
-        ctx.fillStyle = '#d35656';
-        ctx.beginPath();
-        ctx.arc(42, 55, 9, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Chữ tên cảnh sắc nét, màu trắng tinh khôi
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 34px "Segoe UI", Arial, sans-serif';
-        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ffb300';
+        ctx.font = 'bold 44px "Segoe UI", Arial, sans-serif';
+        ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-
-        let displayTitle = title;
-        if (ctx.measureText(displayTitle).width > 530) {
-            while (displayTitle.length > 5 && ctx.measureText(displayTitle + '...').width > 530) {
-                displayTitle = displayTitle.slice(0, -1);
-            }
-            displayTitle += '...';
-        }
-        ctx.fillText(displayTitle, 66, 55);
+        ctx.fillText('📍 ' + title, 400, 80);
 
         const texture = new THREE.CanvasTexture(canvas);
-        // Thu gọn kích thước (1.2m x 0.22m)
-        const geo = new THREE.PlaneGeometry(1.2, 0.22);
+        const geo = new THREE.PlaneGeometry(2.0, 0.4);
         const mat = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
-            opacity: 0.9,
+            opacity: 1.0,
             depthTest: false
         });
 
@@ -1272,15 +1542,14 @@ window.WebXRBridge = (function () {
         if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
         camDir.normalize();
 
-        // ĐƯA LÊN CAO HẲN PHÍA TRÊN ĐẦU (cao hơn tầm mắt 1.65m, cách 3.2m -> góc ngẩng ~ 27 độ)
-        mesh.position.copy(camera.position).add(camDir.multiplyScalar(3.2));
-        mesh.position.y += 1.65;
+        mesh.position.copy(camera.position).add(camDir.multiplyScalar(3.5));
+        mesh.position.y += 0.6;
         mesh.lookAt(camera.position);
         mesh.renderOrder = 200;
         toastGroup.add(mesh);
 
         toastHideTimeout = setTimeout(() => {
-            let op = 0.9;
+            let op = 1.0;
             const fadeInterval = setInterval(() => {
                 op -= 0.05;
                 if (op <= 0) {
@@ -1290,56 +1559,47 @@ window.WebXRBridge = (function () {
                     mat.opacity = op;
                 }
             }, 30);
-        }, 3200);
+        }, 3500);
     }
 
     // ============================================================
     // MENU 3D DANH SÁCH ĐỊA ĐIỂM (VR 3D LOCATIONS PANEL)
-    // Phục vụ chuẩn xác trải nghiệm trong Kính VR và Desktop Simulator
     // ============================================================
 
-    /**
-     * Dựng sẵn các Mesh 3D của Menu
-     */
     function buildVRMenu3DComponents() {
         vrMenuGroup.clear();
 
-        // 1. Nút 3D mở Menu nhỏ gọn, chúc xuống dưới sàn, trong suốt tinh tế
+        // Nút 3D mở Menu nhỏ nổi dưới tầm mắt
         const btnCanvas = document.createElement('canvas');
-        btnCanvas.width = 440;
-        btnCanvas.height = 140;
+        btnCanvas.width = 512;
+        btnCanvas.height = 180;
         const bCtx = btnCanvas.getContext('2d');
 
-        bCtx.fillStyle = 'rgba(20, 22, 34, 0.52)';
-        bCtx.strokeStyle = 'rgba(211, 86, 86, 0.75)';
-        bCtx.lineWidth = 6;
-        roundRect(bCtx, 6, 6, 428, 128, 36);
+        bCtx.fillStyle = 'rgba(5, 12, 28, 0.9)';
+        bCtx.strokeStyle = '#00f0ff';
+        bCtx.lineWidth = 8;
+        roundRect(bCtx, 10, 10, 492, 160, 40);
         bCtx.fill();
         bCtx.stroke();
 
-        bCtx.fillStyle = '#d35656';
-        bCtx.font = 'bold 44px "Segoe UI", Arial, sans-serif';
+        bCtx.fillStyle = '#ffb300';
+        bCtx.font = 'bold 50px "Segoe UI", Arial, sans-serif';
         bCtx.textAlign = 'center';
         bCtx.textBaseline = 'middle';
-        bCtx.fillText('📍', 75, 70);
-
-        bCtx.fillStyle = '#ffffff';
-        bCtx.font = 'bold 36px "Segoe UI", Arial, sans-serif';
-        bCtx.fillText('ĐỊA ĐIỂM', 250, 70);
+        bCtx.fillText('📍 ĐỊA ĐIỂM', 256, 90);
 
         const btnTex = new THREE.CanvasTexture(btnCanvas);
         const btnMat = new THREE.MeshBasicMaterial({
             map: btnTex,
             transparent: true,
-            opacity: 0.85,
             depthTest: false
         });
-        vrMenuBtnMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.44, 0.14), btnMat);
+        vrMenuBtnMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.22), btnMat);
         vrMenuBtnMesh.name = 'vrMenuBtnMesh';
         vrMenuBtnMesh.renderOrder = 300;
         vrMenuGroup.add(vrMenuBtnMesh);
 
-        // 2. Bảng Menu 3D lớn hiển thị Danh sách địa điểm (Glassmorphism Web Style)
+        // Bảng Menu 3D lớn hiển thị Danh sách địa điểm (Glassmorphism Web Style)
         menuCanvas = document.createElement('canvas');
         menuCanvas.width = 1600;
         menuCanvas.height = 1100;
@@ -1355,7 +1615,6 @@ window.WebXRBridge = (function () {
             depthTest: false,
             side: THREE.DoubleSide
         });
-        // Bảng kích thước 2.4m x 1.65m đặt ở tầm mắt
         vrMenuPanelMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.65), panelMat);
         vrMenuPanelMesh.name = 'vrMenuPanelMesh';
         vrMenuPanelMesh.visible = false;
@@ -1363,9 +1622,6 @@ window.WebXRBridge = (function () {
         vrMenuGroup.add(vrMenuPanelMesh);
     }
 
-    /**
-     * Bật / Tắt Bảng Menu 3D
-     */
     function toggleVRMenu(forceState) {
         if (forceState !== undefined) {
             isMenuOpen = forceState;
@@ -1374,7 +1630,6 @@ window.WebXRBridge = (function () {
         }
 
         if (isMenuOpen) {
-            // Mở menu: đặt bảng cách camera 2.4 mét về phía trước
             const camDir = new THREE.Vector3();
             camera.getWorldDirection(camDir);
             camDir.y = 0;
@@ -1382,7 +1637,7 @@ window.WebXRBridge = (function () {
             camDir.normalize();
 
             vrMenuPanelMesh.position.copy(camera.position).add(camDir.clone().multiplyScalar(2.4));
-            vrMenuPanelMesh.position.y = camera.position.y; // ngang tầm mắt
+            vrMenuPanelMesh.position.y = camera.position.y;
             vrMenuPanelMesh.lookAt(camera.position);
 
             vrMenuPanelMesh.visible = true;
@@ -1391,34 +1646,33 @@ window.WebXRBridge = (function () {
             renderMenuCanvas();
             console.log('[WebXRBridge] Đã mở Bảng Menu Danh Sách Địa Điểm 3D.');
         } else {
-            // Đóng menu
             if (vrMenuPanelMesh) vrMenuPanelMesh.visible = false;
-            if (vrMenuBtnMesh) vrMenuBtnMesh.visible = true;
+            if (vrMenuBtnMesh) vrMenuBtnMesh.visible = !isSimulator;
             console.log('[WebXRBridge] Đã đóng Bảng Menu Danh Sách Địa Điểm 3D.');
         }
     }
 
-    /**
-     * Cập nhật vị trí của Nút mở Menu chúc xuống phía dưới sàn
-     */
     function updateVRMenuFloatingPositions() {
         if (!camera || isMenuOpen || !vrMenuBtnMesh) return;
 
-        // Đặt nút nhỏ chúc hẳn xuống phía dưới sàn: cách 1.8m, thấp xuống 1.25m (góc chúc ~ -35°)
+        // Trong Simulator: Không hiện nút 3D lơ lửng chắn ngang màn hình (đã có nút Header & phím M)
+        if (isSimulator) {
+            vrMenuBtnMesh.visible = false;
+            return;
+        }
+
         const camDir = new THREE.Vector3();
         camera.getWorldDirection(camDir);
         camDir.y = 0;
         if (camDir.lengthSq() < 0.001) camDir.set(0, 0, -1);
         camDir.normalize();
 
-        vrMenuBtnMesh.position.copy(camera.position).add(camDir.multiplyScalar(1.8));
+        // Trong VR thật: Đặt nút ở thấp dưới chân (cao độ -1.25m) để không chắn tầm nhìn cảnh quan
+        vrMenuBtnMesh.position.copy(camera.position).add(camDir.multiplyScalar(2.2));
         vrMenuBtnMesh.position.y = camera.position.y - 1.25;
         vrMenuBtnMesh.lookAt(camera.position);
     }
 
-    /**
-     * Vẽ Bảng Menu lên Canvas 1600x1100 px chuẩn Dark Glassmorphism giống hệt Web
-     */
     function renderMenuCanvas() {
         if (!menuCtx || !manifest || !manifest._meta) return;
         const groups = manifest._meta.groups || [];
@@ -1427,47 +1681,40 @@ window.WebXRBridge = (function () {
         menuClickTargets = [];
         menuCtx.clearRect(0, 0, 1600, 1100);
 
-        // 1. Khung nền chính (Dark Glassmorphism trong suốt, đồng bộ tông màu Web)
-        menuCtx.fillStyle = 'rgba(16, 18, 28, 0.82)';
-        menuCtx.strokeStyle = 'rgba(211, 86, 86, 0.6)';
+        // Khung nền chính (Dark Glassmorphism)
+        menuCtx.fillStyle = 'rgba(5, 12, 28, 0.94)';
+        menuCtx.strokeStyle = 'rgba(0, 240, 255, 0.7)';
         menuCtx.lineWidth = 6;
         roundRect(menuCtx, 10, 10, 1580, 1080, 36);
         menuCtx.fill();
         menuCtx.stroke();
 
-        // Viền phụ mờ tinh tế
-        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        menuCtx.lineWidth = 2;
-        roundRect(menuCtx, 18, 18, 1564, 1064, 30);
-        menuCtx.stroke();
-
-        // 2. Header Bar
-        menuCtx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-        roundRect(menuCtx, 24, 24, 1552, 104, 24);
+        // Header Bar
+        menuCtx.fillStyle = 'rgba(10, 25, 47, 0.9)';
+        roundRect(menuCtx, 16, 16, 1568, 110, 26);
         menuCtx.fill();
 
-        // Tiêu đề
-        menuCtx.fillStyle = '#ff7e7e';
-        menuCtx.font = 'bold 38px "Segoe UI", Arial, sans-serif';
+        menuCtx.fillStyle = '#00f0ff';
+        menuCtx.font = 'bold 40px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.textBaseline = 'middle';
-        menuCtx.fillText('📍 DANH SÁCH ĐỊA ĐIỂM — NINH PHƯỚC 360', 55, 76);
+        menuCtx.fillText('📍 DANH SÁCH ĐỊA ĐIỂM — NINH PHƯỚC 360', 50, 70);
 
-        menuCtx.fillStyle = '#cbd5e1';
-        menuCtx.font = '500 21px "Segoe UI", Arial, sans-serif';
-        menuCtx.fillText('Trỏ laser hoặc chạm vào ảnh để chuyển cảnh', 930, 76);
+        menuCtx.fillStyle = '#94a3b8';
+        menuCtx.font = '500 22px "Segoe UI", Arial, sans-serif';
+        menuCtx.fillText('Trỏ laser hoặc nhấp vào ảnh để chuyển cảnh', 900, 70);
 
         // Nút Đóng [✕]
-        const closeBtn = { x: 1435, y: 40, w: 125, h: 72 };
-        menuCtx.fillStyle = 'rgba(211, 86, 86, 0.88)';
-        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        const closeBtn = { x: 1440, y: 35, w: 120, h: 70 };
+        menuCtx.fillStyle = 'rgba(220, 38, 38, 0.9)';
+        menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
         menuCtx.lineWidth = 2;
-        roundRect(menuCtx, closeBtn.x, closeBtn.y, closeBtn.w, closeBtn.h, 16);
+        roundRect(menuCtx, closeBtn.x, closeBtn.y, closeBtn.w, closeBtn.h, 14);
         menuCtx.fill();
         menuCtx.stroke();
 
         menuCtx.fillStyle = '#ffffff';
-        menuCtx.font = 'bold 24px "Segoe UI", Arial, sans-serif';
+        menuCtx.font = 'bold 26px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'center';
         menuCtx.fillText('✕ Đóng', closeBtn.x + closeBtn.w / 2, closeBtn.y + closeBtn.h / 2);
 
@@ -1479,12 +1726,12 @@ window.WebXRBridge = (function () {
             h: closeBtn.h
         });
 
-        // 3. Cột Trái: Danh mục Nhóm địa điểm (Groups Accordion)
+        // Cột Trái: Danh mục Nhóm địa điểm
         const colLeftX = 40;
         const colLeftW = 460;
         let groupY = 150;
 
-        menuCtx.fillStyle = '#94a3b8';
+        menuCtx.fillStyle = '#64748b';
         menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.fillText('KHU VỰC & ĐỊA DANH', colLeftX + 10, groupY);
@@ -1495,16 +1742,15 @@ window.WebXRBridge = (function () {
             const itemH = 74;
 
             if (isSelected) {
-                // Gradient gốm Ninh Phước rực rỡ như trên Web (--primary to --primary-hover)
                 const grad = menuCtx.createLinearGradient(colLeftX, groupY, colLeftX + colLeftW, groupY);
-                grad.addColorStop(0, '#d35656');
-                grad.addColorStop(1, '#e07650');
+                grad.addColorStop(0, '#00c6ff');
+                grad.addColorStop(1, '#0072ff');
                 menuCtx.fillStyle = grad;
                 menuCtx.strokeStyle = '#ffffff';
                 menuCtx.lineWidth = 3;
             } else {
-                menuCtx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-                menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                menuCtx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+                menuCtx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
                 menuCtx.lineWidth = 2;
             }
 
@@ -1512,25 +1758,23 @@ window.WebXRBridge = (function () {
             menuCtx.fill();
             menuCtx.stroke();
 
-            // Icon + Tên nhóm
-            menuCtx.fillStyle = '#ffffff';
+            menuCtx.fillStyle = isSelected ? '#ffffff' : '#e2e8f0';
             menuCtx.font = `bold ${isSelected ? '22px' : '20px'} "Segoe UI", Arial, sans-serif`;
             menuCtx.textAlign = 'left';
             menuCtx.textBaseline = 'middle';
             const grpLabel = grp.label.length > 22 ? grp.label.slice(0, 20) + '...' : grp.label;
             menuCtx.fillText('📍 ' + grpLabel, colLeftX + 20, groupY + itemH / 2);
 
-            // Badge số lượng cảnh
             const badgeW = 90;
             const badgeH = 34;
             const badgeX = colLeftX + colLeftW - badgeW - 16;
             const badgeY = groupY + (itemH - badgeH) / 2;
 
-            menuCtx.fillStyle = isSelected ? 'rgba(255, 255, 255, 0.25)' : 'rgba(211, 86, 86, 0.22)';
+            menuCtx.fillStyle = isSelected ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 179, 0, 0.2)';
             roundRect(menuCtx, badgeX, badgeY, badgeW, badgeH, 12);
             menuCtx.fill();
 
-            menuCtx.fillStyle = isSelected ? '#ffffff' : '#ff9f7e';
+            menuCtx.fillStyle = isSelected ? '#ffffff' : '#ffb300';
             menuCtx.font = 'bold 16px "Segoe UI", Arial, sans-serif';
             menuCtx.textAlign = 'center';
             menuCtx.fillText(`${grp.scenes.length} cảnh`, badgeX + badgeW / 2, badgeY + badgeH / 2);
@@ -1547,14 +1791,13 @@ window.WebXRBridge = (function () {
             groupY += itemH + 12;
         });
 
-        // 4. Cột Phải: Lưới ảnh các Cảnh trong nhóm đang chọn (2 cột x 4 dòng)
+        // Cột Phải: Lưới ảnh các Cảnh trong nhóm đang chọn (2 cột x 4 dòng)
         const colRightX = 530;
         const colRightW = 1030;
         const currentGroup = groups[selectedGroupIndex] || groups[0];
         const allScenes = currentGroup ? currentGroup.scenes : [];
 
-        // Tiêu đề cột phải
-        menuCtx.fillStyle = '#94a3b8';
+        menuCtx.fillStyle = '#64748b';
         menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
         menuCtx.textAlign = 'left';
         menuCtx.fillText(`DANH SÁCH CẢNH (${allScenes.length} CẢNH) — ${currentGroup ? currentGroup.label : ''}`, colRightX + 10, 150);
@@ -1578,15 +1821,13 @@ window.WebXRBridge = (function () {
 
             const isActiveScene = sc.id === activeSceneId;
 
-            // Khung card
-            menuCtx.fillStyle = isActiveScene ? 'rgba(211, 86, 86, 0.24)' : 'rgba(255, 255, 255, 0.07)';
-            menuCtx.strokeStyle = isActiveScene ? '#d35656' : 'rgba(255, 255, 255, 0.16)';
-            menuCtx.lineWidth = isActiveScene ? 3.5 : 2;
+            menuCtx.fillStyle = isActiveScene ? 'rgba(10, 35, 60, 0.95)' : 'rgba(15, 23, 42, 0.85)';
+            menuCtx.strokeStyle = isActiveScene ? '#ffb300' : 'rgba(0, 240, 255, 0.35)';
+            menuCtx.lineWidth = isActiveScene ? 4 : 2;
             roundRect(menuCtx, cardX, cardY, cardW, cardH, 16);
             menuCtx.fill();
             menuCtx.stroke();
 
-            // Khung thumbnail ảnh
             const thumbX = cardX + 10;
             const thumbY = cardY + 10;
             const thumbW = 114;
@@ -1606,19 +1847,17 @@ window.WebXRBridge = (function () {
                 img.crossOrigin = 'anonymous';
                 img.onload = () => {
                     menuThumbCache.set(sc.thumb, img);
-                    renderMenuCanvas(); // vẽ lại khi ảnh tải xong
+                    renderMenuCanvas();
                 };
                 img.src = sc.thumb;
                 menuThumbCache.set(sc.thumb, img);
 
-                // Khung tạm xám đẹp
                 menuCtx.fillStyle = '#1e293b';
                 roundRect(menuCtx, thumbX, thumbY, thumbW, thumbH, 10);
                 menuCtx.fill();
             }
 
-            // Tên cảnh
-            menuCtx.fillStyle = '#ffffff';
+            menuCtx.fillStyle = isActiveScene ? '#ffb300' : '#ffffff';
             menuCtx.font = 'bold 21px "Segoe UI", Arial, sans-serif';
             menuCtx.textAlign = 'left';
             menuCtx.textBaseline = 'top';
@@ -1634,10 +1873,9 @@ window.WebXRBridge = (function () {
             }
             menuCtx.fillText(displayTitle, textX, cardY + 22);
 
-            // Phụ đề nhỏ
-            menuCtx.fillStyle = isActiveScene ? '#ff9f7e' : '#cbd5e1';
+            menuCtx.fillStyle = isActiveScene ? '#ffb300' : '#00f0ff';
             menuCtx.font = '600 15px "Segoe UI", Arial, sans-serif';
-            menuCtx.fillText(isActiveScene ? '★ Đang ở cảnh này' : 'Chạm để dịch chuyển ➔', textX, cardY + 54);
+            menuCtx.fillText(isActiveScene ? '★ Đang đứng ở cảnh này' : 'Chạm để dịch chuyển ➔', textX, cardY + 54);
 
             menuClickTargets.push({
                 type: 'scene',
@@ -1649,14 +1887,13 @@ window.WebXRBridge = (function () {
             });
         });
 
-        // 5. Thanh điều hướng phân trang (nếu > 8 cảnh)
+        // Thanh điều hướng phân trang
         if (totalPages > 1) {
             const navY = 660;
             const prevBtn = { x: colRightX + 20, y: navY, w: 200, h: 56 };
             const nextBtn = { x: colRightX + colRightW - 220, y: navY, w: 200, h: 56 };
 
-            // Trang trước
-            menuCtx.fillStyle = menuPageIndex > 0 ? 'rgba(211, 86, 86, 0.85)' : 'rgba(60, 65, 80, 0.35)';
+            menuCtx.fillStyle = menuPageIndex > 0 ? 'rgba(0, 198, 255, 0.85)' : 'rgba(50, 65, 85, 0.4)';
             roundRect(menuCtx, prevBtn.x, prevBtn.y, prevBtn.w, prevBtn.h, 14);
             menuCtx.fill();
             menuCtx.fillStyle = '#fff';
@@ -1664,14 +1901,12 @@ window.WebXRBridge = (function () {
             menuCtx.textAlign = 'center';
             menuCtx.fillText('◀ Trang trước', prevBtn.x + prevBtn.w / 2, prevBtn.y + prevBtn.h / 2);
 
-            // Trang sau
-            menuCtx.fillStyle = menuPageIndex < totalPages - 1 ? 'rgba(211, 86, 86, 0.85)' : 'rgba(60, 65, 80, 0.35)';
+            menuCtx.fillStyle = menuPageIndex < totalPages - 1 ? 'rgba(0, 198, 255, 0.85)' : 'rgba(50, 65, 85, 0.4)';
             roundRect(menuCtx, nextBtn.x, nextBtn.y, nextBtn.w, nextBtn.h, 14);
             menuCtx.fill();
             menuCtx.fillStyle = '#fff';
             menuCtx.fillText('Trang sau ▶', nextBtn.x + nextBtn.w / 2, nextBtn.y + nextBtn.h / 2);
 
-            // Số trang
             menuCtx.fillStyle = '#94a3b8';
             menuCtx.font = 'bold 20px "Segoe UI", Arial, sans-serif';
             menuCtx.fillText(`Trang ${menuPageIndex + 1} / ${totalPages}`, colRightX + colRightW / 2, navY + 28);
@@ -1699,9 +1934,6 @@ window.WebXRBridge = (function () {
         menuTexture.needsUpdate = true;
     }
 
-    /**
-     * Xử lý click trên Bảng Menu 3D (toạ độ UV từ Raycaster)
-     */
     function handleMenuPanelClick(uv) {
         if (!uv || !menuClickTargets) return;
         const canvasX = uv.x * 1600;
@@ -1734,14 +1966,10 @@ window.WebXRBridge = (function () {
         }
     }
 
-    /**
-     * Chuyển cảnh trong VR và đồng bộ với KrPano
-     */
     async function switchScene(sceneId) {
         if (isTransitioning || sceneId === activeSceneId) return;
         isTransitioning = true;
 
-        // Báo KrPano cập nhật cảnh để kích hoạt audio/thuyết minh
         if (window.krpanoObj) {
             window.krpanoObj.call(`loadscene(${sceneId}, null, MERGE, BLEND(0.5));`);
         }
@@ -1750,9 +1978,6 @@ window.WebXRBridge = (function () {
         isTransitioning = false;
     }
 
-    /**
-     * Chuyển sang cảnh tiếp theo / cảnh trước bằng cần gạt Thumbstick hoặc phím A/D
-     */
     function navigateRelativeScene(delta) {
         if (!manifest) return;
         const sceneIds = Object.keys(manifest).filter(k => k !== '_meta');
@@ -1763,9 +1988,6 @@ window.WebXRBridge = (function () {
         switchScene(sceneIds[nextIndex]);
     }
 
-    /**
-     * Xử lý bóp cò (Trigger) trên tay cầm Meta Quest Touch trong WebXR thật
-     */
     function onSelectStart(event) {
         const controller = event.target;
         const tempMatrix = new THREE.Matrix4();
@@ -1774,7 +1996,6 @@ window.WebXRBridge = (function () {
         const rayDir = new THREE.Vector3(0, 0, -1).applyMatrix4(tempMatrix);
         raycaster.set(controller.position, rayDir);
 
-        // 1. Nếu Menu đang mở: Raycast trúng Bảng Menu
         if (isMenuOpen && vrMenuPanelMesh && vrMenuPanelMesh.visible) {
             const menuHits = raycaster.intersectObject(vrMenuPanelMesh, false);
             if (menuHits.length > 0) {
@@ -1786,7 +2007,6 @@ window.WebXRBridge = (function () {
             }
         }
 
-        // 2. Nếu Raycast trúng Nút mở Menu 3D
         if (vrMenuBtnMesh && vrMenuBtnMesh.visible) {
             const btnHits = raycaster.intersectObject(vrMenuBtnMesh, true);
             if (btnHits.length > 0) {
@@ -1798,7 +2018,6 @@ window.WebXRBridge = (function () {
             }
         }
 
-        // 3. Nếu Raycast trúng Hotspot trong cảnh
         if (hotspotsGroup) {
             const targets = hotspotsGroup.children;
             const intersects = raycaster.intersectObjects(targets, true);
@@ -1819,41 +2038,35 @@ window.WebXRBridge = (function () {
         }
     }
 
-    /**
-     * Vòng lặp Render chính của WebXR trên kính thật
-     */
     function renderLoop(time, frame) {
-        // 1. skyMesh luôn đồng tâm với camera
         if (skyMesh && camera) {
             skyMesh.position.copy(camera.position);
         }
 
-        // 2. Cập nhật vị trí nút mở menu 3D bám theo góc nhìn
         updateVRMenuFloatingPositions();
 
-        // 3. Luôn xoay các Hotspot hướng mặt về phía camera (Billboard hoàn hảo)
         if (hotspotsGroup) {
             hotspotsGroup.children.forEach(hs => {
                 hs.lookAt(camera.position);
 
-                const pulse = 1 + 0.05 * Math.sin(time * 0.004 + (hs.userData.pulseOffset || 0));
-                const targetScale = (hs.userData.baseScale || 1.0) * (hs === hoveredHotspot ? 1.25 : pulse);
+                if (hs.userData && hs.userData.baseY !== undefined) {
+                    if (hs.userData.style === 'trenkhong' || hs.userData.style === 'vitri') {
+                        hs.position.y = hs.userData.baseY + 0.08 * Math.sin(time * 0.003 + (hs.userData.pulseOffset || 0));
+                    }
+                }
+
+                const pulse = 1 + 0.025 * Math.sin(time * 0.004 + (hs.userData.pulseOffset || 0));
+                const targetScale = (hs === hoveredHotspot ? 1.15 : pulse);
                 hs.scale.set(targetScale, targetScale, 1);
             });
         }
 
-        // 4. Xử lý tương tác tay cầm Quest Touch
         handleControllerInteractions();
-
-        // 5. Xử lý tâm ngắm tự động nếu không dùng tay cầm
         handleGazeInteraction(time);
 
         renderer.render(scene, camera);
     }
 
-    /**
-     * Xử lý tia laser ngắm và cần gạt Thumbstick
-     */
     function handleControllerInteractions() {
         let anyControllerActive = false;
 
@@ -1869,7 +2082,6 @@ window.WebXRBridge = (function () {
 
             const dot = controller.getObjectByName('dot');
 
-            // 1. Kiểm tra Menu Panel nếu đang mở
             if (isMenuOpen && vrMenuPanelMesh && vrMenuPanelMesh.visible) {
                 const menuHits = raycaster.intersectObject(vrMenuPanelMesh, false);
                 if (menuHits.length > 0) {
@@ -1878,7 +2090,6 @@ window.WebXRBridge = (function () {
                 }
             }
 
-            // 2. Kiểm tra Nút mở Menu
             if (vrMenuBtnMesh && vrMenuBtnMesh.visible) {
                 const btnHits = raycaster.intersectObject(vrMenuBtnMesh, true);
                 if (btnHits.length > 0) {
@@ -1887,7 +2098,6 @@ window.WebXRBridge = (function () {
                 }
             }
 
-            // 3. Kiểm tra Hotspots
             if (hotspotsGroup) {
                 const targets = hotspotsGroup.children;
                 const hits = raycaster.intersectObjects(targets, true);
@@ -1915,7 +2125,6 @@ window.WebXRBridge = (function () {
                 }
             }
 
-            // Gạt cần Thumbstick: Gạt phải -> Cảnh kế, Gạt trái -> Cảnh trước
             if (controller.gamepad && controller.gamepad.axes && controller.gamepad.axes.length >= 4) {
                 const stickX = controller.gamepad.axes[2];
                 const stickY = controller.gamepad.axes[3];
@@ -1928,7 +2137,6 @@ window.WebXRBridge = (function () {
                         navigateRelativeScene(-1);
                         lastThumbstickTime = now;
                     } else if (stickY > 0.6) {
-                        // Gạt xuống: mở/đóng Menu nhanh
                         toggleVRMenu();
                         lastThumbstickTime = now;
                     }
@@ -1941,15 +2149,11 @@ window.WebXRBridge = (function () {
         }
     }
 
-    /**
-     * Xử lý cơ chế ngắm tự động (Gaze Dwell)
-     */
     function handleGazeInteraction(time) {
         if (!gazeReticle || !gazeReticle.visible) return;
 
         raycaster.set(camera.position, camera.getWorldDirection(new THREE.Vector3()));
 
-        // Kiểm tra nút menu trước
         if (vrMenuBtnMesh && vrMenuBtnMesh.visible) {
             const btnHits = raycaster.intersectObject(vrMenuBtnMesh, true);
             if (btnHits.length > 0) {
@@ -1970,7 +2174,6 @@ window.WebXRBridge = (function () {
             }
         }
 
-        // Kiểm tra hotspots
         if (hotspotsGroup) {
             const targets = hotspotsGroup.children;
             const hits = raycaster.intersectObjects(targets, true);
@@ -2005,9 +2208,6 @@ window.WebXRBridge = (function () {
         gazeReticle.scale.set(1, 1, 1);
     }
 
-    /**
-     * Hiệu ứng chuyển cảnh mịn màng (Fade transition)
-     */
     function tweenFade(fromAlpha, toAlpha, duration) {
         return new Promise(resolve => {
             const startTime = Date.now();

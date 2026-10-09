@@ -11,7 +11,7 @@
 	               gyro="true"
 	               webvr="true"
 	               webvr_gyro_keeplookingdirection="false"
-	               webvr_prev_next_hotspots="true"
+	               webvr_prev_next_hotspots="false"
 	               littleplanetintro="false"
 	               title="false"
 	               thumbs="true"
