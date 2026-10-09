@@ -1161,7 +1161,7 @@ window.WebXRBridge = (function () {
 
         } else if (style === 'trenkhong') {
             // ========================================================
-            // 2. STYLE: trenkhong (Góc nhìn toàn cảnh trên cao - dùng icon máy bay airport.png)
+            // 2. STYLE: trenkhong (Góc nhìn toàn cảnh trên cao - drone/máy bay thu nhỏ vừa vặn)
             // ========================================================
             const canvas = document.createElement('canvas');
             canvas.width = 512;
@@ -1175,8 +1175,8 @@ window.WebXRBridge = (function () {
             texture.minFilter = THREE.LinearMipmapLinearFilter;
             texture.magFilter = THREE.LinearFilter;
 
-            const geo = new THREE.PlaneGeometry(2.2, 2.2);
-            geo.translate(0, 0.2, 0);
+            const geo = new THREE.PlaneGeometry(1.35, 1.35);
+            geo.translate(0, 0.15, 0);
 
             const mat = new THREE.MeshBasicMaterial({
                 map: texture,
@@ -1215,8 +1215,8 @@ window.WebXRBridge = (function () {
             texture.minFilter = THREE.LinearMipmapLinearFilter;
             texture.magFilter = THREE.LinearFilter;
 
-            const geo = new THREE.PlaneGeometry(2.0, 2.0);
-            geo.translate(0, 0.3, 0);
+            const geo = new THREE.PlaneGeometry(1.4, 1.4);
+            geo.translate(0, 0.2, 0);
 
             const mat = new THREE.MeshBasicMaterial({
                 map: texture,
@@ -1255,7 +1255,7 @@ window.WebXRBridge = (function () {
             texture.minFilter = THREE.LinearMipmapLinearFilter;
             texture.magFilter = THREE.LinearFilter;
 
-            const geo = new THREE.PlaneGeometry(1.9, 1.9);
+            const geo = new THREE.PlaneGeometry(1.35, 1.35);
             const mat = new THREE.MeshBasicMaterial({
                 map: texture,
                 transparent: true,
@@ -1375,7 +1375,7 @@ window.WebXRBridge = (function () {
     }
 
     /**
-     * Vẽ Hotspot tiêu chuẩn (trenkhong, tructhang, vitri, muiten) dùng icon asset thật của Web
+     * Vẽ Hotspot tiêu chuẩn (trenkhong, tructhang, vitri, muiten) dùng style Trắng Glass + Viền đỏ đồng bộ 100%
      */
     function drawStandardHotspotCanvas(ctx, title, style) {
         ctx.clearRect(0, 0, 512, 512);
@@ -1385,148 +1385,160 @@ window.WebXRBridge = (function () {
 
         if (style === 'trenkhong') {
             // ============================================
-            // STYLE: trenkhong (Góc nhìn toàn cảnh trên cao - dùng icon máy bay airport.png)
+            // STYLE: trenkhong (Drone / Góc nhìn trên cao - Trắng Glass viền đỏ)
             // ============================================
-            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 95);
-            gradGlow.addColorStop(0, 'rgba(255, 179, 0, 0.6)');
-            gradGlow.addColorStop(0.5, 'rgba(255, 179, 0, 0.2)');
-            gradGlow.addColorStop(1, 'rgba(255, 179, 0, 0)');
+            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 80);
+            gradGlow.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+            gradGlow.addColorStop(0.6, 'rgba(239, 68, 68, 0.15)');
+            gradGlow.addColorStop(1, 'rgba(239, 68, 68, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
-            ctx.arc(cx, cy, 95, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 80, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = 'rgba(10, 25, 47, 0.9)';
-            ctx.strokeStyle = '#ffb300';
+            // Vòng tròn trắng glass mờ viền đỏ nổi bật
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+            ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.arc(cx, cy, 64, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 56, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
 
             if (HOTSPOT_ASSETS.airport && HOTSPOT_ASSETS.airport.complete && HOTSPOT_ASSETS.airport.naturalWidth > 0) {
-                ctx.drawImage(HOTSPOT_ASSETS.airport, cx - 44, cy - 44, 88, 88);
+                ctx.drawImage(HOTSPOT_ASSETS.airport, cx - 38, cy - 38, 76, 76);
             } else {
-                ctx.fillStyle = '#ffb300';
-                ctx.font = 'bold 44px sans-serif';
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 38px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('✈', cx, cy);
             }
 
-            drawHotspotTitleBadge(ctx, cx, cy, title, '#ffb300');
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ef4444');
 
         } else if (style === 'tructhang') {
             // ============================================
-            // STYLE: tructhang (Trực thăng bay lên - dùng icontructhang.png)
+            // STYLE: tructhang (Trực thăng - Trắng Glass viền đỏ)
             // ============================================
-            ctx.fillStyle = 'rgba(10, 25, 47, 0.9)';
-            ctx.strokeStyle = '#ffb300';
+            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 80);
+            gradGlow.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+            gradGlow.addColorStop(0.6, 'rgba(239, 68, 68, 0.15)');
+            gradGlow.addColorStop(1, 'rgba(239, 68, 68, 0)');
+            ctx.fillStyle = gradGlow;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 80, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+            ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.arc(cx, cy, 64, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 56, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
 
             if (HOTSPOT_ASSETS.helicopter && HOTSPOT_ASSETS.helicopter.complete && HOTSPOT_ASSETS.helicopter.naturalWidth > 0) {
-                ctx.drawImage(HOTSPOT_ASSETS.helicopter, cx - 48, cy - 35, 96, 70);
+                ctx.drawImage(HOTSPOT_ASSETS.helicopter, cx - 42, cy - 30, 84, 60);
             } else {
-                ctx.fillStyle = '#ffb300';
-                ctx.font = 'bold 40px sans-serif';
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 36px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText('🚁', cx, cy);
             }
 
-            drawHotspotTitleBadge(ctx, cx, cy, title, '#ffb300');
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ef4444');
 
         } else if (style === 'vitri') {
             // ============================================
-            // STYLE: vitri (Ghim đỏ chuẩn bản Web - dùng iconlocation.png)
+            // STYLE: vitri (Ghim đỏ chuẩn bản Web - Trắng Glass viền đỏ)
             // ============================================
-            const gradGlow = ctx.createRadialGradient(cx, cy - 10, 20, cx, cy - 10, 95);
-            gradGlow.addColorStop(0, 'rgba(220, 38, 38, 0.65)');
-            gradGlow.addColorStop(0.5, 'rgba(220, 38, 38, 0.2)');
+            const gradGlow = ctx.createRadialGradient(cx, cy - 10, 20, cx, cy - 10, 85);
+            gradGlow.addColorStop(0, 'rgba(220, 38, 38, 0.5)');
+            gradGlow.addColorStop(0.6, 'rgba(220, 38, 38, 0.18)');
             gradGlow.addColorStop(1, 'rgba(220, 38, 38, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
-            ctx.arc(cx, cy - 10, 95, 0, Math.PI * 2);
+            ctx.arc(cx, cy - 10, 85, 0, Math.PI * 2);
             ctx.fill();
 
             if (HOTSPOT_ASSETS.location && HOTSPOT_ASSETS.location.complete && HOTSPOT_ASSETS.location.naturalWidth > 0) {
-                ctx.drawImage(HOTSPOT_ASSETS.location, cx - 40, cy - 65, 80, 105);
+                ctx.drawImage(HOTSPOT_ASSETS.location, cx - 36, cy - 60, 72, 95);
             } else {
                 ctx.fillStyle = '#dc2626';
-                ctx.font = 'bold 50px sans-serif';
+                ctx.font = 'bold 48px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('📍', cx, cy - 15);
+                ctx.fillText('📍', cx, cy - 12);
             }
 
-            drawHotspotTitleBadge(ctx, cx, cy, title, '#dc2626');
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ef4444');
 
         } else {
             // ============================================
-            // STYLE: muiten hoặc mặc định (Mũi tên đỏ gradient chuẩn hotspot_pro.svg)
+            // STYLE: muiten hoặc mặc định (Mũi tên đỏ - Trắng Glass viền đỏ)
             // ============================================
-            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 90);
-            gradGlow.addColorStop(0, 'rgba(237, 47, 90, 0.65)');
-            gradGlow.addColorStop(0.5, 'rgba(237, 47, 90, 0.2)');
-            gradGlow.addColorStop(1, 'rgba(237, 47, 90, 0)');
+            const gradGlow = ctx.createRadialGradient(cx, cy, 20, cx, cy, 75);
+            gradGlow.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+            gradGlow.addColorStop(0.6, 'rgba(239, 68, 68, 0.15)');
+            gradGlow.addColorStop(1, 'rgba(239, 68, 68, 0)');
             ctx.fillStyle = gradGlow;
             ctx.beginPath();
-            ctx.arc(cx, cy, 90, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 75, 0, Math.PI * 2);
             ctx.fill();
 
-            // Vòng tròn trung tâm
-            ctx.fillStyle = 'rgba(10, 25, 47, 0.92)';
-            ctx.strokeStyle = '#ed2f5a';
-            ctx.lineWidth = 8;
+            // Vòng tròn trắng glass mờ viền đỏ
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 6;
             ctx.beginPath();
-            ctx.arc(cx, cy, 55, 0, Math.PI * 2);
+            ctx.arc(cx, cy, 52, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
 
-            // Mũi tên Chevron đỏ Panoee
-            ctx.fillStyle = '#ed2f5a';
+            // Mũi tên Chevron đỏ Panoee sang trọng
+            ctx.fillStyle = '#ef4444';
             ctx.beginPath();
-            ctx.moveTo(cx, cy - 25);
-            ctx.lineTo(cx + 25, cy + 5);
-            ctx.lineTo(cx + 14, cy + 18);
+            ctx.moveTo(cx, cy - 22);
+            ctx.lineTo(cx + 22, cy + 5);
+            ctx.lineTo(cx + 12, cy + 16);
             ctx.lineTo(cx, cy + 4);
-            ctx.lineTo(cx - 14, cy + 18);
-            ctx.lineTo(cx - 25, cy + 5);
+            ctx.lineTo(cx - 12, cy + 16);
+            ctx.lineTo(cx - 22, cy + 5);
             ctx.closePath();
             ctx.fill();
 
-            drawHotspotTitleBadge(ctx, cx, cy, title, '#ed2f5a');
+            drawHotspotTitleBadge(ctx, cx, cy, title, '#ef4444');
         }
     }
 
     function drawHotspotTitleBadge(ctx, cx, cy, title, borderColor) {
         if (!title) return;
         const displayTitle = title.toUpperCase();
-        ctx.font = 'bold 23px "Roboto", "Segoe UI", Arial, sans-serif';
+        ctx.font = 'bold 22px "Segoe UI", Arial, sans-serif';
         const textMetrics = ctx.measureText(displayTitle);
-        const badgeW = Math.min(480, Math.max(160, textMetrics.width + 48));
-        const badgeH = 56;
+        const badgeW = Math.min(460, Math.max(150, textMetrics.width + 44));
+        const badgeH = 52;
         const badgeX = cx - badgeW / 2;
-        const badgeY = cy + 76;
+        const badgeY = cy + 70;
 
         ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
-        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+        ctx.shadowBlur = 8;
         ctx.shadowOffsetY = 3;
 
-        ctx.fillStyle = 'rgba(10, 25, 47, 0.95)';
-        ctx.strokeStyle = borderColor || '#00f0ff';
+        // Nền trắng glass mờ cao cấp đồng bộ với nút Địa điểm và bảng Menu 3D (xoá bỏ màu đen)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+        ctx.strokeStyle = borderColor || '#ef4444';
         ctx.lineWidth = 3;
-        roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 10);
+        roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 12);
         ctx.fill();
         ctx.shadowColor = 'transparent';
         ctx.stroke();
 
-        ctx.fillStyle = '#ffffff';
+        // Chữ màu đỏ đậm sắc nét trên nền trắng
+        ctx.fillStyle = '#dc2626';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(displayTitle, cx, badgeY + badgeH / 2 + 1);
